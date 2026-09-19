@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detlof Preparatory School — Learners Information Portal</title>
+  <!-- ==========================================================================
+       DETLOF PREPARATORY SCHOOL — STUDENT PORTAL (STANDALONE VSCODE HTML FILE)
+       --------------------------------------------------------------------------
+       How to edit in VS Code:
+       1. Search for "EDITABLE PORTAL DATA" in the <script> tag at the bottom
+          to customize default students, results, timetables, or announcements.
+       2. This file is automatically linked to "detlof-admin-bulk-import (6).html".
+          Any student login code generated in "detlof-admin-bulk-import (6).html"
+          can immediately log into this HTML portal (and the main Next.js portal).
+       ========================================================================== -->
+  <style>
+    :root {
+      --ink: #351044;
+      --ink-deep: #21052e;
+      --muted: #76677b;
+      --line: #eadff0;
+      --paper: #fffdfd;
+      --canvas: #faf6fc;
+      --teal: #8d00d4;
+      --teal-dark: #5b008a;
+      --teal-soft: #f2ddfc;
+      --gold: #ffd400;
+      --gold-soft: #fff7cc;
+      --blue: #8d00d4;
+      --blue-soft: #f2ddfc;
+      --purple: #8d00d4;
+      --purple-soft: #f2ddfc;
+      --red: #e00000;
+      --red-soft: #ffe4e4;
+      --green: #5f8f21;
+      --green-soft: #eef7d8;
+      --shadow: 0 12px 30px rgba(91, 0, 138, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select { font: inherit; }
+    button { border: 0; cursor: pointer; }
+    a { color: inherit; }
+
+    .hidden { display: none !important; }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(33, 5, 46, 0.62);
+    }
+    .modal-card {
+      width: min(100%, 420px);
+      padding: 26px;
+      border-radius: 16px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(33, 5, 46, 0.3);
+    }
+    .modal-card h2 { margin: 0 0 8px; color: var(--ink-deep); }
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .modal-copy { margin: 0 0 18px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    ::selection { background: var(--gold); color: var(--ink-deep); }
+    :focus-visible {
+      outline: 3px solid rgba(255, 212, 0, 0.9);
+      outline-offset: 3px;
+    }
+
+    /* ==========================================================================
+       1. LOGIN SCREEN STYLES
+       ========================================================================== */
+    .login-shell {
+      display: grid;
+      grid-template-columns: minmax(420px, 1.02fr) minmax(420px, 0.98fr);
+      min-height: 100vh;
+      background: #fff;
+    }
+    .login-brand-panel {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,0.1), transparent 28%),
+        linear-gradient(145deg, var(--teal) 0%, var(--teal-dark) 72%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px clamp(32px, 5vw, 80px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      padding: 3px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 9px;
+      flex-shrink: 0;
+    }
+    .brand strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: 0.13em;
+      font-weight: 800;
+    }
+    .brand span {
+      display: block;
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
+    .login-hero h1 {
+      font-size: clamp(34px, 4.2vw, 56px);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      margin: 14px 0 18px;
+    }
+    .login-hero h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+    .login-hero p {
+      color: #f6e7fc;
+      max-width: 430px;
+      line-height: 1.65;
+      margin: 0 0 24px;
+    }
+    .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      font-size: 12px;
+      color: #fff5b8;
+    }
+    .login-form-panel {
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 0;
+    }
+    .role-switch {
+      display: flex;
+      background: #f5eafa;
+      padding: 4px;
+      border-radius: 8px;
+      margin: 18px 0 22px;
+    }
+    .role-switch button {
+      flex: 1;
+      padding: 9px 10px;
+      border-radius: 6px;
+      background: transparent;
+      color: #76677b;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .role-switch button.active {
+      background: #fff;
+      color: var(--teal-dark);
+      box-shadow: 0 2px 8px rgba(18, 51, 50, 0.08);
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 750;
+      color: #46615b;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #e5d7eb;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 13px;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .field input:hover { border-color: #cdb3d8; }
+    .field input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(141, 0, 212, 0.12);
+    }
+    .primary-btn {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 8px;
+      background: var(--teal);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    }
+    .primary-btn:hover {
+      background: var(--teal-dark);
+      box-shadow: 0 8px 18px rgba(91, 0, 138, 0.2);
+      transform: translateY(-1px);
+    }
+    .outline-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: #fff;
+      border: 1px solid #e5d7eb;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, transform 0.18s;
+    }
+    .outline-btn:hover {
+      background: var(--teal-soft);
+      border-color: #cdb3d8;
+      transform: translateY(-1px);
+    }
+    .alert-box {
+      padding: 10px 12px;
+      border-radius: 7px;
+      font-size: 11px;
+      margin-bottom: 14px;
+      background: var(--red-soft);
+      color: #9e473e;
+      font-weight: 600;
+    }
+    .info-box {
+      padding: 10px 12px;
+      border-radius: 7px;
+      font-size: 11px;
+      margin-bottom: 14px;
+      background: #f4eafb;
+      border-left: 3px solid var(--purple);
+      color: #542d64;
+    }
+    .bulk-sync-box {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fffbea;
+      border: 1px solid #f1dc7c;
+    }
+    .code-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .code-chip {
+      background: #fff;
+      border: 1px solid #e5d7eb;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ink-deep);
+    }
+    .code-chip:hover {
+      background: var(--gold-soft);
+    }
+
+    /* ==========================================================================
+       2. STUDENT PORTAL SHELL & DASHBOARD STYLES
+       ========================================================================== */
+    .portal-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 236px;
+      background: linear-gradient(180deg, var(--teal-dark) 0%, #2d063c 100%);
+      color: #fff;
+      padding: 26px 14px 20px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 32px;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 8px;
+      background: transparent;
+      color: #f1dafa;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .nav-btn:hover { background: rgba(255, 255, 255, 0.07); color: #fff; }
+    .nav-btn.active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: inset 3px 0 var(--gold);
+    }
+    .portal-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      height: 66px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .portal-content {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 30px 28px 60px;
+    }
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 26px 30px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 14px 28px rgba(91, 0, 138, 0.14);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .stat-card, .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      right: -26px;
+      top: -26px;
+      border-radius: 50%;
+      background: var(--teal-soft);
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(91, 0, 138, 0.13);
+    }
+    .stat-card small {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .stat-card strong {
+      display: block;
+      font-size: 20px;
+      color: var(--ink-deep);
+      margin: 4px 0;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .panel {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      min-width: 520px;
+    }
+    th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #eef3f0;
+      font-size: 12px;
+    }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover { background: #fcf8fe; }
+    .grade-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 11px;
+      background: var(--gold-soft);
+      color: var(--teal-dark);
+    }
+
+    @media (max-width: 860px) {
+      .login-shell { grid-template-columns: 1fr; }
+      .login-brand-panel {
+        display: flex;
+        min-height: auto;
+        gap: 32px;
+        padding: 24px 22px 28px;
+      }
+      .login-hero h1 { font-size: clamp(32px, 9vw, 48px); }
+      .login-hero p { max-width: none; }
+      .portal-shell { flex-direction: column; }
+      .sidebar { width: 100%; padding: 14px; }
+      .nav-list { flex-direction: row; flex-wrap: wrap; margin-top: 14px; }
+      .nav-btn { width: auto; flex: 1 1 145px; }
+      .sidebar > div:last-child {
+        display: flex;
+        gap: 8px;
+        padding-top: 14px !important;
+      }
+      .sidebar > div:last-child a,
+      .sidebar > div:last-child button {
+        margin-bottom: 0 !important;
+      }
+      .topbar {
+        height: auto;
+        min-height: 66px;
+        padding: 14px 18px;
+        flex-wrap: wrap;
+      }
+      .topbar > div:last-child {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .portal-content { padding: 22px 16px 42px; }
+      .welcome-banner { padding: 22px; }
+      .welcome-banner > div:last-child {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .welcome-banner > div:last-child .outline-btn {
+        flex: 1 1 180px;
+        justify-content: center;
+      }
+      .stats-grid, .two-col { grid-template-columns: 1fr; }
+      .nav-list {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 3px;
+        scrollbar-width: thin;
+      }
+      .nav-btn { flex: 0 0 auto; white-space: nowrap; }
+    }
+
+    @media (max-width: 480px) {
+      .login-form-panel { padding: 30px 18px; }
+      .brand strong { font-size: 14px; }
+      .brand span { font-size: 7px; }
+      .brand-logo { width: 50px; height: 50px; }
+      .role-switch button { font-size: 11px; }
+      .topbar > div:first-child { width: 100%; }
+      #topbarStudentMeta {
+        display: block;
+        margin: 4px 0 0 !important;
+        overflow-wrap: anywhere;
+      }
+      .stat-card, .panel { padding: 16px; }
+      .welcome-banner h1 { font-size: 22px !important; }
+      .welcome-banner > div:last-child .outline-btn { flex-basis: 100%; }
+      table { min-width: 480px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       VIEW 1: STUDENT & ADMIN LOGIN SCREEN
+       ========================================================================== -->
+  <main id="loginScreen" class="login-shell">
+    <section class="login-brand-panel">
+      <div class="brand">
+        <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+        <div>
+          <strong>DETLOF</strong>
+          <span>PREPARATORY SCHOOL</span>
+        </div>
+      </div>
+
+      <div class="login-hero">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);font-weight:700;">
+          Learners Information Portal
+        </div>
+        <h1>Everything you need<br /><em>to stay on track.</em></h1>
+        <p>Sign in with your registered email and personal password.</p>
+        <div class="feature-pills">
+          <span>✓ Academic Results</span>
+          <span>✓ Class Timetable</span>
+          <span>✓ School Announcements</span>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:#f1dafa;">
+        Est. 2010 · Wisdom Balanced
+      </div>
+    </section>
+
+    <section class="login-form-panel">
+      <div class="login-card">
+        <p style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;">
+          Welcome back
+        </p>
+        <h2 style="font-size:24px;color:var(--ink-deep);margin:0 0 6px;">Detlof Preparatory School</h2>
+        <p style="color:var(--muted);font-size:12px;margin:0;">Learners Information Portal</p>
+        <p style="color:var(--muted);font-size:11px;margin:8px 0 0;">Use firstname.lastname@detlof.edu or firstname.lastname.middlename@detlof.edu. Your temporary password is used once to create your own password.</p>
+
+        <div class="role-switch">
+          <button type="button" id="roleStudentBtn" class="active" onclick="setLoginRole('student')">Student login</button>
+          <button type="button" id="roleTeacherBtn" onclick="setLoginRole('teacher')">Teacher login</button>
+        </div>
+
+        <div id="loginInfoBox" class="info-box hidden"></div>
+        <div id="loginErrorBox" class="alert-box hidden"></div>
+
+        <form id="portalLoginForm">
+          <div class="field">
+            <label id="emailLabel">Student email</label>
+            <input type="text" id="loginEmail" inputmode="email" autocomplete="username" placeholder="firstname.lastname@detlof.edu" required />
+          </div>
+
+          <div class="field">
+            <label id="passwordLabel">Password</label>
+            <input type="password" id="loginPassword" placeholder="Temporary or personal password" required />
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:11px;">
+            <label style="display:flex;align-items:center;gap:6px;color:var(--muted);">
+              <input type="checkbox" checked /> Keep me signed in
+            </label>
+            <button type="button" style="background:transparent;color:var(--teal);font-weight:700;" onclick="showForgotNote()">
+              Forgot Password?
+            </button>
+          </div>
+
+          <button type="submit" class="primary-btn">Login</button>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="passwordSetupModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="passwordSetupTitle">
+    <div class="modal-card">
+      <p class="eyebrow">First-time sign in</p>
+      <h2 id="passwordSetupTitle">Create your personal password</h2>
+      <p class="modal-copy">Your temporary password has been accepted. Choose a password you will remember for future sign-ins.</p>
+      <div id="passwordSetupError" class="alert-box hidden"></div>
+      <form id="passwordSetupForm">
+        <div class="field">
+          <label for="newPassword">New password</label>
+          <input type="password" id="newPassword" minlength="8" autocomplete="new-password" required />
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirm new password</label>
+          <input type="password" id="confirmPassword" minlength="8" autocomplete="new-password" required />
+        </div>
+        <button type="submit" class="primary-btn">Save personal password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       VIEW 2: AUTHENTICATED STUDENT PORTAL SHELL
+       ========================================================================== -->
+  <div id="portalShell" class="portal-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+        <div>
+          <strong>DETLOF</strong>
+          <span>STUDENT PORTAL</span>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        <button class="nav-btn" data-tab="results" onclick="switchTab('results')">🏅 My Results</button>
+        <button class="nav-btn" data-tab="timetable" onclick="switchTab('timetable')">📅 My Timetable</button>
+        <button class="nav-btn" data-tab="announcements" onclick="switchTab('announcements')">📢 Announcements</button>
+        <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')">👤 My Profile</button>
+      </nav>
+
+      <div style="margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.12);">
+        <a href="/detlof-admin-bulk-import%20(6).html" class="outline-btn" style="width:100%;justify-content:center;margin-bottom:10px;background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.2);">
+          Bulk Import &amp; Codes →
+        </a>
+        <button onclick="logoutPortal()" class="outline-btn" style="width:100%;justify-content:center;">
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <div class="portal-main">
+      <header class="topbar">
+        <div>
+          <strong id="topbarStudentName" style="color:var(--ink-deep);">Student Name</strong>
+          <span id="topbarStudentMeta" style="color:var(--muted);font-size:12px;margin-left:8px;">Class</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a href="/detlof-admin-bulk-import%20(6).html" class="outline-btn">Open Code Generator</a>
+          <button onclick="logoutPortal()" class="outline-btn">Logout</button>
+        </div>
+      </header>
+
+      <div class="portal-content">
+        <!-- TAB: DASHBOARD -->
+        <section id="tab-dashboard" class="portal-tab">
+          <div class="welcome-banner">
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;">
+                2024 / 2025 Academic Year · Term 2
+              </div>
+              <h1 id="dashWelcomeHeading" style="margin:6px 0;font-size:26px;">Welcome back!</h1>
+              <p style="margin:0;color:#f6e7fc;font-size:13px;">Here is your personal academic results and timetable summary.</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="outline-btn" onclick="switchTab('results')">📊 View My Results</button>
+              <button class="outline-btn" onclick="switchTab('timetable')">📅 View My Timetable</button>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <small>Assigned Class</small>
+              <strong id="statClass">JHS 2</strong>
+              <span style="font-size:11px;color:var(--muted);">Current enrolled class</span>
+            </div>
+            <div class="stat-card">
+              <small>Overall Average</small>
+              <strong id="statAverage">81%</strong>
+              <span style="font-size:11px;color:var(--green);">Term 2 · 5 Subjects Published</span>
+            </div>
+            <div class="stat-card">
+              <small>Next Scheduled Lesson</small>
+              <strong id="statNextLesson">Mathematics</strong>
+              <span style="font-size:11px;color:var(--muted);">Monday · 8:00 AM – 9:00 AM</span>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="panel">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="margin:0;font-size:16px;">📊 My Results Summary</h2>
+                <button class="outline-btn" onclick="switchTab('results')">Full Report →</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Class (40)</th>
+                    <th>Exam (60)</th>
+                    <th>Total (100)</th>
+                    <th>Grade</th>
+                  </tr>
+                </thead>
+                <tbody id="dashResultsBody"></tbody>
+              </table>
+            </div>
+
+            <div class="panel">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="margin:0;font-size:16px;">📅 My Class Timetable</h2>
+                <button class="outline-btn" onclick="switchTab('timetable')">Full Week →</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Venue</th>
+                  </tr>
+                </thead>
+                <tbody id="dashTimetableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: RESULTS -->
+        <section id="tab-results" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 4px;">📊 Academic Results Report</h2>
+            <p id="resultsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Class Score (/40)</th>
+                  <th>Exam Score (/60)</th>
+                  <th>Total Score (/100)</th>
+                  <th>Grade</th>
+                  <th>Teacher's Remark</th>
+                </tr>
+              </thead>
+              <tbody id="fullResultsBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB: TIMETABLE -->
+        <section id="tab-timetable" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 4px;">📅 Weekly Class Timetable</h2>
+            <p id="timetableSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Time</th>
+                  <th>Subject</th>
+                  <th>Teacher</th>
+                  <th>Classroom / Venue</th>
+                </tr>
+              </thead>
+              <tbody id="fullTimetableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB: ANNOUNCEMENTS -->
+        <section id="tab-announcements" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 14px;">📢 School Announcements</h2>
+            <div id="announcementsContainer" style="display:grid;gap:12px;"></div>
+          </div>
+        </section>
+
+        <!-- TAB: PROFILE -->
+        <section id="tab-profile" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 14px;">👤 Student Profile &amp; Security</h2>
+            <table>
+              <tbody id="profileTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       3. EDITABLE PORTAL DATA & BULK-IMPORT SYNC LOGIC
+       ========================================================================== -->
+  <script>
+    const STORAGE_KEY = "detlof_bulk_import_codes";
+    let loginRole = "student";
+    let activeStudent = null;
+
+    // Default students (automatically merged with codes generated in detlof-admin-bulk-import (6).html)
+    const DEFAULT_STUDENTS = [
+      {
+        fullName: "Eliana Ama Owusu",
+        email: "eliana.owusu@detlof.edu",
+        studentId: "DPS-24-0187",
+        currentClass: "JHS 2",
+        academicYear: "2024 / 2025",
+      },
+      {
+        fullName: "Abena Osei",
+        email: "abena.osei@detlof.edu",
+        studentId: "DPS-25-0301",
+        currentClass: "JHS 1",
+        academicYear: "2024 / 2025",
+      },
+      {
+        fullName: "Kojo Antwi",
+        email: "kojo.antwi@detlof.edu",
+        studentId: "DPS-25-0302",
+        currentClass: "Basic 5",
+        academicYear: "2024 / 2025",
+      },
+    ];
+
+    const DEFAULT_RESULTS = [
+      { subject: "Mathematics", classScore: 35, examScore: 55, totalScore: 90, grade: "A", remark: "Excellent progress" },
+      { subject: "English Language", classScore: 32, examScore: 50, totalScore: 82, grade: "A", remark: "Very good" },
+      { subject: "Integrated Science", classScore: 28, examScore: 48, totalScore: 76, grade: "B", remark: "Keep it up" },
+      { subject: "Computing / ICT", classScore: 30, examScore: 45, totalScore: 75, grade: "B", remark: "Good work" },
+      { subject: "Social Studies", classScore: 27, examScore: 44, totalScore: 71, grade: "B", remark: "Good effort" },
+    ];
+
+    const DEFAULT_ANNOUNCEMENTS = [
+      { title: "Mid-term assessments begin next Monday", category: "School Notice", date: "May 14, 2025", body: "Please check the assessment schedule and bring your required materials each day." },
+      { title: "Science has moved to the Science Lab", category: "Timetable Update", date: "May 9, 2025", body: "Wednesday science lessons will take place in the Science Lab from 10:30 AM." },
+      { title: "Term 2 results are now available", category: "Results Update", date: "May 7, 2025", body: "Your latest academic results have been published." },
+    ];
+
+    function getSyncedStudents() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        const map = new Map();
+        DEFAULT_STUDENTS.forEach((s) => map.set(s.studentId.toUpperCase(), s));
+        if (Array.isArray(parsed)) {
+          parsed.forEach((s) => {
+            if (s && s.studentId) map.set(String(s.studentId).toUpperCase(), s);
+          });
+        }
+        return Array.from(map.values());
+      } catch {
+        return [...DEFAULT_STUDENTS];
+      }
+    }
+
+    function saveStudentPassword(student, password) {
+      const students = getSyncedStudents().map((item) => {
+        if (String(item.studentId).toUpperCase() !== String(student.studentId).toUpperCase()) return item;
+        return { ...item, customPassword: password };
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+      student.customPassword = password;
+    }
+
+    function isValidStudentEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email);
+    }
+
+    function getStudentPassword(student) {
+      return String(student.customPassword || "").trim();
+    }
+
+    function showPasswordSetup(student) {
+      const modal = document.getElementById("passwordSetupModal");
+      const form = document.getElementById("passwordSetupForm");
+      const error = document.getElementById("passwordSetupError");
+      form.reset();
+      error.classList.add("hidden");
+      modal.classList.remove("hidden");
+      document.getElementById("newPassword").focus();
+      form.onsubmit = (event) => {
+        event.preventDefault();
+        const password = document.getElementById("newPassword").value;
+        const confirmation = document.getElementById("confirmPassword").value;
+        if (password.length < 8) {
+          error.textContent = "Your personal password must be at least 8 characters.";
+          error.classList.remove("hidden");
+          return;
+        }
+        if (password !== confirmation) {
+          error.textContent = "The two passwords do not match.";
+          error.classList.remove("hidden");
+          return;
+        }
+        saveStudentPassword(student, password);
+        modal.classList.add("hidden");
+        renderPortalForStudent(student);
+      };
+    }
+
+    function showForgotNote() {
+      const box = document.getElementById("loginInfoBox");
+      box.textContent = "Password recovery: Contact the school office to begin a secure reset using your registered email.";
+      box.classList.remove("hidden");
+    }
+
+    function renderPortalForStudent(student) {
+      activeStudent = student;
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("portalShell").classList.remove("hidden");
+
+      document.getElementById("topbarStudentName").textContent = student.fullName;
+      document.getElementById("topbarStudentMeta").textContent =
+        (student.currentClass || "JHS 2") + " · " + student.email;
+      document.getElementById("dashWelcomeHeading").textContent =
+        "Good morning, " + student.fullName.split(" ")[0] + "!";
+      document.getElementById("statClass").textContent = student.currentClass || "JHS 2";
+
+      const avg = Math.round(DEFAULT_RESULTS.reduce((a, r) => a + r.totalScore, 0) / DEFAULT_RESULTS.length);
+      document.getElementById("statAverage").textContent = avg + "%";
+
+      document.getElementById("resultsSubtitle").textContent =
+        student.fullName + " · " + (student.currentClass || "JHS 2") + " · 2024 / 2025 Term 2";
+      document.getElementById("timetableSubtitle").textContent =
+        "Current Class Timetable for " + (student.currentClass || "JHS 2") + " · 2024 / 2025";
+
+      const dashResults = document.getElementById("dashResultsBody");
+      const fullResults = document.getElementById("fullResultsBody");
+      dashResults.innerHTML = "";
+      fullResults.innerHTML = "";
+
+      DEFAULT_RESULTS.forEach((r) => {
+        dashResults.innerHTML +=
+          "<tr><td><strong>" + r.subject + "</strong></td><td>" + r.classScore + "</td><td>" + r.examScore + "</td><td><strong>" + r.totalScore + "</strong></td><td><span class='grade-pill'>" + r.grade + "</span></td></tr>";
+        fullResults.innerHTML +=
+          "<tr><td><strong>" + r.subject + "</strong></td><td>" + r.classScore + "</td><td>" + r.examScore + "</td><td><strong>" + r.totalScore + "</strong></td><td><span class='grade-pill'>" + r.grade + "</span></td><td>" + r.remark + "</td></tr>";
+      });
+
+      const schedule = [
+        { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (student.currentClass || "JHS 2") + " Room" },
+        { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (student.currentClass || "JHS 2") + " Room" },
+        { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: "Science Lab" },
+        { day: "Wednesday", time: "10:30 – 11:30", subject: "Computing / ICT", teacher: "Mr. Kofi", venue: "ICT Lab" },
+        { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (student.currentClass || "JHS 2") + " Room" },
+      ];
+
+      const dashTT = document.getElementById("dashTimetableBody");
+      const fullTT = document.getElementById("fullTimetableBody");
+      dashTT.innerHTML = "";
+      fullTT.innerHTML = "";
+      schedule.forEach((s) => {
+        dashTT.innerHTML += "<tr><td>" + s.time + "</td><td><strong>" + s.subject + "</strong></td><td>" + s.venue + "</td></tr>";
+        fullTT.innerHTML += "<tr><td>" + s.day + "</td><td>" + s.time + "</td><td><strong>" + s.subject + "</strong></td><td>" + s.teacher + "</td><td>" + s.venue + "</td></tr>";
+      });
+
+      const annBox = document.getElementById("announcementsContainer");
+      annBox.innerHTML = "";
+      DEFAULT_ANNOUNCEMENTS.forEach((a) => {
+        annBox.innerHTML +=
+          "<div style='padding:14px;border:1px solid var(--line);border-radius:10px;'>" +
+          "<small style='color:var(--teal);font-weight:700;'>" + a.category + " · " + a.date + "</small>" +
+          "<h3 style='margin:6px 0;font-size:15px;color:var(--ink-deep);'>" + a.title + "</h3>" +
+          "<p style='margin:0;color:#5f7470;font-size:12px;'>" + a.body + "</p></div>";
+      });
+
+      document.getElementById("profileTableBody").innerHTML =
+        "<tr><th>Full Name</th><td><strong>" + student.fullName + "</strong></td></tr>" +
+        "<tr><th>Student Email</th><td>" + student.email + "</td></tr>" +
+        "<tr><th>Current Class</th><td>" + (student.currentClass || "JHS 2") + "</td></tr>" +
+        "<tr><th>Academic Year</th><td>" + (student.academicYear || "2024 / 2025") + "</td></tr>";
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll(".portal-tab").forEach((el) => el.classList.add("hidden"));
+      document.getElementById("tab-" + tabName).classList.remove("hidden");
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabName);
+      });
+    }
+
+    function logoutPortal() {
+      activeStudent = null;
+      document.getElementById("portalShell").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("loginPassword").value = "";
+    }
+
+    document.getElementById("portalLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value.trim();
+      const errBox = document.getElementById("loginErrorBox");
+      errBox.classList.add("hidden");
+      if (!isValidStudentEmail(email)) {
+        errBox.textContent = "Enter a valid email address, for example name@example.com.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+      if (password.length < 8) {
+        errBox.textContent = "Your password must be at least 8 characters.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      const matchedLocal = getSyncedStudents().find(
+        (s) =>
+          isValidStudentEmail(s.email.trim().toLowerCase()) &&
+          s.email.trim().toLowerCase() === email &&
+          getStudentPassword(s) === password
+      );
+
+      if (matchedLocal) {
+        if (!matchedLocal.customPassword) {
+          showPasswordSetup(matchedLocal);
+          return;
+        }
+        renderPortalForStudent(matchedLocal);
+        return;
+      }
+
+      // Also attempt server session login when running inside the Next.js server
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user?.role === "admin") {
+            window.location.href = "/detlof-admin-bulk-import%20(6).html";
+            return;
+          }
+          if (data.user) {
+            renderPortalForStudent(data.user);
+            return;
+          }
+        }
+      } catch {
+        // Fallback to standalone HTML mode when opened directly as a file in VS Code
+      }
+
+      errBox.textContent = "We could not sign you in with those details. Verify your email and password.";
+      errBox.classList.remove("hidden");
+    });
+
+    function setLoginRole(role) {
+      loginRole = role;
+      document.getElementById("roleStudentBtn").classList.toggle("active", role === "student");
+      document.getElementById("roleTeacherBtn").classList.toggle("active", role === "teacher");
+      document.getElementById("emailLabel").textContent = role === "student" ? "Student email" : "Teacher email";
+      document.getElementById("loginErrorBox").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>
