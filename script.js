@@ -1,16 +1,4 @@
 const STORAGE_KEY = "detlof_bulk_import_codes";
-const ADMIN_ACCOUNT = {
-  email: "admin@detlof.edu.gh",
-  password: "DetlofAdmin2025!",
-};
-const TEACHER_ACCOUNTS = [
-  {
-    email: "teacher@detlof.edu.gh",
-    password: "DetlofTeacher2026!",
-    name: "Class Teacher",
-  },
-];
-let currentRole = "student";
 let activeStudent = null;
 
 const DEFAULT_STUDENTS = [
@@ -82,43 +70,9 @@ function getSyncedStudents() {
   }
 }
 
-function setLoginRole(role) {
-  const allowedRoles = ["student", "teacher", "admin"];
-  if (!allowedRoles.includes(role)) return;
-  const roleChanged = currentRole !== role;
-  currentRole = role;
-  document.getElementById("roleStudentBtn").classList.toggle("active", role === "student");
-  document.getElementById("roleTeacherBtn").classList.toggle("active", role === "teacher");
-  document.getElementById("roleAdminBtn").classList.toggle("active", role === "admin");
-  document.getElementById("studentIdFieldWrap").classList.toggle("hidden", role !== "student");
-  document.getElementById("emailLabel").textContent = role === "student" ? "Student Email" : role === "teacher" ? "Teacher Email" : "Administrator Email";
-  document.getElementById("passwordLabel").textContent = role === "student" ? "Password / Login Code (PIN)" : role === "teacher" ? "Teacher Password" : "Administrator Password";
-
-  if (roleChanged) {
-    document.getElementById("loginEmail").value = "";
-    document.getElementById("loginStudentId").value = "";
-    document.getElementById("loginPassword").value = "";
-    document.getElementById("loginPassword").type = "password";
-    document.getElementById("togglePasswordBtn").textContent = "Show";
-    document.getElementById("togglePasswordBtn").setAttribute("aria-label", "Show password");
-    document.getElementById("loginErrorBox").classList.add("hidden");
-  }
-
-  const infoBox = document.getElementById("loginInfoBox");
-  if (role === "admin") {
-    infoBox.textContent = "Admin access: enter your account email and password to open the bulk generator.";
-    infoBox.classList.remove("hidden");
-  } else if (role === "teacher") {
-    infoBox.textContent = "Teacher access: enter your account email and password to update a student's records and timetable.";
-    infoBox.classList.remove("hidden");
-  } else {
-    infoBox.classList.add("hidden");
-  }
-}
-
 function showForgotNote() {
   const box = document.getElementById("loginInfoBox");
-  box.textContent = "Password recovery: contact the school office or reset the code in detlof-admin-bulk-import (6).html.";
+  box.textContent = "Forgot your code? Ask the school office for your Login Code / PIN.";
   box.classList.remove("hidden");
 }
 
@@ -132,10 +86,12 @@ function togglePasswordVisibility() {
 }
 
 function fillCredentials(student) {
-  setLoginRole("student");
   document.getElementById("loginEmail").value = student.email;
   document.getElementById("loginStudentId").value = student.studentId;
   document.getElementById("loginPassword").value = student.loginCode;
+  document.getElementById("loginPassword").type = "password";
+  document.getElementById("togglePasswordBtn").textContent = "Show";
+  document.getElementById("togglePasswordBtn").setAttribute("aria-label", "Show password");
   const info = document.getElementById("loginInfoBox");
   info.textContent = "Loaded credentials for " + student.fullName + " (" + student.studentId + "). Click Sign in to Portal.";
   info.classList.remove("hidden");
@@ -292,31 +248,6 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   const password = document.getElementById("loginPassword").value.trim();
   const errorBox = document.getElementById("loginErrorBox");
   errorBox.classList.add("hidden");
-
-  if (currentRole === "teacher") {
-    const teacher = TEACHER_ACCOUNTS.find((account) => account.email.toLowerCase() === email && account.password === password);
-    if (!teacher) {
-      errorBox.textContent = "Invalid teacher credentials. Use the teacher account shown above.";
-      errorBox.classList.remove("hidden");
-      return;
-    }
-    sessionStorage.setItem("detlof_portal_role", "teacher");
-    sessionStorage.setItem("detlof_teacher", JSON.stringify({ name: teacher.name, email: teacher.email }));
-    window.location.href = "detlof-admin-bulk-import%20(6).html?role=teacher&teacher=" + encodeURIComponent(teacher.name);
-    return;
-  }
-
-  if (currentRole === "admin") {
-    const isValidAdmin = email === ADMIN_ACCOUNT.email && password === ADMIN_ACCOUNT.password;
-    if (!isValidAdmin) {
-      errorBox.textContent = "Invalid admin credentials. Use admin@detlof.edu.gh and DetlofAdmin2025! to access the bulk generator.";
-      errorBox.classList.remove("hidden");
-      return;
-    }
-    sessionStorage.setItem("detlof_portal_role", "admin");
-    window.location.href = "detlof-admin-bulk-import%20(6).html?role=admin";
-    return;
-  }
 
   const matchedLocal = getSyncedStudents().find(
     (student) =>

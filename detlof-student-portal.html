@@ -52,45 +52,34 @@
         <h2 style="font-size:24px;color:var(--ink-deep);margin:0 0 6px;">Sign in to your portal</h2>
         <p style="color:var(--muted);font-size:12px;margin:0;">Use your school email, Student ID, and Login Code/PIN.</p>
 
-        <div class="role-switch">
-          <button type="button" id="roleStudentBtn" class="active" onclick="setLoginRole('student')">Student</button>
-          <button type="button" id="roleTeacherBtn" onclick="setLoginRole('teacher')">Teacher</button>
-          <button type="button" id="roleAdminBtn" onclick="setLoginRole('admin')">Administrator</button>
-        </div>
-
         <div id="loginInfoBox" class="info-box hidden"></div>
         <div id="loginErrorBox" class="alert-box hidden"></div>
 
         <form id="portalLoginForm">
           <div class="field">
-            <label id="emailLabel">Student Email</label>
-            <input type="email" id="loginEmail" placeholder="you@detlof.edu.gh" required />
-          </div>
-
-          <div class="field" id="studentIdFieldWrap">
-            <label>Student ID</label>
-            <input type="text" id="loginStudentId" placeholder="e.g. DPS-24-0187 or DPS-25-0301" />
+            <label for="loginEmail">Student Email</label>
+            <input type="email" id="loginEmail" placeholder="you@detlof.edu.gh" autocomplete="username" required />
           </div>
 
           <div class="field">
-            <label id="passwordLabel">Password / Login Code (PIN)</label>
+            <label for="loginStudentId">Student ID</label>
+            <input type="text" id="loginStudentId" placeholder="e.g. DPS-24-0187 or DPS-25-0301" autocomplete="off" required />
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Password / Login Code (PIN)</label>
             <div class="password-input-wrap">
-              <input type="password" id="loginPassword" placeholder="Enter your Login Code or PIN" required />
+              <input type="password" id="loginPassword" placeholder="Enter your Login Code or PIN" autocomplete="current-password" required />
               <button type="button" id="togglePasswordBtn" class="password-toggle" onclick="togglePasswordVisibility()" aria-label="Show password">Show</button>
             </div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:11px;">
-            <label style="display:flex;align-items:center;gap:6px;color:var(--muted);">
-              <input type="checkbox" checked /> Keep me signed in
-            </label>
-            <button type="button" style="background:transparent;color:var(--teal);font-weight:700;" onclick="showForgotNote()">
-              Forgot Password?
-            </button>
-          </div>
-
           <button type="submit" class="primary-btn">Sign in to Portal →</button>
         </form>
+
+        <div style="font-size:12px;color:var(--muted);margin-top:22px;text-align:center;">
+          Administrator or teacher? <a style="color:var(--crest-purple);" href="detlof-admin-bulk-import%20(6).html">Sign in to the admin portal</a>
+        </div>
 
       </div>
     </section>
