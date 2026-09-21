@@ -426,52 +426,86 @@
       .card { padding: 16px; }
       .field input, .field select, .field textarea { font-size: 12px; }
       .timetable-row { grid-template-columns: 1fr 1fr; }
-     .timetable-day { grid-column: 1 / -1; }
-     }
-      .admin-login-screen {
-        position: fixed; inset: 0; z-index: 50;
-        display: flex;
-      }
-      .admin-login-left {
-        flex: 1; display: flex; align-items: center; justify-content: center;
-        background: #1a337e; overflow: hidden;
-      }
-      .admin-login-left img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-      .admin-login-right {
-        flex: 1; display: flex; align-items: center; justify-content: center;
-        background: #fff;
-      }
-      .admin-login-right .login-wrap { max-width: 500px; width: 100%; padding: 16px; }
-      .admin-login-form { margin: 40px 0; display: flex; flex-direction: column; gap: 22px; }
-      .admin-login-form label { display: block; text-align: left; font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 6px; }
-      .admin-login-form input {
-        width: 100%; border: 1px solid #d1d5db; border-radius: 8px;
-        padding: 10px 12px; font-size: 14px; font-family: inherit;
-      }
-      .admin-login-form input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
-      .admin-login-form .login-btn {
-        width: 100%; background: #1a337e; color: #fff; font-weight: 700;
-        padding: 10px 16px; border-radius: 9999px; border: 0; cursor: pointer; font-size: 14px;
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-      }
-      .admin-login-form .login-btn:hover { background: #2547a8; }
-      .admin-login-form .login-btn:disabled { opacity: .7; cursor: wait; }
-      .admin-login-error { color: #dc2626; font-size: 13px; margin-top: -14px; }
-      .admin-login-footer { text-align: center; padding: 16px 0 0; font-size: 13px; color: #6b7280; }
-      .admin-login-footer a { color: #2563eb; text-decoration: none; }
-      .admin-login-footer a:hover { text-decoration: underline; }
-      .admin-login-divider { position: relative; padding: 14px 0; text-align: center; }
-      .admin-login-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #d1d5db; }
-      .admin-login-divider span { background: #fff; padding: 0 12px; font-size: 13px; color: #6b7280; position: relative; }
-      .admin-login-brand { text-align: center; margin-bottom: 6px; }
-      .admin-login-brand img { width: 64px; height: 76px; object-fit: contain; }
-      .admin-login-brand h2 { margin: 8px 0 2px; color: #1a337e; font-size: 22px; }
-      .admin-login-brand p { margin: 0; color: #9ca3af; font-size: 13px; }
-      @media (max-width: 768px) {
-        .admin-login-screen { flex-direction: column; }
-        .admin-login-left { min-height: 180px; }
-        .admin-login-left img { max-height: 180px; }
-      }
+      .timetable-day { grid-column: 1 / -1; }
+    }
+    .admin-login-screen {
+      position: fixed; inset: 0; z-index: 50;
+      display: flex;
+    }
+    .admin-login-left {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      background: #1a337e; overflow: hidden;
+    }
+    .admin-login-left img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .admin-login-right {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      background: #fff;
+    }
+    .admin-login-right .login-wrap { max-width: 500px; width: 100%; padding: 16px; }
+    .admin-login-form { margin: 40px 0; display: flex; flex-direction: column; gap: 22px; }
+    .admin-login-form label { display: block; text-align: left; font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+    .admin-login-form input {
+      width: 100%; border: 1px solid #d1d5db; border-radius: 8px;
+      padding: 10px 12px; font-size: 14px; font-family: inherit;
+    }
+    .admin-login-form input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+    .admin-login-form .login-btn {
+      width: 100%; background: #1a337e; color: #fff; font-weight: 700;
+      padding: 10px 16px; border-radius: 9999px; border: 0; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .admin-login-form .login-btn:hover { background: #2547a8; }
+    .admin-login-form .login-btn:disabled { opacity: .7; cursor: wait; }
+    .admin-login-error { color: #dc2626; font-size: 13px; margin-top: -14px; }
+    .admin-login-footer { text-align: center; padding: 16px 0 0; font-size: 13px; color: #6b7280; }
+    .admin-login-footer a { color: #2563eb; text-decoration: none; }
+    .admin-login-footer a:hover { text-decoration: underline; }
+    .admin-login-divider { position: relative; padding: 14px 0; text-align: center; }
+    .admin-login-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #d1d5db; }
+    .admin-login-divider span { background: #fff; padding: 0 12px; font-size: 13px; color: #6b7280; position: relative; }
+    .admin-login-brand { text-align: center; margin-bottom: 6px; }
+    .admin-login-brand img { width: 64px; height: 76px; object-fit: contain; }
+    .admin-login-brand h2 { margin: 8px 0 2px; color: #1a337e; font-size: 22px; }
+    .admin-login-brand p { margin: 0; color: #9ca3af; font-size: 13px; }
+    @media (max-width: 768px) {
+      .admin-login-screen { flex-direction: column; }
+      .admin-login-left { min-height: 180px; }
+      .admin-login-left img { max-height: 180px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 14px 10px 36px; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 14px; }
+      .top-actions { width: 100%; gap: 6px; }
+      .hero-banner { padding: 14px; gap: 10px; }
+      .hero-banner h1 { font-size: 18px; }
+      .hero-banner p { font-size: 11px; }
+      .grid { gap: 14px; }
+      .card { padding: 14px; margin-bottom: 14px; }
+      .field { margin-bottom: 10px; }
+      .field label { font-size: 10px; }
+      .field input, .field select, .field textarea { padding: 9px 10px; min-height: 40px; }
+      .row-2 { gap: 8px; }
+      .btn { padding: 8px 10px; font-size: 10px; min-height: 40px; }
+      .role-banner { padding: 10px 12px; font-size: 12px; gap: 6px; }
+      .selected-student-summary { padding: 12px; gap: 10px; }
+      .selected-student-summary .avatar { width: 38px; height: 38px; font-size: 14px; }
+      .update-card { padding: 12px; margin-top: 14px; }
+      .update-card h3 { font-size: 13px; }
+      .update-card p { font-size: 10px; }
+      table { font-size: 10px; }
+      th { font-size: 9px; padding: 7px 5px; }
+      td { padding: 8px 5px; font-size: 10px; }
+      .code-pill { font-size: 10px; padding: 3px 6px; }
+      .id-pill { font-size: 9px; padding: 2px 5px; }
+      .synced-badge { font-size: 9px; padding: 2px 6px; }
+      .sync-pill { font-size: 10px; padding: 6px 10px; }
+      .status-toast { font-size: 10px; padding: 10px 12px; }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .btn { min-height: 44px; }
+      .field input, .field select, .field textarea { min-height: 44px; }
+      .timetable-day { min-height: 44px; }
+    }
     </style>
 </head>
 <body>
@@ -705,9 +739,14 @@
             <h2>Active Generated Student Login Codes</h2>
             <p class="sub" style="margin-bottom:0;">Download a student's login details to share securely with them.</p>
           </div>
-          <button type="button" id="resyncAllBtn" class="btn btn-outline" style="padding:7px 11px;font-size:11px;">
-            Re-Sync All to Database
-          </button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" id="downloadAllBtn" class="btn btn-gold" style="padding:7px 11px;font-size:11px;">
+              ⬇ Download All Codes
+            </button>
+            <button type="button" id="resyncAllBtn" class="btn btn-outline" style="padding:7px 11px;font-size:11px;">
+              Re-Sync All to Database
+            </button>
+          </div>
         </div>
 
       <section class="card admin-only">
@@ -958,6 +997,37 @@
       URL.revokeObjectURL(url);
     }
 
+    function downloadAllCodes() {
+      if (isTeacher) { window.alert("Teacher access cannot download all codes."); return; }
+      const records = getStoredRecords();
+      const lines = [
+        "Detlof Preparatory School - Bulk Student Login Codes",
+        "Generated: " + new Date().toLocaleString(),
+        "Total Students: " + records.length,
+        "============================================================",
+        "",
+      ];
+      records.forEach((rec) => {
+        lines.push(
+          "Student: " + rec.fullName + "\n" +
+          "Class: " + rec.currentClass + "\n" +
+          "Student ID: " + rec.studentId + "\n" +
+          "Student Email: " + rec.email + "\n" +
+          "Login Code / PIN: " + rec.loginCode + "\n" +
+          "Portal: detlof-student-portal.html\n" +
+          "------------------------------------------------------------"
+        );
+      });
+      const blob = new Blob([lines.join("\r\n")], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "detlof-all-student-codes-" + new Date().toISOString().slice(0, 10) + ".txt";
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Downloaded login codes for " + records.length + " students.");
+    }
+
     function populateRecordStudents() {
       const classSelect = document.getElementById("recordClass");
       const studentNames = document.getElementById("recordStudentNames");
@@ -1042,6 +1112,8 @@
       if (isTeacher) return;
       await syncRecordsToPortal(getStoredRecords());
     });
+
+    document.getElementById("downloadAllBtn").addEventListener("click", downloadAllCodes);
 
     document.getElementById("recordClass").addEventListener("change", populateRecordStudents);
 
