@@ -433,44 +433,45 @@
       display: flex;
     }
     .admin-login-left {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      background: #1a337e; overflow: hidden;
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #1a337e; overflow: hidden; color: #fff; padding: 24px;
     }
-    .admin-login-left img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .admin-login-left .left-logo { width: 100px; height: 116px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+    .admin-login-left h3 { margin: 16px 0 6px; font-size: 22px; letter-spacing: 0.12em; font-weight: 800; }
+    .admin-login-left p { margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
     .admin-login-right {
       flex: 1; display: flex; align-items: center; justify-content: center;
       background: #fff;
     }
-    .admin-login-right .login-wrap { max-width: 500px; width: 100%; padding: 16px; }
-    .admin-login-form { margin: 40px 0; display: flex; flex-direction: column; gap: 22px; }
-    .admin-login-form label { display: block; text-align: left; font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+    .admin-login-right .login-wrap { max-width: 440px; width: 100%; padding: 32px 24px; }
+    .admin-login-title { text-align: center; font-size: 28px; font-weight: 700; color: #1a337e; margin: 0 0 6px; }
+    .admin-login-subtitle { text-align: center; font-size: 13px; color: #6b7280; margin: 0 0 28px; }
+    .admin-login-form { display: flex; flex-direction: column; gap: 18px; }
+    .admin-login-form label { display: block; text-align: left; font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 5px; }
     .admin-login-form input {
       width: 100%; border: 1px solid #d1d5db; border-radius: 8px;
-      padding: 10px 12px; font-size: 14px; font-family: inherit;
+      padding: 10px 12px; font-size: 14px; font-family: inherit; color: #111827;
     }
     .admin-login-form input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
     .admin-login-form .login-btn {
       width: 100%; background: #1a337e; color: #fff; font-weight: 700;
-      padding: 10px 16px; border-radius: 9999px; border: 0; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 16px; border-radius: 9999px; border: 0; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px;
     }
     .admin-login-form .login-btn:hover { background: #2547a8; }
     .admin-login-form .login-btn:disabled { opacity: .7; cursor: wait; }
-    .admin-login-error { color: #dc2626; font-size: 13px; margin-top: -14px; }
-    .admin-login-footer { text-align: center; padding: 16px 0 0; font-size: 13px; color: #6b7280; }
-    .admin-login-footer a { color: #2563eb; text-decoration: none; }
-    .admin-login-footer a:hover { text-decoration: underline; }
-    .admin-login-divider { position: relative; padding: 14px 0; text-align: center; }
-    .admin-login-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #d1d5db; }
-    .admin-login-divider span { background: #fff; padding: 0 12px; font-size: 13px; color: #6b7280; position: relative; }
-    .admin-login-brand { text-align: center; margin-bottom: 6px; }
-    .admin-login-brand img { width: 64px; height: 76px; object-fit: contain; }
-    .admin-login-brand h2 { margin: 8px 0 2px; color: #1a337e; font-size: 22px; }
-    .admin-login-brand p { margin: 0; color: #9ca3af; font-size: 13px; }
+    .admin-login-error { color: #dc2626; font-size: 12px; margin-top: -10px; text-align: center; }
+    .admin-login-divider { position: relative; padding: 16px 0 0; text-align: center; }
+    .admin-login-divider::before { content: ''; position: absolute; top: 0; left: 0; right: 0; border-top: 1px solid #d1d5db; }
+    .admin-login-divider span { background: #fff; padding: 0 12px; font-size: 12px; color: #6b7280; position: relative; }
     @media (max-width: 768px) {
       .admin-login-screen { flex-direction: column; }
-      .admin-login-left { min-height: 180px; }
-      .admin-login-left img { max-height: 180px; }
+      .admin-login-left { min-height: 160px; padding: 16px; }
+      .admin-login-left .left-logo { width: 60px; height: 70px; }
+      .admin-login-left h3 { font-size: 15px; margin: 8px 0 2px; }
+      .admin-login-left p { font-size: 10px; }
+      .admin-login-right .login-wrap { padding: 24px 18px; }
+      .admin-login-title { font-size: 22px; }
     }
     @media (max-width: 480px) {
       .container { padding: 14px 10px 36px; }
@@ -524,44 +525,41 @@
     </div>
   </header>
 
-   <main id="adminMain" class="container hidden">
-     <div id="adminLoginScreen" class="admin-login-screen hidden">
-       <div class="admin-login-left">
-         <img src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
-       </div>
-       <div class="admin-login-right">
-         <div class="login-wrap">
-           <div class="admin-login-brand">
-             <img src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
-             <h2>Detlof Admin Portal</h2>
-             <p>Sign in to manage students, records, and portal updates.</p>
-           </div>
-           <form id="adminLoginForm" class="admin-login-form">
-             <div>
-               <label for="adminLoginEmail">Email</label>
-               <input id="adminLoginEmail" type="email" placeholder="you@detlof.edu.gh" required />
-             </div>
-             <div>
-               <label for="adminLoginPassword">Password</label>
-               <input id="adminLoginPassword" type="password" required />
-             </div>
-             <div id="adminLoginError" class="admin-login-error hidden">Invalid credentials. Use admin@detlof.edu.gh / DetlofAmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!</div>
-             <button type="submit" class="login-btn" id="adminLoginBtn">
-               <span id="adminLoginBtnText">Sign in</span>
-             </button>
-           </form>
-           <div class="admin-login-divider"><span>Detlof Preparatory School</span></div>
-           <div class="admin-login-footer">
-             Administrator controls and reference info are shown on the admin portal page after sign-in.
-           </div>
-         </div>
-       </div>
-     </div>
+   <main id="adminMain" class="container">
+      <div id="adminLoginScreen" class="admin-login-screen">
+        <div class="admin-login-left">
+          <img class="left-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+          <h3>DETLOF</h3>
+          <p>ADMIN PORTAL</p>
+        </div>
+        <div class="admin-login-right">
+          <div class="login-wrap">
+            <h2 class="admin-login-title">Detlof Admin Portal</h2>
+            <p class="admin-login-subtitle">Sign in to manage students, records, and portal updates.</p>
+            <form id="adminLoginForm" class="admin-login-form">
+              <div>
+                <label for="adminLoginEmail">Email</label>
+                <input id="adminLoginEmail" type="email" placeholder="you@detlof.edu.gh" required />
+              </div>
+              <div>
+                <label for="adminLoginPassword">Password</label>
+                <input id="adminLoginPassword" type="password" required />
+              </div>
+              <div id="adminLoginError" class="admin-login-error hidden">Invalid credentials. Use admin@detlof.edu.gh / DetlofAdmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!</div>
+              <button type="submit" class="login-btn" id="adminLoginBtn">
+                <span id="adminLoginBtnText">Sign in</span>
+              </button>
+            </form>
+            <div class="admin-login-divider"><span>&copy; 2026 Detlof Preparatory School</span></div>
+          </div>
+        </div>
+</div>
 
-     <div id="toastBox" class="status-toast">
-      <span id="toastText">Student login codes generated and synced to the portal!</span>
-      <a class="btn btn-teal" href="/" style="padding:6px 12px;font-size:11px;">Go to Student Login →</a>
-    </div>
+<div id="adminContent" class="hidden">
+      <div id="toastBox" class="status-toast">
+       <span id="toastText">Student login codes generated and synced to the portal!</span>
+       <a class="btn btn-teal" href="/" style="padding:6px 12px;font-size:11px;">Go to Student Login →</a>
+     </div>
 
      <div id="roleBanner" class="role-banner">
        <span>Administrator access — full control over student login codes, academic records, timetables, announcements, and portal updates.</span>
@@ -570,7 +568,7 @@
 
      <section class="card" style="margin-bottom:18px; border-left:4px solid var(--gold);">
        <h2 style="color:var(--teal);">Administrator Reference</h2>
-       <p style="margin:0 0 10px; color:var(--muted); font-size:12px;">Administrator controls are documented here. To access admin functions, sign in with the administrator account (admin@detlof.edu.gh / DetlofAdmin2025!) through the admin portal authentication page.</p>
+       <p style="margin:0 0 10px; color:var(--muted); font-size:12px;">Administrator controls are documented here. To access admin functions, sign in with the administrator account (admin@detlof.edu.gh / DetlofAdmin2026!) through the admin portal authentication page.</p>
        <ul style="margin:0; padding-left:18px; color:var(--ink); font-size:12px; line-height:1.7;">
          <li><strong>Bulk Import:</strong> Upload student records via the Import Records tab.</li>
          <li><strong>Login Codes:</strong> Generate and download individual or bulk student login codes.</li>
@@ -748,6 +746,21 @@
             </button>
           </div>
         </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Student ID</th>
+                <th>Login Code</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="codesTableBody"></tbody>
+          </table>
+        </div>
       </section>
 
       <section class="card admin-only">
@@ -764,6 +777,7 @@
         </form>
       </section>
     </div>
+  </div>
   </main>
 
   <script>
@@ -823,7 +837,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const ADMIN_CREDENTIALS = [
-      { email: "admin@detlof.edu.gh", password: "DetlofAmin2026!", name: "Administrator", role: "admin" },
+      { email: "admin@detlof.edu.gh", password: "DetlofAdmin2026!", name: "Administrator", role: "admin" },
       { email: "teacher@detlof.edu.gh", password: "DetlofTeacher2026!", name: "Class Teacher", role: "teacher" },
     ];
     let currentRole = "teacher";
@@ -845,17 +859,17 @@
     }
 
     function showLoginScreen() {
+      const content = document.getElementById("adminContent");
       const screen = document.getElementById("adminLoginScreen");
-      const main = document.getElementById("adminMain");
+      if (content) content.classList.add("hidden");
       if (screen) screen.classList.remove("hidden");
-      if (main) main.classList.add("hidden");
     }
 
     function showMainPanel() {
+      const content = document.getElementById("adminContent");
       const screen = document.getElementById("adminLoginScreen");
-      const main = document.getElementById("adminMain");
+      if (content) content.classList.remove("hidden");
       if (screen) screen.classList.add("hidden");
-      if (main) main.classList.remove("hidden");
       initRoleUI();
       const seed = getStoredRecords();
       renderTable(seed);
@@ -870,8 +884,10 @@
       teacherName = auth.teacherName || (currentRole === "teacher" ? "Class Teacher" : "Administrator");
       isTeacher = currentRole === "teacher";
       isAuthenticated = true;
+      showMainPanel();
+    } else {
+      showLoginScreen();
     }
-    showMainPanel();
 
     const adminLoginForm = document.getElementById("adminLoginForm");
     if (adminLoginForm) {
@@ -898,7 +914,7 @@
           if (btn) btn.disabled = false;
           if (btnText) btnText.textContent = "Sign in";
           if (!ok) {
-            if (errorBox) { errorBox.textContent = "Invalid credentials. Use admin@detlof.edu.gh / DetlofAmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!"; errorBox.classList.remove("hidden"); }
+            if (errorBox) { errorBox.textContent = "Invalid credentials. Use admin@detlof.edu.gh / DetlofAdmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!"; errorBox.classList.remove("hidden"); }
             return;
           }
           sessionStorage.setItem("detlof_admin_auth", JSON.stringify({ role: currentRole, teacherName: teacherName }));
