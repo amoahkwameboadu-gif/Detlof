@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="Detlof%20creast.png" />
+  <title>Detlof Preparatory School — Admin Bulk Import & Login Code Generator</title>
+  <style>
+    :root {
+      --ink: #2a1730;
+      --ink-deep: #2a1730;
+      --muted: #75697a;
+      --line: #eadfe9;
+      --paper: #fffaf0;
+      --canvas: #faf7f3;
+      --crest-purple: #7a1591;
+      --crest-purple-dark: #560f75;
+      --crest-purple-soft: #f3e7f7;
+      --crest-gold: #f2b500;
+      --crest-gold-dark: #b87a00;
+      --crest-gold-soft: #fff3c4;
+      --crest-red: #d9003b;
+      --crest-red-soft: #ffe4ea;
+      --crest-green: #3f7d55;
+      --crest-green-soft: #e5f3ea;
+      --teal: var(--crest-purple);
+      --teal-dark: var(--crest-purple-dark);
+      --teal-soft: var(--crest-purple-soft);
+      --gold: var(--crest-gold);
+      --gold-soft: var(--crest-gold-soft);
+      --green: var(--crest-red);
+      --green-soft: var(--crest-red-soft);
+      --shadow: 0 10px 26px rgba(64, 15, 80, 0.07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--canvas);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .topbar {
+      background: var(--crest-purple-dark);
+      color: #fff;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      border-bottom: 3px solid var(--crest-gold);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand svg {
+      width: 38px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+    .brand strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: 0.12em;
+      color: #fff;
+    }
+    .brand span {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--crest-gold-soft);
+      margin-top: 2px;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 0;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+    .btn-gold {
+      background: var(--crest-gold);
+      color: var(--ink-deep);
+    }
+    .btn-gold:hover {
+      background: var(--crest-gold-dark);
+    }
+    .btn-teal {
+      background: var(--crest-purple);
+      color: #fff;
+    }
+    .btn-teal:hover {
+      background: var(--crest-purple-dark);
+    }
+    .btn-outline {
+      background: var(--paper);
+      color: var(--crest-purple-dark);
+      border: 1px solid var(--line);
+    }
+    .btn-outline:hover {
+      background: var(--crest-purple-soft);
+    }
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 22px 64px;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, var(--crest-purple-dark) 0%, var(--crest-purple) 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 30px rgba(20, 63, 62, 0.12);
+    }
+    .hero-banner h1 {
+      margin: 4px 0 6px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+    .hero-banner p {
+      margin: 0;
+      color: var(--crest-gold-soft);
+      font-size: 13px;
+      max-width: 680px;
+    }
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(242, 181, 93, 0.45);
+      color: var(--crest-gold-soft);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--crest-green);
+      box-shadow: 0 0 0 4px rgba(63, 125, 85, 0.2);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 22px;
+      box-shadow: 0 10px 26px rgba(24, 59, 59, 0.05);
+    }
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      color: var(--ink-deep);
+    }
+    .card p.sub {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .field textarea {
+      min-height: 115px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .timetable-grid {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 14px;
+      overflow-x: auto;
+    }
+    .timetable-head,
+    .timetable-row {
+      display: grid;
+      grid-template-columns: 0.7fr 1.2fr 0.9fr 1.15fr 1fr;
+      gap: 8px;
+      align-items: end;
+      min-width: 760px;
+    }
+    .timetable-head span {
+      padding: 0 2px 5px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .timetable-row .field {
+      margin-bottom: 0;
+    }
+    .timetable-day {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: var(--crest-purple-soft);
+      color: var(--crest-purple-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    @media (max-width: 680px) {
+      .timetable-head { display: none; }
+      .timetable-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .timetable-day {
+        grid-column: 1 / -1;
+        min-height: 34px;
+      }
+      .timetable-row .field:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+    .status-toast {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 15px;
+      border-radius: 9px;
+      background: var(--crest-green-soft);
+      border: 1px solid var(--crest-green-soft);
+      color: var(--crest-green);
+      font-size: 12px;
+      font-weight: 600;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .status-toast.show {
+      display: flex;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 11px 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+    .code-pill {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 800;
+      font-size: 12px;
+      background: var(--crest-gold-soft);
+      color: var(--crest-gold-dark);
+      border: 1px solid var(--crest-gold-soft);
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+    .id-pill {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+      font-size: 11px;
+      background: var(--crest-purple-soft);
+      color: var(--crest-purple-dark);
+      padding: 3px 7px;
+      border-radius: 5px;
+    }
+    .synced-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--crest-green-soft);
+      color: var(--crest-green);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(242, 181, 0, 0.4);
+      color: var(--crest-gold-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .role-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--crest-purple-soft);
+      border: 1px solid var(--crest-purple-soft);
+      color: var(--crest-purple-dark);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .role-banner strong { color: var(--crest-purple); }
+    .selected-student-summary {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin: 14px 0 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+    .selected-student-summary .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--crest-purple), var(--crest-purple-dark));
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .selected-student-summary .ss-main { font-weight: 700; color: var(--ink-deep); }
+    .selected-student-summary .ss-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .update-card {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--crest-gold);
+    }
+    .update-card h3 { margin: 0 0 4px; color: var(--ink-deep); font-size: 14px; }
+    .update-card p { margin: 0 0 14px; color: var(--muted); font-size: 11px; }
+    .teacher-mode .admin-only,
+    .teacher-only { display: none; }
+    .hidden { display: none !important; }
+    .brand-logo { width: 44px; height: 52px; object-fit: contain; flex-shrink: 0; }
+    .table-scroll { width: 100%; overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .top-actions { width: 100%; flex-wrap: wrap; }
+      .role-badge { order: 3; }
+      .container { padding: 20px 16px 48px; }
+      .hero-banner { padding: 18px; }
+      .selected-student-summary { grid-template-columns: 1fr; text-align: center; }
+    }
+    @media (max-width: 560px) {
+      .brand strong { font-size: 13px; }
+      .brand span { font-size: 7px; }
+      .brand-logo { width: 34px; height: 40px; }
+      .btn { padding: 9px 12px; font-size: 11px; }
+      .card { padding: 16px; }
+      .field input, .field select, .field textarea { font-size: 12px; }
+      .timetable-row { grid-template-columns: 1fr 1fr; }
+      .timetable-day { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+      <div>
+        <strong>DETLOF PREPARATORY SCHOOL</strong>
+        <span id="roleSubtitle">ADMIN BULK IMPORT &amp; STUDENT LOGIN CODE GENERATOR</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="role-badge" id="roleBadge">Administrator</span>
+      <span class="sync-pill" id="syncIndicator"><span class="sync-dot"></span>Synced (0 active student codes)</span>
+      <a class="btn btn-outline" href="detlof-student-portal.html" style="padding:7px 11px;font-size:11px;">Go to Student Login →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="toastBox" class="status-toast">
+      <span id="toastText">Student login codes generated and synced to the portal!</span>
+      <a class="btn btn-teal" href="/" style="padding:6px 12px;font-size:11px;">Go to Student Login →</a>
+    </div>
+
+    <div id="roleBanner" class="role-banner">
+      <span>Administrator access — full control over student login codes, academic records, timetables, and portal updates.</span>
+      <span id="roleBannerDetail"></span>
+    </div>
+
+    <div class="grid">
+      <div>
+        <section class="card admin-only" style="margin-bottom:18px;">
+          <h2>1. Quick Generate Single Student Login Code</h2>
+          <p class="sub">Create a unique Student ID and Login Code/PIN for any class from Creche to JHS 3.</p>
+          <form id="singleForm">
+            <div class="field">
+              <label>Student Full Name</label>
+              <input type="text" id="fullName" placeholder="e.g. Kwame Boateng" required />
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label>Student Email</label>
+                <input type="email" id="email" placeholder="kwame.boateng@detlof.edu.gh" required />
+              </div>
+              <div class="field">
+                <label>Assigned Class</label>
+                <select id="currentClass">
+                  <option>Creche</option>
+                  <option>Nursery 1</option>
+                  <option>Nursery 2</option>
+                  <option>KG 1</option>
+                  <option>KG 2</option>
+                  <option>Basic 1</option>
+                  <option>Basic 2</option>
+                  <option>Basic 3</option>
+                  <option>Basic 4</option>
+                  <option>Basic 5</option>
+                  <option selected>Basic 6</option>
+                  <option>JHS 1</option>
+                  <option>JHS 2</option>
+                  <option>JHS 3</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label>Student ID (Auto or Custom)</label>
+                <input type="text" id="studentId" placeholder="e.g. DPS-25-0412" />
+              </div>
+              <div class="field">
+                <label>Login Code / PIN (Auto or Custom)</label>
+                <input type="text" id="loginCode" placeholder="e.g. DET-4829" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-teal" style="width:100%;justify-content:center;">
+              Generate &amp; Sync Student Login Code
+            </button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Academic Records &amp; Timetable</h2>
+          <p class="sub">Select a student and save individual subject results or timetable entries. Saved records appear in that student's portal.</p>
+          <div class="field">
+            <label>Class</label>
+            <select id="recordClass"></select>
+          </div>
+          <div class="field">
+            <label>Student Full Name</label>
+            <input id="recordStudentName" list="recordStudentNames" placeholder="Type the student's full name" required />
+            <datalist id="recordStudentNames"></datalist>
+          </div>
+          <div id="selectedStudentSummary" class="selected-student-summary hidden">
+      <div class="avatar" id="ssAvatar">?</div>
+      <div>
+        <div class="ss-main" id="ssMain">Select a student to view their details</div>
+        <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
+      </div>
+    </div>
+    <form id="resultForm">
+            <h3 style="margin:16px 0 8px;font-size:14px;">Add Subject Result</h3>
+            <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
+            <div class="row-2">
+              <div class="field"><label>SBA 1 / 10</label><input id="resultSba1" type="number" min="0" max="10" step="0.01" required /></div>
+              <div class="field"><label>SBA 2 / 20</label><input id="resultSba2" type="number" min="0" max="20" step="0.01" required /></div>
+            </div>
+            <div class="row-2">
+              <div class="field"><label>Project Work / 20</label><input id="resultProject" type="number" min="0" max="20" step="0.01" required /></div>
+              <div class="field"><label>Exam Score / 100 (weighted to 50)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
+            </div>
+            <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
+            <button class="btn btn-teal" type="submit">Save Result</button>
+          </form>
+          <form id="timetableForm" style="border-top:1px solid var(--line);margin-top:20px;padding-top:4px;">
+            <h3 style="margin:16px 0 8px;font-size:14px;">Add Weekly Timetable</h3>
+            <div class="timetable-grid">
+              <div class="timetable-head" aria-hidden="true">
+                <span>Day</span>
+                <span>Subject</span>
+                <span>Time</span>
+                <span>Room / Venue</span>
+                <span>Teacher</span>
+              </div>
+              <div class="timetable-row">
+                <div class="timetable-day">Monday</div>
+                <div class="field"><label for="scheduleSubjectMonday">Subject</label><input id="scheduleSubjectMonday" data-timetable-day="Monday" data-timetable-field="subject" placeholder="e.g. Mathematics" required /></div>
+                <div class="field"><label for="scheduleTimeMonday">Time</label><input id="scheduleTimeMonday" data-timetable-day="Monday" data-timetable-field="time" type="text" placeholder="8:00 – 9:00" required /></div>
+                <div class="field"><label for="scheduleVenueMonday">Room / Venue</label><input id="scheduleVenueMonday" data-timetable-day="Monday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
+                <div class="field"><label for="scheduleTeacherMonday">Teacher (optional)</label><input id="scheduleTeacherMonday" data-timetable-day="Monday" data-timetable-field="teacher" placeholder="e.g. Mrs. Addo" /></div>
+              </div>
+              <div class="timetable-row">
+                <div class="timetable-day">Tuesday</div>
+                <div class="field"><label for="scheduleSubjectTuesday">Subject</label><input id="scheduleSubjectTuesday" data-timetable-day="Tuesday" data-timetable-field="subject" placeholder="e.g. English Language" required /></div>
+                <div class="field"><label for="scheduleTimeTuesday">Time</label><input id="scheduleTimeTuesday" data-timetable-day="Tuesday" data-timetable-field="time" type="text" placeholder="9:00 – 10:00" required /></div>
+                <div class="field"><label for="scheduleVenueTuesday">Room / Venue</label><input id="scheduleVenueTuesday" data-timetable-day="Tuesday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
+                <div class="field"><label for="scheduleTeacherTuesday">Teacher (optional)</label><input id="scheduleTeacherTuesday" data-timetable-day="Tuesday" data-timetable-field="teacher" placeholder="e.g. Mr. Mensah" /></div>
+              </div>
+              <div class="timetable-row">
+                <div class="timetable-day">Wednesday</div>
+                <div class="field"><label for="scheduleSubjectWednesday">Subject</label><input id="scheduleSubjectWednesday" data-timetable-day="Wednesday" data-timetable-field="subject" placeholder="e.g. Integrated Science" required /></div>
+                <div class="field"><label for="scheduleTimeWednesday">Time</label><input id="scheduleTimeWednesday" data-timetable-day="Wednesday" data-timetable-field="time" type="text" placeholder="10:00 – 11:00" required /></div>
+                <div class="field"><label for="scheduleVenueWednesday">Room / Venue</label><input id="scheduleVenueWednesday" data-timetable-day="Wednesday" data-timetable-field="venue" placeholder="Science Lab" required /></div>
+                <div class="field"><label for="scheduleTeacherWednesday">Teacher (optional)</label><input id="scheduleTeacherWednesday" data-timetable-day="Wednesday" data-timetable-field="teacher" placeholder="e.g. Mrs. Owusu" /></div>
+              </div>
+              <div class="timetable-row">
+                <div class="timetable-day">Thursday</div>
+                <div class="field"><label for="scheduleSubjectThursday">Subject</label><input id="scheduleSubjectThursday" data-timetable-day="Thursday" data-timetable-field="subject" placeholder="e.g. Computing / ICT" required /></div>
+                <div class="field"><label for="scheduleTimeThursday">Time</label><input id="scheduleTimeThursday" data-timetable-day="Thursday" data-timetable-field="time" type="text" placeholder="11:00 – 12:00" required /></div>
+                <div class="field"><label for="scheduleVenueThursday">Room / Venue</label><input id="scheduleVenueThursday" data-timetable-day="Thursday" data-timetable-field="venue" placeholder="ICT Lab" required /></div>
+                <div class="field"><label for="scheduleTeacherThursday">Teacher (optional)</label><input id="scheduleTeacherThursday" data-timetable-day="Thursday" data-timetable-field="teacher" placeholder="e.g. Mr. Kofi" /></div>
+              </div>
+              <div class="timetable-row">
+                <div class="timetable-day">Friday</div>
+                <div class="field"><label for="scheduleSubjectFriday">Subject</label><input id="scheduleSubjectFriday" data-timetable-day="Friday" data-timetable-field="subject" placeholder="e.g. Social Studies" required /></div>
+                <div class="field"><label for="scheduleTimeFriday">Time</label><input id="scheduleTimeFriday" data-timetable-day="Friday" data-timetable-field="time" type="text" placeholder="8:00 – 9:00" required /></div>
+                <div class="field"><label for="scheduleVenueFriday">Room / Venue</label><input id="scheduleVenueFriday" data-timetable-day="Friday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
+                <div class="field"><label for="scheduleTeacherFriday">Teacher (optional)</label><input id="scheduleTeacherFriday" data-timetable-day="Friday" data-timetable-field="teacher" placeholder="e.g. Ms. Aidoo" /></div>
+              </div>
+            </div>
+            <button class="btn btn-gold" type="submit">Save Monday–Friday Timetable</button>
+          </form>
+
+          <form id="portalUpdateForm" class="update-card">
+            <h3>Send Individual Portal Update</h3>
+            <p>Compose a message that will appear in the selected student's portal under announcements.</p>
+            <div class="field"><label>Update Title</label><input id="updateTitle" placeholder="e.g. New homework assigned" required /></div>
+            <div class="field">
+              <label>Category</label>
+              <select id="updateCategory">
+                <option>Results Update</option>
+                <option>Timetable Update</option>
+                <option>School Notice</option>
+                <option>Individual Update</option>
+              </select>
+            </div>
+            <div class="field"><label>Message</label><textarea id="updateMessage" placeholder="Type the message the student will see on their portal…" required></textarea></div>
+            <button class="btn btn-teal" type="submit">Send Portal Update</button>
+          </form>
+        </section>
+      </div>
+
+      <section class="card admin-only">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h2>Active Generated Student Login Codes</h2>
+            <p class="sub" style="margin-bottom:0;">Download a student's login details to share securely with them.</p>
+          </div>
+          <button type="button" id="resyncAllBtn" class="btn btn-outline" style="padding:7px 11px;font-size:11px;">
+            Re-Sync All to Database
+          </button>
+        </div>
+
+      <section class="card admin-only">
+        <h2>Broadcast Announcement to All Student Portals</h2>
+        <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
+        <form id="announcementForm">
+          <div class="row-2">
+            <div class="field"><label>Title</label><input id="annTitle" placeholder="e.g. Term 2 results published" required /></div>
+            <div class="field"><label>Category</label><select id="annCategory"><option>Results Update</option><option>Timetable Update</option><option>School Notice</option><option>Individual Update</option></select></div>
+          </div>
+          <div class="field"><label>Message</label><textarea id="annMessage" placeholder="Type the announcement students will see on their portal…" required></textarea></div>
+          <div class="field"><label>Target Class (optional)</label><input id="annClass" placeholder="Leave blank to send to all classes" /></div>
+          <button class="btn btn-teal" type="submit">Broadcast to All Portals</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "detlof_bulk_import_codes";
+
+    const defaultSeedCodes = [
+      {
+        fullName: "Eliana Ama Owusu",
+        email: "eliana.owusu@detlof.edu.gh",
+        studentId: "DPS-24-0187",
+        currentClass: "JHS 2",
+        academicYear: "2024 / 2025",
+        loginCode: "Detlof2025!",
+      },
+      {
+        fullName: "Abena Osei",
+        email: "abena.osei@detlof.edu.gh",
+        studentId: "DPS-25-0301",
+        currentClass: "JHS 1",
+        academicYear: "2024 / 2025",
+        loginCode: "DET-3019",
+      },
+      {
+        fullName: "Kojo Antwi",
+        email: "kojo.antwi@detlof.edu.gh",
+        studentId: "DPS-25-0302",
+        currentClass: "Basic 5",
+        academicYear: "2024 / 2025",
+        loginCode: "DET-5028",
+      },
+    ];
+
+    function getStoredRecords() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [...defaultSeedCodes];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) && parsed.length ? parsed : [...defaultSeedCodes];
+      } catch {
+        return [...defaultSeedCodes];
+      }
+    }
+
+    function saveStoredRecords(records) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+
+    function randomCode() {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      return "DET-" + num;
+    }
+
+    function randomStudentId(seq) {
+      const num = seq || Math.floor(1000 + Math.random() * 8999);
+      return "DPS-25-" + String(num).padStart(4, "0");
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentRole = params.get("role") === "teacher" ? "teacher" : "admin";
+    const teacherName = decodeURIComponent(params.get("teacher") || "") || (currentRole === "teacher" ? "Class Teacher" : "Administrator");
+    const isTeacher = currentRole === "teacher";
+    document.body.classList.toggle("teacher-mode", isTeacher);
+    const roleBadge = document.getElementById("roleBadge");
+    roleBadge.textContent = isTeacher ? "Teacher" : "Administrator";
+    document.getElementById("roleSubtitle").textContent = isTeacher ? "Teacher Portal — Academic Records & Timetable" : "ADMIN BULK IMPORT & STUDENT LOGIN CODE GENERATOR";
+    const roleBanner = document.getElementById("roleBanner");
+    roleBanner.innerHTML = isTeacher
+      ? "<span>Teacher access — you can update one selected student's academic records, timetable, and send portal updates. Login code generation and bulk sync are hidden.</span><span id='roleBannerDetail'>Signed in as <strong>" + escapeHtml(teacherName) + "</strong></span>"
+      : "<span>Administrator access — full control over student login codes, academic records, timetables, announcements, and portal updates.</span><span id='roleBannerDetail'>Administrator</span>";
+    document.getElementById("roleBannerDetail").id = "roleBannerDetail";
+    document.querySelectorAll(".admin-only").forEach((el) => { if (isTeacher) el.style.display = "none"; });
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function teacherLabel() { return isTeacher ? teacherName : "Administrator"; }
+    function stampIso() { return new Date().toISOString(); }
+    function stampDate() { return new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }); }
+
+    async function syncRecordsToPortal(recordsToSync) {
+      const indicator = document.getElementById("syncIndicator");
+      if (indicator) indicator.textContent = "Syncing to Portal Database…";
+      try {
+        const res = await fetch("/api/admin/bulk-import", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            students: recordsToSync,
+            role: currentRole,
+            academicYear: "2024 / 2025",
+            source: "detlof-admin-bulk-import (6).html",
+          }),
+        });
+        let data = {};
+        try { data = await res.json(); } catch { data = {}; }
+        if (res.ok && Array.isArray(data.students)) {
+          const existing = getStoredRecords();
+          const map = new Map();
+          existing.forEach((item) => map.set(item.studentId.toUpperCase(), item));
+          data.students.forEach((item) => {
+            if (item && item.studentId) {
+              const previous = map.get(item.studentId.toUpperCase()) || {};
+              map.set(item.studentId.toUpperCase(), { ...previous, ...item });
+            }
+          });
+          const merged = Array.from(map.values());
+          saveStoredRecords(merged);
+          renderTable(merged);
+          if (indicator) indicator.textContent = "Synced (" + merged.length + " active student codes)";
+        } else {
+          if (indicator) indicator.textContent = "Saved locally & ready for login";
+        }
+      } catch {
+        if (indicator) indicator.textContent = "Saved locally & ready for login";
+      }
+    }
+
+    function renderTable(records) {
+      const tbody = document.getElementById("codesTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      records.forEach((rec) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td><strong style='color:var(--crest-purple-dark);display:block;'>" +
+          escapeHtml(rec.fullName) +
+          "</strong><small style='color:var(--muted);'>" +
+          escapeHtml(rec.email) +
+          "</small></td>" +
+          "<td>" +
+          escapeHtml(rec.currentClass) +
+          "</td>" +
+          "<td><span class='id-pill'>" +
+          escapeHtml(rec.studentId) +
+          "</span></td>" +
+          "<td><span class='code-pill'>" +
+          escapeHtml(rec.loginCode) +
+          "</span></td>" +
+          "<td><span class='synced-badge'>✓ Active</span></td>" +
+          "<td><button class='btn btn-teal download-code-btn' style='padding:6px 10px;font-size:11px;' type='button'>Download Login Details</button></td>";
+        tr.querySelector(".download-code-btn").addEventListener("click", () => downloadLoginDetails(rec));
+        tbody.appendChild(tr);
+      });
+    }
+
+    function downloadLoginDetails(rec) {
+      const content = [
+        "Detlof Preparatory School - Student Portal Login",
+        "Student: " + rec.fullName,
+        "Class: " + rec.currentClass,
+        "Student ID: " + rec.studentId,
+        "Student Email: " + rec.email,
+        "Login Code / PIN: " + rec.loginCode,
+        "",
+        "Portal: detlof-student-portal.html",
+      ].join("\r\n");
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = rec.studentId + "-portal-login.txt";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function populateRecordStudents() {
+      const classSelect = document.getElementById("recordClass");
+      const studentNames = document.getElementById("recordStudentNames");
+      const studentNameInput = document.getElementById("recordStudentName");
+      const classes = [
+        "Creche", "Nursery 1", "Nursery 2", "KG 1", "KG 2",
+        "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6",
+        "JHS 1", "JHS 2", "JHS 3",
+      ];
+      const selectedClass = classSelect.value || classes[0];
+      classSelect.innerHTML = classes.map((name) => "<option>" + name + "</option>").join("");
+      classSelect.value = classes.includes(selectedClass) ? selectedClass : classes[0];
+      const records = getStoredRecords();
+      const classStudents = records
+        .filter((record) => record.currentClass === classSelect.value)
+        .map((record) => record.fullName);
+      studentNames.innerHTML = classStudents.map((name) => "<option value='" + escapeHtml(name) + "'>").join("");
+      if (studentNameInput.value && !classStudents.includes(studentNameInput.value)) studentNameInput.value = "";
+      updateSelectedStudentSummary(getRecordForTypedName());
+    }
+
+    function getRecordForTypedName() {
+      const selectedClass = document.getElementById("recordClass").value;
+      const typedName = document.getElementById("recordStudentName").value.trim();
+      if (!typedName) return null;
+      return getStoredRecords().find(
+        (record) => record.currentClass === selectedClass && record.fullName.trim().toLowerCase() === typedName.toLowerCase()
+      );
+    }
+
+    function updateSelectedStudentSummary(record) {
+      const box = document.getElementById("selectedStudentSummary");
+      if (!box) return;
+      if (!record) { box.classList.add("hidden"); return; }
+      box.classList.remove("hidden");
+      const avatar = document.getElementById("ssAvatar");
+      const main = document.getElementById("ssMain");
+      const sub = document.getElementById("ssSub");
+      avatar.textContent = (record.fullName.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()) || "?";
+      main.textContent = record.fullName || "Unknown student";
+      sub.textContent = (record.currentClass || "—") + " · " + (record.studentId || "—") + " · " + (record.email || "—");
+    }
+
+    async function updateStudentRecord(studentId, update) {
+      const records = getStoredRecords();
+      const record = records.find((item) => item.studentId === studentId);
+      if (!record) return;
+      Object.assign(record, update);
+      record.updatedBy = teacherLabel();
+      record.updatedAt = stampIso();
+      saveStoredRecords(records);
+      renderTable(records);
+      updateSelectedStudentSummary(record);
+      await syncRecordsToPortal([record]);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastBox");
+      if (!toast) return;
+      document.getElementById("toastText").textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4000);
+    }
+
+    document.getElementById("singleForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (isTeacher) { window.alert("Teacher access is limited to Academic Records & Timetable and portal updates."); return; }
+      const fullName = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const currentClass = document.getElementById("currentClass").value;
+      const studentId = (document.getElementById("studentId").value.trim() || randomStudentId()).toUpperCase();
+      const loginCode = document.getElementById("loginCode").value.trim() || randomCode();
+      const newRec = { fullName, email, studentId, currentClass, academicYear: "2024 / 2025", loginCode };
+      const all = [newRec, ...getStoredRecords().filter((r) => r.studentId !== studentId)];
+      saveStoredRecords(all);
+      renderTable(all);
+      await syncRecordsToPortal([newRec]);
+      e.target.reset();
+    });
+
+    document.getElementById("resyncAllBtn").addEventListener("click", async () => {
+      if (isTeacher) return;
+      await syncRecordsToPortal(getStoredRecords());
+    });
+
+    document.getElementById("recordClass").addEventListener("change", populateRecordStudents);
+
+    document.getElementById("recordStudentName").addEventListener("input", () => {
+      updateSelectedStudentSummary(getRecordForTypedName());
+    });
+
+    document.getElementById("resultForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const record = getRecordForTypedName();
+      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
+      const sba1 = Number(document.getElementById("resultSba1").value);
+      const sba2 = Number(document.getElementById("resultSba2").value);
+      const project = Number(document.getElementById("resultProject").value);
+      const examScore = Number(document.getElementById("resultExamScore").value);
+      const totalScore = Math.round((sba1 + sba2 + project + examScore * 0.5) * 100) / 100;
+      const result = {
+        subject: document.getElementById("resultSubject").value.trim(),
+        sba1,
+        sba2,
+        project,
+        examScore,
+        totalScore,
+        grade: totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : "D",
+        remark: document.getElementById("resultRemark").value.trim() || "Keep it up",
+        updatedBy: teacherLabel(),
+        updatedAt: stampIso(),
+      };
+      const results = (record.results || []).filter((item) => item.subject !== result.subject);
+      results.push(result);
+      await updateStudentRecord(record.studentId, { results });
+      event.target.reset();
+    });
+
+    document.getElementById("timetableForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const record = getRecordForTypedName();
+      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
+      const timetableDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      const timetable = timetableDays.map((day) => ({
+        day,
+        subject: document.getElementById("scheduleSubject" + day).value.trim(),
+        time: document.getElementById("scheduleTime" + day).value.trim(),
+        teacher: document.getElementById("scheduleTeacher" + day).value.trim() || "Not assigned",
+        venue: document.getElementById("scheduleVenue" + day).value.trim(),
+        updatedBy: teacherLabel(),
+        updatedAt: stampIso(),
+      }));
+      await updateStudentRecord(record.studentId, { timetable });
+      event.target.reset();
+    });
+
+    document.getElementById("portalUpdateForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const record = getRecordForTypedName();
+      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
+      const updateObj = {
+        id: "upd-" + Date.now() + "-" + Math.floor(1000 + Math.random() * 9000),
+        title: document.getElementById("updateTitle").value.trim(),
+        category: document.getElementById("updateCategory").value,
+        message: document.getElementById("updateMessage").value.trim(),
+        date: stampDate(),
+        createdAt: stampIso(),
+        createdBy: teacherLabel(),
+        individual: true,
+      };
+      const updates = Array.isArray(record.updates) ? record.updates : [];
+      updates.push(updateObj);
+      await updateStudentRecord(record.studentId, { updates });
+      event.target.reset();
+      showToast("Portal update sent to " + record.fullName + ".");
+    });
+
+    document.getElementById("announcementForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (isTeacher) { window.alert("Announcements can only be sent by an administrator."); return; }
+      const title = document.getElementById("annTitle").value.trim();
+      const message = document.getElementById("annMessage").value.trim();
+      const category = document.getElementById("annCategory").value;
+      const targetClass = document.getElementById("annClass").value.trim();
+      if (!title || !message) return;
+      const updateObj = {
+        id: "ann-" + Date.now(),
+        title,
+        category,
+        message,
+        date: stampDate(),
+        createdAt: stampIso(),
+        createdBy: teacherLabel(),
+        individual: false,
+      };
+      const records = getStoredRecords().map((rec) => {
+        if (targetClass && rec.currentClass !== targetClass) return rec;
+        const updates = Array.isArray(rec.updates) ? rec.updates : [];
+        updates.push({ ...updateObj });
+        rec.updatedBy = teacherLabel();
+        rec.updatedAt = stampIso();
+        return rec;
+      });
+      saveStoredRecords(records);
+      renderTable(records);
+      await syncRecordsToPortal(records);
+      event.target.reset();
+      showToast("Broadcast announcement sent to " + (targetClass || "all") + " student portal(s).");
+    });
+
+    const initial = getStoredRecords();
+    renderTable(initial);
+    populateRecordStudents();
+    updateSelectedStudentSummary(getRecordForTypedName());
+    syncRecordsToPortal(initial);
+  </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detlof Preparatory School — Student Portal</title>
+<!-- ==========================================================================
+     DETLOF PREPARATORY SCHOOL — STUDENT PORTAL
+     ========================================================================== -->
+  <link rel="icon" href="Detlof%20creast.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==========================================================================
+       VIEW 1: STUDENT & ADMIN LOGIN SCREEN
+       ========================================================================== -->
+  <main id="loginScreen" class="login-shell">
+    <section class="login-brand-panel">
+      <div class="brand">
+        <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+        <div>
+          <strong>DETLOF</strong>
+          <span>PREPARATORY SCHOOL</span>
+        </div>
+      </div>
+
+      <div class="login-hero">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--crest-gold);font-weight:700;">
+          Student Information Portal · Wisdom Balance
+        </div>
+        <h1>Everything you need<br /><em>to stay on track.</em></h1>
+        <p>Sign in to access your personal academic results, class timetable, and school announcements.</p>
+        <div class="feature-pills">
+          <span>✓ Academic Results</span>
+          <span>✓ Class Timetable</span>
+          <span>✓ School Announcements</span>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--muted);">
+        © 2025 Detlof Preparatory School · Wisdom Balance
+      </div>
+    </section>
+
+    <section class="login-form-panel">
+      <div class="login-card">
+        <img class="login-mobile-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+        <p style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;">
+          Welcome back
+        </p>
+        <h2 style="font-size:24px;color:var(--ink-deep);margin:0 0 6px;">Sign in to your portal</h2>
+        <p style="color:var(--muted);font-size:12px;margin:0;">Use your school email, Student ID, and Login Code/PIN.</p>
+
+        <div class="role-switch">
+          <button type="button" id="roleStudentBtn" class="active" onclick="setLoginRole('student')">Student</button>
+          <button type="button" id="roleTeacherBtn" onclick="setLoginRole('teacher')">Teacher</button>
+          <button type="button" id="roleAdminBtn" onclick="setLoginRole('admin')">Administrator</button>
+        </div>
+
+        <div id="loginInfoBox" class="info-box hidden"></div>
+        <div id="loginErrorBox" class="alert-box hidden"></div>
+
+        <form id="portalLoginForm">
+          <div class="field">
+            <label id="emailLabel">Student Email</label>
+            <input type="email" id="loginEmail" placeholder="you@detlof.edu.gh" required />
+          </div>
+
+          <div class="field" id="studentIdFieldWrap">
+            <label>Student ID</label>
+            <input type="text" id="loginStudentId" placeholder="e.g. DPS-24-0187 or DPS-25-0301" />
+          </div>
+
+          <div class="field">
+            <label id="passwordLabel">Password / Login Code (PIN)</label>
+            <div class="password-input-wrap">
+              <input type="password" id="loginPassword" placeholder="Enter your Login Code or PIN" required />
+              <button type="button" id="togglePasswordBtn" class="password-toggle" onclick="togglePasswordVisibility()" aria-label="Show password">Show</button>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:11px;">
+            <label style="display:flex;align-items:center;gap:6px;color:var(--muted);">
+              <input type="checkbox" checked /> Keep me signed in
+            </label>
+            <button type="button" style="background:transparent;color:var(--teal);font-weight:700;" onclick="showForgotNote()">
+              Forgot Password?
+            </button>
+          </div>
+
+          <button type="submit" class="primary-btn">Sign in to Portal →</button>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       VIEW 2: AUTHENTICATED STUDENT PORTAL SHELL
+       ========================================================================== -->
+  <div id="portalShell" class="portal-shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+        <div>
+          <strong>DETLOF</strong>
+          <span>STUDENT PORTAL</span>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        <button class="nav-btn" data-tab="results" onclick="switchTab('results')">🏅 My Results</button>
+        <button class="nav-btn" data-tab="timetable" onclick="switchTab('timetable')">📅 My Timetable</button>
+        <button class="nav-btn" data-tab="announcements" onclick="switchTab('announcements')">📢 Announcements</button>
+        <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')">👤 My Profile</button>
+      </nav>
+
+      <div style="margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.12);">
+        <button onclick="logoutPortal()" class="outline-btn" style="width:100%;justify-content:center;">
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <div class="portal-main">
+      <header class="topbar">
+        <div>
+          <strong id="topbarStudentName" style="color:var(--ink-deep);">Student Name</strong>
+          <span id="topbarStudentMeta" style="color:var(--muted);font-size:12px;margin-left:8px;">Class · Student ID</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button onclick="logoutPortal()" class="outline-btn">Logout</button>
+        </div>
+      </header>
+
+      <div class="portal-content">
+        <!-- TAB: DASHBOARD -->
+        <section id="tab-dashboard" class="portal-tab">
+          <div class="welcome-banner">
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--crest-gold);font-weight:700;">
+                2024 / 2025 Academic Year · Term 2
+              </div>
+              <h1 id="dashWelcomeHeading" style="margin:6px 0;font-size:26px;">Welcome back!</h1>
+              <p style="margin:0;color:var(--crest-purple-soft);font-size:13px;">Here is your personal academic results and timetable summary.</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="outline-btn" onclick="switchTab('results')">📊 View My Results</button>
+              <button class="outline-btn" onclick="switchTab('timetable')">📅 View My Timetable</button>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <small>Assigned Class</small>
+              <strong id="statClass">JHS 2</strong>
+              <span id="statStudentId" style="font-size:11px;color:var(--muted);">ID: DPS-24-0187</span>
+            </div>
+            <div class="stat-card">
+              <small>Overall Average</small>
+              <strong id="statAverage">81%</strong>
+              <span style="font-size:11px;color:var(--green);">Term 2 · 5 Subjects Published</span>
+            </div>
+            <div class="stat-card">
+              <small>Next Scheduled Lesson</small>
+              <strong id="statNextLesson">Mathematics</strong>
+              <span style="font-size:11px;color:var(--muted);">Monday · 8:00 AM – 9:00 AM</span>
+            </div>
+          </div>
+
+          <div id="portalUpdateNotice" class="panel update-card hidden">
+            <small class="update-meta" id="portalUpdateMeta">Individual Portal Update</small>
+            <h2 style="margin:6px 0 4px;font-size:16px;" id="portalUpdateTitle"></h2>
+            <p id="portalUpdateMessage" style="margin:0;color:var(--muted);font-size:12px;"></p>
+          </div>
+
+          <div class="two-col">
+            <div class="panel">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="margin:0;font-size:16px;">📊 My Results Summary</h2>
+                <button class="outline-btn" onclick="switchTab('results')">Full Report →</button>
+              </div>
+              <div class="table-scroll"><table>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>SBA 1 (10)</th>
+                    <th>SBA 2 (20)</th>
+                    <th>Project (20)</th>
+                    <th>Exam Contribution (50)</th>
+                    <th>Total (100)</th>
+                    <th>Grade</th>
+                  </tr>
+                </thead>
+                <tbody id="dashResultsBody"></tbody>
+              </table>
+            </div>
+
+            <div class="panel">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="margin:0;font-size:16px;">📅 My Class Timetable</h2>
+                <button class="outline-btn" onclick="switchTab('timetable')">Full Week →</button>
+              </div>
+              <div class="table-scroll"><table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Venue</th>
+                  </tr>
+                </thead>
+                <tbody id="dashTimetableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: RESULTS -->
+        <section id="tab-results" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 4px;">📊 Academic Results Report</h2>
+            <p id="resultsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
+            <div class="table-scroll"><table>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>SBA 1 (/10)</th>
+                  <th>SBA 2 (/20)</th>
+                  <th>Project (/20)</th>
+                  <th>Exam Contribution (/50)</th>
+                  <th>Total Score (/100)</th>
+                  <th>Grade</th>
+                  <th>Teacher's Remark</th>
+                </tr>
+              </thead>
+              <tbody id="fullResultsBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB: TIMETABLE -->
+        <section id="tab-timetable" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 4px;">📅 Weekly Class Timetable</h2>
+            <p id="timetableSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
+            <div class="table-scroll"><table>
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Time</th>
+                  <th>Subject</th>
+                  <th>Teacher</th>
+                  <th>Classroom / Venue</th>
+                </tr>
+              </thead>
+              <tbody id="fullTimetableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB: ANNOUNCEMENTS -->
+        <section id="tab-announcements" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 14px;">📢 School Announcements</h2>
+            <div id="announcementsContainer" style="display:grid;gap:12px;"></div>
+          </div>
+        </section>
+
+        <!-- TAB: PROFILE -->
+        <section id="tab-profile" class="portal-tab hidden">
+          <div class="panel">
+            <h2 style="margin:0 0 14px;">👤 Student Profile &amp; Security</h2>
+            <div class="table-scroll"><table>
+              <tbody id="profileTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       3. EDITABLE PORTAL DATA & BULK-IMPORT SYNC LOGIC
+       ========================================================================== -->
+
+  <script src="script.js"></script>
+</body>
+</html>
