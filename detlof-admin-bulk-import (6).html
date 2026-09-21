@@ -748,6 +748,7 @@
             </button>
           </div>
         </div>
+      </section>
 
       <section class="card admin-only">
         <h2>Broadcast Announcement to All Student Portals</h2>
@@ -867,7 +868,7 @@
       isTeacher = currentRole === "teacher";
       isAuthenticated = true;
     }
-    if (isAuthenticated) showMainPanel(); else showLoginScreen();
+    showMainPanel();
 
     const adminLoginForm = document.getElementById("adminLoginForm");
     if (adminLoginForm) {
