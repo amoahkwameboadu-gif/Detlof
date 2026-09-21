@@ -545,7 +545,7 @@
                <label for="adminLoginPassword">Password</label>
                <input id="adminLoginPassword" type="password" required />
              </div>
-             <div id="adminLoginError" class="admin-login-error hidden">Invalid teacher credentials. Use teacher@detlof.edu.gh / DetlofTeacher2026!</div>
+             <div id="adminLoginError" class="admin-login-error hidden">Invalid credentials. Use admin@detlof.edu.gh / DetlofAmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!</div>
              <button type="submit" class="login-btn" id="adminLoginBtn">
                <span id="adminLoginBtnText">Sign in</span>
              </button>
@@ -822,7 +822,10 @@
     }
 
     const urlParams = new URLSearchParams(window.location.search);
-    const TEACHER_CREDENTIALS = [{ email: "teacher@detlof.edu.gh", password: "DetlofTeacher2026!", name: "Class Teacher" }];
+    const ADMIN_CREDENTIALS = [
+      { email: "admin@detlof.edu.gh", password: "DetlofAmin2026!", name: "Administrator", role: "admin" },
+      { email: "teacher@detlof.edu.gh", password: "DetlofTeacher2026!", name: "Class Teacher", role: "teacher" },
+    ];
     let currentRole = "teacher";
     let teacherName = decodeURIComponent(urlParams.get("teacher") || "") || "Class Teacher";
     let isTeacher = true;
@@ -885,12 +888,17 @@
         // Simulate brief auth delay for UX
         setTimeout(() => {
           let ok = false;
-          const match = TEACHER_CREDENTIALS.find((a) => a.email.toLowerCase() === email && a.password === password);
-          if (match) { ok = true; currentRole = "teacher"; teacherName = match.name; isTeacher = true; }
+          const match = ADMIN_CREDENTIALS.find((a) => a.email.toLowerCase() === email && a.password === password);
+          if (match) {
+            ok = true;
+            currentRole = match.role || "teacher";
+            teacherName = match.name;
+            isTeacher = currentRole === "teacher";
+          }
           if (btn) btn.disabled = false;
           if (btnText) btnText.textContent = "Sign in";
           if (!ok) {
-            if (errorBox) { errorBox.textContent = "Invalid teacher credentials. Use teacher@detlof.edu.gh / DetlofTeacher2026!"; errorBox.classList.remove("hidden"); }
+            if (errorBox) { errorBox.textContent = "Invalid credentials. Use admin@detlof.edu.gh / DetlofAmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!"; errorBox.classList.remove("hidden"); }
             return;
           }
           sessionStorage.setItem("detlof_admin_auth", JSON.stringify({ role: currentRole, teacherName: teacherName }));

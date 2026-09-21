@@ -282,6 +282,27 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   errorBox.classList.remove("hidden");
 });
 
+function downloadMyLoginCode() {
+  if (!activeStudent) { window.alert("Please sign in to download your login code."); return; }
+  const content = [
+    "Detlof Preparatory School - Student Portal Login",
+    "Student: " + activeStudent.fullName,
+    "Class: " + activeStudent.currentClass,
+    "Student ID: " + activeStudent.studentId,
+    "Student Email: " + activeStudent.email,
+    "Login Code / PIN: " + activeStudent.loginCode,
+    "",
+    "Portal: detlof-student-portal.html",
+  ].join("\r\n");
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = activeStudent.studentId + "-portal-login.txt";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 const params = new URLSearchParams(window.location.search);
 if (params.get("email") && params.get("studentId") && params.get("code")) {
   fillCredentials({
