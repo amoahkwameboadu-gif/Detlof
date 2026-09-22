@@ -73,8 +73,8 @@ a { color: inherit; }
   min-width: 0;
 }
 .brand-logo, .login-mobile-logo {
-  width: 48px;
-  height: 56px;
+  width: 58px;
+  height: 68px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -393,7 +393,7 @@ td { padding: 12px 8px; border-bottom: 1px solid var(--line); font-size: 12px; o
   .login-form-panel { padding: 24px 16px; }
   .login-card { max-width: none; }
   .sidebar { padding: 12px 10px; }
-  .brand-logo { width: 40px; height: 48px; }
+  .brand-logo { width: 48px; height: 58px; }
   .brand strong { font-size: 13px; letter-spacing: .08em; }
   .brand span { font-size: 7px; }
   .nav-btn { padding: 9px 10px; font-size: 11px; min-height: 44px; }

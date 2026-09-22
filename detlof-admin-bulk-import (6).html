@@ -407,7 +407,7 @@
     .teacher-mode .admin-only,
     .teacher-only { display: none; }
     .hidden { display: none !important; }
-    .brand-logo { width: 44px; height: 52px; object-fit: contain; flex-shrink: 0; }
+    .brand-logo { width: 58px; height: 68px; object-fit: contain; flex-shrink: 0; }
     .table-scroll { width: 100%; overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
     @media (max-width: 920px) {
       .grid { grid-template-columns: 1fr; }
@@ -421,7 +421,7 @@
     @media (max-width: 560px) {
       .brand strong { font-size: 13px; }
       .brand span { font-size: 7px; }
-      .brand-logo { width: 34px; height: 40px; }
+      .brand-logo { width: 46px; height: 54px; }
       .btn { padding: 9px 12px; font-size: 11px; }
       .card { padding: 16px; }
       .field input, .field select, .field textarea { font-size: 12px; }
@@ -522,6 +522,11 @@
       .synced-badge { font-size: 9px; padding: 2px 6px; }
       .sync-pill { font-size: 10px; padding: 6px 10px; }
       .status-toast { font-size: 10px; padding: 10px 12px; }
+      .brand { width: 100%; align-items: center; }
+      .brand strong { line-height: 1.15; }
+      .brand span { line-height: 1.2; }
+      .top-actions .btn { flex: 1 1 100%; justify-content: center; }
+      .top-actions .role-badge, .top-actions .sync-pill { max-width: 100%; }
     }
     @media (hover: none) and (pointer: coarse) {
       .btn { min-height: 44px; }
@@ -540,7 +545,7 @@
       </div>
     </div>
     <div class="top-actions">
-      <span class="role-badge" id="roleBadge">Administrator</span>
+      <span class="role-badge" id="roleBadge">Welcome</span>
       <span class="sync-pill" id="syncIndicator"><span class="sync-dot"></span>Synced (0 active student codes)</span>
       <a class="btn btn-outline" href="detlof-student-portal.html" style="padding:7px 11px;font-size:11px;">Go to Student Login →</a>
     </div>
@@ -566,7 +571,7 @@
                 <label for="adminLoginPassword">Password</label>
                 <input id="adminLoginPassword" type="password" required />
               </div>
-              <div id="adminLoginError" class="admin-login-error hidden">Invalid credentials. Use admin@detlof.edu.gh / DetlofAdmin2026! or teacher@detlof.edu.gh / DetlofTeacher2026!</div>
+              <div id="adminLoginError" class="admin-login-error hidden">We could not sign you in. Check your details and try again.</div>
               <button type="submit" class="login-btn" id="adminLoginBtn">
                 <span id="adminLoginBtnText">Sign in</span>
               </button>
@@ -583,37 +588,26 @@
      </div>
 
      <div id="roleBanner" class="role-banner">
-       <span>Administrator access — full control over student login codes, academic records, timetables, announcements, and portal updates.</span>
+       <span>Welcome back. You can manage student information and keep each portal up to date.</span>
        <span id="roleBannerDetail"></span>
      </div>
 
-     <section class="card" style="margin-bottom:18px; border-left:4px solid var(--gold);">
-       <h2 style="color:var(--teal);">Administrator Reference</h2>
-       <p style="margin:0 0 10px; color:var(--muted); font-size:12px;">Administrator controls are documented here. To access admin functions, sign in with the administrator account (admin@detlof.edu.gh / DetlofAdmin2026!) through the admin portal authentication page.</p>
-       <ul style="margin:0; padding-left:18px; color:var(--ink); font-size:12px; line-height:1.7;">
-         <li><strong>Bulk Import:</strong> Upload student records via the Import Records tab.</li>
-         <li><strong>Login Codes:</strong> Generate and download individual or bulk student login codes.</li>
-         <li><strong>Active Codes:</strong> View, regenerate, or download active student login codes.</li>
-         <li><strong>Announcements:</strong> Broadcast portal-wide announcements to students.</li>
-         <li><strong>Records &amp; Timetable:</strong> Update academic records and timetable entries per student.</li>
-       </ul>
-     </section>
-
-
     <div class="grid">
       <div>
-        <section class="card admin-only" style="margin-bottom:18px;">
+        <section class="card" style="margin-bottom:18px;">
           <h2>1. Quick Generate Single Student Login Code</h2>
           <p class="sub">Create a unique Student ID and Login Code/PIN for any class from Creche to JHS 3.</p>
           <form id="singleForm">
             <div class="field">
               <label>Student Full Name</label>
-              <input type="text" id="fullName" placeholder="e.g. Kwame Boateng" required />
+              <input type="text" id="fullName" list="quickStudentNames" autocomplete="off" placeholder="Type or choose a student's name" required />
+              <datalist id="quickStudentNames"></datalist>
             </div>
             <div class="row-2">
               <div class="field">
-                <label>Student Email</label>
-                <input type="email" id="email" placeholder="kwame.boateng@detlof.edu.gh" required />
+                <label>Student Email (Auto-generated)</label>
+                <input type="email" id="email" placeholder="Enter the student's name first" readonly aria-describedby="emailHelp" />
+                <small id="emailHelp" style="display:block;margin-top:5px;color:var(--muted);font-size:11px;">Generated from the student's full name.</small>
               </div>
               <div class="field">
                 <label>Assigned Class</label>
@@ -629,6 +623,9 @@
                   <option>Basic 4</option>
                   <option>Basic 5</option>
                   <option selected>Basic 6</option>
+                  <option>Basic 7</option>
+                  <option>Basic 8</option>
+                  <option>Basic 9</option>
                   <option>JHS 1</option>
                   <option>JHS 2</option>
                   <option>JHS 3</option>
@@ -700,8 +697,10 @@
                 <option>Basic 4</option>
                 <option>Basic 5</option>
                 <option>Basic 6</option>
+                <option>Basic 7</option>
+                <option>Basic 8</option>
+                <option>Basic 9</option>
                 <option>JHS 1</option>
-                <option>JHS 2</option>
                 <option selected>JHS 2</option>
                 <option>JHS 3</option>
               </select>
@@ -851,6 +850,26 @@
       },
     ];
 
+    const quickGenerateNames = {
+      "Basic 1": "AGBOYO JUSTICE|AGYAPONG ADEI-KORSAH JAYDEN|AGYAPONG JEHOSAPHAT|AMOAH MYRON|MAC-QUAYSON EMMANUEL|MAWUKO JOSEPH KLENAM|MENSAH ABAKA O.C. EPAPHRAS|MENSAH LARTEY NII JOY EZEKIEL|THOMRSON TSIBU GERALD|AKUETTEH NAA DESOE URSULA|ANYIDOH RICHLOVE|ESSOUN ABA ADELAINE|KUMEDU AKU SEDEM GWENDOLYN|SAWYERR AKUA ELSIE",
+      "Basic 2": "ALI JAWAL|ANDOH ONESIPHOROUS|APPIAH GRIFFEON|ARTHUR GOODISON REGINALD|BOATENG ADDAE JEFFERY|BORTEY DECENT SHADRACK|CUDJOE HENRY ELKANAH|DAKE SWANZEY ARCHIBOLD|DANSO CHEREB|MARFRED PALAS LAMPIEY|MENSAH-SLIPPI PAPA TIBURIOUS|ODOOM KWAME JENSON|AKYERE NANA ESI NELLY|ANDOH DANIELLA|ANIM ABENA FLORA|ANKAM ESSEL AMA KAY-ANN|KOOMSON NHYIRABA QUEEN|KUDANU EDINAM JULIET|MENSAH ABENA LORENA|MENSAH ASEDA KEZIAH|MENSAH BERTINA|NAAMA GIFTY|TAY RUTH|WOODE AMEYE ADWOA SELINA",
+      "Basic 3": "ABAKAH DIVINE|ABAKAH JADEN|ACKROMOND GODWIN|ACKROMOND MELVIN|ADAMS ADOM PRINCE|ADAMU JUWAHA-KORU ZUKLIFULU|AKUFFO N. Y PHILBERT|AUSTIN MENSAH KWEKU ROBERT|BAIDOO A. RAHMAN|BAMFO AMFO KWABENA|BOHAM LEBRON RODNEY|ESSEL TERRENCE|MENSAH ATTA HERBERT|MENSAH ATTA HUBERT|NYANDOH ANTHONY|TETTEH A. HUMPHREY|WOODE AMEYE FIIFI DIVINE|AMANZULEY N. JENNIFER|ANDERSON A. ROSEMOND|ANSAH M.A. LOIS|BASSAW E. ANAVA|DADZIE EUNICE|EMMESAH CLEMENTINA|ENNINFUL ERICA VALERIE|LARTEY THEODOSIA|QUANSAH CATHERINE|SAWYER ESI CHRISTOLIGHT",
+      "Basic 4": "ABDUL AZIZ SAMAD|ALI FAREED|ARHIN TERENCE|ASAMENE CEPHAS JACKLORD|ESHUN LISTOWELL|ESHUN SULTAN|KOOMSON KELVIN|MENSAH BADU FREDRICK|QUAYSON DEGRAFT FYNN|TETTEH ABI LORD|YENZU KOJO NKUNYIM|ACKROMOND ALETHEA|ASMAH NHYIRA RICHLOVE|DANSO CHERYL|ESHUN NHYIRABA|KUDANU JESSICA|MENSAH NAADU LOVE|QUIST DOSIA VALERIE",
+      "Basic 5": "BASSAW AARON|ENOCK ADDAE|ESSIEN BENEDICT|KUDANU CALVIN|MENSAH ABAKAH EZRA|MENSAH DUKU KINGSFORD|MENSAH KOJO LEONARD|NORTEY MENSAH GIDEON|NUTSU ALARIC ELIKEM|TAYLOR KORANKYE NATHANIEL|ANSAH KWENUA NHYIRA|BLANKSON ANASTASIA|CORBINAH MARY|DOGBEY EMILY|HARRISON ZITA SARAH|MENSAH AUSTIN NAANA|MENSAH SLIPPI IMMACULATE",
+      "Basic 6": "BAIDEN PAPA QUECI|BAIDOO USMAN|BRUSAH YAKUBU HENRY|DANSO JERRY OLARM|EGHAN ISAIAH|GYM EKOW MENSAH|LAMPTEY BISMARK|NYAMSON KWEKU SYLVESTER|QUAYSON JONATHAN|SALIFU-BRIDGE MICHEAL|AKUFFO ADZEPA CLARITEL|BOTSIO MICHEALINA|BRACE-FLINTWOOD MICHELLE|GAVOR JEMIMA|GYASI SARPOMAA MELLISA|KOOMSON CHRISTODIA|LARTEY VALERIE|MENSAH ABENA MAAME|MENSAH BIBIANA|NYENZU EFUA NHYIRABA|QUAYSON GLORIA|WOODE NICHOLINA",
+      "Basic 7": "AMOAH LORD MARCUS|ARTHUR GODGREAT|BAFFOUR OWUSU ANDY|CORBINAH DANIEL|EDWIN PAPA SAMUEL|MENSAH GODFREY|NUTSU ZANEIDE EUGENE|QUIST AUSTROPP|ACKAH CHRISTIANA|ALI SONIA|AMEGEDE EDWINA SELIKEM|ARTHUR DANIELS ANGEL|BOHAM NHYIRA LORRAINE|COBBINAH BLESS|DADZIE AMA DEBORAH|DANSO AGNES|DANSO EWURADWOA MILDRED|DAVIES ARABA AWORTWE|ENNUNSON CHARLOTTE|ESHUN PETROLINA|GBABRAH PATLINA|MENSAH JUSTINA|MENSAH KONTOH EKUA MAAME|MOHAMMED HIDAYA SALIFU|QUARSHIE GABRIELLA|SAAKAH DANIELLA|THOMPSON MEVILYN",
+      "Basic 8": "ADU-AYEYI DANIEL|BAIDOO THOMAS|DANSO ROLAND|ENNINFUL ERIC KELVIN|MENSAH JOSIAH|MENSAH KOJO EBENEZER|NYANDOH PROSPER|NYARKO ANTWI CYRUS|OMOOME BOETEY KOFI ALBERT|BAIDOO SHERRIFA|DOE DELA JOANITA|ESHUN ABENA LEWISA|KOUSSANTIE AGNES ABA|KWANSAH MAAME ESI|MENSAH NORTEY JOSEPHINE|NKETSIA MIRACLE|QUARSHIE FAUSTINA|TAYLOR KORANKYE EMMANUELLA|THOMPSON ERNESTINA",
+      "Basic 9": "CUDJOE ERIC|DOUFAND MICHAEL ANGE|CUDJOE ERICA|EGHAN GEORGETTE|GALLEY E. PEACE|KOLGEE RIHANNA|OSEI FREDA|QUAYSON AGNES|THOMFORD ANNA",
+    };
+
+    function populateQuickGenerateNames() {
+      const className = document.getElementById("currentClass").value;
+      const datalist = document.getElementById("quickStudentNames");
+      if (!datalist) return;
+      const names = (quickGenerateNames[className] || "").split("|").filter(Boolean).sort((a, b) => a.localeCompare(b));
+      datalist.innerHTML = names.map((name) => "<option value=\"" + escapeHtml(name) + "\"></option>").join("");
+    }
+
     function getStoredRecords() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -889,13 +908,11 @@
     function initRoleUI() {
       document.body.classList.toggle("teacher-mode", isTeacher);
       const roleBadge = document.getElementById("roleBadge");
-      if (roleBadge) roleBadge.textContent = isTeacher ? "Teacher" : "Administrator";
+      if (roleBadge) roleBadge.textContent = "Welcome";
       const roleSubtitle = document.getElementById("roleSubtitle");
       if (roleSubtitle) roleSubtitle.textContent = isTeacher ? "Teacher Portal — Academic Records & Timetable" : "ADMIN BULK IMPORT & STUDENT LOGIN CODE GENERATOR";
       const roleBanner = document.getElementById("roleBanner");
-      if (roleBanner) roleBanner.innerHTML = isTeacher
-        ? "<span>Teacher access — you can update one selected student's academic records, timetable, and send portal updates. Login code generation and bulk sync are hidden.</span><span id='roleBannerDetail'>Signed in as <strong>" + escapeHtml(teacherName) + "</strong></span>"
-        : "<span>Administrator access — full control over student login codes, academic records, timetables, announcements, and portal updates.</span><span id='roleBannerDetail'>Administrator</span>";
+      if (roleBanner) roleBanner.innerHTML = "<span>Welcome back. You can manage student information and keep each portal up to date.</span><span id='roleBannerDetail'>Ready to help</span>";
       document.querySelectorAll(".admin-only").forEach((el) => { el.style.display = isTeacher ? "none" : ""; });
     }
 
@@ -914,6 +931,7 @@
       initRoleUI();
       const seed = getStoredRecords();
       renderTable(seed);
+      populateQuickGenerateNames();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
       syncRecordsToPortal(seed);
@@ -962,6 +980,7 @@
           showMainPanel();
          }, 400);
        });
+       document.getElementById("currentClass").addEventListener("change", populateQuickGenerateNames);
      }
 
      function escapeHtml(value) {
@@ -1105,7 +1124,7 @@
       const studentNameInput = document.getElementById("recordStudentName");
       const classes = [
         "Creche", "Nursery 1", "Nursery 2", "KG 1", "KG 2",
-        "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6",
+        "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "Basic 7", "Basic 8", "Basic 9",
         "JHS 1", "JHS 2", "JHS 3",
       ];
       const selectedClass = classSelect.value || classes[0];
@@ -1184,9 +1203,7 @@
 
     document.getElementById("fullName").addEventListener("input", function () {
       const emailInput = document.getElementById("email");
-      if (!emailInput.value.trim()) {
-        emailInput.value = generateEmailFromName(this.value);
-      }
+      emailInput.value = generateEmailFromName(this.value);
     });
 
     document.getElementById("resyncAllBtn").addEventListener("click", async () => {
@@ -1231,8 +1248,6 @@
 
     document.getElementById("timetableForm").addEventListener("submit", async (event) => {
       event.preventDefault();
-      const record = getRecordForTypedName();
-      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
       const timetableClass = document.getElementById("timetableClass").value;
       const timetableDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const timetable = timetableDays.map((day) => ({
@@ -1244,8 +1259,24 @@
         updatedBy: teacherLabel(),
         updatedAt: stampIso(),
       }));
-      await updateStudentRecord(record.studentId, { timetable });
+      const records = getStoredRecords();
+      const classRecords = records.filter((record) => record.currentClass === timetableClass);
+      if (!classRecords.length) {
+        window.alert("There are no students in the selected class yet.");
+        return;
+      }
+      classRecords.forEach((record) => {
+        record.timetable = timetable.map((entry) => ({ ...entry }));
+        record.updatedBy = teacherLabel();
+        record.updatedAt = stampIso();
+      });
+      saveStoredRecords(records);
+      renderTable(records);
+      updateSelectedStudentSummary(getRecordForTypedName());
+      await syncRecordsToPortal(classRecords);
       event.target.reset();
+      document.getElementById("timetableClass").value = timetableClass;
+      showToast("Weekly timetable saved for " + timetableClass + ".");
     });
 
     document.getElementById("portalUpdateForm").addEventListener("submit", async (event) => {
