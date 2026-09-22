@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="Detlof%20creast.png" />
+  <link rel="icon" href="Detlof%20creast%201.png" />
   <title>Detlof Preparatory School — Admin Bulk Import & Login Code Generator</title>
   <style>
     :root {
@@ -405,9 +405,10 @@
     .update-card h3 { margin: 0 0 4px; color: var(--ink-deep); font-size: 14px; }
     .update-card p { margin: 0 0 14px; color: var(--muted); font-size: 11px; }
     .teacher-mode .admin-only,
-    .teacher-only { display: none; }
+    .teacher-only { display: block; }
     .hidden { display: none !important; }
-    .brand-logo { width: 58px; height: 68px; object-fit: contain; flex-shrink: 0; }
+    .brand-logo { width: 68px; height: 78px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 4px 8px rgba(0,0,0,.24)); }
+    .brand strong { font-size: 18px; font-weight: 900; letter-spacing: 0.14em; }
     .table-scroll { width: 100%; overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
     @media (max-width: 920px) {
       .grid { grid-template-columns: 1fr; }
@@ -421,7 +422,8 @@
     @media (max-width: 560px) {
       .brand strong { font-size: 13px; }
       .brand span { font-size: 7px; }
-      .brand-logo { width: 46px; height: 54px; }
+      .brand-logo { width: 52px; height: 62px; }
+      .brand strong { font-size: 14px; font-weight: 900; }
       .btn { padding: 9px 12px; font-size: 11px; }
       .card { padding: 16px; }
       .field input, .field select, .field textarea { font-size: 12px; }
@@ -436,7 +438,7 @@
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
       background: #1a337e; overflow: hidden; color: #fff; padding: 24px;
     }
-    .admin-login-left .left-logo { width: 140px; height: 162px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+    .admin-login-left .left-logo { width: 160px; height: 184px; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.38)); }
     .admin-login-left h3 { margin: 16px 0 6px; font-size: 22px; letter-spacing: 0.12em; font-weight: 800; }
     .admin-login-left p { margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
     .admin-login-right {
@@ -467,7 +469,7 @@
     @media (max-width: 768px) {
       .admin-login-screen { flex-direction: column; }
       .admin-login-left { min-height: 160px; padding: 16px; }
-      .admin-login-left .left-logo { width: 90px; height: 104px; }
+      .admin-login-left .left-logo { width: 104px; height: 120px; }
       .admin-login-left h3 { font-size: 15px; margin: 8px 0 2px; }
       .admin-login-left p { font-size: 10px; }
       .admin-login-right .login-wrap { padding: 24px 18px; }
@@ -538,7 +540,7 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+      <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
       <div>
         <strong>DETLOF PREPARATORY SCHOOL</strong>
         <span id="roleSubtitle">ADMIN BULK IMPORT &amp; STUDENT LOGIN CODE GENERATOR</span>
@@ -554,7 +556,7 @@
    <main id="adminMain" class="container">
       <div id="adminLoginScreen" class="admin-login-screen">
         <div class="admin-login-left">
-          <img class="left-logo" src="Detlof%20creast.png" alt="Detlof Preparatory School crest" />
+          <img class="left-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
           <h3>DETLOF</h3>
           <p>ADMIN PORTAL</p>
         </div>
@@ -771,7 +773,7 @@
         </section>
       </div>
 
-      <section class="card admin-only">
+      <section class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
             <h2>Active Generated Student Login Codes</h2>
@@ -803,7 +805,7 @@
         </div>
       </section>
 
-      <section class="card admin-only">
+      <section class="card">
         <h2>Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
@@ -913,7 +915,7 @@
       if (roleSubtitle) roleSubtitle.textContent = isTeacher ? "Teacher Portal — Academic Records & Timetable" : "ADMIN BULK IMPORT & STUDENT LOGIN CODE GENERATOR";
       const roleBanner = document.getElementById("roleBanner");
       if (roleBanner) roleBanner.innerHTML = "<span>Welcome back. You can manage student information and keep each portal up to date.</span><span id='roleBannerDetail'>Ready to help</span>";
-      document.querySelectorAll(".admin-only").forEach((el) => { el.style.display = isTeacher ? "none" : ""; });
+      document.querySelectorAll(".admin-only").forEach((el) => { el.style.display = ""; });
     }
 
     function showLoginScreen() {
@@ -1088,7 +1090,6 @@
     }
 
     function downloadAllCodes() {
-      if (isTeacher) { window.alert("Teacher access cannot download all codes."); return; }
       const records = getStoredRecords();
       const lines = [
         "Detlof Preparatory School - Bulk Student Login Codes",
@@ -1184,7 +1185,6 @@
 
     document.getElementById("singleForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (isTeacher) { window.alert("Teacher access is limited to Academic Records & Timetable and portal updates."); return; }
       const fullName = document.getElementById("fullName").value.trim();
       const emailInput = document.getElementById("email");
       if (!emailInput.value.trim()) {
@@ -1207,7 +1207,6 @@
     });
 
     document.getElementById("resyncAllBtn").addEventListener("click", async () => {
-      if (isTeacher) return;
       await syncRecordsToPortal(getStoredRecords());
     });
 
@@ -1302,7 +1301,6 @@
 
     document.getElementById("announcementForm").addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (isTeacher) { window.alert("Announcements can only be sent by an administrator."); return; }
       const title = document.getElementById("annTitle").value.trim();
       const message = document.getElementById("annMessage").value.trim();
       const category = document.getElementById("annCategory").value;
