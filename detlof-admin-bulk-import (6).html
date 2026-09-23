@@ -855,50 +855,10 @@
                <button class="btn btn-teal" type="submit">Upload &amp; Publish Results</button>
                <button type="button" class="btn btn-outline" id="downloadResultsTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
              </div>
-           </form>
-         </section>
+</form>
+          </section>
 
-         <section class="card" style="margin-bottom:18px;">
-           <h2>⬆ Bulk Upload Student List &amp; Generate Login Codes</h2>
-           <p class="sub">Upload a CSV/Excel file with columns: Student Name, Class, Student Email (optional). The system will generate unique Student IDs and Login Codes for each student.</p>
-           <form id="bulkUploadForm">
-             <div class="row-2">
-<div class="field">
-                  <label for="bulkClass">Default Class</label>
-                  <select id="bulkClass" required>
-                    <option>Creche</option>
-                    <option>Nursery 1</option>
-                    <option>Nursery 2</option>
-                    <option>KG 1</option>
-                    <option>KG 2</option>
-                    <option>Basic 1</option>
-                    <option>Basic 2</option>
-                    <option>Basic 3</option>
-                    <option>Basic 4</option>
-                    <option>Basic 5</option>
-                    <option selected>Basic 6</option>
-                    <option>Basic 7</option>
-                    <option>Basic 8</option>
-                    <option>Basic 9</option>
-                  </select>
-                </div>
-               <div class="field">
-                 <label for="bulkFile">CSV / Excel File</label>
-                 <input type="file" id="bulkFile" accept=".csv,.xlsx,.xls" required />
-               </div>
-             </div>
-             <div class="field">
-               <label>Preview / Parsed Data</label>
-               <div id="bulkPreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
-             </div>
-             <div style="display:flex;gap:10px;margin-top:12px;">
-               <button class="btn btn-gold" type="submit">Generate Codes &amp; Publish</button>
-               <button type="button" class="btn btn-outline" id="downloadBulkTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
-             </div>
-           </form>
-         </section>
-
-         <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
+          <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
            <h3 style="margin:0 0 8px;font-size:14px;">📢 Release Term Results &amp; Calculate Promotions</h3>
            <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
              Click to finalize the selected term. For Term 3, the system will automatically calculate
@@ -1571,69 +1531,6 @@
     reader.readAsText(file);
   });
 
-  document.getElementById("bulkFile").addEventListener("change", function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      const csv = parseCSV(evt.target.result);
-      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
-      csv.forEach((row, i) => {
-        html += "<tr>";
-        row.forEach((cell) => {
-          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
-        });
-        html += "</tr>";
-      });
-      html += "</table>";
-      document.getElementById("bulkPreview").innerHTML = html;
-    };
-    reader.readAsText(file);
-  });
-
-  document.getElementById("bulkUploadForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const file = document.getElementById("bulkFile").files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async function (evt) {
-      const csv = parseCSV(evt.target.result);
-      if (csv.length < 2) return;
-      const headers = csv[0];
-      const nameIdx = headers.findIndex((h) => h.toLowerCase().includes("name"));
-      const classIdx = headers.findIndex((h) => h.toLowerCase().includes("class"));
-      const emailIdx = headers.findIndex((h) => h.toLowerCase().includes("email"));
-      const defaultClass = document.getElementById("bulkClass").value;
-      const records = csv.slice(1).map((row) => {
-        const name = row[nameIdx] || "";
-        const className = row[classIdx] || defaultClass;
-        const email = emailIdx >= 0 ? (row[emailIdx] || "") : "";
-        const loginCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-        const studentID = className.replace(/\s+/g, "").substring(0, 2).toUpperCase() + "-" + String(Math.floor(Math.random() * 9000) + 1000);
-        return {
-          id: studentID,
-          name,
-          className,
-          email: email || (name.toLowerCase().replace(/\s+/g, ".") + "@detlof.edu.gh"),
-          code: loginCode,
-          generatedBy: teacherLabel(),
-          createdAt: stampIso(),
-          status: "active",
-          updates: [],
-        };
-      });
-      const existing = getStoredRecords();
-      const all = [...records, ...existing];
-      saveStoredRecords(all);
-      renderTable(all);
-      await syncRecordsToPortal(all);
-      showToast(records.length + " student(s) added with login codes generated.");
-      e.target.reset();
-      document.getElementById("bulkPreview").innerHTML = "";
-    };
-    reader.readAsText(file);
-  });
-
   document.getElementById("bulkResultsForm").addEventListener("submit", async function (e) {
     e.preventDefault();
     const file = document.getElementById("resultsFile").files[0];
@@ -1690,17 +1587,6 @@
     const a = document.createElement("a");
     a.href = url;
     a.download = "results-upload-template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  document.getElementById("downloadBulkTemplate").addEventListener("click", function () {
-    const csv = "Student Name,Class,Student Email\nJane Smith,JHS 2,jane.smith@detlof.edu.gh\n";
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "students-bulk-template.csv";
     a.click();
     URL.revokeObjectURL(url);
   });
