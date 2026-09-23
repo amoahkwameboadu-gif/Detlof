@@ -12,33 +12,36 @@
   <!-- ==========================================================================
        VIEW 1: STUDENT LOGIN SCREEN — Split-screen like records.ttuportal.com
        ========================================================================== -->
-  <main id="loginScreen" class="login-shell">
-    <section class="login-brand-panel">
-      <div class="brand">
-        <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
-        <div>
-          <strong>DETLOF</strong>
-          <span>PREPARATORY SCHOOL</span>
-        </div>
-      </div>
+   <main id="loginScreen" class="login-shell">
+     <section class="login-brand-panel">
+       <div class="brand">
+         <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+         <div>
+           <strong>DETLOF</strong>
+           <span>PREPARATORY SCHOOL</span>
+         </div>
+       </div>
 
-      <div class="login-hero">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--crest-gold);font-weight:700;">
-          Student Information Portal · Wisdom Balance
-        </div>
-        <h1>Everything you need<br /><em>to stay on track.</em></h1>
-        <p>Sign in to access your personal academic results, class timetable, and school announcements.</p>
-        <div class="feature-pills">
-          <span>✓ Academic Results</span>
-          <span>✓ Class Timetable</span>
-          <span>✓ School Announcements</span>
-        </div>
-      </div>
+       <div class="login-hero">
+         <div class="eyebrow">Student Information Portal · Wisdom Balance</div>
+         <h1>Everything you need<br /><em>to stay on track.</em></h1>
+         <p>Sign in to access your personal academic results, class timetable, and school announcements.</p>
+         <div class="feature-pills">
+           <span>✓ Academic Results</span>
+           <span>✓ Class Timetable</span>
+           <span>✓ School Announcements</span>
+         </div>
+       </div>
 
-      <div style="font-size:11px;color:var(--crest-gold-soft);">
-        © 2025 Detlof Preparatory School · Wisdom Balance
+<div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--crest-gold);font-weight:700;">
+          © 2025 Detlof Preparatory School · Wisdom Balance
+        </div>
+      </section>
+
+      <div id="fileProtocolWarning" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;margin:0 24px;border-radius:8px;font-size:11px;display:none;">
+        <strong>⚠️ Testing Mode Detected:</strong> You're opening this file directly (<code>file://</code>). For login to work with codes generated from the Admin Portal, both files must be served from a local server (same origin).
+        <br><button onclick="location.reload()" class="btn btn-outline" style="margin-top:8px;padding:6px 12px;font-size:11px;">Reload After Starting Server</button>
       </div>
-    </section>
 
     <section class="login-form-panel">
       <div class="login-card">
@@ -97,7 +100,7 @@
 
       <nav class="nav-list">
         <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
-        <button class="nav-btn" data-tab="results" onclick="switchTab('results')">🏅 My Results</button>
+         <button class="nav-btn" data-tab="results" onclick="switchTab('results')">🏅 My Results <span id="resultsPromoBadge" class="hidden" style="background:var(--crest-gold);color:var(--ink-deep);font-size:9px;padding:2px 6px;border-radius:10px;font-weight:800;">New</span></button>
         <button class="nav-btn" data-tab="timetable" onclick="switchTab('timetable')">📅 My Timetable</button>
         <button class="nav-btn" data-tab="announcements" onclick="switchTab('announcements')">📢 Announcements</button>
         <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')">👤 My Profile</button>
@@ -126,11 +129,14 @@
         <section id="tab-dashboard" class="portal-tab">
           <div class="welcome-banner">
             <div>
-              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--crest-gold);font-weight:700;">
-                2024 / 2025 Academic Year · Term 2
+              <div class="eyebrow">2024 / 2025 Academic Year · <span id="dashTermInfo">Term 2</span>
               </div>
               <h1 id="dashWelcomeHeading" style="margin:6px 0;font-size:26px;">Welcome back!</h1>
-              <p style="margin:0;color:var(--crest-purple-soft);font-size:13px;">Here is your personal academic results and timetable summary.</p>
+              <p id="dashWelcomeSub" style="margin:0;color:var(--crest-purple-soft);font-size:13px;">Here is your personal academic results and timetable summary.</p>
+              <div id="dashPromoChip" class="hidden" style="margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;">
+                <span id="dashPromoIcon">🎓</span>
+                <span id="dashPromoText"></span>
+              </div>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button class="outline-btn" onclick="switchTab('results')">📊 View My Results</button>
@@ -206,10 +212,37 @@
 
         <!-- TAB: RESULTS -->
         <section id="tab-results" class="portal-tab hidden">
+          <div id="promotionNotice" class="panel update-card promotion-notice released hidden" style="margin-bottom:18px;border-left-width:6px;">
+            <div id="promotionNoticeInner" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+              <div class="promo-icon" style="font-size:32px;flex-shrink:0;">🎓</div>
+              <div style="flex:1;min-width:200px;">
+                <small class="update-meta" id="promotionNoticeCategory">Academic Year End</small>
+                <h2 style="margin:6px 0;font-size:20px;" id="promotionNoticeTitle"></h2>
+                <p id="promotionNoticeMessage" style="margin:0;color:var(--muted);font-size:13px;line-height:1.6;"></p>
+              </div>
+              <div style="flex-shrink:0;text-align:center;">
+                <div id="promotionNoticeGPA" style="font-size:28px;font-weight:800;color:var(--crest-purple);"></div>
+                <small style="color:var(--muted);display:block;margin-top:4px;">Cumulative GPA</small>
+              </div>
+            </div>
+          </div>
+
           <div class="panel">
-            <h2 style="margin:0 0 4px;">📊 Academic Results Report</h2>
-            <p id="resultsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
-            <div class="table-scroll"><table>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div>
+                <h2 style="margin:0 0 4px;">📊 Academic Results Report</h2>
+                <p id="resultsSubtitle" style="margin:0;color:var(--muted);font-size:12px;"></p>
+              </div>
+              <div id="termSelector" style="display:flex;gap:6px;">
+                <select id="resultsTermFilter" class="field select" style="padding:6px 10px;font-size:12px;border-radius:6px;border:1px solid var(--line);background:#fff;">
+                  <option value="all">All Terms</option>
+                  <option value="term1">Term 1</option>
+                  <option value="term2">Term 2</option>
+                  <option value="term3">Term 3</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-scroll"><table id="resultsTable">
               <thead>
                 <tr>
                   <th>Subject</th>
@@ -223,6 +256,22 @@
                 </tr>
               </thead>
               <tbody id="fullResultsBody"></tbody>
+            </table></div>
+          </div>
+
+          <div id="cumulativeSummary" class="panel" style="margin-top:18px;">
+            <h2 style="margin:0 0 12px;font-size:16px;">📈 Term Summary &amp; Cumulative GPA</h2>
+            <div class="table-scroll"><table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Subjects</th>
+                  <th>Average</th>
+                  <th>GPA</th>
+                  <th>Grade Distribution</th>
+                </tr>
+              </thead>
+              <tbody id="cumulativeSummaryBody"></tbody>
             </table></div>
           </div>
         </section>
@@ -258,10 +307,55 @@
         <!-- TAB: PROFILE -->
         <section id="tab-profile" class="portal-tab hidden">
           <div class="panel">
-            <h2 style="margin:0 0 14px;">👤 Student Profile &amp; Security</h2>
-            <div class="table-scroll"><table>
-              <tbody id="profileTableBody"></tbody>
-            </table></div>
+            <h2 style="margin:0 0 14px;">👤 Student Profile &amp; Account Settings</h2>
+            <form id="profileEditForm">
+              <div class="profile-pic-section" style="display:flex;align-items-center;gap:18px;margin-bottom:18px;">
+                <div style="position:relative;">
+                  <img id="profilePicPreview" src="Detlof%20creast%201.png" alt="Profile Picture" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
+                  <input type="file" id="profilePicInput" accept="image/*" style="display:none;" />
+                  <button type="button" id="changePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:28px;height:28px;font-size:14px;display:flex;align-items:center;justify-content:center;">📷</button>
+                </div>
+                <div style="font-size:12px;color:var(--muted);">
+                  <strong>Profile Picture</strong>
+                  <p style="margin:2px 0;">Click the camera icon to upload a new photo.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="profileFullName">Full Name</label>
+                <input type="text" id="profileFullName" required />
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="profileEmail">Student Email</label><input type="email" id="profileEmail" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileStudentId">Student ID</label><input type="text" id="profileStudentId" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="profileClass">Current Class</label><input type="text" id="profileClass" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileAcademicYear">Academic Year</label><input type="text" id="profileAcademicYear" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
+              </div>
+              <div class="field">
+                <label for="profileParentName">Parent / Guardian Full Name</label>
+                <input type="text" id="profileParentName" placeholder="e.g. Mr. / Mrs. Owusu" />
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="profileParentPhone">Parent/Guardian Phone Number</label><input type="tel" id="profileParentPhone" placeholder="e.g. 0244123456" /></div>
+                <div class="field"><label for="profileWhatsApp">Active Parent WhatsApp Number</label><input type="tel" id="profileWhatsApp" placeholder="e.g. 0244123456 (with country code optional)" /></div>
+              </div>
+              <div class="field">
+                <label for="profileHomeAddress">Home Address</label>
+                <textarea id="profileHomeAddress" placeholder="Your home address" style="min-height:70px;"></textarea>
+              </div>
+              <div class="field">
+                <label for="profileLoginCode">Login Code / PIN</label>
+                <input type="text" id="profileLoginCode" readonly style="background:#f3f4f6;color:var(--muted);" />
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
+                <button type="submit" class="btn" style="background:var(--crest-purple);color:#fff;">Save Profile Changes</button>
+                <button type="button" class="btn btn-outline" onclick="downloadMyLoginCode()" style="padding:8px 12px;font-size:12px;">⬇ Download My Login Code</button>
+                <button type="button" class="btn btn-outline" id="downloadResultsPdfBtn" style="padding:8px 12px;font-size:12px;">⬇ Download My Results (PDF)</button>
+                <button type="button" class="btn btn-outline" id="downloadTimetablePdfBtn" style="padding:8px 12px;font-size:12px;">⬇ Download My Timetable (PDF)</button>
+              </div>
+            </form>
           </div>
         </section>
       </div>
@@ -273,5 +367,44 @@
        ========================================================================== -->
 
   <script src="script.js"></script>
+  <script>
+    // Auto-login from URL parameters (for admin portal test links)
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("email") && params.get("studentId") && params.get("code")) {
+        const studentData = {
+          fullName: params.get("fullName") || "Test Student",
+          email: params.get("email"),
+          studentId: params.get("studentId"),
+          loginCode: params.get("code"),
+          currentClass: params.get("class") || "JHS 2",
+          academicYear: params.get("year") || "2024 / 2025",
+          profilePic: "Detlof%20creast%201.png",
+          updates: [],
+          timetable: [],
+        };
+        // Store in localStorage for future reference
+        try {
+          const existing = JSON.parse(localStorage.getItem("detlof_bulk_import_codes") || "[]");
+          const idx = existing.findIndex(s => s.studentId.toUpperCase() === studentData.studentId.toUpperCase());
+          if (idx >= 0) existing[idx] = studentData; else existing.unshift(studentData);
+          localStorage.setItem("detlof_bulk_import_codes", JSON.stringify(existing));
+        } catch {}
+        // Directly render portal after short delay
+        setTimeout(function() {
+          document.getElementById("loginScreen").classList.add("hidden");
+          document.getElementById("portalShell").classList.remove("hidden");
+          renderPortalForStudent(studentData);
+          switchTab("dashboard");
+        }, 200);
+      }
+    })();
+  </script>
+  <script>
+    // Show warning if opened via file:// protocol
+    if (location.protocol === "file:") {
+      document.getElementById("fileProtocolWarning").style.display = "block";
+    }
+  </script>
 </body>
 </html>

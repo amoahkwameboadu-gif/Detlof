@@ -562,8 +562,6 @@
         </div>
         <div class="admin-login-right">
           <div class="login-wrap">
-            <h2 class="admin-login-title">Detlof Admin Portal</h2>
-            <p class="admin-login-subtitle">Sign in to manage students, records, and portal updates.</p>
             <form id="adminLoginForm" class="admin-login-form">
               <div>
                 <label for="adminLoginEmail">Email</label>
@@ -577,6 +575,27 @@
               <button type="submit" class="login-btn" id="adminLoginBtn">
                 <span id="adminLoginBtnText">Sign in</span>
               </button>
+              <div style="margin-top:14px;text-align:center;">
+                <a href="#" id="academicsAdminLoginLink" style="font-size:12px;color:var(--crest-gold);text-decoration:underline;">Academics Administrator? Sign in here</a>
+              </div>
+            </form>
+
+            <form id="academicsAdminLoginScreen" class="admin-login-form hidden" style="margin-top:14px;">
+              <div>
+                <label for="academicsAdminEmail">Email</label>
+                <input id="academicsAdminEmail" type="email" placeholder="admin-academics@detlof.edu.gh" required />
+              </div>
+              <div>
+                <label for="academicsAdminPassword">Password</label>
+                <input id="academicsAdminPassword" type="password" required />
+              </div>
+              <div id="academicsAdminError" class="admin-login-error hidden">Invalid credentials.</div>
+              <button type="submit" class="login-btn" id="academicsAdminLoginBtn">
+                <span id="academicsAdminLoginBtnText">Sign in to Academic Admin</span>
+              </button>
+              <div style="margin-top:14px;text-align:center;">
+                <a href="#" id="backToTeacherLogin" style="font-size:12px;color:var(--muted);text-decoration:underline;">Back to Teacher Portal</a>
+              </div>
             </form>
             <div class="admin-login-divider"><span>&copy; 2026 Detlof Preparatory School</span></div>
           </div>
@@ -584,6 +603,10 @@
 </div>
 
 <div id="adminContent" class="hidden">
+      <div id="fileProtocolWarningAdmin" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;margin:0 0 16px;border-radius:8px;font-size:11px;display:none;">
+        <strong>⚠️ Testing Mode Detected:</strong> You're opening this file directly (<code>file://</code>). For generated codes to work in the Student Portal, both files must be served from a local server (same origin).
+        <br><button onclick="location.reload()" class="btn btn-outline" style="margin-top:8px;padding:6px 12px;font-size:11px;">Reload After Starting Server</button>
+      </div>
       <div id="toastBox" class="status-toast">
        <span id="toastText">Student login codes generated and synced to the portal!</span>
        <a class="btn btn-teal" href="/" style="padding:6px 12px;font-size:11px;">Go to Student Login →</a>
@@ -628,9 +651,6 @@
                   <option>Basic 7</option>
                   <option>Basic 8</option>
                   <option>Basic 9</option>
-                  <option>JHS 1</option>
-                  <option>JHS 2</option>
-                  <option>JHS 3</option>
                 </select>
               </div>
             </div>
@@ -669,52 +689,73 @@
         <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
       </div>
     </div>
-    <form id="resultForm">
-            <h3 style="margin:16px 0 8px;font-size:14px;">Add Subject Result</h3>
-            <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
-            <div class="row-2">
-              <div class="field"><label>SBA 1 / 10</label><input id="resultSba1" type="number" min="0" max="10" step="0.01" required /></div>
-              <div class="field"><label>SBA 2 / 20</label><input id="resultSba2" type="number" min="0" max="20" step="0.01" required /></div>
-            </div>
-            <div class="row-2">
-              <div class="field"><label>Project Work / 20</label><input id="resultProject" type="number" min="0" max="20" step="0.01" required /></div>
-              <div class="field"><label>Exam Score / 100 (weighted to 50)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
-            </div>
-            <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
-            <button class="btn btn-teal" type="submit">Save Result</button>
-          </form>
-          <form id="timetableForm" style="border-top:1px solid var(--line);margin-top:20px;padding-top:4px;">
-            <h3 style="margin:16px 0 8px;font-size:14px;">Add Weekly Timetable</h3>
-            <div class="field">
-              <label>Select Class</label>
-              <select id="timetableClass">
-                <option>Creche</option>
-                <option>Nursery 1</option>
-                <option>Nursery 2</option>
-                <option>KG 1</option>
-                <option>KG 2</option>
-                <option>Basic 1</option>
-                <option>Basic 2</option>
-                <option>Basic 3</option>
-                <option>Basic 4</option>
-                <option>Basic 5</option>
-                <option>Basic 6</option>
-                <option>Basic 7</option>
-                <option>Basic 8</option>
-                <option>Basic 9</option>
-                <option>JHS 1</option>
-                <option selected>JHS 2</option>
-                <option>JHS 3</option>
-              </select>
-            </div>
-            <div class="timetable-grid">
-              <div class="timetable-head" aria-hidden="true">
-                <span>Day</span>
-                <span>Subject</span>
-                <span>Time</span>
-                <span>Room / Venue</span>
-                <span>Teacher</span>
-              </div>
+     <form id="resultForm">
+             <h3 style="margin:16px 0 8px;font-size:14px;">Publish Term Results</h3>
+             <div class="field">
+               <label for="resultTerm">Academic Term</label>
+               <select id="resultTerm" required>
+                 <option value="term1">First Term</option>
+                 <option value="term2">Second Term</option>
+                 <option value="term3">Third Term</option>
+               </select>
+             </div>
+             <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
+             <div class="row-2">
+               <div class="field"><label>SBA 1 / 10</label><input id="resultSba1" type="number" min="0" max="10" step="0.01" required /></div>
+               <div class="field"><label>SBA 2 / 20</label><input id="resultSba2" type="number" min="0" max="20" step="0.01" required /></div>
+             </div>
+             <div class="row-2">
+               <div class="field"><label>Project Work / 20</label><input id="resultProject" type="number" min="0" max="20" step="0.01" required /></div>
+               <div class="field"><label>Exam Score / 100 (weighted to 50)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
+             </div>
+             <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
+             <button class="btn btn-teal" type="submit">Save Result</button>
+</form>
+           <form id="timetableForm" style="border-top:1px solid var(--line);margin-top:20px;padding-top:4px;">
+             <h3 style="margin:16px 0 8px;font-size:14px;">Timetable</h3>
+             <div class="field">
+               <label>Select Class</label>
+               <select id="timetableClass">
+                 <option>Creche</option>
+                 <option>Nursery 1</option>
+                 <option>Nursery 2</option>
+                 <option>KG 1</option>
+                 <option>KG 2</option>
+                 <option>Basic 1</option>
+                 <option>Basic 2</option>
+                 <option>Basic 3</option>
+                 <option>Basic 4</option>
+                 <option>Basic 5</option>
+                 <option>Basic 6</option>
+                 <option>Basic 7</option>
+                 <option>Basic 8</option>
+                 <option>Basic 9</option>
+               </select>
+             </div>
+             <div class="row-2">
+               <div class="field">
+                 <label for="timetableFile">CSV / Excel File (Day,Subject,Time,Venue,Teacher)</label>
+                 <input type="file" id="timetableFile" accept=".csv,.xlsx,.xls" />
+               </div>
+               <div class="field">
+                 <label>Preview / Parsed Data</label>
+                 <div id="timetablePreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
+               </div>
+             </div>
+             <div style="display:flex;gap:10px;margin-top:12px;">
+               <button class="btn btn-teal" type="submit">Upload & Preview Timetable</button>
+               <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
+             </div>
+             <hr style="margin:18px 0;border-color:var(--line);" />
+             <p class="sub" style="margin-bottom:12px;">Or enter manually for a single class:</p>
+             <div class="timetable-grid">
+               <div class="timetable-head" aria-hidden="true">
+                 <span>Day</span>
+                 <span>Subject</span>
+                 <span>Time</span>
+                 <span>Room / Venue</span>
+                 <span>Teacher</span>
+               </div>
               <div class="timetable-row">
                 <div class="timetable-day">Monday</div>
                 <div class="field"><label for="scheduleSubjectMonday">Subject</label><input id="scheduleSubjectMonday" data-timetable-day="Monday" data-timetable-field="subject" placeholder="e.g. Mathematics" required /></div>
@@ -750,9 +791,9 @@
                 <div class="field"><label for="scheduleVenueFriday">Room / Venue</label><input id="scheduleVenueFriday" data-timetable-day="Friday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
                 <div class="field"><label for="scheduleTeacherFriday">Teacher (optional)</label><input id="scheduleTeacherFriday" data-timetable-day="Friday" data-timetable-field="teacher" placeholder="e.g. Ms. Aidoo" /></div>
               </div>
-            </div>
-            <button class="btn btn-gold" type="submit">Save Monday–Friday Timetable</button>
-          </form>
+</div>
+             <button class="btn btn-gold" type="submit">Save Timetable</button>
+           </form>
 
           <form id="portalUpdateForm" class="update-card">
             <h3>Send Individual Portal Update</h3>
@@ -769,11 +810,124 @@
             </div>
             <div class="field"><label>Message</label><textarea id="updateMessage" placeholder="Type the message the student will see on their portal…" required></textarea></div>
             <button class="btn btn-teal" type="submit">Send Portal Update</button>
+           </form>
+         </section>
+
+         <section class="card academics-admin-only" style="margin-bottom:18px;">
+           <h2>🔍 Academic Admin Verification & Preview</h2>
+           <p class="sub">Review and approve pending results, timetables, and term releases before publishing to student portals.</p>
+           <div id="pendingApprovals" style="display:none;">
+             <h4 style="margin:12px 0 8px;">Pending Approvals</h4>
+             <div id="pendingList" style="max-height:300px;overflow:auto;"></div>
+<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-gold" id="approveAllBtn">✅ Approve & Publish All</button>
+                <button class="btn btn-outline" id="rejectAllBtn">❌ Reject All</button>
+                <button class="btn btn-teal" id="sendAllTimetablesWhatsAppBtn">📱 Send All Timetables via WhatsApp</button>
+                <button class="btn btn-teal" id="sendAllResultsWhatsAppBtn" style="background:#128C7E;border-color:#128C7E;">📊 Send All Results via WhatsApp</button>
+              </div>
+           </div>
+           <p id="noPendingMsg" style="color:var(--muted);text-align:center;padding:20px;">No pending items awaiting approval.</p>
+         </section>
+
+         <section class="card" style="margin-bottom:18px;">
+           <h2>📊 Bulk Upload Term Results (Excel/CSV)</h2>
+           <p class="sub">Upload a CSV file with columns: Student Name, Class, Student ID, Subject, SBA 1, SBA 2, Project, Exam Score. The system will match students by name to send results to their portals.</p>
+           <form id="bulkResultsForm">
+             <div class="row-2">
+               <div class="field">
+                 <label for="resultsTerm">Academic Term</label>
+                 <select id="resultsTerm" required>
+                   <option value="term1">First Term</option>
+                   <option value="term2">Second Term</option>
+                   <option value="term3">Third Term</option>
+                 </select>
+               </div>
+               <div class="field">
+                 <label for="resultsFile">CSV / Excel File</label>
+                 <input type="file" id="resultsFile" accept=".csv,.xlsx,.xls" required />
+               </div>
+             </div>
+             <div class="field">
+               <label>Preview / Parsed Data</label>
+               <div id="resultsPreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
+             </div>
+             <div style="display:flex;gap:10px;margin-top:12px;">
+               <button class="btn btn-teal" type="submit">Upload &amp; Publish Results</button>
+               <button type="button" class="btn btn-outline" id="downloadResultsTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
+             </div>
+           </form>
+         </section>
+
+         <section class="card" style="margin-bottom:18px;">
+           <h2>⬆ Bulk Upload Student List &amp; Generate Login Codes</h2>
+           <p class="sub">Upload a CSV/Excel file with columns: Student Name, Class, Student Email (optional). The system will generate unique Student IDs and Login Codes for each student.</p>
+           <form id="bulkUploadForm">
+             <div class="row-2">
+<div class="field">
+                  <label for="bulkClass">Default Class</label>
+                  <select id="bulkClass" required>
+                    <option>Creche</option>
+                    <option>Nursery 1</option>
+                    <option>Nursery 2</option>
+                    <option>KG 1</option>
+                    <option>KG 2</option>
+                    <option>Basic 1</option>
+                    <option>Basic 2</option>
+                    <option>Basic 3</option>
+                    <option>Basic 4</option>
+                    <option>Basic 5</option>
+                    <option selected>Basic 6</option>
+                    <option>Basic 7</option>
+                    <option>Basic 8</option>
+                    <option>Basic 9</option>
+                  </select>
+                </div>
+               <div class="field">
+                 <label for="bulkFile">CSV / Excel File</label>
+                 <input type="file" id="bulkFile" accept=".csv,.xlsx,.xls" required />
+               </div>
+             </div>
+             <div class="field">
+               <label>Preview / Parsed Data</label>
+               <div id="bulkPreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
+             </div>
+             <div style="display:flex;gap:10px;margin-top:12px;">
+               <button class="btn btn-gold" type="submit">Generate Codes &amp; Publish</button>
+               <button type="button" class="btn btn-outline" id="downloadBulkTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
+             </div>
+           </form>
+         </section>
+
+         <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
+           <h3 style="margin:0 0 8px;font-size:14px;">📢 Release Term Results &amp; Calculate Promotions</h3>
+           <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
+             Click to finalize the selected term. For Term 3, the system will automatically calculate
+             cumulative GPA, grade distribution across all terms, determine promotion status, and send
+             promotion notices to each student's portal.
+           </p>
+           <div class="row-2">
+             <div class="field">
+               <label>Release Term</label>
+               <select id="releaseTerm" required>
+                 <option value="term1">First Term</option>
+                 <option value="term2">Second Term</option>
+                 <option value="term3" selected>Third Term</option>
+               </select>
+             </div>
+             <div class="field">
+               <label>Promotion Calculation</label>
+               <select id="promotionMode">
+                 <option value="auto">Auto-calculate for all students in class</option>
+                 <option value="individual">Per selected student only</option>
+               </select>
+             </div>
+           </div>
+            <button class="btn btn-gold" type="submit">Release Results and Calculate Promotions</button>
           </form>
         </section>
-      </div>
+       </div>
 
-      <section class="card">
+       <section class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
           <div>
             <h2>Active Generated Student Login Codes</h2>
@@ -805,8 +959,8 @@
         </div>
       </section>
 
-      <section class="card">
-        <h2>Broadcast Announcement to All Student Portals</h2>
+    <section class="card">
+      <h2>Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -1063,8 +1217,12 @@
           escapeHtml(rec.loginCode) +
           "</span></td>" +
           "<td><span class='synced-badge'>✓ Active</span></td>" +
-          "<td><button class='btn btn-teal download-code-btn' style='padding:6px 10px;font-size:11px;' type='button'>Download Login Details</button></td>";
+          "<td>" +
+          "<button class='btn btn-teal download-code-btn' style='padding:6px 10px;font-size:11px;margin-bottom:4px;' type='button'>Download Login Details</button>" +
+          "<button class='btn btn-gold test-portal-btn' style='padding:6px 10px;font-size:11px;background:#f2b500;border-color:#f2b500;color:#2a1730;' type='button'>🔗 Test in Student Portal</button>" +
+          "</td>";
         tr.querySelector(".download-code-btn").addEventListener("click", () => downloadLoginDetails(rec));
+        tr.querySelector(".test-portal-btn").addEventListener("click", () => openStudentPortalForStudent(rec));
         tbody.appendChild(tr);
       });
     }
@@ -1222,11 +1380,13 @@
       event.preventDefault();
       const record = getRecordForTypedName();
       if (!record) { window.alert("Type a student's full name from the selected class."); return; }
+      const termKey = document.getElementById("resultTerm").value;
       const sba1 = Number(document.getElementById("resultSba1").value);
       const sba2 = Number(document.getElementById("resultSba2").value);
       const project = Number(document.getElementById("resultProject").value);
       const examScore = Number(document.getElementById("resultExamScore").value);
       const totalScore = Math.round((sba1 + sba2 + project + examScore * 0.5) * 100) / 100;
+      const grade = totalScore >= 90 ? "A" : totalScore >= 80 ? "B" : totalScore >= 70 ? "C" : totalScore >= 60 ? "D" : totalScore >= 50 ? "E" : "F";
       const result = {
         subject: document.getElementById("resultSubject").value.trim(),
         sba1,
@@ -1234,16 +1394,68 @@
         project,
         examScore,
         totalScore,
-        grade: totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : "D",
+        grade,
         remark: document.getElementById("resultRemark").value.trim() || "Keep it up",
         updatedBy: teacherLabel(),
         updatedAt: stampIso(),
       };
-      const results = (record.results || []).filter((item) => item.subject !== result.subject);
-      results.push(result);
-      await updateStudentRecord(record.studentId, { results });
+      if (!record.termResults) record.termResults = {};
+      if (!record.termResults[termKey]) record.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
+      const termData = record.termResults[termKey];
+      const filtered = (termData.results || []).filter((item) => item.subject !== result.subject);
+      filtered.push(result);
+      termData.results = filtered;
+      termData.subjectCount = filtered.length;
+      termData.gpa = calculateGPASimple(filtered);
+      termData.updatedBy = teacherLabel();
+      termData.updatedAt = stampIso();
+      await updateStudentRecord(record.studentId, { termResults: record.termResults });
       event.target.reset();
+      document.getElementById("resultTerm").value = termKey;
+      showToast("Result saved for " + record.fullName + " (" + termKey.replace("term", "Term ") + ").");
     });
+
+    function calculateGPASimple(results) {
+      if (!results || !results.length) return null;
+      const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
+      const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || (r.totalScore >= 90 ? "A" : r.totalScore >= 80 ? "B" : r.totalScore >= 70 ? "C" : r.totalScore >= 60 ? "D" : r.totalScore >= 50 ? "E" : "F")] || 0), 0);
+      return Math.round((totalPoints / results.length) * 100) / 100;
+    }
+
+    document.getElementById("releaseResultsForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const termKey = document.getElementById("releaseTerm").value;
+      const mode = document.getElementById("promotionMode").value;
+      const record = getRecordForTypedName();
+      const records = getStoredRecords();
+      let targetRecords = [];
+      if (mode === "auto" && record) {
+        targetRecords = records.filter((r) => r.currentClass === record.currentClass);
+      } else if (mode === "auto") {
+        targetRecords = records.filter((r) => (r.currentClass || "JHS 2") === "JHS 2");
+      } else if (record) {
+        targetRecords = [record];
+      } else {
+        window.alert("Select a student or use auto mode.");
+        return;
+      }
+      if (!targetRecords.length) {
+        window.alert("No students found for promotion calculation.");
+        return;
+      }
+      addPendingApproval("release", { termKey, mode, studentCount: targetRecords.length, studentIds: targetRecords.map(r => r.id), createdBy: teacherLabel(), createdAt: stampIso() });
+      showToast("Term " + termKey.replace("term", "") + " release with promotions queued for Academic Admin approval (" + targetRecords.length + " students).");
+      event.target.reset();
+      document.getElementById("releaseTerm").value = termKey;
+      document.getElementById("promotionMode").value = mode;
+      renderPendingApprovals();
+    });
+
+    function nextClassSimple(currentClass) {
+      const progression = ["Creche", "KG", "Lower KG", "Upper KG", "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3"];
+      const idx = progression.indexOf(currentClass);
+      return idx >= 0 && idx < progression.length - 1 ? progression[idx + 1] : currentClass;
+    }
 
     document.getElementById("timetableForm").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1328,14 +1540,600 @@
       renderTable(records);
       await syncRecordsToPortal(records);
       event.target.reset();
-      showToast("Broadcast announcement sent to " + (targetClass || "all") + " student portal(s).");
-    });
+       showToast("Broadcast announcement sent to " + (targetClass || "all") + " student portal(s).");
+     });
 
-    const initial = getStoredRecords();
-    renderTable(initial);
-    populateRecordStudents();
-    updateSelectedStudentSummary(getRecordForTypedName());
-    syncRecordsToPortal(initial);
-  </script>
+  function parseCSV(text) {
+    const rows = text.trim().split(/\r?\n/);
+    return rows.map((row) => {
+      const cols = row.split(",").map((c) => c.trim().replace(/^["']|["']$/g, ""));
+      return cols;
+    });
+  }
+
+  document.getElementById("resultsFile").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      const csv = parseCSV(evt.target.result);
+      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
+      csv.forEach((row, i) => {
+        html += "<tr>";
+        row.forEach((cell) => {
+          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+      document.getElementById("resultsPreview").innerHTML = html;
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("bulkFile").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      const csv = parseCSV(evt.target.result);
+      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
+      csv.forEach((row, i) => {
+        html += "<tr>";
+        row.forEach((cell) => {
+          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+      document.getElementById("bulkPreview").innerHTML = html;
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("bulkUploadForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const file = document.getElementById("bulkFile").files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function (evt) {
+      const csv = parseCSV(evt.target.result);
+      if (csv.length < 2) return;
+      const headers = csv[0];
+      const nameIdx = headers.findIndex((h) => h.toLowerCase().includes("name"));
+      const classIdx = headers.findIndex((h) => h.toLowerCase().includes("class"));
+      const emailIdx = headers.findIndex((h) => h.toLowerCase().includes("email"));
+      const defaultClass = document.getElementById("bulkClass").value;
+      const records = csv.slice(1).map((row) => {
+        const name = row[nameIdx] || "";
+        const className = row[classIdx] || defaultClass;
+        const email = emailIdx >= 0 ? (row[emailIdx] || "") : "";
+        const loginCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const studentID = className.replace(/\s+/g, "").substring(0, 2).toUpperCase() + "-" + String(Math.floor(Math.random() * 9000) + 1000);
+        return {
+          id: studentID,
+          name,
+          className,
+          email: email || (name.toLowerCase().replace(/\s+/g, ".") + "@detlof.edu.gh"),
+          code: loginCode,
+          generatedBy: teacherLabel(),
+          createdAt: stampIso(),
+          status: "active",
+          updates: [],
+        };
+      });
+      const existing = getStoredRecords();
+      const all = [...records, ...existing];
+      saveStoredRecords(all);
+      renderTable(all);
+      await syncRecordsToPortal(all);
+      showToast(records.length + " student(s) added with login codes generated.");
+      e.target.reset();
+      document.getElementById("bulkPreview").innerHTML = "";
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("bulkResultsForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const file = document.getElementById("resultsFile").files[0];
+    if (!file) return;
+    const termKey = document.getElementById("resultsTerm").value;
+    const reader = new FileReader();
+    reader.onload = async function (evt) {
+      const csv = parseCSV(evt.target.result);
+      if (csv.length < 2) return;
+      const headers = csv[0];
+      const nameIdx = headers.findIndex((h) => h.toLowerCase().includes("name"));
+      const subjectIdx = headers.findIndex((h) => h.toLowerCase().includes("subject"));
+      const examIdx = headers.findIndex((h) => h.toLowerCase().includes("exam"));
+      const sba1Idx = headers.findIndex((h) => h.toLowerCase().includes("sba 1"));
+      const sba2Idx = headers.findIndex((h) => h.toLowerCase().includes("sba 2"));
+      const projectIdx = headers.findIndex((h) => h.toLowerCase().includes("project"));
+      const existing = getStoredRecords();
+      let matchedCount = 0;
+      const resultsData = [];
+      csv.slice(1).forEach((row) => {
+        const studentName = row[nameIdx] || "";
+        const subject = row[subjectIdx] || "";
+        const exam = row[examIdx] || "";
+        const sba1 = row[sba1Idx] || "";
+        const sba2 = row[sba2Idx] || "";
+        const project = row[projectIdx] || "";
+        const rec = existing.find((r) => r.name.toLowerCase() === studentName.toLowerCase());
+        if (rec) {
+          matchedCount++;
+          resultsData.push({
+            studentName,
+            studentId: rec.id,
+            subject,
+            exam,
+            sba1,
+            sba2,
+            project,
+          });
+        }
+      });
+      addPendingApproval("results", { termKey, resultsData, matchedCount, createdBy: teacherLabel(), createdAt: stampIso() });
+      showToast("Results for " + termKey.replace("term", "Term ") + " queued for Academic Admin approval (" + matchedCount + " students matched).");
+      e.target.reset();
+      document.getElementById("resultsPreview").innerHTML = "";
+      renderPendingApprovals();
+    }
+    reader.readAsText(file);
+  });
+
+  document.getElementById("downloadResultsTemplate").addEventListener("click", function () {
+    const csv = "Student Name,Class,Student ID,Subject,SBA 1,SBA 2,Project,Exam Score\nJohn Doe,JHS 1,JHS1-1001,Mathematics,15,18,20,75\n";
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "results-upload-template.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("downloadBulkTemplate").addEventListener("click", function () {
+    const csv = "Student Name,Class,Student Email\nJane Smith,JHS 2,jane.smith@detlof.edu.gh\n";
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "students-bulk-template.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("academicsAdminLoginLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.querySelector(".admin-login-form").classList.add("hidden");
+    document.getElementById("academicsAdminLoginScreen").classList.remove("hidden");
+  });
+
+  document.getElementById("backToTeacherLogin").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("academicsAdminLoginScreen").classList.add("hidden");
+    document.querySelector(".admin-login-form").classList.remove("hidden");
+  });
+
+document.getElementById("academicsAdminLoginBtn").addEventListener("click", function (e) {
+    e.preventDefault();
+    const email = document.getElementById("academicsAdminEmail").value;
+    const password = document.getElementById("academicsAdminPassword").value;
+    if (email === "admin-academics@detlof.edu.gh" && password === "DetlofAcademics2026!") {
+      localStorage.setItem("detlof_academics_admin", "true");
+      document.getElementById("academicsAdminError").classList.add("hidden");
+       document.getElementById("adminLoginScreen").classList.add("hidden");
+      document.getElementById("adminContent").classList.remove("hidden");
+      document.querySelectorAll(".admin-only, .academics-admin-only").forEach((el) => el.classList.remove("hidden"));
+      renderPendingApprovals();
+    } else {
+      document.getElementById("academicsAdminError").classList.remove("hidden");
+    }
+  });
+
+  document.getElementById("timetableFile").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      const csv = parseCSV(evt.target.result);
+      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
+      csv.forEach((row, i) => {
+        html += "<tr>";
+        row.forEach((cell) => {
+          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
+        });
+        html += "</tr>";
+      });
+      html += "</table>";
+      document.getElementById("timetablePreview").innerHTML = html;
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("timetableForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const file = document.getElementById("timetableFile").files[0];
+    const timetableClass = document.getElementById("timetableClass").value;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async function (evt) {
+        const csv = parseCSV(evt.target.result);
+        if (csv.length < 2) return;
+        const headers = csv[0].map(h => h.toLowerCase().trim());
+        const dayIdx = headers.indexOf("day");
+        const subjectIdx = headers.indexOf("subject");
+        const timeIdx = headers.indexOf("time");
+        const venueIdx = headers.indexOf("venue");
+        const teacherIdx = headers.indexOf("teacher");
+        const schedule = csv.slice(1).map(row => ({
+          day: row[dayIdx] || "",
+          subject: row[subjectIdx] || "",
+          time: row[timeIdx] || "",
+          venue: row[venueIdx] || "",
+          teacher: row[teacherIdx] || "Not assigned",
+        })).filter(r => r.day && r.subject);
+        addPendingApproval("timetable", { className: timetableClass, schedule, createdBy: teacherLabel(), createdAt: stampIso() });
+        showToast("Timetable for " + timetableClass + " queued for Academic Admin approval (" + schedule.length + " entries).");
+        e.target.reset();
+        document.getElementById("timetablePreview").innerHTML = "";
+        renderPendingApprovals();
+      };
+      reader.readAsText(file);
+    } else {
+      const timetableDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      const schedule = timetableDays.map((day) => ({
+        day,
+        subject: document.getElementById("scheduleSubject" + day).value.trim(),
+        time: document.getElementById("scheduleTime" + day).value.trim(),
+        teacher: document.getElementById("scheduleTeacher" + day).value.trim() || "Not assigned",
+        venue: document.getElementById("scheduleVenue" + day).value.trim(),
+      })).filter(r => r.subject);
+      if (!schedule.length) return;
+      addPendingApproval("timetable", { className: timetableClass, schedule, createdBy: teacherLabel(), createdAt: stampIso() });
+      showToast("Timetable for " + timetableClass + " queued for Academic Admin approval (" + schedule.length + " entries).");
+      e.target.reset();
+      renderPendingApprovals();
+    }
+  });
+
+  document.getElementById("downloadTimetableTemplate").addEventListener("click", function () {
+    const csv = "Day,Subject,Time,Venue,Teacher\nMonday,Mathematics,8:00-9:00,JHS 2 Room,Mrs. Addo\nTuesday,English Language,9:00-10:00,JHS 2 Room,Mr. Mensah\n";
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "timetable-upload-template.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  function addPendingApproval(type, data) {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    pending.push({ id: "pending-" + Date.now(), type, data, status: "pending", submittedAt: stampIso() });
+    localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
+  }
+
+  function renderPendingApprovals() {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const pendingList = document.getElementById("pendingList");
+    const noPendingMsg = document.getElementById("noPendingMsg");
+    const pendingApprovals = document.getElementById("pendingApprovals");
+    const adminOnlyItems = document.querySelectorAll(".admin-only");
+    const isAcademicsAdmin = localStorage.getItem("detlof_academics_admin") === "true";
+    if (!isAcademicsAdmin) return;
+    if (!pending.length) {
+      pendingApprovals.style.display = "none";
+      noPendingMsg.style.display = "block";
+      return;
+    }
+    pendingApprovals.style.display = "block";
+    noPendingMsg.style.display = "none";
+    let html = "";
+    pending.forEach((item, i) => {
+      const typeLabel = { results: "📊 Results", timetable: "📅 Timetable", release: "📢 Term Release" }[item.type] || item.type;
+      html += "<div style='border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:#fff;'>";
+      html += "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>";
+      html += "<strong>" + typeLabel + "</strong>";
+      html += "<span style='font-size:11px;color:var(--muted);'>Submitted: " + item.submittedAt + "</span>";
+      html += "</div>";
+      if (item.type === "results") {
+        html += "Term: " + item.data.termKey + " | " + item.data.matchedCount + " students matched";
+      } else if (item.type === "timetable") {
+        html += "Class: " + item.data.className + " | " + item.data.schedule.length + " entries";
+      } else if (item.type === "release") {
+        html += "Term: " + item.data.termKey + " | Mode: " + item.data.mode;
+      }
+      html += "<div style='margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;'>";
+      html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;' onclick='approvePending(" + i + ")'>✅ Approve</button>";
+      html += "<button class='btn btn-outline' style='padding:4px 10px;font-size:11px;' onclick='rejectPending(" + i + ")'>❌ Reject</button>";
+      if (item.type === "timetable") {
+        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#25D366;' onclick='sendTimetableToAllParents(\"" + item.data.className.replace(/"/g, '\\"') + "\", " + JSON.stringify(item.data.schedule).replace(/"/g, '"') + ")'>📱 Send via WhatsApp</button>";
+      }
+      if (item.type === "results") {
+        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#128C7E;border-color:#128C7E;' onclick='sendResultsToAllParents(\"" + item.data.termKey + "\")'>📊 Send Results via WhatsApp</button>";
+      }
+      html += "</div>";
+      html += "</div>";
+    });
+    pendingList.innerHTML = html;
+  }
+
+  window.approvePending = function(index) {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const item = pending[index];
+    if (!item) return;
+    if (item.type === "results") {
+      publishResultsToPortals(item.data.termKey, item.data.resultsData);
+    } else if (item.type === "timetable") {
+      publishTimetableToPortals(item.data.className, item.data.schedule);
+    } else if (item.type === "release") {
+      processReleaseApproval(item.data);
+    }
+    item.status = "approved";
+    item.approvedAt = stampIso();
+    localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
+    showToast("Approved and published to student portals.");
+    renderPendingApprovals();
+  };
+
+  window.rejectPending = function(index) {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const item = pending[index];
+    if (!item) return;
+    item.status = "rejected";
+    item.rejectedAt = stampIso();
+    localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
+    showToast("Rejected.");
+    renderPendingApprovals();
+  };
+
+  function publishTimetableToPortals(className, schedule) {
+    const records = getStoredRecords();
+    records.forEach(rec => {
+      if (rec.currentClass === className) {
+        rec.timetable = schedule;
+        rec.timetableUpdatedBy = "Academics Admin";
+        rec.timetableUpdatedAt = stampIso();
+      }
+    });
+    saveStoredRecords(records);
+    syncRecordsToPortal(records);
+    renderTable(records);
+  }
+
+  document.getElementById("approveAllBtn").addEventListener("click", function() {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    pending.forEach((item, i) => {
+      if (item.status === "pending") {
+        window.approvePending(i);
+      }
+    });
+  });
+
+  document.getElementById("rejectAllBtn").addEventListener("click", function() {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    pending.forEach((item, i) => {
+      if (item.status === "pending") {
+        window.rejectPending(i);
+      }
+    });
+  });
+
+  document.getElementById("sendAllTimetablesWhatsAppBtn").addEventListener("click", function() {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const timetableItems = pending.filter(item => item.status === "pending" && item.type === "timetable");
+    timetableItems.forEach(item => {
+      sendTimetableToAllParents(item.data.className, item.data.schedule);
+    });
+  });
+
+  document.getElementById("sendAllResultsWhatsAppBtn").addEventListener("click", function() {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const resultsItems = pending.filter(item => item.status === "pending" && item.type === "results");
+    const terms = [...new Set(resultsItems.map(item => item.data.termKey))];
+    terms.forEach(termKey => {
+      sendResultsToAllParents(termKey);
+    });
+  });
+
+  function publishResultsToPortals(termKey, resultsData) {
+    const existing = getStoredRecords();
+    resultsData.forEach(rd => {
+      const rec = existing.find(r => r.id === rd.studentId);
+      if (rec) {
+        const updates = Array.isArray(rec.updates) ? rec.updates : [];
+        updates.push({
+          id: "result-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5),
+          title: termKey.replace("term", "Term ") + " " + rd.subject + " Result",
+          category: "Results Update",
+          message: "Subject: " + rd.subject + " | Exam: " + rd.exam + " | SBA1: " + rd.sba1 + " | SBA2: " + rd.sba2 + " | Project: " + rd.project,
+          date: stampDate(),
+          createdAt: stampIso(),
+          createdBy: "Academics Admin",
+          individual: true,
+        });
+        rec.updates = updates;
+        if (!rec.termResults) rec.termResults = {};
+        if (!rec.termResults[termKey]) rec.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
+        const totalScore = Number(rd.sba1) + Number(rd.sba2) + Number(rd.project) + Number(rd.exam) * 0.5;
+        const grade = totalScore >= 90 ? "A" : totalScore >= 80 ? "B" : totalScore >= 70 ? "C" : totalScore >= 60 ? "D" : totalScore >= 50 ? "E" : "F";
+        rec.termResults[termKey].results.push({
+          subject: rd.subject,
+          sba1: Number(rd.sba1),
+          sba2: Number(rd.sba2),
+          project: Number(rd.project),
+          examScore: Number(rd.exam),
+          totalScore: Math.round(totalScore * 100) / 100,
+          grade,
+        });
+      }
+    });
+    existing.forEach(rec => {
+      if (rec.termResults && rec.termResults[termKey] && rec.termResults[termKey].results.length) {
+        const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
+        const results = rec.termResults[termKey].results;
+        const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade] || 0), 0);
+        rec.termResults[termKey].gpa = Math.round((totalPoints / results.length) * 100) / 100;
+        rec.termResults[termKey].subjectCount = results.length;
+      }
+    });
+    saveStoredRecords(existing);
+    syncRecordsToPortal(existing);
+    renderTable(existing);
+  }
+
+  function processReleaseApproval(data) {
+    const records = getStoredRecords();
+    const targetRecords = records.filter(r => data.studentIds.includes(r.id));
+    targetRecords.forEach((rec) => {
+      const allTerms = rec.termResults || {};
+      const termCount = ["term1", "term2", "term3"].filter((k) => allTerms[k] && Array.isArray(allTerms[k].results) && allTerms[k].results.length).length;
+      if (termCount >= 3) {
+        const gradeCount = { F: 0, E: 0, D: 0, C: 0, B: 0, A: 0 };
+        ["term1", "term2", "term3"].forEach((tk) => {
+          if (allTerms[tk] && Array.isArray(allTerms[tk].results)) {
+            allTerms[tk].results.forEach((r) => {
+              const g = r.grade || (r.totalScore >= 90 ? "A" : r.totalScore >= 80 ? "B" : r.totalScore >= 70 ? "C" : r.totalScore >= 60 ? "D" : r.totalScore >= 50 ? "E" : "F");
+              gradeCount[g] = (gradeCount[g] || 0) + 1;
+            });
+          }
+        });
+        let promotionStatus;
+        if (gradeCount.F + gradeCount.E >= 2) {
+          promotionStatus = "repeated";
+        } else if (gradeCount.F + gradeCount.E >= 1 || gradeCount.D + gradeCount.C > 0) {
+          promotionStatus = "on_try";
+        } else {
+          promotionStatus = "promoted";
+        }
+        const nextCls = promotionStatus === "promoted" || promotionStatus === "on_try" ? nextClassSimple(rec.currentClass || "JHS 2") : rec.currentClass;
+        rec.promotionStatus = promotionStatus;
+        rec.promotedClass = nextCls;
+        rec.promotionDate = stampDate();
+      }
+    });
+    saveStoredRecords(targetRecords);
+    const promotionUpdate = {
+      id: "promo-" + Date.now(),
+      title: "Academic Year Promotion Results",
+      category: "Results Update",
+      message: "Your third-term results have been released along with your cumulative GPA and promotion status. View your dashboard for details.",
+      date: stampDate(),
+      createdAt: stampIso(),
+      createdBy: "Academics Admin",
+      individual: true,
+    };
+    targetRecords.forEach((rec) => {
+      const updates = Array.isArray(rec.updates) ? rec.updates : [];
+      updates.push({ ...promotionUpdate });
+      rec.updates = updates;
+    });
+    renderTable(targetRecords);
+    syncRecordsToPortal(targetRecords);
+  }
+
+  function sendTimetableViaWhatsApp(className, schedule, studentPhone) {
+    if (!studentPhone) return;
+    const formattedPhone = studentPhone.replace(/\D/g, "");
+    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
+    let message = "📅 *Detlof Preparatory School - Class Timetable*\n\n";
+    message += `Class: ${className}\n\n`;
+    schedule.forEach(item => {
+      message += `📌 ${item.day}: ${item.subject} (${item.time}) - ${item.venue}${item.teacher ? " with " + item.teacher : ""}\n`;
+    });
+    message += "\n_View full details on your Student Portal_\nhttps://detlof.edu.gh/portal";
+    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  function sendResultsViaWhatsApp(student, termKey) {
+    if (!student.profileWhatsApp && !student.profileParentPhone) return;
+    const phone = student.profileWhatsApp || student.profileParentPhone;
+    const formattedPhone = phone.replace(/\D/g, "");
+    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
+    const termData = student.termResults?.[termKey];
+    if (!termData || !termData.results?.length) return;
+    let message = `📊 *Detlof Preparatory School - ${termKey.replace("term", "Term ").toUpperCase()} Results*\n\n`;
+    message += `Student: ${student.fullName}\nClass: ${student.currentClass}\nStudent ID: ${student.studentId}\n\n`;
+    const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
+    let totalPoints = 0;
+    termData.results.forEach(r => {
+      const grade = r.grade || "—";
+      const points = pointsMap[grade] || 0;
+      totalPoints += points;
+      message += `📚 ${r.subject}: ${r.totalScore}% (Grade ${grade})\n`;
+    });
+    const gpa = termData.results.length ? Math.round((totalPoints / termData.results.length) * 100) / 100 : "—";
+    message += `\n📈 Term GPA: ${gpa}`;
+    if (student.promotionStatus) {
+      const promoText = { promoted: "✅ Promoted", on_try: "⚠️ On Trial", repeated: "🔁 Repeating" }[student.promotionStatus] || "";
+      message += `\n🎓 Status: ${promoText}`;
+      if (student.promotedClass) message += ` → ${student.promotedClass}`;
+    }
+    message += "\n\n_View full details on Student Portal_\nhttps://detlof.edu.gh/portal";
+    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  function sendResultsToAllParents(termKey) {
+    const records = getStoredRecords();
+    let count = 0;
+    records.forEach(student => {
+      if (student.profileWhatsApp || student.profileParentPhone) {
+        sendResultsViaWhatsApp(student, termKey);
+        count++;
+      }
+    });
+    showToast("WhatsApp results opened for " + count + " parent(s).");
+  }
+
+  function sendTimetableToAllParents(className, schedule) {
+    const records = getStoredRecords();
+    const classStudents = records.filter(r => r.currentClass === className);
+    classStudents.forEach(student => {
+      const phone = student.profileWhatsApp || student.profileParentPhone;
+      if (phone) {
+        sendTimetableViaWhatsApp(className, schedule, phone);
+      }
+    });
+    showToast("WhatsApp messages opened for " + classStudents.filter(s => s.profileWhatsApp || s.profileParentPhone).length + " parent(s).");
+  }
+
+  function openStudentPortalForStudent(student) {
+    const url = "detlof-student-portal.html?email=" + encodeURIComponent(student.email) + "&studentId=" + encodeURIComponent(student.studentId) + "&code=" + encodeURIComponent(student.loginCode) + "&fullName=" + encodeURIComponent(student.fullName) + "&class=" + encodeURIComponent(student.currentClass) + "&year=" + encodeURIComponent(student.academicYear || "2024 / 2025");
+    window.open(url, "_blank");
+    showToast("Opening Student Portal for " + student.fullName + "...");
+  }
+
+  function openStudentPortalWithTest() {
+    const records = getStoredRecords();
+    if (!records.length) { showToast("No student records to test with"); return; }
+    const student = records[0];
+    const url = "detlof-student-portal.html?email=" + encodeURIComponent(student.email) + "&studentId=" + encodeURIComponent(student.studentId) + "&code=" + encodeURIComponent(student.loginCode) + "&fullName=" + encodeURIComponent(student.fullName);
+    window.open(url, "_blank");
+  }
+
+  function copyTestCredentials() {
+    const records = getStoredRecords();
+    if (!records.length) { showToast("No student records to copy"); return; }
+    const student = records[0];
+    const text = "Student: " + student.fullName + "\nEmail: " + student.email + "\nStudent ID: " + student.studentId + "\nLogin Code: " + student.loginCode + "\nClass: " + student.currentClass;
+    navigator.clipboard.writeText(text).then(() => showToast("Test credentials copied to clipboard!")).catch(() => showToast("Copy failed"));
+  }
+
+const initial = getStoredRecords();
+        renderTable(initial);
+        populateRecordStudents();
+        updateSelectedStudentSummary(getRecordForTypedName());
+        syncRecordsToPortal(initial);
+
+      // Show warning if opened via file:// protocol
+      if (location.protocol === "file:") {
+        document.getElementById("fileProtocolWarningAdmin").style.display = "block";
+      }
+    </script>
 </body>
 </html>
