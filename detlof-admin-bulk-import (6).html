@@ -719,6 +719,28 @@
             </div>
             <div id="adminProfileError" class="admin-login-error hidden" style="margin-top:-8px;"></div>
             <button class="btn btn-gold" type="submit" style="width:100%;justify-content:center;">Save Student Profile Details</button>
+
+            <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;">
+            <h3 style="margin:0 0 8px;font-size:13px;">Send Student Report &amp; Timetable via WhatsApp</h3>
+            <p class="sub" style="margin:0 0 12px;">Paste a parent's WhatsApp number, then send this student's academic report or class timetable directly to them.</p>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminSendParentPhone">Parent WhatsApp Number</label>
+                <input id="adminSendParentPhone" type="tel" placeholder="e.g. 0244123456" />
+              </div>
+              <div class="field">
+                <label for="adminSendTerm">Send Report Term</label>
+                <select id="adminSendTerm">
+                  <option value="term1">First Term</option>
+                  <option value="term2" selected>Second Term</option>
+                  <option value="term3">Third Term</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-teal" id="sendStudentReportWhatsAppBtn" style="flex:1;">Send Report via WhatsApp</button>
+              <button type="button" class="btn btn-teal" id="sendStudentTimetableWhatsAppBtn" style="flex:1;">Send Timetable via WhatsApp</button>
+            </div>
           </form>
         </section>
 
@@ -1556,6 +1578,25 @@
       });
     });
 
+    document.getElementById("sendStudentReportWhatsAppBtn").addEventListener("click", function () {
+      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      const phone = document.getElementById("adminSendParentPhone").value.trim();
+      const termKey = document.getElementById("adminSendTerm").value;
+      if (!record) { showToast("Select a student first"); return; }
+      if (!phone) { showToast("Enter a parent WhatsApp number"); return; }
+      sendResultsViaWhatsApp(record, termKey, phone);
+      showToast("Opening WhatsApp with " + record.fullName + "'s report…");
+    });
+
+    document.getElementById("sendStudentTimetableWhatsAppBtn").addEventListener("click", function () {
+      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      const phone = document.getElementById("adminSendParentPhone").value.trim();
+      if (!record) { showToast("Select a student first"); return; }
+      if (!phone) { showToast("Enter a parent WhatsApp number"); return; }
+      sendStudentTimetableViaWhatsApp(record, phone);
+      showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
+    });
+
     document.getElementById("fullName").addEventListener("input", function () {
       const emailInput = document.getElementById("email");
       emailInput.value = generateEmailFromName(this.value);
@@ -2173,13 +2214,16 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     window.open(url, "_blank");
   }
 
-  function sendResultsViaWhatsApp(student, termKey) {
-    if (!student.profileWhatsApp && !student.profileParentPhone) return;
-    const phone = student.profileWhatsApp || student.profileParentPhone;
-    const formattedPhone = phone.replace(/\D/g, "");
+  function sendResultsViaWhatsApp(student, termKey, phone) {
+    const destination = phone || student.profileWhatsApp || student.profileParentPhone;
+    if (!destination) return;
+    const formattedPhone = String(destination).replace(/\D/g, "");
     const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
     const termData = student.termResults?.[termKey];
-    if (!termData || !termData.results?.length) return;
+    if (!termData || !termData.results?.length) {
+      showToast("No results found for " + (student.fullName || student.studentId) + " in " + termKey);
+      return;
+    }
     let message = `📊 *Detlof Preparatory School - ${termKey.replace("term", "Term ").toUpperCase()} Results*\n\n`;
     message += `Student: ${student.fullName}\nClass: ${student.currentClass}\nStudent ID: ${student.studentId}\n\n`;
     const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
@@ -2198,6 +2242,29 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
       if (student.promotedClass) message += ` → ${student.promotedClass}`;
     }
     message += "\n\n_View full details on Student Portal_\nhttps://detlof.edu.gh/portal";
+    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  function sendStudentTimetableViaWhatsApp(student, phone) {
+    const destination = phone || student.profileWhatsApp || student.profileParentPhone;
+    if (!destination) {
+      showToast("No WhatsApp number on file for " + (student.fullName || student.studentId));
+      return;
+    }
+    const formattedPhone = String(destination).replace(/\D/g, "");
+    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
+    const schedule = Array.isArray(student.timetable) ? student.timetable : [];
+    let message = "📅 *Detlof Preparatory School - Class Timetable*\n\n";
+    message += `Student: ${student.fullName || ""} (${student.studentId || ""})\nClass: ${student.currentClass || ""}\n\n`;
+    if (schedule.length) {
+      schedule.forEach(item => {
+        message += `📌 ${item.day || ""}: ${item.subject || ""} (${item.time || ""}) - ${item.venue || ""}${item.teacher ? " with " + item.teacher : ""}\n`;
+      });
+    } else {
+      message += "_No timetable has been published for this student yet._\n";
+    }
+    message += "\n_View full details on your Student Portal_";
     const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   }
