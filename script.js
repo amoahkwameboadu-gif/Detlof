@@ -1,5 +1,14 @@
 const STORAGE_KEY = "detlof_bulk_import_codes";
+const PORTAL_API_BASE = "http://127.0.0.1:5000";
 let activeStudent = null;
+
+const DEFAULT_RESULTS = [
+  { subject: "Mathematics", sba1: 9, sba2: 18, project: 18, examScore: 90, totalScore: 90, grade: "A", remark: "Excellent progress" },
+  { subject: "English Language", sba1: 8, sba2: 17, project: 17, examScore: 80, totalScore: 82, grade: "A", remark: "Very good" },
+  { subject: "Integrated Science", sba1: 8, sba2: 15, project: 16, examScore: 74, totalScore: 76, grade: "B", remark: "Keep it up" },
+  { subject: "Computing / ICT", sba1: 7, sba2: 15, project: 16, examScore: 74, totalScore: 75, grade: "B", remark: "Good work" },
+  { subject: "Social Studies", sba1: 7, sba2: 14, project: 15, examScore: 70, totalScore: 71, grade: "B", remark: "Good effort" },
+];
 
 const DEFAULT_STUDENTS = [
   {
@@ -47,14 +56,6 @@ const DEFAULT_STUDENTS = [
   },
 ];
 
-const DEFAULT_RESULTS = [
-  { subject: "Mathematics", sba1: 9, sba2: 18, project: 18, examScore: 90, totalScore: 90, grade: "A", remark: "Excellent progress" },
-  { subject: "English Language", sba1: 8, sba2: 17, project: 17, examScore: 80, totalScore: 82, grade: "A", remark: "Very good" },
-  { subject: "Integrated Science", sba1: 8, sba2: 15, project: 16, examScore: 74, totalScore: 76, grade: "B", remark: "Keep it up" },
-  { subject: "Computing / ICT", sba1: 7, sba2: 15, project: 16, examScore: 74, totalScore: 75, grade: "B", remark: "Good work" },
-  { subject: "Social Studies", sba1: 7, sba2: 14, project: 15, examScore: 70, totalScore: 71, grade: "B", remark: "Good effort" },
-];
-
 const DEFAULT_ANNOUNCEMENTS = [
   { title: "Mid-term assessments begin next Monday", category: "School Notice", date: "May 14, 2025", body: "Please check the assessment schedule and bring your required materials each day." },
   { title: "Science has moved to the Science Lab", category: "Timetable Update", date: "May 9, 2025", body: "Wednesday science lessons will take place in the Science Lab from 10:30 AM." },
@@ -72,32 +73,161 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function normalizeStudent(student) {
+  if (!student || typeof student !== "object") return student;
+  const normalized = { ...student };
+  const parentPhone = normalized.parentPhone || normalized.profileParentPhone || "";
+  const whatsappNumber = normalized.whatsappNumber || normalized.profileWhatsApp || "";
+  normalized.parentPhone = parentPhone;
+  normalized.profileParentPhone = parentPhone;
+  normalized.whatsappNumber = whatsappNumber;
+  normalized.profileWhatsApp = whatsappNumber;
+  return normalized;
+}
+
+function mergeStudentData(existing, incoming) {
+  const base = existing || {};
+  const update = incoming || {};
+  const merged = { ...base, ...update };
+  const existingParentPhone = base.parentPhone || base.profileParentPhone || "";
+  const existingWhatsApp = base.whatsappNumber || base.profileWhatsApp || "";
+  const incomingParentPhone = update.parentPhone || update.profileParentPhone || "";
+  const incomingWhatsApp = update.whatsappNumber || update.profileWhatsApp || "";
+  if (incomingParentPhone) {
+    merged.parentPhone = incomingParentPhone;
+    merged.profileParentPhone = incomingParentPhone;
+  } else if (existingParentPhone) {
+    merged.parentPhone = existingParentPhone;
+    merged.profileParentPhone = existingParentPhone;
+  }
+  if (incomingWhatsApp) {
+    merged.whatsappNumber = incomingWhatsApp;
+    merged.profileWhatsApp = incomingWhatsApp;
+  } else if (existingWhatsApp) {
+    merged.whatsappNumber = existingWhatsApp;
+    merged.profileWhatsApp = existingWhatsApp;
+  }
+  return normalizeStudent(merged);
+}
+
+async function fetchPortalApi(path, options = {}) {
+  const urls = [path];
+  const backendUrl = PORTAL_API_BASE + path;
+  if (window.location.href.indexOf(PORTAL_API_BASE) !== 0) {
+    urls.push(backendUrl);
+  }
+  let lastResponse = null;
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok || response.status === 401) return response;
+      lastResponse = response;
+    } catch {
+    }
+  }
+  return lastResponse;
+}
+
+function findSyncedStudent(credentials) {
+  const email = String(credentials.email || "").trim().toLowerCase();
+  const studentId = String(credentials.studentId || "").trim().toUpperCase();
+  const loginCode = String(credentials.loginCode || credentials.password || "").trim();
+  return getSyncedStudents().find((student) =>
+    String(student.email || "").trim().toLowerCase() === email &&
+    String(student.studentId || "").trim().toUpperCase() === studentId &&
+    String(student.loginCode || "").trim() === loginCode
+  );
+}
+
+function upsertSyncedStudent(student) {
+  const normalized = normalizeStudent(student);
+  const students = getSyncedStudents();
+  const index = students.findIndex((item) =>
+    String(item.studentId || "").trim().toUpperCase() === String(normalized.studentId || "").trim().toUpperCase()
+  );
+  if (index >= 0) {
+    students[index] = mergeStudentData(students[index], normalized);
+  } else {
+    students.unshift(normalized);
+  }
+  saveSyncedStudents();
+  return students[index >= 0 ? index : 0];
+}
+
+async function resolveStudentFromCredentials(credentials, allowLocal = true) {
+  const payload = {
+    email: String(credentials.email || "").trim().toLowerCase(),
+    studentId: String(credentials.studentId || "").trim().toUpperCase(),
+    password: String(credentials.loginCode || credentials.password || "").trim(),
+  };
+  const response = await fetchPortalApi("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (response) {
+    if (response.ok) {
+      const data = await response.json().catch(() => ({}));
+      if (data.student) return normalizeStudent(data.student);
+    }
+    if (response.status === 401) return null;
+  }
+  if (!allowLocal) return null;
+  const localStudent = findSyncedStudent(payload);
+  return localStudent ? normalizeStudent(localStudent) : null;
+}
+
+function studentFromUrlParams(params) {
+  return normalizeStudent({
+    fullName: params.get("fullName") || "Detlof Student",
+    email: params.get("email"),
+    studentId: params.get("studentId"),
+    loginCode: params.get("code"),
+    currentClass: params.get("class") || "JHS 2",
+    academicYear: params.get("year") || "2024 / 2025",
+    parentPhone: params.get("parentPhone") || params.get("profileParentPhone") || "",
+    profileParentPhone: params.get("profileParentPhone") || params.get("parentPhone") || "",
+    whatsappNumber: params.get("whatsappNumber") || params.get("profileWhatsApp") || "",
+    profileWhatsApp: params.get("profileWhatsApp") || params.get("whatsappNumber") || "",
+  });
+}
+
+async function resolveStudentFromUrlParams(params) {
+  const credentials = {
+    email: params.get("email"),
+    studentId: params.get("studentId"),
+    loginCode: params.get("code"),
+  };
+  const remoteStudent = await resolveStudentFromCredentials(credentials, false);
+  if (remoteStudent) return remoteStudent;
+  const localStudent = findSyncedStudent(credentials);
+  if (localStudent) return mergeStudentData(localStudent, studentFromUrlParams(params));
+  return studentFromUrlParams(params);
+}
+
 function getSyncedStudents() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
     const map = new Map();
-    DEFAULT_STUDENTS.forEach((student) => map.set(student.studentId.toUpperCase(), student));
+    DEFAULT_STUDENTS.forEach((student) => map.set(student.studentId.toUpperCase(), normalizeStudent(student)));
     if (Array.isArray(parsed)) {
       parsed.forEach((student) => {
         if (student && student.studentId) {
-          const existing = map.get(String(student.studentId).toUpperCase());
-          if (existing) {
-            Object.assign(existing, student);
-          } else {
-            map.set(String(student.studentId).toUpperCase(), student);
-          }
+          const key = String(student.studentId).toUpperCase();
+          const existing = map.get(key);
+          map.set(key, normalizeStudent(existing ? mergeStudentData(existing, student) : student));
         }
       });
     }
     return Array.from(map.values());
   } catch {
-    return [...DEFAULT_STUDENTS];
+    return DEFAULT_STUDENTS.map((student) => normalizeStudent(student));
   }
 }
 
 function saveSyncedStudents() {
-  const synced = getSyncedStudents();
+  const synced = getSyncedStudents().map((student) => normalizeStudent(student));
   localStorage.setItem(STORAGE_KEY, JSON.stringify(synced));
 }
 
@@ -117,9 +247,10 @@ function togglePasswordVisibility() {
 }
 
 function fillCredentials(student) {
-  document.getElementById("loginEmail").value = student.email;
-  document.getElementById("loginStudentId").value = student.studentId;
-  document.getElementById("loginPassword").value = student.loginCode;
+  const credentials = normalizeStudent(student);
+  document.getElementById("loginEmail").value = credentials.email;
+  document.getElementById("loginStudentId").value = credentials.studentId;
+  document.getElementById("loginPassword").value = credentials.loginCode;
   document.getElementById("loginPassword").type = "password";
   document.getElementById("togglePasswordBtn").textContent = "Show";
   document.getElementById("togglePasswordBtn").setAttribute("aria-label", "Show password");
@@ -280,8 +411,21 @@ function emptyRow(columns, message) {
   return "<tr><td colspan='" + columns + "' style='text-align:center;color:var(--muted);padding:20px;'>" + escapeHtml(message) + "</td></tr>";
 }
 
+function configureStudentProfileAccess() {
+  ["profileParentName", "profileParentPhone", "profileWhatsApp", "profileHomeAddress"].forEach((id) => {
+    const field = document.getElementById(id);
+    if (field) field.readOnly = true;
+  });
+  const picInput = document.getElementById("profilePicInput");
+  const picBtn = document.getElementById("changePicBtn");
+  if (picInput) picInput.style.display = "none";
+  if (picBtn) picBtn.style.display = "none";
+}
+
 function renderPortalForStudent(student) {
-  activeStudent = student;
+  activeStudent = mergeStudentData(activeStudent, student);
+  student = activeStudent;
+  configureStudentProfileAccess();
   document.getElementById("loginScreen").classList.add("hidden");
   document.getElementById("portalShell").classList.remove("hidden");
 
@@ -500,27 +644,8 @@ function renderPortalForStudent(student) {
     if (student.profilePic) {
       document.getElementById("profilePicPreview").src = student.profilePic;
     } else {
-      document.getElementById("profilePicPreview").src = "Detlof%20creast%201.png";
+      document.getElementById("profilePicPreview").src = "detlofcreast.svg";
     }
-  }
-
-  const picInput = document.getElementById("profilePicInput");
-  const picBtn = document.getElementById("changePicBtn");
-  if (picBtn) {
-    picBtn.onclick = function () {
-      if (picInput) picInput.click();
-    };
-  }
-  if (picInput) {
-    picInput.onchange = function (e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (evt) {
-        document.getElementById("profilePicPreview").src = evt.target.result;
-      };
-      reader.readAsDataURL(file);
-    };
   }
 
   if (profileFormSection) {
@@ -529,10 +654,7 @@ function renderPortalForStudent(student) {
       const updated = {
         fullName: document.getElementById("profileFullName").value.trim() || activeStudent.fullName,
         parentName: document.getElementById("profileParentName").value.trim(),
-        parentPhone: document.getElementById("profileParentPhone").value.trim(),
-        whatsappNumber: document.getElementById("profileWhatsApp").value.trim(),
         homeAddress: document.getElementById("profileHomeAddress").value.trim(),
-        profilePic: document.getElementById("profilePicPreview").src || activeStudent.profilePic,
         updatedBy: "Student Self-Update",
         updatedAt: new Date().toISOString(),
       };
@@ -542,7 +664,8 @@ function renderPortalForStudent(student) {
     };
   }
 
-  document.getElementById("profileTableBody").innerHTML = "";
+  const profileTable = document.getElementById("profileTableBody");
+  if (profileTable) profileTable.innerHTML = "";
 }
 
 function switchTab(tabName) {
@@ -570,31 +693,41 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   const errorBox = document.getElementById("loginErrorBox");
   errorBox.classList.add("hidden");
 
-  const matchedLocal = getSyncedStudents().find(
-    (student) =>
-      String(student.email || "").trim().toLowerCase() === email &&
-      String(student.studentId || "").trim().toUpperCase() === studentId &&
-      String(student.loginCode || "").trim() === password
-  );
+  const matchedLocal = findSyncedStudent({ email, studentId, loginCode: password });
+  const payload = { email, studentId, password, syncedRecord: matchedLocal || null };
+  let remoteStudent = null;
+  let canUseLocal = false;
 
-  try {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, studentId, password, syncedRecord: matchedLocal || null }),
-    });
+  const response = await fetchPortalApi("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (response) {
     if (response.ok) {
-      const data = await response.json();
-      if (data.student) {
-        renderPortalForStudent(data.student);
+      const data = await response.json().catch(() => ({}));
+      if (data.student) remoteStudent = normalizeStudent(data.student);
+    } else if (response.status === 401) {
+      if (matchedLocal && window.location.protocol === "file:") {
+        canUseLocal = true;
+      } else {
+        errorBox.textContent = "We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.";
+        errorBox.classList.remove("hidden");
         return;
       }
+    } else {
+      canUseLocal = true;
     }
-  } catch {
-    // Standalone HTML mode uses the local synced records.
+  } else {
+    canUseLocal = true;
   }
 
-  if (matchedLocal) {
+  if (remoteStudent) {
+    renderPortalForStudent(remoteStudent);
+    return;
+  }
+
+  if (matchedLocal && canUseLocal) {
     renderPortalForStudent(matchedLocal);
     return;
   }
@@ -631,7 +764,7 @@ function downloadResultsPDF() {
   let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Academic Results - ' + escapeHtml(activeStudent.fullName) + '</title>';
   html += '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Inter, Arial, sans-serif;padding:40px;color:#2a1730;}';
   html += '.header{text-align:center;margin-bottom:30px;}';
-  html += '.logo{width:80px;height:94px;}';
+  html += '.logo{width:110px;height:102px;}';
   html += '.subtitle{color:#75697a;font-size:12px;}';
   html += 'h1{color:#560f75;font-size:24px;margin:8px 0;}';
   html += '.info{color:#75697a;font-size:12px;margin:4px 0;}';
@@ -642,7 +775,7 @@ function downloadResultsPDF() {
   html += '.gpa-box{background:#fffaf0;padding:14px;border-radius:8px;margin:16px 0;border-left:4px solid #f2b500;}';
   html += '.promo-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;}';
   html += '</style></head><body>';
-  html += '<div class="header"><img class="logo" src="Detlof%20creast%201.png" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
+  html += '<div class="header"><img class="logo" src="detlofcreast.svg" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
   html += '<div class="subtitle">Student Academic Results Report</div>';
   html += '<div class="info">' + escapeHtml(activeStudent.fullName) + ' · ' + escapeHtml(activeStudent.studentId) + ' · ' + escapeHtml(activeStudent.currentClass || "JHS 2") + '</div>';
   html += '<div class="info">Academic Year: ' + escapeHtml(activeStudent.academicYear || "2024 / 2025") + '</div></div>';
@@ -740,7 +873,7 @@ function downloadTimetablePDF() {
   let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Class Timetable - ' + escapeHtml(activeStudent.fullName) + '</title>';
   html += '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Inter, Arial, sans-serif;padding:40px;color:#2a1730;}';
   html += '.header{text-align:center;margin-bottom:30px;}';
-  html += '.logo{width:80px;height:94px;}';
+  html += '.logo{width:110px;height:102px;}';
   html += '.subtitle{color:#75697a;font-size:12px;}';
   html += 'h1{color:#560f75;font-size:24px;margin:8px 0;}';
   html += '.info{color:#75697a;font-size:12px;margin:4px 0;}';
@@ -748,7 +881,7 @@ function downloadTimetablePDF() {
   html += 'th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#75697a;padding:8px;border-bottom:2px solid #eadfe9;}';
   html += 'td{padding:8px;border-bottom:1px solid #eadfe9;font-size:12px;}';
   html += '</style></head><body>';
-  html += '<div class="header"><img class="logo" src="Detlof%20creast%201.png" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
+  html += '<div class="header"><img class="logo" src="detlofcreast.svg" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
   html += '<div class="subtitle">Weekly Class Timetable</div>';
   html += '<div class="info">' + escapeHtml(activeStudent.currentClass || "JHS 2") + ' · ' + escapeHtml(activeStudent.academicYear || "2024 / 2025") + '</div>';
   html += '<div class="info">' + escapeHtml(activeStudent.fullName) + ' · ' + escapeHtml(activeStudent.studentId) + '</div></div>';
@@ -772,19 +905,11 @@ function downloadTimetablePDF() {
   setTimeout(function () { printWindow.print(); }, 500);
 }
 
-const params = new URLSearchParams(window.location.search);
-if (params.get("email") && params.get("studentId") && params.get("code")) {
-  fillCredentials({
-    fullName: params.get("fullName") || "Detlof Student",
-    email: params.get("email"),
-    studentId: params.get("studentId"),
-    loginCode: params.get("code"),
-  });
-}
-
 window.addEventListener("storage", (event) => {
   if (event.key === STORAGE_KEY && activeStudent) {
-    const updated = getSyncedStudents().find((student) => student.studentId === activeStudent.studentId);
+    const updated = getSyncedStudents().find(
+      (student) => String(student.studentId).toUpperCase() === String(activeStudent.studentId).toUpperCase()
+    );
     if (updated) renderPortalForStudent(updated);
   }
 });

@@ -24,6 +24,15 @@ import json
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_data.json")
 app = Flask(__name__, static_folder=".", static_url_path="")
 
+
+@app.after_request
+def allow_local_portal_api(response):
+    if request.path.startswith("/api/"):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
 DEFAULT_STUDENTS = [
     {
         "fullName": "Eliana Ama Owusu",
@@ -72,10 +81,10 @@ def load_students():
             with open(DATA_FILE, "r", encoding="utf-8") as handle:
                 data = json.load(handle)
             if isinstance(data, list):
-                return data
+                return [normalize_student(dict(item)) for item in data if isinstance(item, dict)]
         except Exception:
             pass
-    return [dict(s) for s in DEFAULT_STUDENTS]
+    return [normalize_student(dict(s)) for s in DEFAULT_STUDENTS]
 
 
 def save_students():
@@ -86,27 +95,50 @@ def save_students():
         pass
 
 
-STUDENTS = load_students()
-
 
 def find_student(email, student_id, password):
-    email = email.strip().lower()
-    student_id = student_id.strip().upper()
-    password = password.strip()
+    email = str(email).strip().lower()
+    student_id = str(student_id).strip().upper()
+    password = str(password).strip()
     for student in STUDENTS:
         if (
-            student["email"].strip().lower() == email
-            and student["studentId"].strip().upper() == student_id
-            and student["loginCode"].strip() == password
+            str(student.get("email", "")).strip().lower() == email and
+            str(student.get("studentId", "")).strip().upper() == student_id and
+            str(student.get("loginCode", "")).strip() == password
         ):
-            return student
+            return normalize_student(student)
     return None
 
 
+def normalize_student(incoming):
+    student = dict(incoming or {})
+    parent_phone = str(student.get("parentPhone") or student.get("profileParentPhone") or "").strip()
+    whatsapp_number = str(student.get("whatsappNumber") or student.get("profileWhatsApp") or "").strip()
+    student["parentPhone"] = parent_phone
+    student["profileParentPhone"] = parent_phone
+    student["whatsappNumber"] = whatsapp_number
+    student["profileWhatsApp"] = whatsapp_number
+    return student
+
+
+STUDENTS = [normalize_student(dict(s)) for s in load_students()]
+
+
 def merge_student(incoming):
+    incoming = normalize_student(incoming)
     sid = str(incoming.get("studentId", "")).strip().upper()
     for index, student in enumerate(STUDENTS):
-        if student["studentId"].strip().upper() == sid:
+        if str(student.get("studentId", "")).strip().upper() == sid:
+            existing_parent_phone = str(student.get("parentPhone") or student.get("profileParentPhone") or "").strip()
+            existing_whatsapp = str(student.get("whatsappNumber") or student.get("profileWhatsApp") or "").strip()
+            incoming_parent_phone = str(incoming.get("parentPhone") or incoming.get("profileParentPhone") or "").strip()
+            incoming_whatsapp = str(incoming.get("whatsappNumber") or incoming.get("profileWhatsApp") or "").strip()
+            if not incoming_parent_phone and existing_parent_phone:
+                incoming["parentPhone"] = existing_parent_phone
+                incoming["profileParentPhone"] = existing_parent_phone
+            if not incoming_whatsapp and existing_whatsapp:
+                incoming["whatsappNumber"] = existing_whatsapp
+                incoming["profileWhatsApp"] = existing_whatsapp
             student.update(incoming)
             student["studentId"] = sid
             return student
@@ -127,24 +159,24 @@ def home():
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     data = request.get_json(silent=True) or {}
-    email = data.get("email", "")
-    student_id = data.get("studentId", "")
-    password = data.get("password", "")
+    email = str(data.get("email", "")).strip().lower()
+    student_id = str(data.get("studentId", "")).strip().upper()
+    password = str(data.get("password", "")).strip()
 
     student = find_student(email, student_id, password)
     if student:
         return jsonify({"student": student})
 
-    synced = data.get("syncedRecord")
+    synced = normalize_student(data.get("syncedRecord"))
     if (
         isinstance(synced, dict)
-        and synced.get("studentId", "").strip().upper() == student_id.strip().upper()
-        and synced.get("email", "").strip().lower() == email.strip().lower()
-        and str(synced.get("loginCode", "")).strip() == password.strip()
+        and str(synced.get("studentId", "")).strip().upper() == student_id.strip().upper() and
+        str(synced.get("email", "")).strip().lower() == email.strip().lower() and
+        str(synced.get("loginCode", "")).strip() == password.strip()
     ):
         existing = find_student(synced.get("email", ""), synced.get("studentId", ""), synced.get("loginCode", ""))
         if existing is None:
-            saved = merge_student(dict(synced))
+            saved = merge_student(synced)
             save_students()
             return jsonify({"student": saved})
         return jsonify({"student": existing})

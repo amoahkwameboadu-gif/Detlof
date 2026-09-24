@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="Detlof%20creast%201.png" />
+  <link rel="icon" href="detlofcreast.svg" />
   <title>Detlof Preparatory School — Admin Bulk Import & Login Code Generator</title>
   <style>
     :root {
@@ -407,7 +407,7 @@
     .teacher-mode .admin-only,
     .teacher-only { display: block; }
     .hidden { display: none !important; }
-    .brand-logo { width: 68px; height: 78px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 4px 8px rgba(0,0,0,.24)); }
+    .brand-logo { width: 128px; height: 148px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 5px 10px rgba(0,0,0,.24)); }
     .brand strong { font-size: 18px; font-weight: 900; letter-spacing: 0.14em; }
     .table-scroll { width: 100%; overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
     @media (max-width: 920px) {
@@ -422,7 +422,7 @@
     @media (max-width: 560px) {
       .brand strong { font-size: 13px; }
       .brand span { font-size: 7px; }
-      .brand-logo { width: 52px; height: 62px; }
+      .brand-logo { width: 92px; height: 108px; }
       .brand strong { font-size: 14px; font-weight: 900; }
       .btn { padding: 9px 12px; font-size: 11px; }
       .card { padding: 16px; }
@@ -436,9 +436,9 @@
     }
     .admin-login-left {
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: #1a337e; overflow: hidden; color: #fff; padding: 24px;
+      background: #1a337e; overflow: hidden; color: #fff; padding: 40px 24px;
     }
-    .admin-login-left .left-logo { width: 160px; height: 184px; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.38)); }
+    .admin-login-left .left-logo { width: 230px; height: 212px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.38)); }
     .admin-login-left h3 { margin: 16px 0 6px; font-size: 22px; letter-spacing: 0.12em; font-weight: 800; }
     .admin-login-left p { margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
     .admin-login-right {
@@ -468,8 +468,8 @@
     .admin-login-divider span { background: #fff; padding: 0 12px; font-size: 12px; color: #6b7280; position: relative; }
     @media (max-width: 768px) {
       .admin-login-screen { flex-direction: column; }
-      .admin-login-left { min-height: 160px; padding: 16px; }
-      .admin-login-left .left-logo { width: 104px; height: 120px; }
+      .admin-login-left { min-height: 180px; padding: 24px 16px; }
+      .admin-login-left .left-logo { width: 150px; height: 138px; }
       .admin-login-left h3 { font-size: 15px; margin: 8px 0 2px; }
       .admin-login-left p { font-size: 10px; }
       .admin-login-right .login-wrap { padding: 24px 18px; }
@@ -540,7 +540,7 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+      <img class="brand-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
       <div>
         <strong>DETLOF PREPARATORY SCHOOL</strong>
         <span id="roleSubtitle">ADMIN BULK IMPORT &amp; STUDENT LOGIN CODE GENERATOR</span>
@@ -556,7 +556,7 @@
    <main id="adminMain" class="container">
       <div id="adminLoginScreen" class="admin-login-screen">
         <div class="admin-login-left">
-          <img class="left-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+          <img class="left-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
           <h3>DETLOF</h3>
           <p>ADMIN PORTAL</p>
         </div>
@@ -604,7 +604,7 @@
 
 <div id="adminContent" class="hidden">
       <div id="fileProtocolWarningAdmin" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;margin:0 0 16px;border-radius:8px;font-size:11px;display:none;">
-        <strong>⚠️ Testing Mode Detected:</strong> You're opening this file directly (<code>file://</code>). For generated codes to work in the Student Portal, both files must be served from a local server (same origin).
+        <strong>⚠️ Testing Mode Detected:</strong> Direct <code>file://</code> pages cannot share browser storage. For manual student login, start <code>python server.py</code>, then open both portals from the local server so generated codes can sync.
         <br><button onclick="location.reload()" class="btn btn-outline" style="margin-top:8px;padding:6px 12px;font-size:11px;">Reload After Starting Server</button>
       </div>
       <div id="toastBox" class="status-toast">
@@ -670,8 +670,60 @@
           </form>
         </section>
 
+        <section class="card admin-profile-section" id="adminProfileSection" style="margin-bottom:18px;">
+          <h2>2. Student Profile, Contact &amp; Photo</h2>
+          <p class="sub">Administrator-only controls for the details shown on each student's individual profile.</p>
+          <form id="adminProfileForm">
+            <div class="field">
+              <label for="adminProfileStudentName">Student</label>
+              <input id="adminProfileStudentName" list="adminProfileStudentNames" autocomplete="off" placeholder="Type a student's full name or Student ID" required />
+              <datalist id="adminProfileStudentNames"></datalist>
+            </div>
+            <div id="adminProfileSummary" class="selected-student-summary hidden">
+              <img id="adminProfileAvatar" src="detlofcreast.svg" alt="Student profile" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--crest-purple-soft);" />
+              <div>
+                <div class="ss-main" id="adminProfileSummaryName">Select a student to manage their profile</div>
+                <div class="ss-sub" id="adminProfileSummaryMeta">Class · Student ID · Email</div>
+              </div>
+            </div>
+            <div class="profile-pic-section" style="display:flex;align-items:center;gap:18px;margin:18px 0;">
+              <div style="position:relative;">
+                <img id="adminProfilePicPreview" src="detlofcreast.svg" alt="Student profile picture" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
+                <input type="file" id="adminProfilePicInput" accept="image/*" style="display:none;" />
+                <button type="button" id="adminChangePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center;">📷</button>
+              </div>
+              <div style="font-size:12px;color:var(--muted);">
+                <strong>Profile Picture</strong>
+                <p style="margin:2px 0;">Upload a clear student photo. The image is saved to the student's profile.</p>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileParentName">Parent / Guardian Full Name</label>
+                <input id="adminProfileParentName" type="text" placeholder="e.g. Mrs. Ama Owusu" />
+              </div>
+              <div class="field">
+                <label for="adminProfileParentPhone">Parent / Guardian Phone</label>
+                <input id="adminProfileParentPhone" type="tel" placeholder="e.g. 0244123456" />
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileWhatsApp">Active Parent WhatsApp Number</label>
+                <input id="adminProfileWhatsApp" type="tel" placeholder="e.g. 0244123456" />
+              </div>
+              <div class="field">
+                <label for="adminProfileHomeAddress">Home Address</label>
+                <input id="adminProfileHomeAddress" type="text" placeholder="e.g. 12 School Road, Accra" />
+              </div>
+            </div>
+            <div id="adminProfileError" class="admin-login-error hidden" style="margin-top:-8px;"></div>
+            <button class="btn btn-gold" type="submit" style="width:100%;justify-content:center;">Save Student Profile Details</button>
+          </form>
+        </section>
+
         <section class="card">
-          <h2>Academic Records &amp; Timetable</h2>
+          <h2>3. Academic Records &amp; Timetable</h2>
           <p class="sub">Select a student and save individual subject results or timetable entries. Saved records appear in that student's portal.</p>
           <div class="field">
             <label>Class</label>
@@ -989,16 +1041,18 @@
     function getStoredRecords() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return [...defaultSeedCodes];
+        if (!raw) return defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
         const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) && parsed.length ? parsed : [...defaultSeedCodes];
+        return Array.isArray(parsed) && parsed.length
+          ? parsed.map((record) => mergeStoredRecord({}, record))
+          : defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
       } catch {
-        return [...defaultSeedCodes];
+        return defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
       }
     }
 
     function saveStoredRecords(records) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify((records || []).map((record) => mergeStoredRecord({}, record))));
     }
 
     function randomCode() {
@@ -1029,6 +1083,8 @@
       if (roleSubtitle) roleSubtitle.textContent = isTeacher ? "Teacher Portal — Academic Records & Timetable" : "ADMIN BULK IMPORT & STUDENT LOGIN CODE GENERATOR";
       const roleBanner = document.getElementById("roleBanner");
       if (roleBanner) roleBanner.innerHTML = "<span>Welcome back. You can manage student information and keep each portal up to date.</span><span id='roleBannerDetail'>Ready to help</span>";
+      const profileSection = document.getElementById("adminProfileSection");
+      if (profileSection) profileSection.classList.toggle("hidden", currentRole !== "admin");
       document.querySelectorAll(".admin-only").forEach((el) => { el.style.display = ""; });
     }
 
@@ -1047,6 +1103,7 @@
       initRoleUI();
       const seed = getStoredRecords();
       renderTable(seed);
+      populateAdminProfileStudents();
       populateQuickGenerateNames();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
@@ -1117,11 +1174,54 @@
       return name.trim().toLowerCase().replace(/\s+/g, ".").replace(/[^a-z0-9.]/g, "") + "@detlof.edu.gh";
     }
 
+    const PORTAL_API_BASE = "http://127.0.0.1:5000";
+
+    async function fetchPortalApi(path, options = {}) {
+      const urls = [path];
+      const backendUrl = PORTAL_API_BASE + path;
+      if (window.location.href.indexOf(PORTAL_API_BASE) !== 0) {
+        urls.push(backendUrl);
+      }
+      let lastResponse = null;
+      for (const url of urls) {
+        try {
+          const response = await fetch(url, options);
+          if (response.ok || response.status === 401) return response;
+          lastResponse = response;
+        } catch {
+        }
+      }
+      return lastResponse;
+    }
+
+    function mergeStoredRecord(existing, incoming) {
+      const merged = { ...(existing || {}), ...(incoming || {}) };
+      const existingParentPhone = (existing && (existing.parentPhone || existing.profileParentPhone)) || "";
+      const existingWhatsApp = (existing && (existing.whatsappNumber || existing.profileWhatsApp)) || "";
+      const incomingParentPhone = (incoming && (incoming.parentPhone || incoming.profileParentPhone)) || "";
+      const incomingWhatsApp = (incoming && (incoming.whatsappNumber || incoming.profileWhatsApp)) || "";
+      if (incomingParentPhone) {
+        merged.parentPhone = incomingParentPhone;
+        merged.profileParentPhone = incomingParentPhone;
+      } else if (existingParentPhone) {
+        merged.parentPhone = existingParentPhone;
+        merged.profileParentPhone = existingParentPhone;
+      }
+      if (incomingWhatsApp) {
+        merged.whatsappNumber = incomingWhatsApp;
+        merged.profileWhatsApp = incomingWhatsApp;
+      } else if (existingWhatsApp) {
+        merged.whatsappNumber = existingWhatsApp;
+        merged.profileWhatsApp = existingWhatsApp;
+      }
+      return merged;
+    }
+
     async function syncRecordsToPortal(recordsToSync) {
       const indicator = document.getElementById("syncIndicator");
       if (indicator) indicator.textContent = "Syncing to Portal Database…";
       try {
-        const res = await fetch("/api/admin/bulk-import", {
+        const res = await fetchPortalApi("/api/admin/bulk-import", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1132,20 +1232,23 @@
           }),
         });
         let data = {};
-        try { data = await res.json(); } catch { data = {}; }
-        if (res.ok && Array.isArray(data.students)) {
+        if (res) {
+          try { data = await res.json(); } catch { data = {}; }
+        }
+        if (res && res.ok && Array.isArray(data.students)) {
           const existing = getStoredRecords();
           const map = new Map();
-          existing.forEach((item) => map.set(item.studentId.toUpperCase(), item));
+          existing.forEach((item) => map.set(String(item.studentId).toUpperCase(), item));
           data.students.forEach((item) => {
             if (item && item.studentId) {
-              const previous = map.get(item.studentId.toUpperCase()) || {};
-              map.set(item.studentId.toUpperCase(), { ...previous, ...item });
+              const key = String(item.studentId).toUpperCase();
+              map.set(key, mergeStoredRecord(map.get(key), item));
             }
           });
           const merged = Array.from(map.values());
           saveStoredRecords(merged);
           renderTable(merged);
+          populateAdminProfileStudents();
           if (indicator) indicator.textContent = "Synced (" + merged.length + " active student codes)";
         } else {
           if (indicator) indicator.textContent = "Saved locally & ready for login";
@@ -1153,6 +1256,110 @@
       } catch {
         if (indicator) indicator.textContent = "Saved locally & ready for login";
       }
+    }
+
+    function populateAdminProfileStudents() {
+      const records = getStoredRecords();
+      const datalist = document.getElementById("adminProfileStudentNames");
+      if (!datalist) return;
+      datalist.innerHTML = records.flatMap((record) => [
+        "<option value=\"" + escapeHtml(record.fullName || "") + "\"></option>",
+        "<option value=\"" + escapeHtml(record.studentId || "") + "\"></option>",
+      ]).join("");
+    }
+
+    function findAdminProfileRecord(value) {
+      const query = String(value || "").trim().toLowerCase();
+      if (!query) return null;
+      return getStoredRecords().find((record) =>
+        String(record.studentId || "").trim().toLowerCase() === query ||
+        String(record.fullName || "").trim().toLowerCase() === query
+      ) || null;
+    }
+
+    function loadAdminProfileRecord() {
+      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      const summary = document.getElementById("adminProfileSummary");
+      if (!record) {
+        summary.classList.add("hidden");
+        document.getElementById("adminProfileParentName").value = "";
+        document.getElementById("adminProfileParentPhone").value = "";
+        document.getElementById("adminProfileWhatsApp").value = "";
+        document.getElementById("adminProfileHomeAddress").value = "";
+        document.getElementById("adminProfilePicPreview").src = "detlofcreast.svg";
+        return null;
+      }
+      document.getElementById("adminProfileParentName").value = record.parentName || "";
+      document.getElementById("adminProfileParentPhone").value = record.parentPhone || record.profileParentPhone || "";
+      document.getElementById("adminProfileWhatsApp").value = record.whatsappNumber || record.profileWhatsApp || "";
+      document.getElementById("adminProfileHomeAddress").value = record.homeAddress || "";
+      document.getElementById("adminProfilePicPreview").src = record.profilePic || "detlofcreast.svg";
+      document.getElementById("adminProfileAvatar").src = record.profilePic || "detlofcreast.svg";
+      document.getElementById("adminProfileSummaryName").textContent = record.fullName || record.studentId;
+      document.getElementById("adminProfileSummaryMeta").textContent =
+        (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || "");
+      summary.classList.remove("hidden");
+      return record;
+    }
+
+    function readAdminProfileImage(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve("");
+        if (!file.type.startsWith("image/")) {
+          reject(new Error("Please choose an image file."));
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(reader.error || new Error("Could not read the image."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function submitAdminProfile(event) {
+      event.preventDefault();
+      const errorBox = document.getElementById("adminProfileError");
+      errorBox.classList.add("hidden");
+      const record = loadAdminProfileRecord();
+      if (!record) {
+        errorBox.textContent = "Select a generated student before saving profile details.";
+        errorBox.classList.remove("hidden");
+        return;
+      }
+      const parentName = document.getElementById("adminProfileParentName").value.trim();
+      const parentPhone = document.getElementById("adminProfileParentPhone").value.trim();
+      const whatsappNumber = document.getElementById("adminProfileWhatsApp").value.trim();
+      const homeAddress = document.getElementById("adminProfileHomeAddress").value.trim();
+      const imageInput = document.getElementById("adminProfilePicInput");
+      const imageFile = imageInput.files && imageInput.files[0];
+      let profilePic = record.profilePic || "";
+      try {
+        profilePic = await readAdminProfileImage(imageFile);
+      } catch (error) {
+        errorBox.textContent = error.message;
+        errorBox.classList.remove("hidden");
+        return;
+      }
+      const updated = mergeStoredRecord(record, {
+        parentName,
+        parentPhone,
+        profileParentPhone: parentPhone,
+        whatsappNumber,
+        profileWhatsApp: whatsappNumber,
+        homeAddress,
+        profilePic: profilePic || record.profilePic || "",
+        updatedBy: "Administrator",
+        updatedAt: stampIso(),
+      });
+      const records = getStoredRecords().map((item) =>
+        String(item.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : item
+      );
+      saveStoredRecords(records);
+      renderTable(records);
+      populateAdminProfileStudents();
+      await syncRecordsToPortal([updated]);
+      loadAdminProfileRecord();
+      showToast("Profile details saved for " + updated.fullName + ".");
     }
 
     function renderTable(records) {
@@ -1311,12 +1518,42 @@
       const currentClass = document.getElementById("currentClass").value;
       const studentId = (document.getElementById("studentId").value.trim() || randomStudentId()).toUpperCase();
       const loginCode = document.getElementById("loginCode").value.trim() || randomCode();
-      const newRec = { fullName, email: emailInput.value.trim().toLowerCase(), studentId, currentClass, academicYear: "2024 / 2025", loginCode };
-      const all = [newRec, ...getStoredRecords().filter((r) => r.studentId !== studentId)];
+      const existingRecords = getStoredRecords();
+      const previous = existingRecords.find(
+        (record) => String(record.studentId).toUpperCase() === studentId
+      );
+      const newRec = {
+        ...(previous || {}),
+        fullName,
+        email: emailInput.value.trim().toLowerCase(),
+        studentId,
+        currentClass,
+        academicYear: "2024 / 2025",
+        loginCode,
+        updatedAt: stampIso(),
+        updatedBy: teacherLabel(),
+      };
+      const all = [newRec, ...existingRecords.filter((record) => String(record.studentId).toUpperCase() !== studentId)];
       saveStoredRecords(all);
       renderTable(all);
+      populateAdminProfileStudents();
       await syncRecordsToPortal([newRec]);
       e.target.reset();
+    });
+
+    document.getElementById("adminProfileStudentName").addEventListener("input", loadAdminProfileRecord);
+    document.getElementById("adminProfileForm").addEventListener("submit", submitAdminProfile);
+    document.getElementById("adminChangePicBtn").addEventListener("click", () => {
+      document.getElementById("adminProfilePicInput").click();
+    });
+    document.getElementById("adminProfilePicInput").addEventListener("change", function () {
+      const file = this.files && this.files[0];
+      if (!file) return;
+      readAdminProfileImage(file).then((dataUrl) => {
+        document.getElementById("adminProfilePicPreview").src = dataUrl;
+        const avatar = document.getElementById("adminProfileAvatar");
+        if (avatar) avatar.src = dataUrl;
+      });
     });
 
     document.getElementById("fullName").addEventListener("input", function () {
@@ -1612,6 +1849,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
       document.getElementById("academicsAdminError").classList.add("hidden");
        document.getElementById("adminLoginScreen").classList.add("hidden");
       document.getElementById("adminContent").classList.remove("hidden");
+      document.getElementById("adminProfileSection").classList.add("hidden");
       document.querySelectorAll(".admin-only, .academics-admin-only").forEach((el) => el.classList.remove("hidden"));
       renderPendingApprovals();
     } else {
@@ -1988,8 +2226,24 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     showToast("WhatsApp messages opened for " + classStudents.filter(s => s.profileWhatsApp || s.profileParentPhone).length + " parent(s).");
   }
 
+  function buildStudentPortalUrl(student) {
+    const params = new URLSearchParams({
+      email: student.email || "",
+      studentId: student.studentId || "",
+      code: student.loginCode || "",
+      fullName: student.fullName || "",
+      class: student.currentClass || "",
+      year: student.academicYear || "2024 / 2025",
+    });
+    const parentPhone = student.parentPhone || student.profileParentPhone || "";
+    const whatsappNumber = student.whatsappNumber || student.profileWhatsApp || "";
+    if (parentPhone) params.set("parentPhone", parentPhone);
+    if (whatsappNumber) params.set("whatsappNumber", whatsappNumber);
+    return "detlof-student-portal.html?" + params.toString();
+  }
+
   function openStudentPortalForStudent(student) {
-    const url = "detlof-student-portal.html?email=" + encodeURIComponent(student.email) + "&studentId=" + encodeURIComponent(student.studentId) + "&code=" + encodeURIComponent(student.loginCode) + "&fullName=" + encodeURIComponent(student.fullName) + "&class=" + encodeURIComponent(student.currentClass) + "&year=" + encodeURIComponent(student.academicYear || "2024 / 2025");
+    const url = buildStudentPortalUrl(student);
     window.open(url, "_blank");
     showToast("Opening Student Portal for " + student.fullName + "...");
   }
@@ -1997,9 +2251,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
   function openStudentPortalWithTest() {
     const records = getStoredRecords();
     if (!records.length) { showToast("No student records to test with"); return; }
-    const student = records[0];
-    const url = "detlof-student-portal.html?email=" + encodeURIComponent(student.email) + "&studentId=" + encodeURIComponent(student.studentId) + "&code=" + encodeURIComponent(student.loginCode) + "&fullName=" + encodeURIComponent(student.fullName);
-    window.open(url, "_blank");
+    window.open(buildStudentPortalUrl(records[0]), "_blank");
   }
 
   function copyTestCredentials() {

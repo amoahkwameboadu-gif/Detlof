@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detlof Preparatory School — Student Portal</title>
-  <link rel="icon" href="Detlof%20creast%201.png" />
+  <link rel="icon" href="detlofcreast.svg" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,7 +15,7 @@
    <main id="loginScreen" class="login-shell">
      <section class="login-brand-panel">
        <div class="brand">
-         <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+         <img class="brand-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
          <div>
            <strong>DETLOF</strong>
            <span>PREPARATORY SCHOOL</span>
@@ -39,13 +39,13 @@
       </section>
 
       <div id="fileProtocolWarning" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;margin:0 24px;border-radius:8px;font-size:11px;display:none;">
-        <strong>⚠️ Testing Mode Detected:</strong> You're opening this file directly (<code>file://</code>). For login to work with codes generated from the Admin Portal, both files must be served from a local server (same origin).
+        <strong>⚠️ Testing Mode Detected:</strong> Direct <code>file://</code> pages cannot share browser storage. For manual login with codes generated in the Admin Portal, start <code>python server.py</code> and open both portals from the local server.
         <br><button onclick="location.reload()" class="btn btn-outline" style="margin-top:8px;padding:6px 12px;font-size:11px;">Reload After Starting Server</button>
       </div>
 
     <section class="login-form-panel">
       <div class="login-card">
-        <img class="login-mobile-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+        <img class="login-mobile-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
         <p style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;">
           Welcome back
         </p>
@@ -91,7 +91,7 @@
   <div id="portalShell" class="portal-shell hidden">
     <aside class="sidebar">
       <div class="brand">
-        <img class="brand-logo" src="Detlof%20creast%201.png" alt="Detlof Preparatory School crest" />
+        <img class="brand-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
         <div>
           <strong>DETLOF</strong>
           <span>STUDENT PORTAL</span>
@@ -308,16 +308,17 @@
         <section id="tab-profile" class="portal-tab hidden">
           <div class="panel">
             <h2 style="margin:0 0 14px;">👤 Student Profile &amp; Account Settings</h2>
+            <p style="font-size:12px;color:var(--muted);margin:0 0 16px;">Your school details are captured automatically. Contact details and profile images are maintained by the administrator.</p>
             <form id="profileEditForm">
               <div class="profile-pic-section" style="display:flex;align-items-center;gap:18px;margin-bottom:18px;">
                 <div style="position:relative;">
-                  <img id="profilePicPreview" src="Detlof%20creast%201.png" alt="Profile Picture" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
+                <img id="profilePicPreview" src="detlofcreast.svg" alt="Profile Picture" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
                   <input type="file" id="profilePicInput" accept="image/*" style="display:none;" />
-                  <button type="button" id="changePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:28px;height:28px;font-size:14px;display:flex;align-items:center;justify-content:center;">📷</button>
+                  <button type="button" id="changePicBtn" style="display:none;">Change photo</button>
                 </div>
                 <div style="font-size:12px;color:var(--muted);">
                   <strong>Profile Picture</strong>
-                  <p style="margin:2px 0;">Click the camera icon to upload a new photo.</p>
+                  <p style="margin:2px 0;">Managed by the school administrator and displayed automatically on your profile.</p>
                 </div>
               </div>
 
@@ -335,22 +336,22 @@
               </div>
               <div class="field">
                 <label for="profileParentName">Parent / Guardian Full Name</label>
-                <input type="text" id="profileParentName" placeholder="e.g. Mr. / Mrs. Owusu" />
+                <input type="text" id="profileParentName" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" />
               </div>
               <div class="row-2">
-                <div class="field"><label for="profileParentPhone">Parent/Guardian Phone Number</label><input type="tel" id="profileParentPhone" placeholder="e.g. 0244123456" /></div>
-                <div class="field"><label for="profileWhatsApp">Active Parent WhatsApp Number</label><input type="tel" id="profileWhatsApp" placeholder="e.g. 0244123456 (with country code optional)" /></div>
+                <div class="field"><label for="profileParentPhone">Parent/Guardian Phone Number</label><input type="tel" id="profileParentPhone" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileWhatsApp">Active Parent WhatsApp Number</label><input type="tel" id="profileWhatsApp" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="field">
                 <label for="profileHomeAddress">Home Address</label>
-                <textarea id="profileHomeAddress" placeholder="Your home address" style="min-height:70px;"></textarea>
+                <textarea id="profileHomeAddress" readonly placeholder="Managed by school administrator" style="min-height:70px;background:#f3f4f6;color:var(--muted);"></textarea>
               </div>
               <div class="field">
                 <label for="profileLoginCode">Login Code / PIN</label>
                 <input type="text" id="profileLoginCode" readonly style="background:#f3f4f6;color:var(--muted);" />
               </div>
               <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
-                <button type="submit" class="btn" style="background:var(--crest-purple);color:#fff;">Save Profile Changes</button>
+                <button type="submit" class="btn" style="background:var(--crest-purple);color:#fff;">Save Profile Details</button>
                 <button type="button" class="btn btn-outline" onclick="downloadMyLoginCode()" style="padding:8px 12px;font-size:12px;">⬇ Download My Login Code</button>
                 <button type="button" class="btn btn-outline" id="downloadResultsPdfBtn" style="padding:8px 12px;font-size:12px;">⬇ Download My Results (PDF)</button>
                 <button type="button" class="btn btn-outline" id="downloadTimetablePdfBtn" style="padding:8px 12px;font-size:12px;">⬇ Download My Timetable (PDF)</button>
@@ -369,31 +370,19 @@
   <script src="script.js"></script>
   <script>
     // Auto-login from URL parameters (for admin portal test links)
-    (function() {
+    (async function() {
       const params = new URLSearchParams(window.location.search);
       if (params.get("email") && params.get("studentId") && params.get("code")) {
-        const studentData = {
-          fullName: params.get("fullName") || "Test Student",
-          email: params.get("email"),
-          studentId: params.get("studentId"),
-          loginCode: params.get("code"),
-          currentClass: params.get("class") || "JHS 2",
-          academicYear: params.get("year") || "2024 / 2025",
-          profilePic: "Detlof%20creast%201.png",
-          updates: [],
-          timetable: [],
-        };
-        // Store in localStorage for future reference
-        try {
-          const existing = JSON.parse(localStorage.getItem("detlof_bulk_import_codes") || "[]");
-          const idx = existing.findIndex(s => s.studentId.toUpperCase() === studentData.studentId.toUpperCase());
-          if (idx >= 0) existing[idx] = studentData; else existing.unshift(studentData);
-          localStorage.setItem("detlof_bulk_import_codes", JSON.stringify(existing));
-        } catch {}
-        // Directly render portal after short delay
+        const studentData = await resolveStudentFromUrlParams(params);
+        if (!studentData || !studentData.email || !studentData.studentId || !studentData.loginCode) {
+          const errorBox = document.getElementById("loginErrorBox");
+          errorBox.textContent = "We could not load this student's portal record.";
+          errorBox.classList.remove("hidden");
+          return;
+        }
+        upsertSyncedStudent(studentData);
+        fillCredentials(studentData);
         setTimeout(function() {
-          document.getElementById("loginScreen").classList.add("hidden");
-          document.getElementById("portalShell").classList.remove("hidden");
           renderPortalForStudent(studentData);
           switchTab("dashboard");
         }, 200);
