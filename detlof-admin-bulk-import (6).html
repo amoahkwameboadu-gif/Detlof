@@ -722,9 +722,48 @@
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button type="submit" class="btn btn-teal" style="flex:1;">Generate & Sync All</button>
-              <button type="button" class="btn btn-gold" id="downloadClassExcelBtn" style="flex:1;">⬇ Download Excel</button>
+              <button type="button" class="btn btn-gold" id="downloadClassExcelBtn" style="flex:1;">⬇ Download Excel (New)</button>
+              <button type="button" class="btn btn-gold" id="downloadExistingClassExcelBtn" style="flex:1;">⬇ Download Excel (Existing)</button>
             </div>
             <div id="classGenerateStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
+          </form>
+        </section>
+
+        <section class="card" style="margin-bottom:18px;">
+          <h2>3. Download Credentials by Class</h2>
+          <p class="sub">Download existing student credentials as Excel for any class. Includes students created via single or class generation.</p>
+          <form id="downloadClassCredentialsForm">
+            <div class="field">
+              <label>Select Class</label>
+              <select id="downloadClassSelect" required>
+                <option value="">— Choose a class —</option>
+                <option>Creche</option>
+                <option>Nursery One</option>
+                <option>Nursery Two</option>
+                <option>KG 1</option>
+                <option>KG 2 Boys</option>
+                <option>KG 2 Girls</option>
+                <option>Lower KG</option>
+                <option>Upper KG</option>
+                <option>Basic 1</option>
+                <option>Basic 2</option>
+                <option>Basic 3</option>
+                <option>Basic 4</option>
+                <option>Basic 5</option>
+                <option>Basic 6</option>
+                <option>Basic 7</option>
+                <option>Basic 8</option>
+                <option>Basic 9</option>
+                <option>JHS 1</option>
+                <option>JHS 2</option>
+                <option>JHS 3</option>
+                <option>SHS 1</option>
+                <option>SHS 2</option>
+                <option>SHS 3</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-gold" id="downloadClassCredentialsBtn" style="width:100%;justify-content:center;">⬇ Download Excel for Class</button>
+            <div id="downloadClassStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
           </form>
         </section>
 
@@ -797,114 +836,13 @@
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button type="button" class="btn btn-teal" id="sendStudentReportWhatsAppBtn" style="flex:1;">Send Report via WhatsApp</button>
-              <button type="button" class="btn btn-teal" id="sendStudentTimetableWhatsAppBtn" style="flex:1;">Send Timetable via WhatsApp</button>
+<button type="button" class="btn btn-teal" id="sendStudentTimetableWhatsAppBtn" style="flex:1;">Send Timetable via WhatsApp</button>
             </div>
           </form>
         </section>
 
-        <section class="card">
-          <h2>3. Academic Records &amp; Timetable</h2>
-          <p class="sub">Select a student and save individual subject results or timetable entries. Saved records appear in that student's portal.</p>
-          <div class="field">
-            <label>Class</label>
-            <select id="recordClass"></select>
-          </div>
-          <div class="field">
-            <label>Student Full Name</label>
-            <input id="recordStudentName" list="recordStudentNames" placeholder="Type the student's full name" required />
-            <datalist id="recordStudentNames"></datalist>
-          </div>
-          <div id="selectedStudentSummary" class="selected-student-summary hidden">
-      <div class="avatar" id="ssAvatar">?</div>
-      <div>
-        <div class="ss-main" id="ssMain">Select a student to view their details</div>
-        <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
-      </div>
-    </div>
-<form id="resultForm">
-              <h3 style="margin:16px 0 8px;font-size:14px;">Publish Term Results</h3>
-              <div class="field">
-                <label for="resultTerm">Academic Term</label>
-                <select id="resultTerm" required>
-                  <option value="term1">First Term</option>
-                  <option value="term2">Second Term</option>
-                  <option value="term3">Third Term</option>
-                </select>
-              </div>
-              <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
-              <div class="row-2">
-                <div class="field"><label>Class Score (out of 40)</label><input id="resultClassScore" type="number" min="0" max="40" step="0.01" required /></div>
-                <div class="field"><label>Exam Score (out of 100, weighted to 60)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
-              </div>
-              <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
-              <button class="btn btn-teal" type="submit">Save Result</button>
-</form>
-           <form id="timetableForm" style="border-top:1px solid var(--line);margin-top:20px;padding-top:4px;">
-             <h3 style="margin:16px 0 8px;font-size:14px;">Timetable</h3>
-             <div class="field">
-               <label>Select Class</label>
-<select id="timetableClass">
-                  <option>Creche</option>
-                  <option>Nursery One</option>
-                  <option>Nursery Two</option>
-                  <option>KG 1</option>
-                  <option>KG 2 Boys</option>
-                  <option>KG 2 Girls</option>
-                  <option>Lower KG</option>
-                  <option>Upper KG</option>
-                  <option>Basic 1</option>
-                  <option>Basic 2</option>
-                  <option>Basic 3</option>
-                  <option>Basic 4</option>
-                  <option>Basic 5</option>
-                  <option>Basic 6</option>
-                  <option>Basic 7</option>
-                  <option>Basic 8</option>
-                  <option>Basic 9</option>
-                  <option>JHS 1</option>
-                  <option>JHS 2</option>
-                  <option>JHS 3</option>
-                  <option>SHS 1</option>
-                  <option>SHS 2</option>
-                  <option>SHS 3</option>
-                </select>
-             </div>
-             <div class="row-2">
-               <div class="field">
-                 <label for="timetableFile">CSV / Excel File (Day,Subject,Time,Venue,Teacher)</label>
-                 <input type="file" id="timetableFile" accept=".csv,.xlsx,.xls" />
-               </div>
-               <div class="field">
-                 <label>Preview / Parsed Data</label>
-                 <div id="timetablePreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
-               </div>
-             </div>
-<div style="display:flex;gap:10px;margin-top:12px;">
-                <button class="btn btn-teal" type="submit">Upload & Preview Timetable</button>
-                <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
-              </div>
-            </form>
-
-          <form id="portalUpdateForm" class="update-card">
-            <h3>Send Individual Portal Update</h3>
-            <p>Compose a message that will appear in the selected student's portal under announcements.</p>
-            <div class="field"><label>Update Title</label><input id="updateTitle" placeholder="e.g. New homework assigned" required /></div>
-            <div class="field">
-              <label>Category</label>
-              <select id="updateCategory">
-                <option>Results Update</option>
-                <option>Timetable Update</option>
-                <option>School Notice</option>
-                <option>Individual Update</option>
-              </select>
-            </div>
-            <div class="field"><label>Message</label><textarea id="updateMessage" placeholder="Type the message the student will see on their portal…" required></textarea></div>
-            <button class="btn btn-teal" type="submit">Send Portal Update</button>
-           </form>
-         </section>
-
-         <section class="card academics-admin-only" style="margin-bottom:18px;">
-           <h2>🔍 Academic Admin Verification & Preview</h2>
+      <section class="card academics-admin-only" style="margin-bottom:18px;">
+        <h2>🔍 Academic Admin Verification & Preview</h2>
            <p class="sub">Review and approve pending results, timetables, and term releases before publishing to student portals.</p>
            <div id="pendingApprovals" style="display:none;">
              <h4 style="margin:12px 0 8px;">Pending Approvals</h4>
@@ -972,45 +910,62 @@
                </select>
              </div>
            </div>
-            <button class="btn btn-gold" type="submit">Release Results and Calculate Promotions</button>
+<button class="btn btn-gold" type="submit">Release Results and Calculate Promotions</button>
           </form>
         </section>
        </div>
 
-       <section class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h2>Active Generated Student Login Codes</h2>
-            <p class="sub" style="margin-bottom:0;">Download a student's login details to share securely with them.</p>
+      <section class="card" style="margin-bottom:18px;">
+        <h2>3. Class Timetable Management</h2>
+        <p class="sub">Upload a CSV/Excel timetable for an entire class. The timetable will automatically apply to all students in that class.</p>
+        <form id="timetableForm">
+          <div class="field">
+            <label>Select Class</label>
+            <select id="timetableClass">
+              <option>Creche</option>
+              <option>Nursery One</option>
+              <option>Nursery Two</option>
+              <option>KG 1</option>
+              <option>KG 2 Boys</option>
+              <option>KG 2 Girls</option>
+              <option>Lower KG</option>
+              <option>Upper KG</option>
+              <option>Basic 1</option>
+              <option>Basic 2</option>
+              <option>Basic 3</option>
+              <option>Basic 4</option>
+              <option>Basic 5</option>
+              <option>Basic 6</option>
+              <option>Basic 7</option>
+              <option>Basic 8</option>
+              <option>Basic 9</option>
+              <option>JHS 1</option>
+              <option>JHS 2</option>
+              <option>JHS 3</option>
+              <option>SHS 1</option>
+              <option>SHS 2</option>
+              <option>SHS 3</option>
+            </select>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button type="button" id="downloadAllBtn" class="btn btn-gold" style="padding:7px 11px;font-size:11px;">
-              ⬇ Download All Codes
-            </button>
-            <button type="button" id="resyncAllBtn" class="btn btn-outline" style="padding:7px 11px;font-size:11px;">
-              Re-Sync All to Database
-            </button>
+          <div class="row-2">
+            <div class="field">
+              <label for="timetableFile">CSV / Excel File (Day,Subject,Time,Venue,Teacher)</label>
+              <input type="file" id="timetableFile" accept=".csv,.xlsx,.xls" />
+            </div>
+            <div class="field">
+              <label>Preview / Parsed Data</label>
+              <div id="timetablePreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
+            </div>
           </div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Class</th>
-                <th>Student ID</th>
-                <th>Login Code</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="codesTableBody"></tbody>
-          </table>
-        </div>
+          <div style="display:flex;gap:10px;margin-top:12px;">
+            <button class="btn btn-teal" type="submit">Upload & Sync Timetable to Class</button>
+            <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
+          </div>
+        </form>
       </section>
 
-    <section class="card">
-      <h2>Broadcast Announcement to All Student Portals</h2>
+      <section class="card" style="margin-bottom:18px;">
+        <h2>4. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -1747,6 +1702,72 @@
       showToast("Downloaded credentials for " + className);
     });
 
+    document.getElementById("downloadExistingClassExcelBtn").addEventListener("click", function () {
+      const className = document.getElementById("classGenerateClass").value;
+      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+      
+      if (!className) { showToast("Select a class first"); return; }
+      
+      const existingRecords = getStoredRecords();
+      const classRecords = existingRecords.filter((r) => r.currentClass === className);
+      
+      if (!classRecords.length) {
+        showToast("No existing students found in " + className);
+        return;
+      }
+      
+      let csv = "Full Name,Email,Student ID,Class,Academic Year,Login Code\n";
+      
+      classRecords.forEach((rec) => {
+        csv += "\"" + rec.fullName + "\",\"" + rec.email + "\",\"" + rec.studentId + "\",\"" + rec.currentClass + "\",\"" + rec.academicYear + "\",\"" + rec.loginCode + "\"\n";
+      });
+      
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = className.replace(/\s+/g, "_") + "_existing_credentials.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      showToast("Downloaded " + classRecords.length + " existing credentials for " + className);
+    });
+
+    document.getElementById("downloadClassCredentialsBtn").addEventListener("click", function () {
+      const className = document.getElementById("downloadClassSelect").value;
+      const statusEl = document.getElementById("downloadClassStatus");
+      
+      if (!className) { showToast("Select a class first"); return; }
+      
+      const existingRecords = getStoredRecords();
+      const classRecords = existingRecords.filter((r) => r.currentClass === className);
+      
+      if (!classRecords.length) {
+        showToast("No students found in " + className);
+        return;
+      }
+      
+      let csv = "Full Name,Email,Student ID,Class,Academic Year,Login Code\n";
+      
+      classRecords.forEach((rec) => {
+        csv += "\"" + rec.fullName + "\",\"" + rec.email + "\",\"" + rec.studentId + "\",\"" + rec.currentClass + "\",\"" + rec.academicYear + "\",\"" + rec.loginCode + "\"\n";
+      });
+      
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = className.replace(/\s+/g, "_") + "_credentials.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      statusEl.textContent = "Downloaded " + classRecords.length + " credentials for " + className;
+      statusEl.style.color = "var(--crest-green)";
+      
+      showToast("Downloaded " + classRecords.length + " credentials for " + className);
+    });
+
     document.getElementById("adminProfileStudentName").addEventListener("input", loadAdminProfileRecord);
     document.getElementById("adminProfileForm").addEventListener("submit", submitAdminProfile);
     document.getElementById("adminChangePicBtn").addEventListener("click", () => {
@@ -1874,39 +1895,6 @@
       const idx = progression.indexOf(currentClass);
       return idx >= 0 && idx < progression.length - 1 ? progression[idx + 1] : currentClass;
     }
-
-    document.getElementById("timetableForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const timetableClass = document.getElementById("timetableClass").value;
-      const timetableDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-      const timetable = timetableDays.map((day) => ({
-        day,
-        subject: document.getElementById("scheduleSubject" + day).value.trim(),
-        time: document.getElementById("scheduleTime" + day).value.trim(),
-        teacher: document.getElementById("scheduleTeacher" + day).value.trim() || "Not assigned",
-        venue: document.getElementById("scheduleVenue" + day).value.trim(),
-        updatedBy: teacherLabel(),
-        updatedAt: stampIso(),
-      }));
-      const records = getStoredRecords();
-      const classRecords = records.filter((record) => record.currentClass === timetableClass);
-      if (!classRecords.length) {
-        window.alert("There are no students in the selected class yet.");
-        return;
-      }
-      classRecords.forEach((record) => {
-        record.timetable = timetable.map((entry) => ({ ...entry }));
-        record.updatedBy = teacherLabel();
-        record.updatedAt = stampIso();
-      });
-      saveStoredRecords(records);
-      renderTable(records);
-      updateSelectedStudentSummary(getRecordForTypedName());
-      await syncRecordsToPortal(classRecords);
-      event.target.reset();
-      document.getElementById("timetableClass").value = timetableClass;
-      showToast("Weekly timetable saved for " + timetableClass + ".");
-    });
 
     document.getElementById("portalUpdateForm").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -2108,46 +2096,56 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     e.preventDefault();
     const file = document.getElementById("timetableFile").files[0];
     const timetableClass = document.getElementById("timetableClass").value;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async function (evt) {
-        const csv = parseCSV(evt.target.result);
-        if (csv.length < 2) return;
-        const headers = csv[0].map(h => h.toLowerCase().trim());
-        const dayIdx = headers.indexOf("day");
-        const subjectIdx = headers.indexOf("subject");
-        const timeIdx = headers.indexOf("time");
-        const venueIdx = headers.indexOf("venue");
-        const teacherIdx = headers.indexOf("teacher");
-        const schedule = csv.slice(1).map(row => ({
-          day: row[dayIdx] || "",
-          subject: row[subjectIdx] || "",
-          time: row[timeIdx] || "",
-          venue: row[venueIdx] || "",
-          teacher: row[teacherIdx] || "Not assigned",
-        })).filter(r => r.day && r.subject);
-        addPendingApproval("timetable", { className: timetableClass, schedule, createdBy: teacherLabel(), createdAt: stampIso() });
-        showToast("Timetable for " + timetableClass + " queued for Academic Admin approval (" + schedule.length + " entries).");
-        e.target.reset();
-        document.getElementById("timetablePreview").innerHTML = "";
-        renderPendingApprovals();
-      };
-      reader.readAsText(file);
-    } else {
-      const timetableDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-      const schedule = timetableDays.map((day) => ({
-        day,
-        subject: document.getElementById("scheduleSubject" + day).value.trim(),
-        time: document.getElementById("scheduleTime" + day).value.trim(),
-        teacher: document.getElementById("scheduleTeacher" + day).value.trim() || "Not assigned",
-        venue: document.getElementById("scheduleVenue" + day).value.trim(),
-      })).filter(r => r.subject);
-      if (!schedule.length) return;
-      addPendingApproval("timetable", { className: timetableClass, schedule, createdBy: teacherLabel(), createdAt: stampIso() });
-      showToast("Timetable for " + timetableClass + " queued for Academic Admin approval (" + schedule.length + " entries).");
+    if (!timetableClass) { showToast("Select a class first"); return; }
+    if (!file) { showToast("Select a CSV/Excel file"); return; }
+    
+    const reader = new FileReader();
+    reader.onload = async function (evt) {
+      const csv = parseCSV(evt.target.result);
+      if (csv.length < 2) { showToast("Invalid file format"); return; }
+      const headers = csv[0].map(h => h.toLowerCase().trim());
+      const dayIdx = headers.indexOf("day");
+      const subjectIdx = headers.indexOf("subject");
+      const timeIdx = headers.indexOf("time");
+      const venueIdx = headers.indexOf("venue");
+      const teacherIdx = headers.indexOf("teacher");
+      const schedule = csv.slice(1).map(row => ({
+        day: row[dayIdx] || "",
+        subject: row[subjectIdx] || "",
+        time: row[timeIdx] || "",
+        venue: row[venueIdx] || "",
+        teacher: row[teacherIdx] || "Not assigned",
+      })).filter(r => r.day && r.subject);
+      
+      if (!schedule.length) { showToast("No valid timetable entries found"); return; }
+      
+      // Apply timetable to all students in the class
+      const records = getStoredRecords();
+      const classRecords = records.filter((record) => record.currentClass === timetableClass);
+      if (!classRecords.length) {
+        showToast("No students found in " + timetableClass);
+        return;
+      }
+      
+      const updatedRecords = classRecords.map((record) => ({
+        ...record,
+        timetable: schedule.map((entry) => ({ ...entry, updatedBy: teacherLabel(), updatedAt: stampIso() })),
+        updatedBy: teacherLabel(),
+        updatedAt: stampIso(),
+      }));
+      
+      const otherRecords = records.filter((record) => record.currentClass !== timetableClass);
+      const allRecords = [...otherRecords, ...updatedRecords];
+      saveStoredRecords(allRecords);
+      renderTable(allRecords);
+      updateSelectedStudentSummary(getRecordForTypedName());
+      await syncRecordsToPortal(updatedRecords);
+      
+      showToast("Timetable synced for all " + classRecords.length + " students in " + timetableClass + " (" + schedule.length + " entries).");
       e.target.reset();
-      renderPendingApprovals();
-    }
+      document.getElementById("timetablePreview").innerHTML = "";
+    };
+    reader.readAsText(file);
   });
 
   document.getElementById("downloadTimetableTemplate").addEventListener("click", function () {

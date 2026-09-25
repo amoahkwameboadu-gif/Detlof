@@ -734,14 +734,12 @@ function renderPortalForStudent(student) {
       e.preventDefault();
       const updated = {
         fullName: document.getElementById("profileFullName").value.trim() || activeStudent.fullName,
-        parentName: document.getElementById("profileParentName").value.trim(),
-        homeAddress: document.getElementById("profileHomeAddress").value.trim(),
         updatedBy: "Student Self-Update",
         updatedAt: new Date().toISOString(),
       };
       Object.assign(activeStudent, updated);
       saveSyncedStudents();
-      window.alert("Profile updated. Changes are saved locally and will sync with your records.");
+      window.alert("Profile updated. Only your name can be changed; other details are managed by the school administrator.");
     };
   }
 
