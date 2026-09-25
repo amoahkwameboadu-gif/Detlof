@@ -638,10 +638,13 @@
                 <label>Assigned Class</label>
                 <select id="currentClass">
                   <option>Creche</option>
-                  <option>Nursery 1</option>
-                  <option>Nursery 2</option>
+                  <option>Nursery One</option>
+                  <option>Nursery Two</option>
                   <option>KG 1</option>
-                  <option>KG 2</option>
+                  <option>KG 2 Boys</option>
+                  <option>KG 2 Girls</option>
+                  <option>Lower KG</option>
+                  <option>Upper KG</option>
                   <option>Basic 1</option>
                   <option>Basic 2</option>
                   <option>Basic 3</option>
@@ -651,6 +654,12 @@
                   <option>Basic 7</option>
                   <option>Basic 8</option>
                   <option>Basic 9</option>
+                  <option>JHS 1</option>
+                  <option>JHS 2</option>
+                  <option>JHS 3</option>
+                  <option>SHS 1</option>
+                  <option>SHS 2</option>
+                  <option>SHS 3</option>
                 </select>
               </div>
             </div>
@@ -664,9 +673,58 @@
                 <input type="text" id="loginCode" placeholder="e.g. DET-4829" />
               </div>
             </div>
-            <button type="submit" class="btn btn-teal" style="width:100%;justify-content:center;">
-              Generate &amp; Sync Student Login Code
+<button type="submit" class="btn btn-teal" style="width:100%;justify-content:center;">
+              Generate & Sync Student Login Code
             </button>
+          </form>
+        </section>
+
+        <section class="card" style="margin-bottom:18px;">
+          <h2>2. Generate Credentials for Entire Class</h2>
+          <p class="sub">Select a class, generate unique login codes for all students in that class, and download as Excel.</p>
+          <form id="classGenerateForm">
+            <div class="field">
+              <label>Select Class</label>
+              <select id="classGenerateClass" required>
+                <option value="">— Choose a class —</option>
+                <option>Creche</option>
+                <option>Nursery One</option>
+                <option>Nursery Two</option>
+                <option>KG 1</option>
+                <option>KG 2 Boys</option>
+                <option>KG 2 Girls</option>
+                <option>Lower KG</option>
+                <option>Upper KG</option>
+                <option>Basic 1</option>
+                <option>Basic 2</option>
+                <option>Basic 3</option>
+                <option>Basic 4</option>
+                <option>Basic 5</option>
+                <option>Basic 6</option>
+                <option>Basic 7</option>
+                <option>Basic 8</option>
+                <option>Basic 9</option>
+                <option>JHS 1</option>
+                <option>JHS 2</option>
+                <option>JHS 3</option>
+                <option>SHS 1</option>
+                <option>SHS 2</option>
+                <option>SHS 3</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Prefix for Login Codes (e.g. KG1, KGG, NUR2)</label>
+              <input type="text" id="classGeneratePrefix" placeholder="Auto-generated from class name" />
+            </div>
+            <div class="field">
+              <label>Starting Number</label>
+              <input type="number" id="classGenerateStart" value="1" min="1" />
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="submit" class="btn btn-teal" style="flex:1;">Generate & Sync All</button>
+              <button type="button" class="btn btn-gold" id="downloadClassExcelBtn" style="flex:1;">⬇ Download Excel</button>
+            </div>
+            <div id="classGenerateStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
           </form>
         </section>
 
@@ -763,48 +821,53 @@
         <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
       </div>
     </div>
-     <form id="resultForm">
-             <h3 style="margin:16px 0 8px;font-size:14px;">Publish Term Results</h3>
-             <div class="field">
-               <label for="resultTerm">Academic Term</label>
-               <select id="resultTerm" required>
-                 <option value="term1">First Term</option>
-                 <option value="term2">Second Term</option>
-                 <option value="term3">Third Term</option>
-               </select>
-             </div>
-             <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
-             <div class="row-2">
-               <div class="field"><label>SBA 1 / 10</label><input id="resultSba1" type="number" min="0" max="10" step="0.01" required /></div>
-               <div class="field"><label>SBA 2 / 20</label><input id="resultSba2" type="number" min="0" max="20" step="0.01" required /></div>
-             </div>
-             <div class="row-2">
-               <div class="field"><label>Project Work / 20</label><input id="resultProject" type="number" min="0" max="20" step="0.01" required /></div>
-               <div class="field"><label>Exam Score / 100 (weighted to 50)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
-             </div>
-             <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
-             <button class="btn btn-teal" type="submit">Save Result</button>
+<form id="resultForm">
+              <h3 style="margin:16px 0 8px;font-size:14px;">Publish Term Results</h3>
+              <div class="field">
+                <label for="resultTerm">Academic Term</label>
+                <select id="resultTerm" required>
+                  <option value="term1">First Term</option>
+                  <option value="term2">Second Term</option>
+                  <option value="term3">Third Term</option>
+                </select>
+              </div>
+              <div class="field"><label>Subject</label><input id="resultSubject" placeholder="e.g. Mathematics" required /></div>
+              <div class="row-2">
+                <div class="field"><label>Class Score (out of 40)</label><input id="resultClassScore" type="number" min="0" max="40" step="0.01" required /></div>
+                <div class="field"><label>Exam Score (out of 100, weighted to 60)</label><input id="resultExamScore" type="number" min="0" max="100" step="0.01" required /></div>
+              </div>
+              <div class="field"><label>Teacher Remark</label><input id="resultRemark" placeholder="Optional remark" /></div>
+              <button class="btn btn-teal" type="submit">Save Result</button>
 </form>
            <form id="timetableForm" style="border-top:1px solid var(--line);margin-top:20px;padding-top:4px;">
              <h3 style="margin:16px 0 8px;font-size:14px;">Timetable</h3>
              <div class="field">
                <label>Select Class</label>
-               <select id="timetableClass">
-                 <option>Creche</option>
-                 <option>Nursery 1</option>
-                 <option>Nursery 2</option>
-                 <option>KG 1</option>
-                 <option>KG 2</option>
-                 <option>Basic 1</option>
-                 <option>Basic 2</option>
-                 <option>Basic 3</option>
-                 <option>Basic 4</option>
-                 <option>Basic 5</option>
-                 <option>Basic 6</option>
-                 <option>Basic 7</option>
-                 <option>Basic 8</option>
-                 <option>Basic 9</option>
-               </select>
+<select id="timetableClass">
+                  <option>Creche</option>
+                  <option>Nursery One</option>
+                  <option>Nursery Two</option>
+                  <option>KG 1</option>
+                  <option>KG 2 Boys</option>
+                  <option>KG 2 Girls</option>
+                  <option>Lower KG</option>
+                  <option>Upper KG</option>
+                  <option>Basic 1</option>
+                  <option>Basic 2</option>
+                  <option>Basic 3</option>
+                  <option>Basic 4</option>
+                  <option>Basic 5</option>
+                  <option>Basic 6</option>
+                  <option>Basic 7</option>
+                  <option>Basic 8</option>
+                  <option>Basic 9</option>
+                  <option>JHS 1</option>
+                  <option>JHS 2</option>
+                  <option>JHS 3</option>
+                  <option>SHS 1</option>
+                  <option>SHS 2</option>
+                  <option>SHS 3</option>
+                </select>
              </div>
              <div class="row-2">
                <div class="field">
@@ -816,58 +879,11 @@
                  <div id="timetablePreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
                </div>
              </div>
-             <div style="display:flex;gap:10px;margin-top:12px;">
-               <button class="btn btn-teal" type="submit">Upload & Preview Timetable</button>
-               <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
-             </div>
-             <hr style="margin:18px 0;border-color:var(--line);" />
-             <p class="sub" style="margin-bottom:12px;">Or enter manually for a single class:</p>
-             <div class="timetable-grid">
-               <div class="timetable-head" aria-hidden="true">
-                 <span>Day</span>
-                 <span>Subject</span>
-                 <span>Time</span>
-                 <span>Room / Venue</span>
-                 <span>Teacher</span>
-               </div>
-              <div class="timetable-row">
-                <div class="timetable-day">Monday</div>
-                <div class="field"><label for="scheduleSubjectMonday">Subject</label><input id="scheduleSubjectMonday" data-timetable-day="Monday" data-timetable-field="subject" placeholder="e.g. Mathematics" required /></div>
-                <div class="field"><label for="scheduleTimeMonday">Time</label><input id="scheduleTimeMonday" data-timetable-day="Monday" data-timetable-field="time" type="text" placeholder="8:00 – 9:00" required /></div>
-                <div class="field"><label for="scheduleVenueMonday">Room / Venue</label><input id="scheduleVenueMonday" data-timetable-day="Monday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
-                <div class="field"><label for="scheduleTeacherMonday">Teacher (optional)</label><input id="scheduleTeacherMonday" data-timetable-day="Monday" data-timetable-field="teacher" placeholder="e.g. Mrs. Addo" /></div>
+<div style="display:flex;gap:10px;margin-top:12px;">
+                <button class="btn btn-teal" type="submit">Upload & Preview Timetable</button>
+                <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
               </div>
-              <div class="timetable-row">
-                <div class="timetable-day">Tuesday</div>
-                <div class="field"><label for="scheduleSubjectTuesday">Subject</label><input id="scheduleSubjectTuesday" data-timetable-day="Tuesday" data-timetable-field="subject" placeholder="e.g. English Language" required /></div>
-                <div class="field"><label for="scheduleTimeTuesday">Time</label><input id="scheduleTimeTuesday" data-timetable-day="Tuesday" data-timetable-field="time" type="text" placeholder="9:00 – 10:00" required /></div>
-                <div class="field"><label for="scheduleVenueTuesday">Room / Venue</label><input id="scheduleVenueTuesday" data-timetable-day="Tuesday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
-                <div class="field"><label for="scheduleTeacherTuesday">Teacher (optional)</label><input id="scheduleTeacherTuesday" data-timetable-day="Tuesday" data-timetable-field="teacher" placeholder="e.g. Mr. Mensah" /></div>
-              </div>
-              <div class="timetable-row">
-                <div class="timetable-day">Wednesday</div>
-                <div class="field"><label for="scheduleSubjectWednesday">Subject</label><input id="scheduleSubjectWednesday" data-timetable-day="Wednesday" data-timetable-field="subject" placeholder="e.g. Integrated Science" required /></div>
-                <div class="field"><label for="scheduleTimeWednesday">Time</label><input id="scheduleTimeWednesday" data-timetable-day="Wednesday" data-timetable-field="time" type="text" placeholder="10:00 – 11:00" required /></div>
-                <div class="field"><label for="scheduleVenueWednesday">Room / Venue</label><input id="scheduleVenueWednesday" data-timetable-day="Wednesday" data-timetable-field="venue" placeholder="Science Lab" required /></div>
-                <div class="field"><label for="scheduleTeacherWednesday">Teacher (optional)</label><input id="scheduleTeacherWednesday" data-timetable-day="Wednesday" data-timetable-field="teacher" placeholder="e.g. Mrs. Owusu" /></div>
-              </div>
-              <div class="timetable-row">
-                <div class="timetable-day">Thursday</div>
-                <div class="field"><label for="scheduleSubjectThursday">Subject</label><input id="scheduleSubjectThursday" data-timetable-day="Thursday" data-timetable-field="subject" placeholder="e.g. Computing / ICT" required /></div>
-                <div class="field"><label for="scheduleTimeThursday">Time</label><input id="scheduleTimeThursday" data-timetable-day="Thursday" data-timetable-field="time" type="text" placeholder="11:00 – 12:00" required /></div>
-                <div class="field"><label for="scheduleVenueThursday">Room / Venue</label><input id="scheduleVenueThursday" data-timetable-day="Thursday" data-timetable-field="venue" placeholder="ICT Lab" required /></div>
-                <div class="field"><label for="scheduleTeacherThursday">Teacher (optional)</label><input id="scheduleTeacherThursday" data-timetable-day="Thursday" data-timetable-field="teacher" placeholder="e.g. Mr. Kofi" /></div>
-              </div>
-              <div class="timetable-row">
-                <div class="timetable-day">Friday</div>
-                <div class="field"><label for="scheduleSubjectFriday">Subject</label><input id="scheduleSubjectFriday" data-timetable-day="Friday" data-timetable-field="subject" placeholder="e.g. Social Studies" required /></div>
-                <div class="field"><label for="scheduleTimeFriday">Time</label><input id="scheduleTimeFriday" data-timetable-day="Friday" data-timetable-field="time" type="text" placeholder="8:00 – 9:00" required /></div>
-                <div class="field"><label for="scheduleVenueFriday">Room / Venue</label><input id="scheduleVenueFriday" data-timetable-day="Friday" data-timetable-field="venue" placeholder="JHS 2 Room" required /></div>
-                <div class="field"><label for="scheduleTeacherFriday">Teacher (optional)</label><input id="scheduleTeacherFriday" data-timetable-day="Friday" data-timetable-field="teacher" placeholder="e.g. Ms. Aidoo" /></div>
-              </div>
-</div>
-             <button class="btn btn-gold" type="submit">Save Timetable</button>
-           </form>
+            </form>
 
           <form id="portalUpdateForm" class="update-card">
             <h3>Send Individual Portal Update</h3>
@@ -1014,42 +1030,99 @@
     const STORAGE_KEY = "detlof_bulk_import_codes";
 
     const defaultSeedCodes = [
-      {
-        fullName: "Eliana Ama Owusu",
-        email: "eliana.owusu@detlof.edu.gh",
-        studentId: "DPS-24-0187",
-        currentClass: "JHS 2",
-        academicYear: "2024 / 2025",
-        loginCode: "Detlof2025!",
-      },
-      {
-        fullName: "Abena Osei",
-        email: "abena.osei@detlof.edu.gh",
-        studentId: "DPS-25-0301",
-        currentClass: "JHS 1",
-        academicYear: "2024 / 2025",
-        loginCode: "DET-3019",
-      },
-      {
-        fullName: "Kojo Antwi",
-        email: "kojo.antwi@detlof.edu.gh",
-        studentId: "DPS-25-0302",
-        currentClass: "Basic 5",
-        academicYear: "2024 / 2025",
-        loginCode: "DET-5028",
-      },
+      { fullName: "Kristen Denison Esoun", email: "kristen.esoun@detlof.edu.gh", studentId: "KG1-0001", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1001" },
+      { fullName: "Comfort Ewonam Akakpoh", email: "comfort.akakpoh@detlof.edu.gh", studentId: "KG1-0002", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1002" },
+      { fullName: "Marcus Kobby Prah", email: "marcus.prah@detlof.edu.gh", studentId: "KG1-0003", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1003" },
+      { fullName: "Doxa Egyapa Kobina Prah", email: "doxa.prah@detlof.edu.gh", studentId: "KG1-0004", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1004" },
+      { fullName: "Joseph Kudanu", email: "joseph.kudanu@detlof.edu.gh", studentId: "KG1-0005", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1005" },
+      { fullName: "Jesse Odoop", email: "jesse.odom@detlof.edu.gh", studentId: "KG1-0006", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1006" },
+      { fullName: "Elwy Xolarli Dzobo", email: "elwy.dzobo@detlof.edu.gh", studentId: "KG1-0007", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1007" },
+      { fullName: "Nhyiraba Brena", email: "nhyiraba.brena@detlof.edu.gh", studentId: "KG1-0008", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1008" },
+      { fullName: "Robert Anthony Esoun", email: "robert.esoun@detlof.edu.gh", studentId: "KG1-0009", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1009" },
+      { fullName: "Elora Aaryn Amoah", email: "elora.amoah@detlof.edu.gh", studentId: "KG1-0010", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1010" },
+      { fullName: "Fiifi Gabrab", email: "fiifi.gabrab@detlof.edu.gh", studentId: "KG1-0011", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1011" },
+      { fullName: "Reuben Amosah", email: "reuben.amosah@detlof.edu.gh", studentId: "KG1-0012", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1012" },
+      { fullName: "Warrick Oswald Ewua", email: "warrick.ewua@detlof.edu.gh", studentId: "KG1-0013", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1013" },
+      { fullName: "Giovanna Anim", email: "giovanna.anim@detlof.edu.gh", studentId: "KG1-0014", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1014" },
+      { fullName: "Gabriella Ammal", email: "gabriella.ammal@detlof.edu.gh", studentId: "KG1-0015", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1015" },
+      { fullName: "Zipporah Agyapong", email: "zipporah.agyapong@detlof.edu.gh", studentId: "KG1-0016", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1016" },
+      { fullName: "Napoleon Odehy Arkhrah", email: "napoleon.arkhrah@detlof.edu.gh", studentId: "KGB-0001", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2001" },
+      { fullName: "Kelvin Kwakyir Entsua", email: "kelvin.entsua@detlof.edu.gh", studentId: "KGB-0002", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2002" },
+      { fullName: "Edmund Fiifi Mensah", email: "edmund.mensah@detlof.edu.gh", "studentId": "KGB-0003", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2003" },
+      { fullName: "Archibald Nii A. Quayson", email: "archibald.quayson@detlof.edu.gh", studentId: "KGB-0004", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2004" },
+      { fullName: "Eward Eloelo Agbetzi", email: "eward.agbetzi@detlof.edu.gh", studentId: "KGB-0005", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2005" },
+      { fullName: "Justin Quansah", email: "justin.quansah@detlof.edu.gh", studentId: "KGB-0006", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2006" },
+      { fullName: "Cyril T. Esselifie", email: "cyril.esselifie@detlof.edu.gh", studentId: "KGB-0007", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2007" },
+      { fullName: "Azzam Nsiya Zilkifilu", email: "azzam.zilkifilu@detlof.edu.gh", studentId: "KGB-0008", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2008" },
+      { fullName: "Benedict Borlabi Bortey", email: "benedict.bortey@detlof.edu.gh", studentId: "KGB-0009", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2009" },
+      { fullName: "Geovanna K. Arthur", email: "geovanna.arthur@detlof.edu.gh", studentId: "KGG-0001", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2010" },
+      { fullName: "Varnika A. Essel", email: "varnika.essel@detlof.edu.gh", studentId: "KGG-0002", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2011" },
+      { fullName: "Dominion Dadzie", email: "dominion.dadzie@detlof.edu.gh", studentId: "KGG-0003", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2012" },
+      { fullName: "Godjoy Asmah", email: "godjoy.asmah@detlof.edu.gh", studentId: "KGG-0004", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2013" },
+      { fullName: "Godpraise Asmah", email: "godpraise.asmah@detlof.edu.gh", studentId: "KGG-0005", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2014" },
+      { fullName: "Maya Britt Appiah", email: "maya.appiah@detlof.edu.gh", studentId: "KGG-0006", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2015" },
+      { fullName: "Henritta Star Arthur", email: "henritta.arthur@detlof.edu.gh", studentId: "KGG-0007", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2016" },
+      { fullName: "Patricia Dadzie", email: "patricia.dadzie@detlof.edu.gh", studentId: "KGG-0008", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2017" },
+      { fullName: "Ama Anokyeewaa Adusei", email: "ama.adusei@detlof.edu.gh", studentId: "KGG-0009", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2018" },
+      { fullName: "Percis Woode Agyapong Laorian Boso", email: "percis.boso@detlof.edu.gh", studentId: "NUR2-0001", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3001" },
+      { fullName: "Leon Kojo Afful", email: "leon.afful@detlof.edu.gh", studentId: "NUR2-0002", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3002" },
+      { fullName: "Leo Baijon Quansah", email: "leo.quansah@detlof.edu.gh", studentId: "NUR2-0003", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3003" },
+      { fullName: "Zana Akorful", email: "zana.akorful@detlof.edu.gh", studentId: "NUR2-0004", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3004" },
+      { fullName: "Anthony", email: "anthony@detlof.edu.gh", studentId: "NUR2-0005", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3005" },
+      { fullName: "Armstrong", email: "armstrong@detlof.edu.gh", studentId: "NUR2-0006", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3006" },
+      { fullName: "Zaid Adamu", email: "zaid.adamu@detlof.edu.gh", studentId: "NUR2-0007", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3007" },
+      { fullName: "Precious Essien", email: "precious.essien@detlof.edu.gh", studentId: "NUR2-0008", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3008" },
+      { fullName: "Elsie Abakah Mensah", email: "elsie.mensah@detlof.edu.gh", studentId: "NUR2-0009", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3009" },
+      { fullName: "Uzziah", email: "uzziah@detlof.edu.gh", studentId: "NUR2-0010", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3010" },
+      { fullName: "Blessed", email: "blessed@detlof.edu.gh", studentId: "NUR2-0011", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3011" },
+      { fullName: "Matthew Abakah", email: "matthew.abakah@detlof.edu.gh", studentId: "NUR2-0012", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3012" },
+      { fullName: "Destiny Tay", email: "destiny.tay@detlof.edu.gh", studentId: "NUR2-0013", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3013" },
+      { fullName: "Firdaus Baidoo", email: "firdaus.baidoo@detlof.edu.gh", studentId: "NUR2-0014", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3014" },
+      { fullName: "Marcel Isibu Thompson", email: "marcel.thompson@detlof.edu.gh", studentId: "NUR2-0015", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3015" },
+      { fullName: "Nhyira Edusei", email: "nhyira.edusei@detlof.edu.gh", studentId: "NUR2-0016", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3016" },
+      { fullName: "Eliana Mensah", email: "eliana.mensah@detlof.edu.gh", studentId: "NUR2-0017", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3017" },
+      { fullName: "Lara Mensah", email: "lara.mensah@detlof.edu.gh", studentId: "NUR2-0018", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3018" },
+      { fullName: "Laurian Danso", email: "laurian.danso@detlof.edu.gh", studentId: "NUR2-0019", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3019" },
+      { fullName: "Fiifi Sowyer", email: "fiifi.sowyer@detlof.edu.gh", studentId: "CRE-0001", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4001" },
+      { fullName: "Nessa Jesusline Afful", email: "nessa.afful@detlof.edu.gh", studentId: "CRE-0002", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4002" },
+      { fullName: "Kofi Moses", email: "kofi.moses@detlof.edu.gh", studentId: "CRE-0003", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4003" },
+      { fullName: "Obrenpong", email: "obrenpong@detlof.edu.gh", studentId: "CRE-0004", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4004" },
+      { fullName: "Enyimyam", email: "enyiam@detlof.edu.gh", studentId: "CRE-0005", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4005" },
+      { fullName: "Thiery O. Ankrah", email: "thiery.anrah@detlof.edu.gh", studentId: "NUR1-0001", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5001" },
+      { fullName: "Ohemaa", email: "ohemaa@detlof.edu.gh", studentId: "NUR1-0002", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5002" },
+      { fullName: "Duo La", email: "duola@detlof.edu.gh", studentId: "NUR1-0003", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5003" },
+      { fullName: "Calista Obeng Appiah", email: "calista.appiah@detlof.edu.gh", studentId: "NUR1-0004", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5004" },
+      { fullName: "Naa Agele", email: "naa.agele@detlof.edu.gh", studentId: "NUR1-0005", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5005" },
+      { fullName: "Kendrick", email: "kendrick@detlof.edu.gh", studentId: "NUR1-0006", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5006" },
+      { fullName: "Janet", email: "janet@detlof.edu.gh", studentId: "NUR1-0007", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5007" },
+      { fullName: "Wisdom", email: "wisdom@detlof.edu.gh", studentId: "NUR1-0008", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5008" },
+      { fullName: "Zulaiha Ali", email: "zulaiha.ali@detlof.edu.gh", studentId: "NUR1-0009", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5009" },
     ];
 
     const quickGenerateNames = {
-      "Basic 1": "AGBOYO JUSTICE|AGYAPONG ADEI-KORSAH JAYDEN|AGYAPONG JEHOSAPHAT|AMOAH MYRON|MAC-QUAYSON EMMANUEL|MAWUKO JOSEPH KLENAM|MENSAH ABAKA O.C. EPAPHRAS|MENSAH LARTEY NII JOY EZEKIEL|THOMRSON TSIBU GERALD|AKUETTEH NAA DESOE URSULA|ANYIDOH RICHLOVE|ESSOUN ABA ADELAINE|KUMEDU AKU SEDEM GWENDOLYN|SAWYERR AKUA ELSIE",
-      "Basic 2": "ALI JAWAL|ANDOH ONESIPHOROUS|APPIAH GRIFFEON|ARTHUR GOODISON REGINALD|BOATENG ADDAE JEFFERY|BORTEY DECENT SHADRACK|CUDJOE HENRY ELKANAH|DAKE SWANZEY ARCHIBOLD|DANSO CHEREB|MARFRED PALAS LAMPIEY|MENSAH-SLIPPI PAPA TIBURIOUS|ODOOM KWAME JENSON|AKYERE NANA ESI NELLY|ANDOH DANIELLA|ANIM ABENA FLORA|ANKAM ESSEL AMA KAY-ANN|KOOMSON NHYIRABA QUEEN|KUDANU EDINAM JULIET|MENSAH ABENA LORENA|MENSAH ASEDA KEZIAH|MENSAH BERTINA|NAAMA GIFTY|TAY RUTH|WOODE AMEYE ADWOA SELINA",
-      "Basic 3": "ABAKAH DIVINE|ABAKAH JADEN|ACKROMOND GODWIN|ACKROMOND MELVIN|ADAMS ADOM PRINCE|ADAMU JUWAHA-KORU ZUKLIFULU|AKUFFO N. Y PHILBERT|AUSTIN MENSAH KWEKU ROBERT|BAIDOO A. RAHMAN|BAMFO AMFO KWABENA|BOHAM LEBRON RODNEY|ESSEL TERRENCE|MENSAH ATTA HERBERT|MENSAH ATTA HUBERT|NYANDOH ANTHONY|TETTEH A. HUMPHREY|WOODE AMEYE FIIFI DIVINE|AMANZULEY N. JENNIFER|ANDERSON A. ROSEMOND|ANSAH M.A. LOIS|BASSAW E. ANAVA|DADZIE EUNICE|EMMESAH CLEMENTINA|ENNINFUL ERICA VALERIE|LARTEY THEODOSIA|QUANSAH CATHERINE|SAWYER ESI CHRISTOLIGHT",
-      "Basic 4": "ABDUL AZIZ SAMAD|ALI FAREED|ARHIN TERENCE|ASAMENE CEPHAS JACKLORD|ESHUN LISTOWELL|ESHUN SULTAN|KOOMSON KELVIN|MENSAH BADU FREDRICK|QUAYSON DEGRAFT FYNN|TETTEH ABI LORD|YENZU KOJO NKUNYIM|ACKROMOND ALETHEA|ASMAH NHYIRA RICHLOVE|DANSO CHERYL|ESHUN NHYIRABA|KUDANU JESSICA|MENSAH NAADU LOVE|QUIST DOSIA VALERIE",
-      "Basic 5": "BASSAW AARON|ENOCK ADDAE|ESSIEN BENEDICT|KUDANU CALVIN|MENSAH ABAKAH EZRA|MENSAH DUKU KINGSFORD|MENSAH KOJO LEONARD|NORTEY MENSAH GIDEON|NUTSU ALARIC ELIKEM|TAYLOR KORANKYE NATHANIEL|ANSAH KWENUA NHYIRA|BLANKSON ANASTASIA|CORBINAH MARY|DOGBEY EMILY|HARRISON ZITA SARAH|MENSAH AUSTIN NAANA|MENSAH SLIPPI IMMACULATE",
-      "Basic 6": "BAIDEN PAPA QUECI|BAIDOO USMAN|BRUSAH YAKUBU HENRY|DANSO JERRY OLARM|EGHAN ISAIAH|GYM EKOW MENSAH|LAMPTEY BISMARK|NYAMSON KWEKU SYLVESTER|QUAYSON JONATHAN|SALIFU-BRIDGE MICHEAL|AKUFFO ADZEPA CLARITEL|BOTSIO MICHEALINA|BRACE-FLINTWOOD MICHELLE|GAVOR JEMIMA|GYASI SARPOMAA MELLISA|KOOMSON CHRISTODIA|LARTEY VALERIE|MENSAH ABENA MAAME|MENSAH BIBIANA|NYENZU EFUA NHYIRABA|QUAYSON GLORIA|WOODE NICHOLINA",
-      "Basic 7": "AMOAH LORD MARCUS|ARTHUR GODGREAT|BAFFOUR OWUSU ANDY|CORBINAH DANIEL|EDWIN PAPA SAMUEL|MENSAH GODFREY|NUTSU ZANEIDE EUGENE|QUIST AUSTROPP|ACKAH CHRISTIANA|ALI SONIA|AMEGEDE EDWINA SELIKEM|ARTHUR DANIELS ANGEL|BOHAM NHYIRA LORRAINE|COBBINAH BLESS|DADZIE AMA DEBORAH|DANSO AGNES|DANSO EWURADWOA MILDRED|DAVIES ARABA AWORTWE|ENNUNSON CHARLOTTE|ESHUN PETROLINA|GBABRAH PATLINA|MENSAH JUSTINA|MENSAH KONTOH EKUA MAAME|MOHAMMED HIDAYA SALIFU|QUARSHIE GABRIELLA|SAAKAH DANIELLA|THOMPSON MEVILYN",
-      "Basic 8": "ADU-AYEYI DANIEL|BAIDOO THOMAS|DANSO ROLAND|ENNINFUL ERIC KELVIN|MENSAH JOSIAH|MENSAH KOJO EBENEZER|NYANDOH PROSPER|NYARKO ANTWI CYRUS|OMOOME BOETEY KOFI ALBERT|BAIDOO SHERRIFA|DOE DELA JOANITA|ESHUN ABENA LEWISA|KOUSSANTIE AGNES ABA|KWANSAH MAAME ESI|MENSAH NORTEY JOSEPHINE|NKETSIA MIRACLE|QUARSHIE FAUSTINA|TAYLOR KORANKYE EMMANUELLA|THOMPSON ERNESTINA",
-      "Basic 9": "CUDJOE ERIC|DOUFAND MICHAEL ANGE|CUDJOE ERICA|EGHAN GEORGETTE|GALLEY E. PEACE|KOLGEE RIHANNA|OSEI FREDA|QUAYSON AGNES|THOMFORD ANNA",
+      "Creche": "FIIFI SOWYER|NESSA JESUSLINE AFFUL|KOFI MOSES|OBREMPONG|ENYIMYAM",
+      "Nursery One": "THIERY O. ANKRAH|OHEMAA|DUALA|CALISTA OBENG APPIAH|NAA AGELE|KENDRICK|JANET|WISDOM|ZULAIHA ALI",
+      "Nursery Two": "PERCIS WOODE AGYAPONG LAURIAN BANSO|LEON KOJO AFFUL|LEO BAIJON QUANSAH|ZANA AKORFUL|ANTHONY|ARMSTRONG|ZAID ADAMU|PRECIOUS ESSIEN|ELSIE ABAKAH MENSAH|UZZIAH|BLESSED|MATTHEW ABAKAH|DESTINY TAY|FIRDAUS BAIDOO|MARCEL ISIBU THOMPSON|NHYIRA EDUSEI|ELIANA MENSAH|LARA MENSAH|LAURIAN DANSO",
+      "KG 1": "KRISTEN DENNISON ESSOUN|COMFORT EWONAM AKAKPOH|MARCUS KOBBY PRAH|DOXA EGYAPA KOBINA PRAH|JOSEPH KUDANU|JESSE ODOOM|ELWY XOLARLI DZOBO|NHYIRABA BRENU|ROBERT ANTHONY ESSOUN|ELORA AARYN AMOAH|FIIFI GARBRAH|RUEBEN AMISSAH|WARRICK OSWALD EWUAH|GIOVANA ANIM|GABRIELLA AMISSAL|ZIPPORAH AGYAPONG",
+      "KG 2 Boys": "NAPOLEON ODEHYE ARKRAH|KELVIN KWEGYIR ENTSUAH|EDMUND FIIFI MENSAH|ARCHIBALD NII A. QUAYSON|EWARD ELOLO AGBETZI|JUSTIN QUANSAH|CYRIL T. ESSELIFIE|AZZAM NSIYA ZILKIFILU|BENEDICT BORLABI BORTEY",
+      "KG 2 Girls": "GEOVANNA K. ARTHUR|VARNIKA A. ESSEL|DOMINION DADZIE|GODJOY ASMAH|GODPRAISE ASMAH|MAYA BRITT APPIAH|HENRITTA STAR ARTHUR|PATRICIA DADZIE|AMA ANOKYEWAA ADUSEI",
+      "Lower KG": "",
+      "Upper KG": "",
+      "Basic 1": "",
+      "Basic 2": "",
+      "Basic 3": "",
+      "Basic 4": "",
+      "Basic 5": "",
+      "Basic 6": "",
+      "Basic 7": "",
+      "Basic 8": "",
+      "Basic 9": "",
+      "JHS 1": "",
+      "JHS 2": "",
+      "JHS 3": "",
+      "SHS 1": "",
+      "SHS 2": "",
+      "SHS 3": "",
     };
 
     function populateQuickGenerateNames() {
@@ -1249,7 +1322,7 @@
           body: JSON.stringify({
             students: recordsToSync,
             role: currentRole,
-            academicYear: "2024 / 2025",
+            academicYear: "2025 / 2026",
             source: "detlof-admin-bulk-import (6).html",
           }),
         });
@@ -1550,7 +1623,7 @@
         email: emailInput.value.trim().toLowerCase(),
         studentId,
         currentClass,
-        academicYear: "2024 / 2025",
+        academicYear: "2025 / 2026",
         loginCode,
         updatedAt: stampIso(),
         updatedBy: teacherLabel(),
@@ -1561,6 +1634,117 @@
       populateAdminProfileStudents();
       await syncRecordsToPortal([newRec]);
       e.target.reset();
+    });
+
+    document.getElementById("classGenerateForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const className = document.getElementById("classGenerateClass").value;
+      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+      const statusEl = document.getElementById("classGenerateStatus");
+      
+      if (!className) { showToast("Select a class first"); return; }
+      
+      const existingRecords = getStoredRecords();
+      const classRecords = existingRecords.filter((r) => r.currentClass === className);
+      const existingNames = new Set(classRecords.map((r) => r.fullName.toUpperCase()));
+      
+      // Get names for this class from quickGenerateNames
+      const classNamesStr = quickGenerateNames[className] || "";
+      const classNames = classNamesStr.split("|").filter(Boolean);
+      
+      if (!classNames.length) {
+        showToast("No student names defined for " + className);
+        return;
+      }
+      
+      let generated = 0;
+      let skipped = 0;
+      const newRecords = [];
+      
+      for (let i = 0; i < classNames.length; i++) {
+        const fullName = classNames[i];
+        if (existingNames.has(fullName.toUpperCase())) {
+          skipped++;
+          continue;
+        }
+        
+        const studentId = prefix + "-" + String(startNum + generated).padStart(4, "0");
+        const loginCode = "DET-" + String(1000 + generated).slice(-4);
+        
+        const newRec = {
+          fullName,
+          email: generateEmailFromName(fullName),
+          studentId,
+          currentClass: className,
+          academicYear: "2025 / 2026",
+          loginCode,
+          updatedAt: stampIso(),
+          updatedBy: teacherLabel(),
+        };
+        
+        newRecords.push(newRec);
+        generated++;
+      }
+      
+      if (generated === 0) {
+        showToast("All students already exist in " + className + " (" + skipped + " skipped)");
+        return;
+      }
+      
+      const allRecords = [...existingRecords, ...newRecords];
+      saveStoredRecords(allRecords);
+      renderTable(allRecords);
+      populateAdminProfileStudents();
+      await syncRecordsToPortal(newRecords);
+      
+      statusEl.textContent = "Generated " + generated + " credentials for " + className + (skipped ? " (" + skipped + " skipped)" : "");
+      statusEl.style.color = "var(--crest-green)";
+      
+      showToast("Generated " + generated + " credentials for " + className);
+    });
+
+    document.getElementById("downloadClassExcelBtn").addEventListener("click", function () {
+      const className = document.getElementById("classGenerateClass").value;
+      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+      
+      if (!className) { showToast("Select a class first"); return; }
+      
+      const existingRecords = getStoredRecords();
+      const existingNames = new Set(existingRecords.filter((r) => r.currentClass === className).map((r) => r.fullName.toUpperCase()));
+      
+      const classNamesStr = quickGenerateNames[className] || "";
+      const classNames = classNamesStr.split("|").filter(Boolean);
+      
+      if (!classNames.length) {
+        showToast("No student names defined for " + className);
+        return;
+      }
+      
+      let csv = "Full Name,Email,Student ID,Class,Academic Year,Login Code\n";
+      let rowNum = startNum;
+      
+      classNames.forEach((fullName) => {
+        if (existingNames.has(fullName.toUpperCase())) return;
+        
+        const studentId = prefix + "-" + String(rowNum).padStart(4, "0");
+        const loginCode = "DET-" + String(1000 + rowNum - startNum).slice(-4);
+        const email = generateEmailFromName(fullName);
+        
+        csv += "\"" + fullName + "\",\"" + email + "\",\"" + studentId + "\",\"" + className + "\",\"2025 / 2026\",\"" + loginCode + "\"\n";
+        rowNum++;
+      });
+      
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = className.replace(/\s+/g, "_") + "_credentials.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      showToast("Downloaded credentials for " + className);
     });
 
     document.getElementById("adminProfileStudentName").addEventListener("input", loadAdminProfileRecord);
@@ -1619,17 +1803,13 @@
       const record = getRecordForTypedName();
       if (!record) { window.alert("Type a student's full name from the selected class."); return; }
       const termKey = document.getElementById("resultTerm").value;
-      const sba1 = Number(document.getElementById("resultSba1").value);
-      const sba2 = Number(document.getElementById("resultSba2").value);
-      const project = Number(document.getElementById("resultProject").value);
+      const classScore = Number(document.getElementById("resultClassScore").value);
       const examScore = Number(document.getElementById("resultExamScore").value);
-      const totalScore = Math.round((sba1 + sba2 + project + examScore * 0.5) * 100) / 100;
-      const grade = totalScore >= 90 ? "A" : totalScore >= 80 ? "B" : totalScore >= 70 ? "C" : totalScore >= 60 ? "D" : totalScore >= 50 ? "E" : "F";
+      const totalScore = Math.round((classScore + examScore) * 100) / 100;
+      const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
       const result = {
         subject: document.getElementById("resultSubject").value.trim(),
-        sba1,
-        sba2,
-        project,
+        classScore,
         examScore,
         totalScore,
         grade,
@@ -1656,7 +1836,7 @@
     function calculateGPASimple(results) {
       if (!results || !results.length) return null;
       const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
-      const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || (r.totalScore >= 90 ? "A" : r.totalScore >= 80 ? "B" : r.totalScore >= 70 ? "C" : r.totalScore >= 60 ? "D" : r.totalScore >= 50 ? "E" : "F")] || 0), 0);
+      const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || (r.totalScore >= 80 ? "A" : r.totalScore >= 70 ? "B" : r.totalScore >= 60 ? "C" : r.totalScore >= 50 ? "D" : r.totalScore >= 40 ? "E" : "F")] || 0), 0);
       return Math.round((totalPoints / results.length) * 100) / 100;
     }
 
@@ -1820,32 +2000,38 @@
       if (csv.length < 2) return;
       const headers = csv[0];
       const nameIdx = headers.findIndex((h) => h.toLowerCase().includes("name"));
+      const classIdx = headers.findIndex((h) => h.toLowerCase().includes("class"));
+      const studentIdIdx = headers.findIndex((h) => h.toLowerCase().includes("student id"));
       const subjectIdx = headers.findIndex((h) => h.toLowerCase().includes("subject"));
-      const examIdx = headers.findIndex((h) => h.toLowerCase().includes("exam"));
-      const sba1Idx = headers.findIndex((h) => h.toLowerCase().includes("sba 1"));
-      const sba2Idx = headers.findIndex((h) => h.toLowerCase().includes("sba 2"));
-      const projectIdx = headers.findIndex((h) => h.toLowerCase().includes("project"));
+      const classScoreIdx = headers.findIndex((h) => h.toLowerCase().includes("class score"));
+      const examScoreIdx = headers.findIndex((h) => h.toLowerCase().includes("exam score"));
       const existing = getStoredRecords();
       let matchedCount = 0;
       const resultsData = [];
       csv.slice(1).forEach((row) => {
         const studentName = row[nameIdx] || "";
+        const studentClass = row[classIdx] || "";
+        const studentId = row[studentIdIdx] || "";
         const subject = row[subjectIdx] || "";
-        const exam = row[examIdx] || "";
-        const sba1 = row[sba1Idx] || "";
-        const sba2 = row[sba2Idx] || "";
-        const project = row[projectIdx] || "";
-        const rec = existing.find((r) => r.name.toLowerCase() === studentName.toLowerCase());
+        const classScore = row[classScoreIdx] || "";
+        const examScore = row[examScoreIdx] || "";
+        let rec = null;
+        if (studentId) {
+          rec = existing.find((r) => String(r.studentId).toUpperCase() === String(studentId).toUpperCase());
+        }
+        if (!rec && studentName && studentClass) {
+          rec = existing.find((r) => r.fullName.toLowerCase() === studentName.toLowerCase() && r.currentClass === studentClass);
+        }
+        if (!rec && studentName) {
+          rec = existing.find((r) => r.fullName.toLowerCase() === studentName.toLowerCase());
+        }
         if (rec) {
           matchedCount++;
           resultsData.push({
-            studentName,
-            studentId: rec.id,
+            studentId: rec.studentId,
             subject,
-            exam,
-            sba1,
-            sba2,
-            project,
+            classScore,
+            examScore,
           });
         }
       });
@@ -1859,7 +2045,7 @@
   });
 
   document.getElementById("downloadResultsTemplate").addEventListener("click", function () {
-    const csv = "Student Name,Class,Student ID,Subject,SBA 1,SBA 2,Project,Exam Score\nJohn Doe,JHS 1,JHS1-1001,Mathematics,15,18,20,75\n";
+    const csv = "Student Name,Class,Student ID,Subject,Class Score,Exam Score\nJohn Doe,KG 1,KG1-0001,Mathematics,32,56\n";
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -2107,14 +2293,14 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
   function publishResultsToPortals(termKey, resultsData) {
     const existing = getStoredRecords();
     resultsData.forEach(rd => {
-      const rec = existing.find(r => r.id === rd.studentId);
+      const rec = existing.find(r => r.studentId === rd.studentId);
       if (rec) {
         const updates = Array.isArray(rec.updates) ? rec.updates : [];
         updates.push({
           id: "result-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5),
           title: termKey.replace("term", "Term ") + " " + rd.subject + " Result",
           category: "Results Update",
-          message: "Subject: " + rd.subject + " | Exam: " + rd.exam + " | SBA1: " + rd.sba1 + " | SBA2: " + rd.sba2 + " | Project: " + rd.project,
+          message: "Subject: " + rd.subject + " | Class: " + rd.classScore + " | Exam: " + rd.examScore,
           date: stampDate(),
           createdAt: stampIso(),
           createdBy: "Academics Admin",
@@ -2123,15 +2309,15 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
         rec.updates = updates;
         if (!rec.termResults) rec.termResults = {};
         if (!rec.termResults[termKey]) rec.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
-        const totalScore = Number(rd.sba1) + Number(rd.sba2) + Number(rd.project) + Number(rd.exam) * 0.5;
-        const grade = totalScore >= 90 ? "A" : totalScore >= 80 ? "B" : totalScore >= 70 ? "C" : totalScore >= 60 ? "D" : totalScore >= 50 ? "E" : "F";
+        const classScore = Number(rd.classScore);
+        const examScore = Number(rd.examScore);
+        const totalScore = Math.round((classScore + examScore) * 100) / 100;
+        const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
         rec.termResults[termKey].results.push({
           subject: rd.subject,
-          sba1: Number(rd.sba1),
-          sba2: Number(rd.sba2),
-          project: Number(rd.project),
-          examScore: Number(rd.exam),
-          totalScore: Math.round(totalScore * 100) / 100,
+          classScore,
+          examScore,
+          totalScore,
           grade,
         });
       }

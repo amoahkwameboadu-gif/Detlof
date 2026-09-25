@@ -2,64 +2,95 @@ const STORAGE_KEY = "detlof_bulk_import_codes";
 const PORTAL_API_BASE = "http://127.0.0.1:5000";
 let activeStudent = null;
 
+const ACADEMIC_YEAR = "2025 / 2026";
+
 const DEFAULT_RESULTS = [
-  { subject: "Mathematics", sba1: 9, sba2: 18, project: 18, examScore: 90, totalScore: 90, grade: "A", remark: "Excellent progress" },
-  { subject: "English Language", sba1: 8, sba2: 17, project: 17, examScore: 80, totalScore: 82, grade: "A", remark: "Very good" },
-  { subject: "Integrated Science", sba1: 8, sba2: 15, project: 16, examScore: 74, totalScore: 76, grade: "B", remark: "Keep it up" },
-  { subject: "Computing / ICT", sba1: 7, sba2: 15, project: 16, examScore: 74, totalScore: 75, grade: "B", remark: "Good work" },
-  { subject: "Social Studies", sba1: 7, sba2: 14, project: 15, examScore: 70, totalScore: 71, grade: "B", remark: "Good effort" },
+  { subject: "Mathematics", classScore: 32, examScore: 56, totalScore: 88, grade: "B", remark: "Very good" },
+  { subject: "English Language", classScore: 34, examScore: 60, totalScore: 94, grade: "A", remark: "Excellent progress" },
+  { subject: "Integrated Science", classScore: 30, examScore: 55, totalScore: 85, grade: "B", remark: "Keep it up" },
+  { subject: "Computing / ICT", classScore: 28, examScore: 50, totalScore: 78, grade: "C", remark: "Good work" },
+  { subject: "Social Studies", classScore: 30, examScore: 52, totalScore: 82, grade: "B", remark: "Good effort" },
 ];
 
 const DEFAULT_STUDENTS = [
-  {
-    fullName: "Eliana Ama Owusu",
-    email: "eliana.owusu@detlof.edu.gh",
-    studentId: "DPS-24-0187",
-    currentClass: "JHS 2",
-    academicYear: "2024 / 2025",
-    loginCode: "Detlof2025!",
-    promotionStatus: "promoted",
-    promotedClass: "JHS 3",
-    termResults: {
-      term1: {
-        results: DEFAULT_RESULTS.map((r) => ({ ...r })),
-        gpa: 3.4,
-        subjectCount: DEFAULT_RESULTS.length,
-      },
-      term2: {
-        results: DEFAULT_RESULTS.map((r) => ({ ...r })),
-        gpa: 3.6,
-        subjectCount: DEFAULT_RESULTS.length,
-      },
-      term3: {
-        results: DEFAULT_RESULTS.map((r) => ({ ...r })),
-        gpa: 3.5,
-        subjectCount: DEFAULT_RESULTS.length,
-      },
-    },
-  },
-  {
-    fullName: "Abena Osei",
-    email: "abena.osei@detlof.edu.gh",
-    studentId: "DPS-25-0301",
-    currentClass: "JHS 1",
-    academicYear: "2024 / 2025",
-    loginCode: "DET-3019",
-  },
-  {
-    fullName: "Kojo Antwi",
-    email: "kojo.antwi@detlof.edu.gh",
-    studentId: "DPS-25-0302",
-    currentClass: "Basic 5",
-    academicYear: "2024 / 2025",
-    loginCode: "DET-5028",
-  },
+  { fullName: "Kristen Denison Esoun", email: "kristen.esoun@detlof.edu.gh", studentId: "KG1-0001", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1001", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Comfort Ewonam Akakpoh", email: "comfort.akakpoh@detlof.edu.gh", studentId: "KG1-0002", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1002", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Marcus Kobby Prah", email: "marcus.prah@detlof.edu.gh", studentId: "KG1-0003", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1003", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Doxa Egyapa Kobina Prah", email: "doxa.prah@detlof.edu.gh", studentId: "KG1-0004", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1004", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Joseph Kudanu", email: "joseph.kudanu@detlof.edu.gh", studentId: "KG1-0005", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1005", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Jesse Odoop", email: "jesse.odom@detlof.edu.gh", studentId: "KG1-0006", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1006", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Elwy Xolarli Dzobo", email: "elwy.dzobo@detlof.edu.gh", studentId: "KG1-0007", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1007", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Nhyiraba Brena", email: "nhyiraba.brena@detlof.edu.gh", studentId: "KG1-0008", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1008", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Robert Anthony Esoun", email: "robert.esoun@detlof.edu.gh", studentId: "KG1-0009", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1009", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Elora Aaryn Amoah", email: "elora.amoah@detlof.edu.gh", studentId: "KG1-0010", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1010", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Fiifi Gabrab", email: "fiifi.gabrab@detlof.edu.gh", studentId: "KG1-0011", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1011", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Reuben Amosah", email: "reuben.amosah@detlof.edu.gh", studentId: "KG1-0012", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1012", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Warrick Oswald Ewua", email: "warrick.ewua@detlof.edu.gh", studentId: "KG1-0013", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1013", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Giovanna Anim", email: "giovanna.anim@detlof.edu.gh", studentId: "KG1-0014", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1014", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Gabriella Ammal", email: "gabriella.ammal@detlof.edu.gh", studentId: "KG1-0015", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1015", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Zipporah Agyapong", email: "zipporah.agyapong@detlof.edu.gh", studentId: "KG1-0016", currentClass: "KG 1", academicYear: ACADEMIC_YEAR, loginCode: "DET-1016", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term3: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  // KG 2 Boys
+  { fullName: "Napoleon Odehy Arkhrah", email: "napoleon.arkhrah@detlof.edu.gh", studentId: "KGB-0001", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2001", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Kelvin Kwakyir Entsua", email: "kelvin.entsua@detlof.edu.gh", studentId: "KGB-0002", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2002", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Edmund Fiifi Mensah", email: "edmund.mensah@detlof.edu.gh", studentId: "KGB-0003", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2003", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Archibald Nii A. Quayson", email: "archibald.quayson@detlof.edu.gh", studentId: "KGB-0004", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2004", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Eward Eloelo Agbetzi", email: "eward.agbetzi@detlof.edu.gh", studentId: "KGB-0005", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2005", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Justin Quansah", email: "justin.quansah@detlof.edu.gh", studentId: "KGB-0006", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2006", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Cyril T. Esselifie", email: "cyril.esselifie@detlof.edu.gh", studentId: "KGB-0007", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2007", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Azzam Nsiya Zilkifilu", email: "azzam.zilkifilu@detlof.edu.gh", studentId: "KGB-0008", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2008", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Benedict Borlabi Bortey", email: "benedict.bortey@detlof.edu.gh", studentId: "KGB-0009", currentClass: "KG 2 Boys", academicYear: ACADEMIC_YEAR, loginCode: "DET-2009", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  // KG 2 Girls
+  { fullName: "Geovanna K. Arthur", email: "geovanna.arthur@detlof.edu.gh", studentId: "KGG-0001", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2010", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Varnika A. Essel", email: "varnika.essel@detlof.edu.gh", studentId: "KGG-0002", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2011", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Dominion Dadzie", email: "dominion.dadzie@detlof.edu.gh", studentId: "KGG-0003", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2012", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Godjoy Asmah", email: "godjoy.asmah@detlof.edu.gh", studentId: "KGG-0004", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2013", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Godpraise Asmah", email: "godpraise.asmah@detlof.edu.gh", studentId: "KGG-0005", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2014", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Maya Britt Appiah", email: "maya.appiah@detlof.edu.gh", studentId: "KGG-0006", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2015", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Henritta Star Arthur", email: "henritta.arthur@detlof.edu.gh", studentId: "KGG-0007", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2016", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Patricia Dadzie", email: "patricia.dadzie@detlof.edu.gh", studentId: "KGG-0008", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2017", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Ama Anokyeewaa Adusei", email: "ama.adusei@detlof.edu.gh", studentId: "KGG-0009", currentClass: "KG 2 Girls", academicYear: ACADEMIC_YEAR, loginCode: "DET-2018", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) }, term2: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  // Nursery Two
+  { fullName: "Percis Woode Agyapong Laorian Boso", email: "percis.boso@detlof.edu.gh", studentId: "NUR2-0001", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3001", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Leon Kojo Afful", email: "leon.afful@detlof.edu.gh", studentId: "NUR2-0002", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3002", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Leo Baijon Quansah", email: "leo.quansah@detlof.edu.gh", studentId: "NUR2-0003", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3003", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Zana Akorful", email: "zana.akorful@detlof.edu.gh", studentId: "NUR2-0004", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3004", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Anthony", email: "anthony@detlof.edu.gh", studentId: "NUR2-0005", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3005", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Armstrong", email: "armstrong@detlof.edu.gh", studentId: "NUR2-0006", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3006", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Zaid Adamu", email: "zaid.adamu@detlof.edu.gh", studentId: "NUR2-0007", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3007", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Precious Essien", email: "precious.essien@detlof.edu.gh", studentId: "NUR2-0008", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3008", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Elsie Abakah Mensah", email: "elsie.mensah@detlof.edu.gh", studentId: "NUR2-0009", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3009", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Uzziah", email: "uzziah@detlof.edu.gh", studentId: "NUR2-0010", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3010", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Blessed", email: "blessed@detlof.edu.gh", studentId: "NUR2-0011", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3011", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Matthew Abakah", email: "matthew.abakah@detlof.edu.gh", studentId: "NUR2-0012", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3012", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Destiny Tay", email: "destiny.tay@detlof.edu.gh", studentId: "NUR2-0013", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3013", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Firdaus Baidoo", email: "firdaus.baidoo@detlof.edu.gh", studentId: "NUR2-0014", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3014", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Marcel Isibu Thompson", email: "marcel.thompson@detlof.edu.gh", studentId: "NUR2-0015", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3015", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Nhyira Edusei", email: "nhyira.edusei@detlof.edu.gh", studentId: "NUR2-0016", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3016", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Eliana Mensah", email: "eliana.mensah@detlof.edu.gh", studentId: "NUR2-0017", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3017", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Lara Mensah", email: "lara.mensah@detlof.edu.gh", studentId: "NUR2-0018", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3018", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Laurian Danso", email: "laurian.danso@detlof.edu.gh", studentId: "NUR2-0019", currentClass: "Nursery Two", academicYear: ACADEMIC_YEAR, loginCode: "DET-3019", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  // Creche
+  { fullName: "Fiifi Sowyer", email: "fiifi.sowyer@detlof.edu.gh", studentId: "CRE-0001", currentClass: "Creche", academicYear: ACADEMIC_YEAR, loginCode: "DET-4001", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Nessa Jesusline Afful", email: "nessa.afful@detlof.edu.gh", studentId: "CRE-0002", currentClass: "Creche", academicYear: ACADEMIC_YEAR, loginCode: "DET-4002", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Kofi Moses", email: "kofi.moses@detlof.edu.gh", studentId: "CRE-0003", currentClass: "Creche", academicYear: ACADEMIC_YEAR, loginCode: "DET-4003", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Obrenpong", email: "obrenpong@detlof.edu.gh", studentId: "CRE-0004", currentClass: "Creche", academicYear: ACADEMIC_YEAR, loginCode: "DET-4004", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Enyimyam", email: "enyiam@detlof.edu.gh", studentId: "CRE-0005", currentClass: "Creche", academicYear: ACADEMIC_YEAR, loginCode: "DET-4005", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  // Nursery One
+  { fullName: "Thiery O. Ankrah", email: "thiery.anrah@detlof.edu.gh", studentId: "NUR1-0001", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5001", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Ohemaa", email: "ohemaa@detlof.edu.gh", studentId: "NUR1-0002", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5002", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Duo La", email: "duola@detlof.edu.gh", studentId: "NUR1-0003", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5003", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Calista Obeng Appiah", email: "calista.appiah@detlof.edu.gh", studentId: "NUR1-0004", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5004", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Naa Agele", email: "naa.agele@detlof.edu.gh", studentId: "NUR1-0005", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5005", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Kendrick", email: "kendrick@detlof.edu.gh", studentId: "NUR1-0006", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5006", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Janet", email: "janet@detlof.edu.gh", studentId: "NUR1-0007", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5007", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Wisdom", email: "wisdom@detlof.edu.gh", studentId: "NUR1-0008", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5008", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
+  { fullName: "Zulaiha Ali", email: "zulaiha.ali@detlof.edu.gh", studentId: "NUR1-0009", currentClass: "Nursery One", academicYear: ACADEMIC_YEAR, loginCode: "DET-5009", termResults: { term1: { results: DEFAULT_RESULTS.map((r) => ({ ...r })) } } },
 ];
 
 const DEFAULT_ANNOUNCEMENTS = [
-  { title: "Mid-term assessments begin next Monday", category: "School Notice", date: "May 14, 2025", body: "Please check the assessment schedule and bring your required materials each day." },
-  { title: "Science has moved to the Science Lab", category: "Timetable Update", date: "May 9, 2025", body: "Wednesday science lessons will take place in the Science Lab from 10:30 AM." },
-  { title: "Term 2 results are now available", category: "Results Update", date: "May 7, 2025", body: "Your latest academic results have been published." },
+  { title: "Term 3 assessments begin next Monday", category: "School Notice", date: "May 14, 2026", body: "Please check the assessment schedule and bring your required materials each day." },
+  { title: "Science has moved to the Science Lab", category: "Timetable Update", date: "May 9, 2026", body: "Wednesday science lessons will take place in the Science Lab from 10:30 AM." },
+  { title: "Term 3 results are now available", category: "Results Update", date: "May 7, 2026", body: "Your latest academic results have been published." },
 ];
 
 const DAY_ORDER = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5 };
@@ -268,24 +299,29 @@ function sortedSchedule(schedule) {
 }
 
 function resultRow(result, showRemark) {
-  const sba1 = result.sba1 ?? 0;
-  const sba2 = result.sba2 ?? 0;
-  const project = result.project ?? 0;
-  const examContribution = Math.round((Number(result.examScore || 0) * 0.5) * 100) / 100;
+  const classScore = Number(result.classScore || 0);
+  const examScore = Number(result.examScore || 0);
+  const total = Math.round((classScore + examScore) * 100) / 100;
+  const grade = result.grade || calculateGrade(total);
   const remarkCell = showRemark
     ? "<td>" + escapeHtml(result.remark || "—") + (result.updatedBy ? "<br><small class='update-meta'>Updated by " + escapeHtml(result.updatedBy) + "</small>" : "") + "</td>"
     : "";
-  return "<tr><td><strong>" + escapeHtml(result.subject) + "</strong></td><td>" + escapeHtml(sba1) + "</td><td>" + escapeHtml(sba2) + "</td><td>" + escapeHtml(project) + "</td><td>" + escapeHtml(examContribution) + "</td><td><strong>" + escapeHtml(result.totalScore ?? "—") + "</strong></td><td><span class='grade-pill'>" + escapeHtml(result.grade || "—") + "</span></td>" + remarkCell + "</tr>";
+  return "<tr><td><strong>" + escapeHtml(result.subject) + "</strong></td><td>" + escapeHtml(classScore) + "</td><td>" + escapeHtml(examScore) + "</td><td><strong>" + escapeHtml(total) + "</strong></td><td><span class='grade-pill'>" + escapeHtml(grade) + "</span></td>" + remarkCell + "</tr>";
 }
 
 function calculateGrade(score) {
   const s = Number(score) || 0;
-  if (s >= 90) return "A";
-  if (s >= 80) return "B";
-  if (s >= 70) return "C";
-  if (s >= 60) return "D";
-  if (s >= 50) return "E";
+  if (s >= 80) return "A";
+  if (s >= 70) return "B";
+  if (s >= 60) return "C";
+  if (s >= 50) return "D";
+  if (s >= 40) return "E";
   return "F";
+}
+
+function gradeLabel(grade) {
+  const labels = { A: "Excellent", B: "Very Good", C: "Good", D: "Pass", E: "Pass/Needs Improvement", F: "Fail" };
+  return labels[grade] || grade;
 }
 
 function gradeToPoints(grade) {
@@ -295,12 +331,54 @@ function gradeToPoints(grade) {
 
 function calculateTermGPA(results) {
   if (!results || !results.length) return null;
-  const totalPoints = results.reduce((sum, result) => sum + gradeToPoints(result.grade || calculateGrade(result.totalScore)), 0);
+  const totalPoints = results.reduce((sum, result) => {
+    const total = Number(result.totalScore) || (Number(result.classScore || 0) + Number(result.examScore || 0));
+    return sum + gradeToPoints(result.grade || calculateGrade(total));
+  }, 0);
   return Math.round((totalPoints / results.length) * 100) / 100;
 }
 
+function calculateTermAverage(results) {
+  if (!results || !results.length) return null;
+  const sum = results.reduce((total, result) => total + (Number(result.totalScore) || (Number(result.classScore || 0) + Number(result.examScore || 0))), 0);
+  return Math.round((sum / results.length) * 100) / 100;
+}
+
+function annualSubjectAverage(student, subject) {
+  const allTerms = getAllTermResults(student);
+  const termKeys = Object.keys(allTerms).filter((k) => allTerms[k]);
+  if (termKeys.length < 3) return null;
+  const scores = termKeys.map((k) => {
+    const r = (allTerms[k].results || []).find((item) => item.subject === subject);
+    return r ? Number(r.totalScore) || (Number(r.classScore || 0) + Number(r.examScore || 0)) : 0;
+  });
+  if (scores.length < 3) return null;
+  return Math.round((scores.reduce((a, b) => a + b, 0) / 3) * 100) / 100;
+}
+
+function calculateAnnualAverage(student) {
+  const allTerms = getAllTermResults(student);
+  const termKeys = Object.keys(allTerms).filter((k) => allTerms[k]);
+  if (termKeys.length < 3) return null;
+  const subjects = new Set();
+  termKeys.forEach((k) => {
+    if (Array.isArray(allTerms[k].results)) {
+      allTerms[k].results.forEach((r) => subjects.add(r.subject));
+    }
+  });
+  const scores = [];
+  subjects.forEach((subject) => {
+    const avg = annualSubjectAverage(student, subject);
+    if (avg != null) scores.push(avg);
+  });
+  if (!scores.length || scores.length < subjects.size) return null;
+  return Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100;
+}
+
 const CLASS_PROGRESSION = [
-  "Creche", "KG", "Lower KG", "Upper KG",
+  "Creche", "Nursery One", "Nursery Two",
+  "KG 1", "KG 2 Boys", "KG 2 Girls",
+  "Lower KG", "Upper KG",
   "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6",
   "JHS 1", "JHS 2", "JHS 3",
   "SHS 1", "SHS 2", "SHS 3",
@@ -326,16 +404,7 @@ function getAllTermResults(student) {
 }
 
 function calculateCumulativeGPA(student) {
-  const allTerms = getAllTermResults(student);
-  const termGPAs = [];
-  Object.values(allTerms).forEach((termData) => {
-    if (termData && termData.gpa != null) {
-      termGPAs.push(termData.gpa);
-    }
-  });
-  if (!termGPAs.length) return null;
-  const cumulative = termGPAs.reduce((a, b) => a + b, 0) / termGPAs.length;
-  return Math.round(cumulative * 100) / 100;
+  return calculateAnnualAverage(student);
 }
 
 function getAllGradesForStudent(student) {
@@ -361,50 +430,62 @@ function getAllGradesForStudent(student) {
 }
 
 function calculatePromotionStatus(student) {
-  const { grades } = getAllGradesForStudent(student);
-  if (!grades.length) return null;
+  const allTerms = getAllTermResults(student);
+  const termKeys = Object.keys(allTerms).filter((k) => allTerms[k]);
+  if (termKeys.length < 3) return null;
 
-  const failingGrades = grades.filter((g) => g === "F" || g === "E");
-  const conditionalGrades = grades.filter((g) => g === "D" || g === "C");
+  const annualAverage = calculateAnnualAverage(student);
+  if (annualAverage == null) {
+    return "pending";
+  }
 
-  if (failingGrades.length >= 2) {
-    return "repeated";
+  if (annualAverage >= 50) {
+    return "promoted";
   }
-  if (failingGrades.length >= 1 || conditionalGrades.length > 0) {
-    return "on_try";
-  }
-  return "promoted";
+  return "not_promoted";
 }
 
-function getPromotionNoticeData(promotionStatus, cumulativeGPA, student) {
-  const nextCls = student.promotedClass || nextClass(student.currentClass || "JHS 2");
+function getPromotionNoticeData(promotionStatus, annualAverage, student) {
+  const nextCls = student.promotedClass || nextClass(student.currentClass || "KG 1");
+  const avg = annualAverage != null ? annualAverage + "%" : "—";
   const notices = {
     promoted: {
-      category: "🎓 Congratulations",
+      category: "Academic Year End Result",
       title: "Promoted to " + nextCls,
-      message: "Congratulations! You have been successfully promoted to " + nextCls + ". Your hard work and dedication have paid off. Keep up the excellent performance!",
-      gpaColor: "var(--crest-green)",
+      message: "Congratulations! You have been successfully promoted to " + nextCls + ". Your annual average is " + avg + ". Keep up the excellent performance!",
       borderColor: "var(--crest-green)",
       bgColor: "var(--crest-green-soft)",
     },
     on_try: {
-      category: "⚠️ Conditional Promotion",
+      category: "Conditional Promotion",
       title: "Promoted to " + nextCls + " (On Trial)",
-      message: "You have been promoted to " + nextCls + " on trial. Please focus on improving your grades in the areas where you scored D, C, E, or F. Consistent effort will secure your position.",
-      gpaColor: "var(--crest-gold)",
+      message: "You have been promoted to " + nextCls + " on trial. Your annual average is " + avg + ". Focus on improving your grades next year.",
+      borderColor: "var(--crest-gold)",
+      bgColor: "var(--crest-gold-soft)",
+    },
+    not_promoted: {
+      category: "Academic Decision",
+      title: "Not Promoted from " + (student.currentClass || "KG 1"),
+      message: "Based on your annual average of " + avg + ", you are required to repeat " + (student.currentClass || "KG 1") + " next year. Speak to your class teacher for a recovery plan.",
+      borderColor: "var(--crest-red)",
+      bgColor: "var(--crest-red-soft)",
+    },
+    pending: {
+      category: "In Progress",
+      title: "Results Pending",
+      message: "Your annual result is still being calculated. All three terms must be published before your final result is available.",
       borderColor: "var(--crest-gold)",
       bgColor: "var(--crest-gold-soft)",
     },
     repeated: {
-      category: "📚 Academic Decision",
-      title: "Required to Repeat " + (student.currentClass || "JHS 2"),
-      message: "Based on your academic performance, you are required to repeat " + (student.currentClass || "JHS 2") + " next year. You must focus on improving your F and E grades. Speak to your class teacher for a recovery plan.",
-      gpaColor: "var(--crest-red)",
+      category: "Academic Decision",
+      title: "Required to Repeat " + (student.currentClass || "KG 1"),
+      message: "Based on your academic performance, you are required to repeat " + (student.currentClass || "KG 1") + " next year. Speak to your class teacher for a recovery plan.",
       borderColor: "var(--crest-red)",
       bgColor: "var(--crest-red-soft)",
     },
   };
-  return notices[promotionStatus] || notices.on_try;
+  return notices[promotionStatus] || notices.pending;
 }
 
 function emptyRow(columns, message) {
@@ -431,15 +512,15 @@ function renderPortalForStudent(student) {
 
   document.getElementById("topbarStudentName").textContent = student.fullName;
   document.getElementById("topbarStudentMeta").textContent =
-    (student.currentClass || "JHS 2") + " · " + student.studentId + " · " + student.email;
+    (student.currentClass || "KG 1") + " · " + student.studentId + " · " + student.email;
   document.getElementById("dashWelcomeHeading").textContent =
     "Good morning, " + student.fullName.split(" ")[0] + "!";
-  document.getElementById("statClass").textContent = student.currentClass || "JHS 2";
+  document.getElementById("statClass").textContent = student.currentClass || "KG 1";
   document.getElementById("statStudentId").textContent = "Student ID: " + student.studentId;
 
   const allTerms = getAllTermResults(student);
   const termCount = Object.values(allTerms).filter((t) => t != null).length;
-  const cumulativeGPA = calculateCumulativeGPA(student);
+  const annualAverage = calculateCumulativeGPA(student);
   document.getElementById("dashTermInfo").textContent =
     termCount >= 3 ? "Third Term · Results Released" : termCount > 0 ? "Term " + termCount : "No Results Yet";
 
@@ -447,7 +528,7 @@ function renderPortalForStudent(student) {
   const promoIcon = document.getElementById("dashPromoIcon");
   const promoText = document.getElementById("dashPromoText");
   const promotionStatus = student.promotionStatus || calculatePromotionStatus(student);
-  if (termCount >= 3 && cumulativeGPA != null && promotionStatus) {
+  if (termCount >= 3 && annualAverage != null && promotionStatus) {
     const statuses = {
       promoted: { icon: "🎓", text: "Promoted to " + (student.promotedClass || nextClass(student.currentClass)), color: "var(--crest-green)", bg: "var(--crest-green-soft)" },
       on_try: { icon: "⚠️", text: "On Trial — Promoted", color: "var(--crest-gold)", bg: "var(--crest-gold-soft)" },
@@ -455,7 +536,7 @@ function renderPortalForStudent(student) {
     };
     const s = statuses[promotionStatus] || statuses.on_try;
     promoIcon.textContent = s.icon;
-    promoText.textContent = s.text + " · GPA " + cumulativeGPA;
+    promoText.textContent = s.text + " · GPA " + annualAverage;
     promoChip.style.color = s.color;
     promoChip.style.background = s.bg;
     promoChip.classList.remove("hidden");
@@ -473,13 +554,13 @@ function renderPortalForStudent(student) {
   document.getElementById("statAverage").nextElementSibling.textContent =
     average == null
       ? (termCount ? termCount + " Term(s) Published" : "No results published yet")
-      : (termCount ? "Cumulative GPA: " + cumulativeGPA + " · " + termCount + " Term(s)" : "Term 2 · " + studentResults.length + " Subjects Published");
+      : (termCount ? "Annual Average: " + annualAverage + "% · " + termCount + " Term(s)" : "Term 2 · " + studentResults.length + " Subjects Published");
 
   const displayedTerm = student.displayedTerm || "all";
   document.getElementById("resultsSubtitle").textContent =
-    student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "JHS 2") + " · Academic Year " + (student.academicYear || "2024 / 2025") + (displayedTerm !== "all" ? " · " + displayedTerm.replace("term", "Term ") : "");
+    student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "KG 1") + " · Academic Year " + (student.academicYear || ACADEMIC_YEAR) + (displayedTerm !== "all" ? " · " + displayedTerm.replace("term", "Term ") : "");
   document.getElementById("timetableSubtitle").textContent =
-    "Current Class Timetable for " + (student.currentClass || "JHS 2") + " · 2024 / 2025";
+    "Current Class Timetable for " + (student.currentClass || "KG 1") + " · " + ACADEMIC_YEAR;
 
   const dashResults = document.getElementById("dashResultsBody");
   const fullResults = document.getElementById("fullResultsBody");
@@ -523,18 +604,18 @@ function renderPortalForStudent(student) {
 
   const promoBadge = document.getElementById("resultsPromoBadge");
   promotionStatus = student.promotionStatus || calculatePromotionStatus(student);
-  if (termCount >= 3 && cumulativeGPA != null && promotionStatus) {
+  if (termCount >= 3 && annualAverage != null && promotionStatus) {
     if (promoBadge) promoBadge.classList.remove("hidden");
     const promoIcon = promoNoticeInner.querySelector(".promo-icon");
     if (promoIcon) {
-      const iconMap = { promoted: "🎓", on_try: "⚠️", repeated: "📚" };
+      const iconMap = { promoted: "🎓", on_try: "⚠️", repeated: "📚", not_promoted: "📚", pending: "⏳" };
       promoIcon.textContent = iconMap[promotionStatus] || "🎓";
     }
-    const noticeData = getPromotionNoticeData(promotionStatus, cumulativeGPA, student);
+    const noticeData = getPromotionNoticeData(promotionStatus, annualAverage, student);
     promoCategory.textContent = noticeData.category;
     promoTitle.textContent = noticeData.title;
     promoMessage.textContent = noticeData.message;
-    promoGPA.textContent = "GPA " + cumulativeGPA;
+    promoGPA.textContent = "GPA " + annualAverage;
     promoNotice.style.borderLeft = "6px solid " + noticeData.borderColor;
     promoNotice.style.background = noticeData.bgColor;
     promoNotice.classList.remove("hidden");
@@ -545,7 +626,7 @@ function renderPortalForStudent(student) {
 
   const cumulativeBody = document.getElementById("cumulativeSummaryBody");
   cumulativeBody.innerHTML = "";
-  if (termCount > 0 || cumulativeGPA != null) {
+  if (termCount > 0 || annualAverage != null) {
     const termLabels = { term1: "Term 1", term2: "Term 2", term3: "Term 3" };
     Object.keys(termLabels).forEach((termKey) => {
       const termData = allTerms[termKey];
@@ -570,17 +651,17 @@ function renderPortalForStudent(student) {
     const totalDistStr = Object.keys(totalDist).sort().map((g) => g + "×" + totalDist[g]).join(", ");
     const cumulativeAvg = totalGrades.length ? Math.round(totalScores.reduce((s, sc) => s + sc, 0) / totalScores.length) : null;
     cumulativeBody.innerHTML +=
-      "<tr style='border-top:2px solid var(--line);'><td><strong>Cumulative</strong></td><td>" + totalGrades.length + "</td><td><strong>" + (cumulativeAvg != null ? cumulativeAvg + "%" : "—") + "</strong></td><td><strong>" + (cumulativeGPA != null ? cumulativeGPA : "—") + "</strong></td><td><strong>" + (totalDistStr || "—") + "</strong></td></tr>";
+      "<tr style='border-top:2px solid var(--line);'><td><strong>Cumulative</strong></td><td>" + totalGrades.length + "</td><td><strong>" + (cumulativeAvg != null ? cumulativeAvg + "%" : "—") + "</strong></td><td><strong>" + (annualAverage != null ? annualAverage : "—") + "</strong></td><td><strong>" + (totalDistStr || "—") + "</strong></td></tr>";
   } else {
     cumulativeBody.innerHTML = emptyRow(5, "No term results have been published yet.");
   }
 
   const defaultSchedule = [
-    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (student.currentClass || "JHS 2") + " Room" },
-    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (student.currentClass || "JHS 2") + " Room" },
-    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: "Science Lab" },
+    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (student.currentClass || "KG 1") + " Room" },
+    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (student.currentClass || "KG 1") + " Room" },
+    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: (student.currentClass || "KG 1") + " Room" },
     { day: "Wednesday", time: "10:30 – 11:30", subject: "Computing / ICT", teacher: "Mr. Kofi", venue: "ICT Lab" },
-    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (student.currentClass || "JHS 2") + " Room" },
+    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (student.currentClass || "KG 1") + " Room" },
   ];
   const hasTimetable = Array.isArray(student.timetable);
   const schedule = hasTimetable ? sortedSchedule(student.timetable) : defaultSchedule;
@@ -777,8 +858,8 @@ function downloadResultsPDF() {
   html += '</style></head><body>';
   html += '<div class="header"><img class="logo" src="detlofcreast.svg" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
   html += '<div class="subtitle">Student Academic Results Report</div>';
-  html += '<div class="info">' + escapeHtml(activeStudent.fullName) + ' · ' + escapeHtml(activeStudent.studentId) + ' · ' + escapeHtml(activeStudent.currentClass || "JHS 2") + '</div>';
-  html += '<div class="info">Academic Year: ' + escapeHtml(activeStudent.academicYear || "2024 / 2025") + '</div></div>';
+  html += '<div class="info">' + escapeHtml(activeStudent.fullName) + ' · ' + escapeHtml(activeStudent.studentId) + ' · ' + escapeHtml(activeStudent.currentClass || "KG 1") + '</div>';
+  html += '<div class="info">Academic Year: ' + escapeHtml(activeStudent.academicYear || ACADEMIC_YEAR) + '</div></div>';
 
   const hasTermResults = Object.values(allTerms).some((t) => t != null);
   if (displayedTerm !== "all" && allTerms[displayedTerm]) {
@@ -786,7 +867,7 @@ function downloadResultsPDF() {
     const label = { term1: "First Term", term2: "Second Term", term3: "Third Term" }[displayedTerm];
     html += '<h2 style="color:#560f75;font-size:18px;margin:20px 0 10px;">' + label + ' Results</h2>';
     html += renderResultsTableHTML(termData.results || []);
-    html += renderGPABox(calculateTermGPASimple(termData.results || []), termData.results || [], label);
+    html += renderTermSummaryBox(termData.results || [], label);
   } else if (hasTermResults) {
     const termLabels = { term1: "First Term", term2: "Second Term", term3: "Third Term" };
     Object.keys(termLabels).forEach((tk) => {
@@ -794,16 +875,16 @@ function downloadResultsPDF() {
       if (td && Array.isArray(td.results)) {
         html += '<h2 style="color:#560f75;font-size:18px;margin:20px 0 10px;">' + termLabels[tk] + ' Results</h2>';
         html += renderResultsTableHTML(td.results);
-        html += renderGPABox(td.gpa != null ? td.gpa : calculateTermGPASimple(td.results), td.results, termLabels[tk]);
+        html += renderTermSummaryBox(td.results, termLabels[tk]);
       }
     });
   }
 
-  const cumulativeGPA = calculateCumulativeGPA(activeStudent);
-  if (cumulativeGPA != null) {
+  const annualAverage = calculateCumulativeGPA(activeStudent);
+  if (annualAverage != null) {
     const promoStatus = activeStudent.promotionStatus || calculatePromotionStatus(activeStudent);
-    const promoText = { promoted: "Promoted", on_try: "On Trial", repeated: "Repeating" }[promoStatus] || "";
-    html += '<div class="gpa-box"><strong>Cumulative GPA: ' + cumulativeGPA + '</strong>';
+    const promoText = { promoted: "Promoted", on_try: "On Trial", repeated: "Repeating", not_promoted: "Not Promoted", pending: "" }[promoStatus] || "";
+    html += '<div class="gpa-box"><strong>Annual Average: ' + annualAverage + '%</strong>';
     if (promoText) html += ' · <span class="promo-badge" style="background:#e5f3ea;color:#3f7d55;">' + promoText + '</span>';
     html += '</div>';
   } else {
@@ -825,48 +906,47 @@ function downloadResultsPDF() {
 }
 
 function renderResultsTableHTML(results) {
-  let html = '<table><thead><tr><th>Subject</th><th>SBA 1</th><th>SBA 2</th><th>Project</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>';
+  let html = '<table><thead><tr><th>Subject</th><th>Class Score</th><th>Exam Score</th><th>Total</th><th>Grade</th></tr></thead><tbody>';
   results.forEach((r) => {
-    html += "<tr><td><strong>" + escapeHtml(r.subject) + "</strong></td><td>" + escapeHtml(r.sba1) + "</td><td>" + escapeHtml(r.sba2) + "</td><td>" + escapeHtml(r.project) + "</td><td>" + escapeHtml(Math.round((Number(r.examScore || 0) * 0.5) * 100) / 100) + "</td><td><strong>" + escapeHtml(r.totalScore) + "</strong></td><td>" + gradePillHTML(r.grade || calculateGrade(r.totalScore)) + "</td></tr>";
+    const classScore = Number(r.classScore || 0);
+    const examScore = Number(r.examScore || 0);
+    const total = Math.round((classScore + examScore) * 100) / 100;
+    const grade = r.grade || calculateGrade(total);
+    html += "<tr><td><strong>" + escapeHtml(r.subject) + "</strong></td><td>" + escapeHtml(classScore) + "</td><td>" + escapeHtml(examScore) + "</td><td><strong>" + escapeHtml(total) + "</strong></td><td>" + gradePillHTML(grade) + "</td></tr>";
   });
   html += "</tbody></table>";
   return html;
 }
 
+function renderTermSummaryBox(results, label) {
+  if (!results || !results.length) return "";
+  const avg = calculateTermAverage(results);
+  const gpa = calculateTermGPA(results);
+  let dist = {};
+  results.forEach((r) => {
+    const g = r.grade || calculateGrade(r.totalScore || (Number(r.classScore || 0) + Number(r.examScore || 0)));
+    dist[g] = (dist[g] || 0) + 1;
+  });
+  const distStr = Object.keys(dist).sort().map((g) => g + "×" + dist[g]).join(", ");
+  return '<div class="gpa-box"><strong>' + label + ' Average: ' + (avg != null ? avg + "%" : "—") + '</strong> · <strong>GPA: ' + (gpa != null ? gpa : "—") + '</strong> · <span style="color:#75697a;">' + distStr + '</span></div>';
+}
+
 function gradePillHTML(grade) {
-  const colors = { A: "#e5f3ea", B: "#fff3c4", C: "#ffe4ea", D: "#f3e7f7" };
-  const textColors = { A: "#3f7d55", B: "#b87a00", C: "#d9003b", D: "#560f75" };
+  const colors = { A: "#e5f3ea", B: "#fff3c4", C: "#ffe4ea", D: "#f3e7f7", E: "#ffe0e0", F: "#ffcccc" };
+  const textColors = { A: "#3f7d55", B: "#b87a00", C: "#d9003b", D: "#560f75", E: "#b00", F: "#c00" };
   const bg = colors[grade] || "#ffe4ea";
   const tc = textColors[grade] || "#d9003b";
   return '<span class="grade-pill" style="background:' + bg + ';color:' + tc + ';">' + escapeHtml(grade) + '</span>';
 }
 
-function calculateTermGPASimple(results) {
-  if (!results || !results.length) return null;
-  const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
-  const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || calculateGrade(r.totalScore)] || 0), 0);
-  return Math.round((totalPoints / results.length) * 100) / 100;
-}
-
-function renderGPABox(gpa, results, label) {
-  if (gpa == null) return "";
-  let dist = {};
-  results.forEach((r) => {
-    const g = r.grade || calculateGrade(r.totalScore);
-    dist[g] = (dist[g] || 0) + 1;
-  });
-  const distStr = Object.keys(dist).sort().map((g) => g + "×" + dist[g]).join(", ");
-  return '<div class="gpa-box"><strong>' + label + ' GPA: ' + gpa + '</strong> · <span style="color:#75697a;">' + distStr + '</span></div>';
-}
-
 function downloadTimetablePDF() {
   if (!activeStudent) { window.alert("Please sign in to download your timetable."); return; }
   const defaultSchedule = [
-    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (activeStudent.currentClass || "JHS 2") + " Room" },
-    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (activeStudent.currentClass || "JHS 2") + " Room" },
-    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: "Science Lab" },
+    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (activeStudent.currentClass || "KG 1") + " Room" },
+    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (activeStudent.currentClass || "KG 1") + " Room" },
+    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: (activeStudent.currentClass || "KG 1") + " Room" },
     { day: "Wednesday", time: "10:30 – 11:30", subject: "Computing / ICT", teacher: "Mr. Kofi", venue: "ICT Lab" },
-    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (activeStudent.currentClass || "JHS 2") + " Room" },
+    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (activeStudent.currentClass || "KG 1") + " Room" },
   ];
   const schedule = Array.isArray(activeStudent.timetable) ? sortedSchedule(activeStudent.timetable) : defaultSchedule;
 
@@ -883,7 +963,7 @@ function downloadTimetablePDF() {
   html += '</style></head><body>';
   html += '<div class="header"><img class="logo" src="detlofcreast.svg" alt="Detlof Crest"><h1>DETLOF PREPARATORY SCHOOL</h1>';
   html += '<div class="subtitle">Weekly Class Timetable</div>';
-  html += '<div class="info">' + escapeHtml(activeStudent.currentClass || "JHS 2") + ' · ' + escapeHtml(activeStudent.academicYear || "2024 / 2025") + '</div>';
+  html += '<div class="info">' + escapeHtml(activeStudent.currentClass || "KG 1") + ' · ' + escapeHtml(activeStudent.academicYear || ACADEMIC_YEAR) + '</div>';
   html += '<div class="info">' + escapeHtml(activeStudent.fullName) + ' · ' + escapeHtml(activeStudent.studentId) + '</div></div>';
   html += '<table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Teacher</th><th>Venue</th></tr></thead><tbody>';
   if (schedule.length) {
