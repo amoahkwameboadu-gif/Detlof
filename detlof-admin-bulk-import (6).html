@@ -765,6 +765,11 @@
             <button type="button" class="btn btn-gold" id="downloadClassCredentialsBtn" style="width:100%;justify-content:center;">⬇ Download Excel for Class</button>
             <div id="downloadClassStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
           </form>
+          <hr style="margin:18px 0;border-color:var(--line);" />
+          <h3 style="margin:0 0 8px;font-size:13px;">Students in Selected Class</h3>
+          <div id="downloadClassStudentList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;background:#fff;">
+            <p style="color:var(--muted);text-align:center;padding:20px;">Select a class above to view students.</p>
+          </div>
         </section>
 
         <section class="card admin-profile-section" id="adminProfileSection" style="margin-bottom:18px;">
@@ -1732,6 +1737,33 @@
       URL.revokeObjectURL(url);
       
       showToast("Downloaded " + classRecords.length + " existing credentials for " + className);
+    });
+
+    document.getElementById("downloadClassSelect").addEventListener("change", function () {
+      const className = this.value;
+      const listEl = document.getElementById("downloadClassStudentList");
+      if (!className) {
+        listEl.innerHTML = "<p style='color:var(--muted);text-align:center;padding:20px;'>Select a class above to view students.</p>";
+        return;
+      }
+      const existingRecords = getStoredRecords();
+      const classRecords = existingRecords.filter((r) => r.currentClass === className);
+      if (!classRecords.length) {
+        listEl.innerHTML = "<p style='color:var(--muted);text-align:center;padding:20px;'>No students found in " + escapeHtml(className) + ".</p>";
+        return;
+      }
+      listEl.innerHTML = classRecords.map((rec) => {
+        const csv = "Full Name,Email,Student ID,Class,Academic Year,Login Code\n\"" + rec.fullName + "\",\"" + rec.email + "\",\"" + rec.studentId + "\",\"" + rec.currentClass + "\",\"" + rec.academicYear + "\",\"" + rec.loginCode + "\"";
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        return "<div style='display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid var(--line);'>" +
+          "<div style='flex:1;'>" +
+            "<strong>" + escapeHtml(rec.fullName) + "</strong><br>" +
+            "<small style='color:var(--muted);'>" + escapeHtml(rec.studentId) + " · " + escapeHtml(rec.email) + "</small>" +
+          "</div>" +
+          "<a href='" + url + "' download='" + escapeHtml(rec.studentId) + "_credentials.csv' class='btn btn-teal' style='padding:6px 10px;font-size:11px;'>⬇ Download</a>" +
+        "</div>";
+      }).join("");
     });
 
     document.getElementById("downloadClassCredentialsBtn").addEventListener("click", function () {

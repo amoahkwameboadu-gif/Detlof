@@ -983,6 +983,11 @@ function downloadTimetablePDF() {
   setTimeout(function () { printWindow.print(); }, 500);
 }
 
+function downloadMyTimetable() {
+  if (!activeStudent) { window.alert("Please sign in to download your timetable."); return; }
+  downloadTimetablePDF();
+}
+
 window.addEventListener("storage", (event) => {
   if (event.key === STORAGE_KEY && activeStudent) {
     const updated = getSyncedStudents().find(
