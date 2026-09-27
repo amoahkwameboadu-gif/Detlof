@@ -14,7 +14,10 @@ How to run it:
   1. Install Flask:   pip install flask
   2. Start the server: python server.py
   3. Open your browser to: http://127.0.0.1:5000
-     (it serves detlof-student-portal.html, style.css, script.js and the admin page for you)
+     /        -> index.html (landing page with both sign-in buttons)
+     /portal  -> detlof-student-portal.html
+     /admin   -> detlof-admin-bulk-import (6).html
+     style.css, script.js, the crest and every other file are served too.
 """
 
 from flask import Flask, jsonify, request, send_from_directory
@@ -22,6 +25,9 @@ import os
 import json
 
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_data.json")
+LANDING_PAGE = "index.html"
+PORTAL_PAGE = "detlof-student-portal.html"
+ADMIN_PAGE = "detlof-admin-bulk-import (6).html"
 app = Flask(__name__, static_folder=".", static_url_path="")
 
 
@@ -202,7 +208,20 @@ def merge_student(incoming):
 
 @app.route("/")
 def home():
-    return send_from_directory(".", "detlof-student-portal.html")
+    """Front door: the branded landing page, same as static hosting serves for /."""
+    return send_from_directory(".", LANDING_PAGE)
+
+
+@app.route("/portal")
+def portal():
+    """Short alias for the student portal sign-in page."""
+    return send_from_directory(".", PORTAL_PAGE)
+
+
+@app.route("/admin")
+def admin():
+    """Short alias for the admin / bulk-import page (its filename contains a space)."""
+    return send_from_directory(".", ADMIN_PAGE)
 
 
 @app.route("/api/auth/login", methods=["POST"])
