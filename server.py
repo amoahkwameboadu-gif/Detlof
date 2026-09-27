@@ -125,8 +125,8 @@ def load_students():
                 data = json.load(handle)
             if isinstance(data, list):
                 return [normalize_student(dict(item)) for item in data if isinstance(item, dict)]
-        except Exception:
-            pass
+        except (OSError, ValueError) as error:
+            print("WARNING: could not read " + DATA_FILE + ": " + str(error) + " — using the built-in list.")
     return [normalize_student(dict(s)) for s in DEFAULT_STUDENTS]
 
 
@@ -134,8 +134,9 @@ def save_students():
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as handle:
             json.dump(STUDENTS, handle, indent=2, ensure_ascii=False)
-    except Exception:
-        pass
+    except OSError as error:
+        # Keep serving even when the data file cannot be written (read-only disk etc.).
+        print("WARNING: could not save " + DATA_FILE + ": " + str(error))
 
 
 
@@ -182,6 +183,11 @@ def merge_student(incoming):
             if not incoming_whatsapp and existing_whatsapp:
                 incoming["whatsappNumber"] = existing_whatsapp
                 incoming["profileWhatsApp"] = existing_whatsapp
+            # Never blank out the fields a student signs in with when a partial
+            # record is synced from the admin page.
+            for field in ("fullName", "email", "loginCode", "currentClass", "academicYear"):
+                if not str(incoming.get(field) or "").strip() and str(student.get(field) or "").strip():
+                    incoming[field] = student[field]
             student.update(incoming)
             student["studentId"] = sid
             return student
@@ -209,6 +215,11 @@ def login():
     student = find_student(email, student_id, password)
     if student:
         return jsonify({"student": student})
+
+    # Without credentials there is nothing to verify — an empty payload used to slip
+    # through the synced-record branch below and create a blank student record.
+    if not (email and student_id and password):
+        return jsonify({"error": "Invalid email, student ID, or login code."}), 401
 
     synced = normalize_student(data.get("syncedRecord"))
     if (
@@ -262,4 +273,9 @@ def announcements():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Bind on every interface so the portal can be reached from another machine /
+    # proxied preview, and keep the reloader off unless debugging is asked for.
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "5000"))
+    debug = os.environ.get("FLASK_DEBUG", "0").lower() in ("1", "true", "yes")
+    app.run(host=host, port=port, debug=debug)

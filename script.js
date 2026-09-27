@@ -1,5 +1,9 @@
 const STORAGE_KEY = "detlof_bulk_import_codes";
-const PORTAL_API_BASE = "http://127.0.0.1:5000";
+const IS_FILE_PROTOCOL = typeof window !== "undefined" && !!window.location && window.location.protocol === "file:";
+// Served over http(s) the API lives on the same origin (server.py serves both the pages
+// and /api/*), so a relative path is enough. Only a page opened straight from disk needs
+// to reach out to the local Flask backend by absolute URL.
+const PORTAL_API_BASE = IS_FILE_PROTOCOL ? "http://127.0.0.1:5000" : "";
 let activeStudent = null;
 
 const ACADEMIC_YEAR = "2025 / 2026";
@@ -95,6 +99,56 @@ const DEFAULT_ANNOUNCEMENTS = [
 
 const DAY_ORDER = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5 };
 
+// Inline SVG path data used for the promotion status icons (the markup ships SVG icons,
+// so we swap the path instead of writing emoji text into an <svg> element).
+const STATUS_ICON_PATHS = {
+  promoted: "M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z",
+  on_try: "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z",
+  repeated: "M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z",
+  not_promoted: "M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z",
+  pending: "M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z",
+};
+
+function byId(id) {
+  return document.getElementById(id);
+}
+
+function setText(id, text) {
+  const element = byId(id);
+  if (element) element.textContent = text;
+  return element;
+}
+
+function setAdjacentText(id, text) {
+  const element = byId(id);
+  const target = element ? element.nextElementSibling : null;
+  if (target) target.textContent = text;
+  return target;
+}
+
+function setValue(id, value) {
+  const element = byId(id);
+  if (element) element.value = value == null ? "" : value;
+  return element;
+}
+
+function setHtml(id, html) {
+  const element = byId(id);
+  if (element) element.innerHTML = html;
+  return element;
+}
+
+function setStatusIcon(target, status) {
+  if (!target) return;
+  const svg = typeof target.tagName === "string" && target.tagName.toLowerCase() === "svg"
+    ? target
+    : target.querySelector("svg");
+  if (!svg) return;
+  const path = svg.querySelector("path");
+  if (path) path.setAttribute("d", STATUS_ICON_PATHS[status] || STATUS_ICON_PATHS.promoted);
+  svg.setAttribute("aria-label", String(status || "status").replace(/_/g, " "));
+}
+
 function escapeHtml(value) {
   return String(value == null ? "" : value)
     .replaceAll("&", "&amp;")
@@ -142,11 +196,9 @@ function mergeStudentData(existing, incoming) {
 }
 
 async function fetchPortalApi(path, options = {}) {
-  const urls = [path];
-  const backendUrl = PORTAL_API_BASE + path;
-  if (window.location.href.indexOf(PORTAL_API_BASE) !== 0) {
-    urls.push(backendUrl);
-  }
+  // Same-origin first (works when server.py serves the page); the absolute local backend
+  // URL is only tried for pages opened from disk.
+  const urls = PORTAL_API_BASE ? [PORTAL_API_BASE + path, path] : [path];
   let lastResponse = null;
   for (const url of urls) {
     try {
@@ -154,15 +206,17 @@ async function fetchPortalApi(path, options = {}) {
       if (response.ok || response.status === 401) return response;
       lastResponse = response;
     } catch {
+      // Backend unreachable (static hosting / offline): fall through to the local records.
     }
   }
   return lastResponse;
 }
 
 function findSyncedStudent(credentials) {
-  const email = String(credentials.email || "").trim().toLowerCase();
-  const studentId = String(credentials.studentId || "").trim().toUpperCase();
-  const loginCode = String(credentials.loginCode || credentials.password || "").trim();
+  const source = credentials || {};
+  const email = String(source.email || "").trim().toLowerCase();
+  const studentId = String(source.studentId || "").trim().toUpperCase();
+  const loginCode = String(source.loginCode || source.password || "").trim();
   return getSyncedStudents().find((student) =>
     String(student.email || "").trim().toLowerCase() === email &&
     String(student.studentId || "").trim().toUpperCase() === studentId &&
@@ -209,18 +263,24 @@ async function resolveStudentFromCredentials(credentials, allowLocal = true) {
 }
 
 function studentFromUrlParams(params) {
-  return normalizeStudent({
-    fullName: params.get("fullName") || "Detlof Student",
+  // Only pick up the values actually present in the URL: a blanket default here would
+  // overwrite the real record (class, year, …) when it is merged in.
+  const raw = {
+    fullName: params.get("fullName"),
     email: params.get("email"),
     studentId: params.get("studentId"),
     loginCode: params.get("code"),
-    currentClass: params.get("class") || "JHS 2",
-    academicYear: params.get("year") || "2024 / 2025",
-    parentPhone: params.get("parentPhone") || params.get("profileParentPhone") || "",
-    profileParentPhone: params.get("profileParentPhone") || params.get("parentPhone") || "",
-    whatsappNumber: params.get("whatsappNumber") || params.get("profileWhatsApp") || "",
-    profileWhatsApp: params.get("profileWhatsApp") || params.get("whatsappNumber") || "",
+    currentClass: params.get("class"),
+    academicYear: params.get("year"),
+    parentPhone: params.get("parentPhone") || params.get("profileParentPhone"),
+    whatsappNumber: params.get("whatsappNumber") || params.get("profileWhatsApp"),
+  };
+  const fromUrl = {};
+  Object.keys(raw).forEach((key) => {
+    const value = raw[key];
+    if (value != null && String(value).trim() !== "") fromUrl[key] = String(value).trim();
   });
+  return normalizeStudent(fromUrl);
 }
 
 async function resolveStudentFromUrlParams(params) {
@@ -231,9 +291,15 @@ async function resolveStudentFromUrlParams(params) {
   };
   const remoteStudent = await resolveStudentFromCredentials(credentials, false);
   if (remoteStudent) return remoteStudent;
+  const fromUrl = studentFromUrlParams(params);
   const localStudent = findSyncedStudent(credentials);
-  if (localStudent) return mergeStudentData(localStudent, studentFromUrlParams(params));
-  return studentFromUrlParams(params);
+  if (localStudent) return mergeStudentData(localStudent, fromUrl);
+  return normalizeStudent({
+    fullName: "Detlof Student",
+    currentClass: "KG 1",
+    academicYear: ACADEMIC_YEAR,
+    ...fromUrl,
+  });
 }
 
 function getSyncedStudents() {
@@ -263,32 +329,46 @@ function saveSyncedStudents() {
 }
 
 function showForgotNote() {
-  const box = document.getElementById("loginInfoBox");
+  const box = byId("loginInfoBox");
+  if (!box) return;
   box.textContent = "Forgot your code? Ask the school office for your Login Code / PIN.";
   box.classList.remove("hidden");
 }
 
 function togglePasswordVisibility() {
-  const passwordInput = document.getElementById("loginPassword");
-  const toggleButton = document.getElementById("togglePasswordBtn");
+  const passwordInput = byId("loginPassword");
+  const toggleButton = byId("togglePasswordBtn");
+  if (!passwordInput) return;
   const isHidden = passwordInput.type === "password";
   passwordInput.type = isHidden ? "text" : "password";
-  toggleButton.textContent = isHidden ? "Hide" : "Show";
-  toggleButton.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+  if (toggleButton) {
+    toggleButton.textContent = isHidden ? "Hide" : "Show";
+    toggleButton.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+  }
 }
 
 function fillCredentials(student) {
-  const credentials = normalizeStudent(student);
-  document.getElementById("loginEmail").value = credentials.email;
-  document.getElementById("loginStudentId").value = credentials.studentId;
-  document.getElementById("loginPassword").value = credentials.loginCode;
-  document.getElementById("loginPassword").type = "password";
-  document.getElementById("togglePasswordBtn").textContent = "Show";
-  document.getElementById("togglePasswordBtn").setAttribute("aria-label", "Show password");
-  const info = document.getElementById("loginInfoBox");
-  info.textContent = "Loaded credentials for " + student.fullName + " (" + student.studentId + "). Click Sign in to Portal.";
-  info.classList.remove("hidden");
-  document.getElementById("loginErrorBox").classList.add("hidden");
+  if (!student) return;
+  const credentials = normalizeStudent(student) || {};
+  setValue("loginEmail", credentials.email || "");
+  setValue("loginStudentId", credentials.studentId || "");
+  const passwordInput = byId("loginPassword");
+  if (passwordInput) {
+    passwordInput.value = credentials.loginCode || "";
+    passwordInput.type = "password";
+  }
+  const toggleButton = byId("togglePasswordBtn");
+  if (toggleButton) {
+    toggleButton.textContent = "Show";
+    toggleButton.setAttribute("aria-label", "Show password");
+  }
+  const info = byId("loginInfoBox");
+  if (info) {
+    info.textContent = "Loaded credentials for " + (student.fullName || "this student") + " (" + (student.studentId || "—") + "). Click Sign in to Portal.";
+    info.classList.remove("hidden");
+  }
+  const errorBox = byId("loginErrorBox");
+  if (errorBox) errorBox.classList.add("hidden");
 }
 
 function sortedSchedule(schedule) {
@@ -384,9 +464,16 @@ const CLASS_PROGRESSION = [
   "SHS 1", "SHS 2", "SHS 3",
 ];
 
+// Promotions that the plain list order cannot express: KG 2 is split into Boys/Girls,
+// so a KG 1 pupil moves up to the "KG 2" year group, and both KG 2 streams move on to
+// Basic 1 rather than into each other.
+const NEXT_CLASS_OVERRIDES = { "KG 1": "KG 2", "KG 2 Boys": "Basic 1", "KG 2 Girls": "Basic 1" };
+
 function nextClass(currentClass) {
-  const idx = CLASS_PROGRESSION.indexOf(currentClass);
-  return idx >= 0 && idx < CLASS_PROGRESSION.length - 1 ? CLASS_PROGRESSION[idx + 1] : currentClass;
+  const name = String(currentClass || "").trim();
+  if (NEXT_CLASS_OVERRIDES[name]) return NEXT_CLASS_OVERRIDES[name];
+  const idx = CLASS_PROGRESSION.indexOf(name);
+  return idx >= 0 && idx < CLASS_PROGRESSION.length - 1 ? CLASS_PROGRESSION[idx + 1] : name;
 }
 
 function getTermResults(student, term) {
@@ -505,43 +592,55 @@ function configureStudentProfileAccess() {
 
 function renderPortalForStudent(student) {
   activeStudent = mergeStudentData(activeStudent, student);
-  student = activeStudent;
+  student = activeStudent || {};
   configureStudentProfileAccess();
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("portalShell").classList.remove("hidden");
 
-  document.getElementById("topbarStudentName").textContent = student.fullName;
-  document.getElementById("topbarStudentMeta").textContent =
-    (student.currentClass || "KG 1") + " · " + student.studentId + " · " + student.email;
-  document.getElementById("dashWelcomeHeading").textContent =
-    "Good morning, " + student.fullName.split(" ")[0] + "!";
-  document.getElementById("statClass").textContent = student.currentClass || "KG 1";
-  document.getElementById("statStudentId").textContent = "Student ID: " + student.studentId;
+  const loginScreen = byId("loginScreen");
+  const portalShell = byId("portalShell");
+  if (loginScreen) loginScreen.classList.add("hidden");
+  if (portalShell) portalShell.classList.remove("hidden");
+
+  const fullName = student.fullName || "Detlof Student";
+  const currentClass = student.currentClass || "KG 1";
+  const firstName = String(fullName).split(" ")[0] || "Student";
+
+  setText("topbarStudentName", fullName);
+  setText("topbarStudentMeta", currentClass + " · " + (student.studentId || "—") + " · " + (student.email || "—"));
+  setText("dashWelcomeHeading", "Good morning, " + firstName + "!");
+  setText("statClass", currentClass);
+  setText("statStudentId", "Student ID: " + (student.studentId || "—"));
 
   const allTerms = getAllTermResults(student);
   const termCount = Object.values(allTerms).filter((t) => t != null).length;
   const annualAverage = calculateCumulativeGPA(student);
-  document.getElementById("dashTermInfo").textContent =
-    termCount >= 3 ? "Third Term · Results Released" : termCount > 0 ? "Term " + termCount : "No Results Yet";
+  setText(
+    "dashTermInfo",
+    termCount >= 3 ? "Third Term · Results Released" : termCount > 0 ? "Term " + termCount : "No Results Yet"
+  );
 
-  const promoChip = document.getElementById("dashPromoChip");
-  const promoIcon = document.getElementById("dashPromoIcon");
-  const promoText = document.getElementById("dashPromoText");
+  // Declared once — it used to be re-assigned further down, which threw
+  // "Assignment to constant variable" and aborted the whole render.
   const promotionStatus = student.promotionStatus || calculatePromotionStatus(student);
-  if (termCount >= 3 && annualAverage != null && promotionStatus) {
-    const statuses = {
-      promoted: { icon: "🎓", text: "Promoted to " + (student.promotedClass || nextClass(student.currentClass)), color: "var(--crest-green)", bg: "var(--crest-green-soft)" },
-      on_try: { icon: "⚠️", text: "On Trial — Promoted", color: "var(--crest-gold)", bg: "var(--crest-gold-soft)" },
-      repeated: { icon: "📚", text: "Repeating " + (student.currentClass || "JHS 2"), color: "var(--crest-red)", bg: "var(--crest-red-soft)" },
-    };
-    const s = statuses[promotionStatus] || statuses.on_try;
-    promoIcon.textContent = s.icon;
-    promoText.textContent = s.text + " · GPA " + annualAverage;
-    promoChip.style.color = s.color;
-    promoChip.style.background = s.bg;
-    promoChip.classList.remove("hidden");
-  } else {
-    promoChip.classList.add("hidden");
+  const showPromotion = termCount >= 3 && annualAverage != null && !!promotionStatus;
+
+  const promoChip = byId("dashPromoChip");
+  if (promoChip) {
+    if (showPromotion) {
+      const statuses = {
+        promoted: { text: "Promoted to " + (student.promotedClass || nextClass(currentClass)), color: "var(--crest-green)", bg: "var(--crest-green-soft)" },
+        on_try: { text: "On Trial — Promoted", color: "var(--crest-gold)", bg: "var(--crest-gold-soft)" },
+        repeated: { text: "Repeating " + currentClass, color: "var(--crest-red)", bg: "var(--crest-red-soft)" },
+        not_promoted: { text: "Repeating " + currentClass, color: "var(--crest-red)", bg: "var(--crest-red-soft)" },
+      };
+      const chipState = statuses[promotionStatus] || statuses.on_try;
+      setStatusIcon(byId("dashPromoIcon"), promotionStatus);
+      setText("dashPromoText", chipState.text + " · GPA " + annualAverage);
+      promoChip.style.color = chipState.color;
+      promoChip.style.background = chipState.bg;
+      promoChip.classList.remove("hidden");
+    } else {
+      promoChip.classList.add("hidden");
+    }
   }
 
   const hasResults = Array.isArray(student.results);
@@ -549,23 +648,22 @@ function renderPortalForStudent(student) {
   const average = studentResults.length
     ? Math.round(studentResults.reduce((total, result) => total + Number(result.totalScore || 0), 0) / studentResults.length)
     : null;
-  document.getElementById("statAverage").textContent = average == null ? "—" : average + "%";
-
-  document.getElementById("statAverage").nextElementSibling.textContent =
+  const reportedAverage = annualAverage != null ? annualAverage : average;
+  setText("statAverage", average == null ? "—" : average + "%");
+  setAdjacentText(
+    "statAverage",
     average == null
       ? (termCount ? termCount + " Term(s) Published" : "No results published yet")
-      : (termCount ? "Annual Average: " + annualAverage + "% · " + termCount + " Term(s)" : "Term 2 · " + studentResults.length + " Subjects Published");
+      : (termCount ? "Annual Average: " + reportedAverage + "% · " + termCount + " Term(s)" : "Term 2 · " + studentResults.length + " Subjects Published")
+  );
 
   const displayedTerm = student.displayedTerm || "all";
-  document.getElementById("resultsSubtitle").textContent =
-    student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "KG 1") + " · Academic Year " + (student.academicYear || ACADEMIC_YEAR) + (displayedTerm !== "all" ? " · " + displayedTerm.replace("term", "Term ") : "");
-  document.getElementById("timetableSubtitle").textContent =
-    "Current Class Timetable for " + (student.currentClass || "KG 1") + " · " + ACADEMIC_YEAR;
-
-  const dashResults = document.getElementById("dashResultsBody");
-  const fullResults = document.getElementById("fullResultsBody");
-  dashResults.innerHTML = "";
-  fullResults.innerHTML = "";
+  setText(
+    "resultsSubtitle",
+    fullName + " (" + (student.studentId || "—") + ") · " + currentClass + " · Academic Year " + (student.academicYear || ACADEMIC_YEAR) +
+      (displayedTerm !== "all" ? " · " + displayedTerm.replace("term", "Term ") : "")
+  );
+  setText("timetableSubtitle", "Current Class Timetable for " + currentClass + " · " + ACADEMIC_YEAR);
 
   let resultsToDisplay = [];
   if (displayedTerm !== "all" && allTerms[displayedTerm] && Array.isArray(allTerms[displayedTerm].results)) {
@@ -580,52 +678,43 @@ function renderPortalForStudent(student) {
     });
   }
 
-  if (resultsToDisplay.length) {
-    resultsToDisplay.forEach((result) => {
-      dashResults.innerHTML += resultRow(result, false);
-      fullResults.innerHTML += resultRow(result, true);
-    });
-  } else if (studentResults.length) {
-    studentResults.forEach((result) => {
-      dashResults.innerHTML += resultRow(result, false);
-      fullResults.innerHTML += resultRow(result, true);
+  const rowsToRender = resultsToDisplay.length ? resultsToDisplay : studentResults;
+  let dashRows = "";
+  let fullRows = "";
+  if (rowsToRender.length) {
+    rowsToRender.forEach((result) => {
+      dashRows += resultRow(result, false);
+      fullRows += resultRow(result, true);
     });
   } else {
-    dashResults.innerHTML = emptyRow(7, "No results have been published for this student yet.");
-    fullResults.innerHTML = emptyRow(8, "No results have been published for this student yet.");
+    dashRows = emptyRow(5, "No results have been published for this student yet.");
+    fullRows = emptyRow(6, "No results have been published for this student yet.");
   }
+  setHtml("dashResultsBody", dashRows);
+  setHtml("fullResultsBody", fullRows);
 
-  const promoNotice = document.getElementById("promotionNotice");
-  const promoNoticeInner = document.getElementById("promotionNoticeInner");
-  const promoCategory = document.getElementById("promotionNoticeCategory");
-  const promoTitle = document.getElementById("promotionNoticeTitle");
-  const promoMessage = document.getElementById("promotionNoticeMessage");
-  const promoGPA = document.getElementById("promotionNoticeGPA");
-
-  const promoBadge = document.getElementById("resultsPromoBadge");
-  promotionStatus = student.promotionStatus || calculatePromotionStatus(student);
-  if (termCount >= 3 && annualAverage != null && promotionStatus) {
+  const promoNotice = byId("promotionNotice");
+  const promoNoticeInner = byId("promotionNoticeInner");
+  const promoBadge = byId("resultsPromoBadge");
+  if (showPromotion) {
     if (promoBadge) promoBadge.classList.remove("hidden");
-    const promoIcon = promoNoticeInner.querySelector(".promo-icon");
-    if (promoIcon) {
-      const iconMap = { promoted: "🎓", on_try: "⚠️", repeated: "📚", not_promoted: "📚", pending: "⏳" };
-      promoIcon.textContent = iconMap[promotionStatus] || "🎓";
-    }
+    setStatusIcon(promoNoticeInner ? promoNoticeInner.querySelector(".promo-icon") : null, promotionStatus);
     const noticeData = getPromotionNoticeData(promotionStatus, annualAverage, student);
-    promoCategory.textContent = noticeData.category;
-    promoTitle.textContent = noticeData.title;
-    promoMessage.textContent = noticeData.message;
-    promoGPA.textContent = "GPA " + annualAverage;
-    promoNotice.style.borderLeft = "6px solid " + noticeData.borderColor;
-    promoNotice.style.background = noticeData.bgColor;
-    promoNotice.classList.remove("hidden");
+    setText("promotionNoticeCategory", noticeData.category);
+    setText("promotionNoticeTitle", noticeData.title);
+    setText("promotionNoticeMessage", noticeData.message);
+    setText("promotionNoticeGPA", "GPA " + annualAverage);
+    if (promoNotice) {
+      promoNotice.style.borderLeft = "6px solid " + noticeData.borderColor;
+      promoNotice.style.background = noticeData.bgColor;
+      promoNotice.classList.remove("hidden");
+    }
   } else {
-    promoNotice.classList.add("hidden");
+    if (promoNotice) promoNotice.classList.add("hidden");
     if (promoBadge) promoBadge.classList.add("hidden");
   }
 
-  const cumulativeBody = document.getElementById("cumulativeSummaryBody");
-  cumulativeBody.innerHTML = "";
+  let cumulativeRows = "";
   if (termCount > 0 || annualAverage != null) {
     const termLabels = { term1: "Term 1", term2: "Term 2", term3: "Term 3" };
     Object.keys(termLabels).forEach((termKey) => {
@@ -641,7 +730,7 @@ function renderPortalForStudent(student) {
         });
         const distStr = Object.keys(gradeDist).sort().map((g) => g + "×" + gradeDist[g]).join(", ");
         const termGPA = termData.gpa != null ? termData.gpa : (termData.results.length ? calculateTermGPA(termData.results) : null);
-        cumulativeBody.innerHTML +=
+        cumulativeRows +=
           "<tr><td>" + termLabels[termKey] + "</td><td>" + termData.results.length + "</td><td>" + (termAvg != null ? termAvg + "%" : "—") + "</td><td>" + (termGPA != null ? termGPA : "—") + "</td><td>" + (distStr || "—") + "</td></tr>";
       }
     });
@@ -650,58 +739,62 @@ function renderPortalForStudent(student) {
     totalGrades.forEach((g) => { totalDist[g] = (totalDist[g] || 0) + 1; });
     const totalDistStr = Object.keys(totalDist).sort().map((g) => g + "×" + totalDist[g]).join(", ");
     const cumulativeAvg = totalGrades.length ? Math.round(totalScores.reduce((s, sc) => s + sc, 0) / totalScores.length) : null;
-    cumulativeBody.innerHTML +=
+    cumulativeRows +=
       "<tr style='border-top:2px solid var(--line);'><td><strong>Cumulative</strong></td><td>" + totalGrades.length + "</td><td><strong>" + (cumulativeAvg != null ? cumulativeAvg + "%" : "—") + "</strong></td><td><strong>" + (annualAverage != null ? annualAverage : "—") + "</strong></td><td><strong>" + (totalDistStr || "—") + "</strong></td></tr>";
   } else {
-    cumulativeBody.innerHTML = emptyRow(5, "No term results have been published yet.");
+    cumulativeRows = emptyRow(5, "No term results have been published yet.");
   }
+  setHtml("cumulativeSummaryBody", cumulativeRows);
 
   const defaultSchedule = [
-    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (student.currentClass || "KG 1") + " Room" },
-    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (student.currentClass || "KG 1") + " Room" },
-    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: (student.currentClass || "KG 1") + " Room" },
+    { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: currentClass + " Room" },
+    { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: currentClass + " Room" },
+    { day: "Tuesday", time: "8:00 – 9:00", subject: "Integrated Science", teacher: "Mrs. Owusu", venue: currentClass + " Room" },
     { day: "Wednesday", time: "10:30 – 11:30", subject: "Computing / ICT", teacher: "Mr. Kofi", venue: "ICT Lab" },
-    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: (student.currentClass || "KG 1") + " Room" },
+    { day: "Thursday", time: "11:30 – 12:30", subject: "Social Studies", teacher: "Ms. Aidoo", venue: currentClass + " Room" },
   ];
-  const hasTimetable = Array.isArray(student.timetable);
-  const schedule = hasTimetable ? sortedSchedule(student.timetable) : defaultSchedule;
-  const dashTT = document.getElementById("dashTimetableBody");
-  const fullTT = document.getElementById("fullTimetableBody");
-  dashTT.innerHTML = "";
-  fullTT.innerHTML = "";
+  const schedule = Array.isArray(student.timetable) ? sortedSchedule(student.timetable) : defaultSchedule;
+  let dashTimetableRows = "";
+  let fullTimetableRows = "";
   if (schedule.length) {
     schedule.forEach((item) => {
-      dashTT.innerHTML += "<tr><td>" + escapeHtml(item.time) + "</td><td><strong>" + escapeHtml(item.subject) + "</strong></td><td>" + escapeHtml(item.venue || "—") + "</td></tr>";
-      fullTT.innerHTML += "<tr><td>" + escapeHtml(item.day) + "</td><td>" + escapeHtml(item.time) + "</td><td><strong>" + escapeHtml(item.subject) + "</strong></td><td>" + escapeHtml(item.teacher || "Not assigned") + (item.updatedBy ? "<br><small class='update-meta'>Updated by " + escapeHtml(item.updatedBy) + "</small>" : "") + "</td><td>" + escapeHtml(item.venue || "—") + "</td></tr>";
+      dashTimetableRows += "<tr><td>" + escapeHtml(item.time) + "</td><td><strong>" + escapeHtml(item.subject) + "</strong></td><td>" + escapeHtml(item.venue || "—") + "</td></tr>";
+      fullTimetableRows += "<tr><td>" + escapeHtml(item.day) + "</td><td>" + escapeHtml(item.time) + "</td><td><strong>" + escapeHtml(item.subject) + "</strong></td><td>" + escapeHtml(item.teacher || "Not assigned") + (item.updatedBy ? "<br><small class='update-meta'>Updated by " + escapeHtml(item.updatedBy) + "</small>" : "") + "</td><td>" + escapeHtml(item.venue || "—") + "</td></tr>";
     });
     const nextLesson = schedule[0];
-    document.getElementById("statNextLesson").textContent = nextLesson.subject;
-    document.getElementById("statNextLesson").nextElementSibling.textContent = nextLesson.day + " · " + nextLesson.time;
+    setText("statNextLesson", nextLesson.subject);
+    setAdjacentText("statNextLesson", nextLesson.day + " · " + nextLesson.time);
   } else {
-    dashTT.innerHTML = emptyRow(3, "No timetable has been published for this student yet.");
-    fullTT.innerHTML = emptyRow(5, "No timetable has been published for this student yet.");
-    document.getElementById("statNextLesson").textContent = "—";
-    document.getElementById("statNextLesson").nextElementSibling.textContent = "No lessons scheduled";
+    dashTimetableRows = emptyRow(3, "No timetable has been published for this student yet.");
+    fullTimetableRows = emptyRow(5, "No timetable has been published for this student yet.");
+    setText("statNextLesson", "—");
+    setAdjacentText("statNextLesson", "No lessons scheduled");
   }
+  setHtml("dashTimetableBody", dashTimetableRows);
+  setHtml("fullTimetableBody", fullTimetableRows);
 
   const updates = Array.isArray(student.updates) ? student.updates : [];
   const latestUpdate = updates.length ? [...updates].sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))[0] : null;
-  const updateNotice = document.getElementById("portalUpdateNotice");
-  if (latestUpdate) {
-    updateNotice.classList.remove("hidden");
-    document.getElementById("portalUpdateTitle").textContent = latestUpdate.title;
-    document.getElementById("portalUpdateMessage").textContent = latestUpdate.message;
-    document.getElementById("portalUpdateMeta").textContent =
-      (latestUpdate.category || "Portal Update") + " · " + (latestUpdate.date || latestUpdate.createdAt || "") + (latestUpdate.createdBy ? " · Sent by " + latestUpdate.createdBy : "");
-  } else {
-    updateNotice.classList.add("hidden");
+  const updateNotice = byId("portalUpdateNotice");
+  if (updateNotice) {
+    if (latestUpdate) {
+      updateNotice.classList.remove("hidden");
+      setText("portalUpdateTitle", latestUpdate.title);
+      setText("portalUpdateMessage", latestUpdate.message);
+      setText(
+        "portalUpdateMeta",
+        (latestUpdate.category || "Portal Update") + " · " + (latestUpdate.date || latestUpdate.createdAt || "") +
+          (latestUpdate.createdBy ? " · Sent by " + latestUpdate.createdBy : "")
+      );
+    } else {
+      updateNotice.classList.add("hidden");
+    }
   }
 
-  const annBox = document.getElementById("announcementsContainer");
-  annBox.innerHTML = "";
   const individualUpdates = updates.map((update) => ({ ...update, individual: true }));
+  let announcementHtml = "";
   [...individualUpdates, ...DEFAULT_ANNOUNCEMENTS].forEach((announcement) => {
-    annBox.innerHTML +=
+    announcementHtml +=
       "<div style='padding:14px;border:1px solid var(--line);border-radius:10px;" + (announcement.individual ? "border-left:4px solid var(--crest-gold);background:var(--crest-gold-soft);" : "") + "'>" +
       "<small style='color:" + (announcement.individual ? "var(--crest-purple);" : "var(--crest-green);") + ";font-weight:700;'>" + escapeHtml(announcement.category || "Portal Update") + (announcement.individual ? " · Individual Update" : "") + " · " + escapeHtml(announcement.date || announcement.createdAt || "") + "</small>" +
       "<h3 style='margin:6px 0;font-size:15px;color:var(--ink-deep);'>" + escapeHtml(announcement.title) + "</h3>" +
@@ -709,47 +802,48 @@ function renderPortalForStudent(student) {
       (announcement.createdBy ? "<small class='update-meta' style='display:block;margin-top:8px;'>Sent by " + escapeHtml(announcement.createdBy) + "</small>" : "") +
       "</div>";
   });
+  setHtml("announcementsContainer", announcementHtml);
 
-  var profileFormSection = document.getElementById("profileEditForm");
+  const profileFormSection = byId("profileEditForm");
   if (profileFormSection) {
-    document.getElementById("profileFullName").value = student.fullName || "";
-    document.getElementById("profileEmail").value = student.email || "";
-    document.getElementById("profileStudentId").value = student.studentId || "";
-    document.getElementById("profileClass").value = student.currentClass || "";
-    document.getElementById("profileAcademicYear").value = student.academicYear || "2024 / 2025";
-    document.getElementById("profileParentName").value = student.parentName || "";
-    document.getElementById("profileParentPhone").value = student.parentPhone || "";
-    document.getElementById("profileWhatsApp").value = student.whatsappNumber || "";
-    document.getElementById("profileHomeAddress").value = student.homeAddress || "";
-    document.getElementById("profileLoginCode").value = student.loginCode || "";
-    if (student.profilePic) {
-      document.getElementById("profilePicPreview").src = student.profilePic;
-    } else {
-      document.getElementById("profilePicPreview").src = "detlofcreast.svg";
-    }
-  }
+    setValue("profileFullName", student.fullName || "");
+    setValue("profileEmail", student.email || "");
+    setValue("profileStudentId", student.studentId || "");
+    setValue("profileClass", student.currentClass || "");
+    setValue("profileAcademicYear", student.academicYear || ACADEMIC_YEAR);
+    setValue("profileParentName", student.parentName || "");
+    setValue("profileParentPhone", student.parentPhone || "");
+    setValue("profileWhatsApp", student.whatsappNumber || "");
+    setValue("profileHomeAddress", student.homeAddress || "");
+    setValue("profileLoginCode", student.loginCode || "");
+    const picPreview = byId("profilePicPreview");
+    if (picPreview) picPreview.src = student.profilePic || "detlofcreast.svg";
 
-  if (profileFormSection) {
-    profileFormSection.onsubmit = function (e) {
-      e.preventDefault();
-      const updated = {
-        fullName: document.getElementById("profileFullName").value.trim() || activeStudent.fullName,
+    profileFormSection.onsubmit = function (event) {
+      event.preventDefault();
+      const nameField = byId("profileFullName");
+      const typedName = nameField ? nameField.value.trim() : "";
+      Object.assign(activeStudent, {
+        fullName: typedName || activeStudent.fullName,
         updatedBy: "Student Self-Update",
         updatedAt: new Date().toISOString(),
-      };
-      Object.assign(activeStudent, updated);
-      saveSyncedStudents();
+      });
+      // Persist the change against this student's synced record (saveSyncedStudents()
+      // on its own only rewrites what is already in storage).
+      upsertSyncedStudent(activeStudent);
+      renderPortalForStudent(activeStudent);
       window.alert("Profile updated. Only your name can be changed; other details are managed by the school administrator.");
     };
   }
 
-  const profileTable = document.getElementById("profileTableBody");
-  if (profileTable) profileTable.innerHTML = "";
+  setHtml("profileTableBody", "");
 }
 
 function switchTab(tabName) {
+  const target = byId("tab-" + tabName);
+  if (!target) return;
   document.querySelectorAll(".portal-tab").forEach((element) => element.classList.add("hidden"));
-  document.getElementById("tab-" + tabName).classList.remove("hidden");
+  target.classList.remove("hidden");
   document.querySelectorAll(".nav-btn").forEach((button) => {
     button.classList.toggle("active", button.getAttribute("data-tab") === tabName);
   });
@@ -757,20 +851,33 @@ function switchTab(tabName) {
 
 function logoutPortal() {
   activeStudent = null;
-  sessionStorage.removeItem("detlof_portal_role");
-  sessionStorage.removeItem("detlof_teacher");
-  document.getElementById("portalShell").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-  document.getElementById("loginPassword").value = "";
+  try {
+    sessionStorage.removeItem("detlof_portal_role");
+    sessionStorage.removeItem("detlof_teacher");
+  } catch {
+    // Storage can be unavailable (private mode / file://) — logout still works.
+  }
+  const portalShell = byId("portalShell");
+  const loginScreen = byId("loginScreen");
+  if (portalShell) portalShell.classList.add("hidden");
+  if (loginScreen) loginScreen.classList.remove("hidden");
+  setValue("loginPassword", "");
 }
 
-document.getElementById("portalLoginForm").addEventListener("submit", async (event) => {
+const portalLoginForm = byId("portalLoginForm");
+if (portalLoginForm) portalLoginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
-  const studentId = document.getElementById("loginStudentId").value.trim().toUpperCase();
-  const password = document.getElementById("loginPassword").value.trim();
-  const errorBox = document.getElementById("loginErrorBox");
-  errorBox.classList.add("hidden");
+  const email = (byId("loginEmail") || { value: "" }).value.trim().toLowerCase();
+  const studentId = (byId("loginStudentId") || { value: "" }).value.trim().toUpperCase();
+  const password = (byId("loginPassword") || { value: "" }).value.trim();
+  const errorBox = byId("loginErrorBox");
+  if (errorBox) errorBox.classList.add("hidden");
+
+  const showLoginError = (message) => {
+    if (!errorBox) { window.alert(message); return; }
+    errorBox.textContent = message;
+    errorBox.classList.remove("hidden");
+  };
 
   const matchedLocal = findSyncedStudent({ email, studentId, loginCode: password });
   const payload = { email, studentId, password, syncedRecord: matchedLocal || null };
@@ -790,8 +897,7 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
       if (matchedLocal && window.location.protocol === "file:") {
         canUseLocal = true;
       } else {
-        errorBox.textContent = "We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.";
-        errorBox.classList.remove("hidden");
+        showLoginError("We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.");
         return;
       }
     } else {
@@ -811,8 +917,7 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
     return;
   }
 
-  errorBox.textContent = "We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.";
-  errorBox.classList.remove("hidden");
+  showLoginError("We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.");
 });
 
 function downloadMyLoginCode() {

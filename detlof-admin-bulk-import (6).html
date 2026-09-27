@@ -891,6 +891,122 @@
 </form>
           </section>
 
+         <section class="card" style="margin-bottom:18px;">
+           <h2>📚 Student Academic Records &amp; Portal Updates</h2>
+           <p class="sub">Choose a class and student to enter term results one subject at a time, send an individual portal note, or release the whole term below.</p>
+
+           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+             <button type="button" class="btn btn-outline" id="resyncAllBtn">🔄 Re-sync All Records to Portal</button>
+             <button type="button" class="btn btn-gold" id="downloadAllBtn">⬇ Download All Login Codes</button>
+           </div>
+
+           <div class="row-2">
+             <div class="field">
+               <label for="recordClass">Class</label>
+               <select id="recordClass"></select>
+             </div>
+             <div class="field">
+               <label for="recordStudentName">Student</label>
+               <input type="text" id="recordStudentName" list="recordStudentNames" autocomplete="off" placeholder="Type or choose a student's name" />
+               <datalist id="recordStudentNames"></datalist>
+             </div>
+           </div>
+
+           <div id="selectedStudentSummary" class="selected-student-summary hidden">
+             <div class="avatar" id="ssAvatar">?</div>
+             <div>
+               <div class="ss-main" id="ssMain">Select a student to view their record</div>
+               <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
+             </div>
+           </div>
+
+           <form id="resultForm" class="update-card">
+             <h3>✏️ Enter / Update Term Result</h3>
+             <p>Saved straight to this student's portal (class score + exam score are graded automatically).</p>
+             <div class="row-2">
+               <div class="field">
+                 <label for="resultTerm">Term</label>
+                 <select id="resultTerm">
+                   <option value="term1">First Term</option>
+                   <option value="term2" selected>Second Term</option>
+                   <option value="term3">Third Term</option>
+                 </select>
+               </div>
+               <div class="field">
+                 <label for="resultSubject">Subject</label>
+                 <input type="text" id="resultSubject" list="resultSubjectOptions" autocomplete="off" placeholder="e.g. Mathematics" required />
+                 <datalist id="resultSubjectOptions">
+                   <option value="Mathematics"></option>
+                   <option value="English Language"></option>
+                   <option value="Integrated Science"></option>
+                   <option value="Computing / ICT"></option>
+                   <option value="Social Studies"></option>
+                 </datalist>
+               </div>
+             </div>
+             <div class="row-2">
+               <div class="field">
+                 <label for="resultClassScore">Class Score (0–40)</label>
+                 <input type="number" id="resultClassScore" min="0" max="40" step="0.5" placeholder="e.g. 32" required />
+               </div>
+               <div class="field">
+                 <label for="resultExamScore">Exam Score (0–60)</label>
+                 <input type="number" id="resultExamScore" min="0" max="60" step="0.5" placeholder="e.g. 56" required />
+               </div>
+             </div>
+             <div class="field">
+               <label for="resultRemark">Teacher's Remark</label>
+               <input type="text" id="resultRemark" placeholder="e.g. Very good" />
+             </div>
+             <button class="btn btn-teal" type="submit">Save Result to Student Portal</button>
+           </form>
+
+           <form id="portalUpdateForm" class="update-card">
+             <h3>📨 Individual Portal Update</h3>
+             <p>A personal note that appears on this student's portal and in their announcements.</p>
+             <div class="row-2">
+               <div class="field">
+                 <label for="updateTitle">Title</label>
+                 <input type="text" id="updateTitle" placeholder="e.g. Great improvement in Maths" required />
+               </div>
+               <div class="field">
+                 <label for="updateCategory">Category</label>
+                 <select id="updateCategory">
+                   <option>Individual Update</option>
+                   <option>Results Update</option>
+                   <option>Timetable Update</option>
+                   <option>School Notice</option>
+                 </select>
+               </div>
+             </div>
+             <div class="field">
+               <label for="updateMessage">Message</label>
+               <textarea id="updateMessage" placeholder="Type the note this student will see on their portal…" required></textarea>
+             </div>
+             <button class="btn btn-teal" type="submit">Send to Student Portal</button>
+           </form>
+
+           <hr style="margin:18px 0;border:none;border-top:1px solid var(--line);" />
+           <h3 style="margin:0 0 4px;font-size:13px;">Generated Student Login Codes</h3>
+           <p class="sub" style="margin:0 0 6px;">Every credential created on this page — download the details or open the student's portal to test it.</p>
+           <div class="table-scroll" style="max-height:320px;overflow:auto;">
+             <table>
+               <thead>
+                 <tr>
+                   <th>Student</th>
+                   <th>Class</th>
+                   <th>Student ID</th>
+                   <th>Login Code</th>
+                   <th>Status</th>
+                   <th>Actions</th>
+                 </tr>
+               </thead>
+               <tbody id="codesTableBody"></tbody>
+             </table>
+           </div>
+
+           <hr style="margin:18px 0;border:none;border-top:1px solid var(--line);" />
+
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
            <h3 style="margin:0 0 8px;font-size:14px;">📢 Release Term Results &amp; Calculate Promotions</h3>
            <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
@@ -987,6 +1103,82 @@
   </main>
 
   <script>
+    // -------------------------------------------------------------------
+    // Defensive DOM helpers: a missing element must never break the page.
+    // -------------------------------------------------------------------
+    function $id(id) {
+      return document.getElementById(id);
+    }
+
+    function onEvent(id, eventName, handler, options) {
+      const element = $id(id);
+      if (element) element.addEventListener(eventName, handler, options);
+      return element;
+    }
+
+    function valueOf(id, fallback) {
+      const element = $id(id);
+      if (!element) return fallback === undefined ? "" : fallback;
+      return element.value;
+    }
+
+    function setVal(id, value) {
+      const element = $id(id);
+      if (element) element.value = value == null ? "" : value;
+      return element;
+    }
+
+    function setText(id, text) {
+      const element = $id(id);
+      if (element) element.textContent = text;
+      return element;
+    }
+
+    function setHtml(id, html) {
+      const element = $id(id);
+      if (element) element.innerHTML = html;
+      return element;
+    }
+
+    function setSrc(id, source) {
+      const element = $id(id);
+      if (element) element.src = source;
+      return element;
+    }
+
+    function setHidden(id, hidden) {
+      const element = $id(id);
+      if (element) element.classList.toggle("hidden", !!hidden);
+      return element;
+    }
+
+    function filesOf(id) {
+      const element = $id(id);
+      return element && element.files ? element.files : [];
+    }
+
+    // Single grading scale, shared with the student portal (script.js).
+    function gradeFromScore(score) {
+      const value = Number(score) || 0;
+      if (value >= 80) return "A";
+      if (value >= 70) return "B";
+      if (value >= 60) return "C";
+      if (value >= 50) return "D";
+      if (value >= 40) return "E";
+      return "F";
+    }
+
+    // Canonical class list — must match the class selects used across this page and
+    // the student portal, otherwise records can never be matched by class.
+    const SCHOOL_CLASSES = [
+      "Creche", "Nursery One", "Nursery Two",
+      "KG 1", "KG 2 Boys", "KG 2 Girls", "Lower KG", "Upper KG",
+      "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6",
+      "Basic 7", "Basic 8", "Basic 9",
+      "JHS 1", "JHS 2", "JHS 3",
+      "SHS 1", "SHS 2", "SHS 3",
+    ];
+
     const STORAGE_KEY = "detlof_bulk_import_codes";
 
     const defaultSeedCodes = [
@@ -1086,7 +1278,7 @@
     };
 
     function populateQuickGenerateNames() {
-      const className = document.getElementById("currentClass").value;
+      const className = valueOf("currentClass");
       const datalist = document.getElementById("quickStudentNames");
       if (!datalist) return;
       const names = (quickGenerateNames[className] || "").split("|").filter(Boolean).sort((a, b) => a.localeCompare(b));
@@ -1165,7 +1357,12 @@
       syncRecordsToPortal(seed);
     }
 
-    const auth = JSON.parse(sessionStorage.getItem("detlof_admin_auth") || "{}");
+    let auth = {};
+    try {
+      auth = JSON.parse(sessionStorage.getItem("detlof_admin_auth") || "{}") || {};
+    } catch {
+      auth = {};
+    }
     if (auth && auth.role) {
       currentRole = auth.role === "teacher" ? "teacher" : "admin";
       teacherName = auth.teacherName || (currentRole === "teacher" ? "Class Teacher" : "Administrator");
@@ -1180,8 +1377,8 @@
     if (adminLoginForm) {
       adminLoginForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const email = (document.getElementById("adminLoginEmail").value || "").trim().toLowerCase();
-        const password = document.getElementById("adminLoginPassword").value || "";
+        const email = (valueOf("adminLoginEmail") || "").trim().toLowerCase();
+        const password = valueOf("adminLoginPassword") || "";
         const errorBox = document.getElementById("adminLoginError");
         const btn = document.getElementById("adminLoginBtn");
         const btnText = document.getElementById("adminLoginBtnText");
@@ -1208,7 +1405,7 @@
           showMainPanel();
          }, 400);
        });
-       document.getElementById("currentClass").addEventListener("change", populateQuickGenerateNames);
+       onEvent("currentClass", "change", populateQuickGenerateNames);
      }
 
      function escapeHtml(value) {
@@ -1229,14 +1426,12 @@
       return name.trim().toLowerCase().replace(/\s+/g, ".").replace(/[^a-z0-9.]/g, "") + "@detlof.edu.gh";
     }
 
-    const PORTAL_API_BASE = "http://127.0.0.1:5000";
+    // Served over http(s) the API is on the same origin (server.py serves the pages and
+    // /api/*); only a page opened straight from disk needs the absolute backend URL.
+    const PORTAL_API_BASE = location.protocol === "file:" ? "http://127.0.0.1:5000" : "";
 
     async function fetchPortalApi(path, options = {}) {
-      const urls = [path];
-      const backendUrl = PORTAL_API_BASE + path;
-      if (window.location.href.indexOf(PORTAL_API_BASE) !== 0) {
-        urls.push(backendUrl);
-      }
+      const urls = PORTAL_API_BASE ? [PORTAL_API_BASE + path, path] : [path];
       let lastResponse = null;
       for (const url of urls) {
         try {
@@ -1244,6 +1439,7 @@
           if (response.ok || response.status === 401) return response;
           lastResponse = response;
         } catch {
+          // Backend not running (static hosting / offline): localStorage stays the source of truth.
         }
       }
       return lastResponse;
@@ -1333,26 +1529,25 @@
     }
 
     function loadAdminProfileRecord() {
-      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      const record = findAdminProfileRecord(valueOf("adminProfileStudentName"));
       const summary = document.getElementById("adminProfileSummary");
       if (!record) {
         summary.classList.add("hidden");
-        document.getElementById("adminProfileParentName").value = "";
-        document.getElementById("adminProfileParentPhone").value = "";
-        document.getElementById("adminProfileWhatsApp").value = "";
-        document.getElementById("adminProfileHomeAddress").value = "";
-        document.getElementById("adminProfilePicPreview").src = "detlofcreast.svg";
+        setVal("adminProfileParentName", "");
+        setVal("adminProfileParentPhone", "");
+        setVal("adminProfileWhatsApp", "");
+        setVal("adminProfileHomeAddress", "");
+        setSrc("adminProfilePicPreview", "detlofcreast.svg");
         return null;
       }
-      document.getElementById("adminProfileParentName").value = record.parentName || "";
-      document.getElementById("adminProfileParentPhone").value = record.parentPhone || record.profileParentPhone || "";
-      document.getElementById("adminProfileWhatsApp").value = record.whatsappNumber || record.profileWhatsApp || "";
-      document.getElementById("adminProfileHomeAddress").value = record.homeAddress || "";
-      document.getElementById("adminProfilePicPreview").src = record.profilePic || "detlofcreast.svg";
-      document.getElementById("adminProfileAvatar").src = record.profilePic || "detlofcreast.svg";
-      document.getElementById("adminProfileSummaryName").textContent = record.fullName || record.studentId;
-      document.getElementById("adminProfileSummaryMeta").textContent =
-        (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || "");
+      setVal("adminProfileParentName", record.parentName || "");
+      setVal("adminProfileParentPhone", record.parentPhone || record.profileParentPhone || "");
+      setVal("adminProfileWhatsApp", record.whatsappNumber || record.profileWhatsApp || "");
+      setVal("adminProfileHomeAddress", record.homeAddress || "");
+      setSrc("adminProfilePicPreview", record.profilePic || "detlofcreast.svg");
+      setSrc("adminProfileAvatar", record.profilePic || "detlofcreast.svg");
+      setText("adminProfileSummaryName", record.fullName || record.studentId);
+      setText("adminProfileSummaryMeta", (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || ""));
       summary.classList.remove("hidden");
       return record;
     }
@@ -1373,26 +1568,34 @@
 
     async function submitAdminProfile(event) {
       event.preventDefault();
-      const errorBox = document.getElementById("adminProfileError");
-      errorBox.classList.add("hidden");
-      const record = loadAdminProfileRecord();
+      const errorBox = $id("adminProfileError");
+      const showProfileError = (message) => {
+        if (errorBox) {
+          errorBox.textContent = message;
+          errorBox.classList.remove("hidden");
+        } else {
+          window.alert(message);
+        }
+      };
+      if (errorBox) errorBox.classList.add("hidden");
+
+      // Read the typed values FIRST: loadAdminProfileRecord() rewrites every field from
+      // storage, which used to wipe the details being saved before they were read.
+      const parentName = valueOf("adminProfileParentName").trim();
+      const parentPhone = valueOf("adminProfileParentPhone").trim();
+      const whatsappNumber = valueOf("adminProfileWhatsApp").trim();
+      const homeAddress = valueOf("adminProfileHomeAddress").trim();
+      const record = findAdminProfileRecord(valueOf("adminProfileStudentName"));
       if (!record) {
-        errorBox.textContent = "Select a generated student before saving profile details.";
-        errorBox.classList.remove("hidden");
+        showProfileError("Select a generated student before saving profile details.");
         return;
       }
-      const parentName = document.getElementById("adminProfileParentName").value.trim();
-      const parentPhone = document.getElementById("adminProfileParentPhone").value.trim();
-      const whatsappNumber = document.getElementById("adminProfileWhatsApp").value.trim();
-      const homeAddress = document.getElementById("adminProfileHomeAddress").value.trim();
-      const imageInput = document.getElementById("adminProfilePicInput");
-      const imageFile = imageInput.files && imageInput.files[0];
+      const imageFile = filesOf("adminProfilePicInput")[0];
       let profilePic = record.profilePic || "";
       try {
-        profilePic = await readAdminProfileImage(imageFile);
+        if (imageFile) profilePic = await readAdminProfileImage(imageFile);
       } catch (error) {
-        errorBox.textContent = error.message;
-        errorBox.classList.remove("hidden");
+        showProfileError(error.message);
         return;
       }
       const updated = mergeStoredRecord(record, {
@@ -1500,46 +1703,67 @@
     }
 
     function populateRecordStudents() {
-      const classSelect = document.getElementById("recordClass");
-      const studentNames = document.getElementById("recordStudentNames");
-      const studentNameInput = document.getElementById("recordStudentName");
-      const classes = [
-        "Creche", "Nursery 1", "Nursery 2", "KG 1", "KG 2",
-        "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "Basic 7", "Basic 8", "Basic 9",
-        "JHS 1", "JHS 2", "JHS 3",
-      ];
-      const selectedClass = classSelect.value || classes[0];
-      classSelect.innerHTML = classes.map((name) => "<option>" + name + "</option>").join("");
-      classSelect.value = classes.includes(selectedClass) ? selectedClass : classes[0];
+      const classSelect = $id("recordClass");
+      if (!classSelect) return;
       const records = getStoredRecords();
+      // Canonical classes first, then any class that exists on a stored record.
+      const classes = SCHOOL_CLASSES.slice();
+      records.forEach((record) => {
+        const name = record && record.currentClass;
+        if (name && classes.indexOf(name) === -1) classes.push(name);
+      });
+      const selectedClass = classSelect.value || classes[0];
+      classSelect.innerHTML = classes.map((name) => "<option>" + escapeHtml(name) + "</option>").join("");
+      classSelect.value = classes.indexOf(selectedClass) !== -1 ? selectedClass : classes[0];
+
       const classStudents = records
         .filter((record) => record.currentClass === classSelect.value)
-        .map((record) => record.fullName);
-      studentNames.innerHTML = classStudents.map((name) => "<option value='" + escapeHtml(name) + "'>").join("");
-      if (studentNameInput.value && !classStudents.includes(studentNameInput.value)) studentNameInput.value = "";
+        .map((record) => record.fullName)
+        .filter(Boolean);
+      setHtml("recordStudentNames", classStudents.map((name) => "<option value='" + escapeHtml(name) + "'></option>").join(""));
+      const studentNameInput = $id("recordStudentName");
+      if (studentNameInput && studentNameInput.value && classStudents.indexOf(studentNameInput.value) === -1) {
+        studentNameInput.value = "";
+      }
       updateSelectedStudentSummary(getRecordForTypedName());
     }
 
     function getRecordForTypedName() {
-      const selectedClass = document.getElementById("recordClass").value;
-      const typedName = document.getElementById("recordStudentName").value.trim();
-      if (!typedName) return null;
-      return getStoredRecords().find(
-        (record) => record.currentClass === selectedClass && record.fullName.trim().toLowerCase() === typedName.toLowerCase()
+      const records = getStoredRecords();
+      // The record picker is preferred; the administrator profile picker is an accepted
+      // fallback so the release/update forms still know which student is selected.
+      const nameInput = $id("recordStudentName") || $id("adminProfileStudentName");
+      const typed = nameInput ? String(nameInput.value || "").trim().toLowerCase() : "";
+      if (!typed || !records.length) return null;
+      const selectedClass = valueOf("recordClass");
+      const matchesName = (record) => String(record.fullName || "").trim().toLowerCase() === typed;
+      const matchesId = (record) => String(record.studentId || "").trim().toLowerCase() === typed;
+      return (
+        records.find((record) => matchesName(record) && (!selectedClass || record.currentClass === selectedClass)) ||
+        records.find((record) => matchesId(record)) ||
+        records.find((record) => matchesName(record)) ||
+        null
       );
     }
 
     function updateSelectedStudentSummary(record) {
-      const box = document.getElementById("selectedStudentSummary");
+      const box = $id("selectedStudentSummary");
       if (!box) return;
-      if (!record) { box.classList.add("hidden"); return; }
+      if (!record) {
+        box.classList.add("hidden");
+        return;
+      }
       box.classList.remove("hidden");
-      const avatar = document.getElementById("ssAvatar");
-      const main = document.getElementById("ssMain");
-      const sub = document.getElementById("ssSub");
-      avatar.textContent = (record.fullName.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()) || "?";
-      main.textContent = record.fullName || "Unknown student";
-      sub.textContent = (record.currentClass || "—") + " · " + (record.studentId || "—") + " · " + (record.email || "—");
+      const initials = String(record.fullName || "")
+        .split(" ")
+        .map((part) => part.charAt(0))
+        .filter(Boolean)
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+      setText("ssAvatar", initials || "?");
+      setText("ssMain", record.fullName || "Unknown student");
+      setText("ssSub", (record.currentClass || "—") + " · " + (record.studentId || "—") + " · " + (record.email || "—"));
     }
 
     async function updateStudentRecord(studentId, update) {
@@ -1558,21 +1782,21 @@
     function showToast(message) {
       const toast = document.getElementById("toastBox");
       if (!toast) return;
-      document.getElementById("toastText").textContent = message;
+      setText("toastText", message);
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 4000);
     }
 
-    document.getElementById("singleForm").addEventListener("submit", async (e) => {
+    onEvent("singleForm", "submit", async (e) => {
       e.preventDefault();
-      const fullName = document.getElementById("fullName").value.trim();
+      const fullName = valueOf("fullName").trim();
       const emailInput = document.getElementById("email");
       if (!emailInput.value.trim()) {
         emailInput.value = generateEmailFromName(fullName);
       }
-      const currentClass = document.getElementById("currentClass").value;
-      const studentId = (document.getElementById("studentId").value.trim() || randomStudentId()).toUpperCase();
-      const loginCode = document.getElementById("loginCode").value.trim() || randomCode();
+      const currentClass = valueOf("currentClass");
+      const studentId = (valueOf("studentId").trim() || randomStudentId()).toUpperCase();
+      const loginCode = valueOf("loginCode").trim() || randomCode();
       const existingRecords = getStoredRecords();
       const previous = existingRecords.find(
         (record) => String(record.studentId).toUpperCase() === studentId
@@ -1596,11 +1820,11 @@
       e.target.reset();
     });
 
-    document.getElementById("classGenerateForm").addEventListener("submit", async (e) => {
+    onEvent("classGenerateForm", "submit", async (e) => {
       e.preventDefault();
-      const className = document.getElementById("classGenerateClass").value;
-      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
-      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+      const className = valueOf("classGenerateClass");
+      const prefix = valueOf("classGeneratePrefix").trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(valueOf("classGenerateStart") || "1", 10);
       const statusEl = document.getElementById("classGenerateStatus");
       
       if (!className) { showToast("Select a class first"); return; }
@@ -1664,10 +1888,10 @@
       showToast("Generated " + generated + " credentials for " + className);
     });
 
-    document.getElementById("downloadClassExcelBtn").addEventListener("click", function () {
-      const className = document.getElementById("classGenerateClass").value;
-      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
-      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+    onEvent("downloadClassExcelBtn", "click", function () {
+      const className = valueOf("classGenerateClass");
+      const prefix = valueOf("classGeneratePrefix").trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(valueOf("classGenerateStart") || "1", 10);
       
       if (!className) { showToast("Select a class first"); return; }
       
@@ -1707,10 +1931,10 @@
       showToast("Downloaded credentials for " + className);
     });
 
-    document.getElementById("downloadExistingClassExcelBtn").addEventListener("click", function () {
-      const className = document.getElementById("classGenerateClass").value;
-      const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
-      const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
+    onEvent("downloadExistingClassExcelBtn", "click", function () {
+      const className = valueOf("classGenerateClass");
+      const prefix = valueOf("classGeneratePrefix").trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
+      const startNum = parseInt(valueOf("classGenerateStart") || "1", 10);
       
       if (!className) { showToast("Select a class first"); return; }
       
@@ -1739,7 +1963,7 @@
       showToast("Downloaded " + classRecords.length + " existing credentials for " + className);
     });
 
-    document.getElementById("downloadClassSelect").addEventListener("change", function () {
+    onEvent("downloadClassSelect", "change", function () {
       const className = this.value;
       const listEl = document.getElementById("downloadClassStudentList");
       if (!className) {
@@ -1766,8 +1990,8 @@
       }).join("");
     });
 
-    document.getElementById("downloadClassCredentialsBtn").addEventListener("click", function () {
-      const className = document.getElementById("downloadClassSelect").value;
+    onEvent("downloadClassCredentialsBtn", "click", function () {
+      const className = valueOf("downloadClassSelect");
       const statusEl = document.getElementById("downloadClassStatus");
       
       if (!className) { showToast("Select a class first"); return; }
@@ -1800,73 +2024,74 @@
       showToast("Downloaded " + classRecords.length + " credentials for " + className);
     });
 
-    document.getElementById("adminProfileStudentName").addEventListener("input", loadAdminProfileRecord);
-    document.getElementById("adminProfileForm").addEventListener("submit", submitAdminProfile);
-    document.getElementById("adminChangePicBtn").addEventListener("click", () => {
-      document.getElementById("adminProfilePicInput").click();
+    onEvent("adminProfileStudentName", "input", loadAdminProfileRecord);
+    onEvent("adminProfileForm", "submit", submitAdminProfile);
+    onEvent("adminChangePicBtn", "click", () => {
+      const pictureInput = $id("adminProfilePicInput");
+      if (pictureInput) pictureInput.click();
     });
-    document.getElementById("adminProfilePicInput").addEventListener("change", function () {
+    onEvent("adminProfilePicInput", "change", function () {
       const file = this.files && this.files[0];
       if (!file) return;
       readAdminProfileImage(file).then((dataUrl) => {
-        document.getElementById("adminProfilePicPreview").src = dataUrl;
+        setSrc("adminProfilePicPreview", dataUrl);
         const avatar = document.getElementById("adminProfileAvatar");
         if (avatar) avatar.src = dataUrl;
       });
     });
 
-    document.getElementById("sendStudentReportWhatsAppBtn").addEventListener("click", function () {
-      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
-      const phone = document.getElementById("adminSendParentPhone").value.trim();
-      const termKey = document.getElementById("adminSendTerm").value;
+    onEvent("sendStudentReportWhatsAppBtn", "click", function () {
+      const record = findAdminProfileRecord(valueOf("adminProfileStudentName"));
+      const phone = valueOf("adminSendParentPhone").trim();
+      const termKey = valueOf("adminSendTerm");
       if (!record) { showToast("Select a student first"); return; }
       if (!phone) { showToast("Enter a parent WhatsApp number"); return; }
       sendResultsViaWhatsApp(record, termKey, phone);
       showToast("Opening WhatsApp with " + record.fullName + "'s report…");
     });
 
-    document.getElementById("sendStudentTimetableWhatsAppBtn").addEventListener("click", function () {
-      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
-      const phone = document.getElementById("adminSendParentPhone").value.trim();
+    onEvent("sendStudentTimetableWhatsAppBtn", "click", function () {
+      const record = findAdminProfileRecord(valueOf("adminProfileStudentName"));
+      const phone = valueOf("adminSendParentPhone").trim();
       if (!record) { showToast("Select a student first"); return; }
       if (!phone) { showToast("Enter a parent WhatsApp number"); return; }
       sendStudentTimetableViaWhatsApp(record, phone);
       showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
     });
 
-    document.getElementById("fullName").addEventListener("input", function () {
+    onEvent("fullName", "input", function () {
       const emailInput = document.getElementById("email");
       emailInput.value = generateEmailFromName(this.value);
     });
 
-    document.getElementById("resyncAllBtn").addEventListener("click", async () => {
+    onEvent("resyncAllBtn", "click", async () => {
       await syncRecordsToPortal(getStoredRecords());
     });
 
-    document.getElementById("downloadAllBtn").addEventListener("click", downloadAllCodes);
+    onEvent("downloadAllBtn", "click", downloadAllCodes);
 
-    document.getElementById("recordClass").addEventListener("change", populateRecordStudents);
+    onEvent("recordClass", "change", populateRecordStudents);
 
-    document.getElementById("recordStudentName").addEventListener("input", () => {
+    onEvent("recordStudentName", "input", () => {
       updateSelectedStudentSummary(getRecordForTypedName());
     });
 
-    document.getElementById("resultForm").addEventListener("submit", async (event) => {
+    onEvent("resultForm", "submit", async (event) => {
       event.preventDefault();
       const record = getRecordForTypedName();
       if (!record) { window.alert("Type a student's full name from the selected class."); return; }
-      const termKey = document.getElementById("resultTerm").value;
-      const classScore = Number(document.getElementById("resultClassScore").value);
-      const examScore = Number(document.getElementById("resultExamScore").value);
+      const termKey = valueOf("resultTerm");
+      const classScore = Number(valueOf("resultClassScore"));
+      const examScore = Number(valueOf("resultExamScore"));
       const totalScore = Math.round((classScore + examScore) * 100) / 100;
-      const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
+      const grade = gradeFromScore(totalScore);
       const result = {
-        subject: document.getElementById("resultSubject").value.trim(),
+        subject: valueOf("resultSubject").trim(),
         classScore,
         examScore,
         totalScore,
         grade,
-        remark: document.getElementById("resultRemark").value.trim() || "Keep it up",
+        remark: valueOf("resultRemark").trim() || "Keep it up",
         updatedBy: teacherLabel(),
         updatedAt: stampIso(),
       };
@@ -1882,21 +2107,21 @@
       termData.updatedAt = stampIso();
       await updateStudentRecord(record.studentId, { termResults: record.termResults });
       event.target.reset();
-      document.getElementById("resultTerm").value = termKey;
+      setVal("resultTerm", termKey);
       showToast("Result saved for " + record.fullName + " (" + termKey.replace("term", "Term ") + ").");
     });
 
     function calculateGPASimple(results) {
       if (!results || !results.length) return null;
       const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
-      const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || (r.totalScore >= 80 ? "A" : r.totalScore >= 70 ? "B" : r.totalScore >= 60 ? "C" : r.totalScore >= 50 ? "D" : r.totalScore >= 40 ? "E" : "F")] || 0), 0);
+      const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade || gradeFromScore(r.totalScore)] || 0), 0);
       return Math.round((totalPoints / results.length) * 100) / 100;
     }
 
-    document.getElementById("releaseResultsForm").addEventListener("submit", async (event) => {
+    onEvent("releaseResultsForm", "submit", async (event) => {
       event.preventDefault();
-      const termKey = document.getElementById("releaseTerm").value;
-      const mode = document.getElementById("promotionMode").value;
+      const termKey = valueOf("releaseTerm");
+      const mode = valueOf("promotionMode");
       const record = getRecordForTypedName();
       const records = getStoredRecords();
       let targetRecords = [];
@@ -1914,29 +2139,36 @@
         window.alert("No students found for promotion calculation.");
         return;
       }
-      addPendingApproval("release", { termKey, mode, studentCount: targetRecords.length, studentIds: targetRecords.map(r => r.id), createdBy: teacherLabel(), createdAt: stampIso() });
+      addPendingApproval("release", { termKey, mode, studentCount: targetRecords.length, studentIds: targetRecords.map((r) => r.studentId), createdBy: teacherLabel(), createdAt: stampIso() });
       showToast("Term " + termKey.replace("term", "") + " release with promotions queued for Academic Admin approval (" + targetRecords.length + " students).");
       event.target.reset();
-      document.getElementById("releaseTerm").value = termKey;
-      document.getElementById("promotionMode").value = mode;
+      setVal("releaseTerm", termKey);
+      setVal("promotionMode", mode);
       renderPendingApprovals();
     });
 
+    // Promotions the plain list order cannot express: KG 2 is split into Boys/Girls, so a
+    // KG 1 pupil moves up to the "KG 2" year group and both KG 2 streams move on to Basic 1.
+    const NEXT_CLASS_OVERRIDES = { "KG 1": "KG 2", "KG 2 Boys": "Basic 1", "KG 2 Girls": "Basic 1" };
+
     function nextClassSimple(currentClass) {
-      const progression = ["Creche", "KG", "Lower KG", "Upper KG", "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3"];
-      const idx = progression.indexOf(currentClass);
-      return idx >= 0 && idx < progression.length - 1 ? progression[idx + 1] : currentClass;
+      const name = String(currentClass || "").trim();
+      if (NEXT_CLASS_OVERRIDES[name]) return NEXT_CLASS_OVERRIDES[name];
+      // Uses SCHOOL_CLASSES: the old hard-coded list did not contain the real class
+      // names ("KG 1", "Nursery Two", …), so promotions pointed back at the same class.
+      const idx = SCHOOL_CLASSES.indexOf(name);
+      return idx >= 0 && idx < SCHOOL_CLASSES.length - 1 ? SCHOOL_CLASSES[idx + 1] : name;
     }
 
-    document.getElementById("portalUpdateForm").addEventListener("submit", async (event) => {
+    onEvent("portalUpdateForm", "submit", async (event) => {
       event.preventDefault();
       const record = getRecordForTypedName();
       if (!record) { window.alert("Type a student's full name from the selected class."); return; }
       const updateObj = {
         id: "upd-" + Date.now() + "-" + Math.floor(1000 + Math.random() * 9000),
-        title: document.getElementById("updateTitle").value.trim(),
-        category: document.getElementById("updateCategory").value,
-        message: document.getElementById("updateMessage").value.trim(),
+        title: valueOf("updateTitle").trim(),
+        category: valueOf("updateCategory"),
+        message: valueOf("updateMessage").trim(),
         date: stampDate(),
         createdAt: stampIso(),
         createdBy: teacherLabel(),
@@ -1949,12 +2181,12 @@
       showToast("Portal update sent to " + record.fullName + ".");
     });
 
-    document.getElementById("announcementForm").addEventListener("submit", async (event) => {
+    onEvent("announcementForm", "submit", async (event) => {
       event.preventDefault();
-      const title = document.getElementById("annTitle").value.trim();
-      const message = document.getElementById("annMessage").value.trim();
-      const category = document.getElementById("annCategory").value;
-      const targetClass = document.getElementById("annClass").value.trim();
+      const title = valueOf("annTitle").trim();
+      const message = valueOf("annMessage").trim();
+      const category = valueOf("annCategory");
+      const targetClass = valueOf("annClass").trim();
       if (!title || !message) return;
       const updateObj = {
         id: "ann-" + Date.now(),
@@ -1989,7 +2221,7 @@
     });
   }
 
-  document.getElementById("resultsFile").addEventListener("change", function (e) {
+  onEvent("resultsFile", "change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -2004,16 +2236,16 @@
         html += "</tr>";
       });
       html += "</table>";
-      document.getElementById("resultsPreview").innerHTML = html;
+      setHtml("resultsPreview", html);
     };
     reader.readAsText(file);
   });
 
-  document.getElementById("bulkResultsForm").addEventListener("submit", async function (e) {
+  onEvent("bulkResultsForm", "submit", async function (e) {
     e.preventDefault();
-    const file = document.getElementById("resultsFile").files[0];
+    const file = filesOf("resultsFile")[0];
     if (!file) return;
-    const termKey = document.getElementById("resultsTerm").value;
+    const termKey = valueOf("resultsTerm");
     const reader = new FileReader();
     reader.onload = async function (evt) {
       const csv = parseCSV(evt.target.result);
@@ -2058,13 +2290,13 @@
       addPendingApproval("results", { termKey, resultsData, matchedCount, createdBy: teacherLabel(), createdAt: stampIso() });
       showToast("Results for " + termKey.replace("term", "Term ") + " queued for Academic Admin approval (" + matchedCount + " students matched).");
       e.target.reset();
-      document.getElementById("resultsPreview").innerHTML = "";
+      setHtml("resultsPreview", "");
       renderPendingApprovals();
     }
     reader.readAsText(file);
   });
 
-  document.getElementById("downloadResultsTemplate").addEventListener("click", function () {
+  onEvent("downloadResultsTemplate", "click", function () {
     const csv = "Student Name,Class,Student ID,Subject,Class Score,Exam Score\nJohn Doe,KG 1,KG1-0001,Mathematics,32,56\n";
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -2075,36 +2307,38 @@
     URL.revokeObjectURL(url);
   });
 
-  document.getElementById("academicsAdminLoginLink").addEventListener("click", function (e) {
+  onEvent("academicsAdminLoginLink", "click", function (e) {
     e.preventDefault();
-    document.querySelector(".admin-login-form").classList.add("hidden");
-    document.getElementById("academicsAdminLoginScreen").classList.remove("hidden");
+    const teacherLoginForm = document.querySelector(".admin-login-form");
+    if (teacherLoginForm) teacherLoginForm.classList.add("hidden");
+    setHidden("academicsAdminLoginScreen", false);
   });
 
-  document.getElementById("backToTeacherLogin").addEventListener("click", function (e) {
+  onEvent("backToTeacherLogin", "click", function (e) {
     e.preventDefault();
-    document.getElementById("academicsAdminLoginScreen").classList.add("hidden");
-    document.querySelector(".admin-login-form").classList.remove("hidden");
+    setHidden("academicsAdminLoginScreen", true);
+    const teacherLoginForm = document.querySelector(".admin-login-form");
+    if (teacherLoginForm) teacherLoginForm.classList.remove("hidden");
   });
 
-document.getElementById("academicsAdminLoginBtn").addEventListener("click", function (e) {
+onEvent("academicsAdminLoginBtn", "click", function (e) {
     e.preventDefault();
-    const email = document.getElementById("academicsAdminEmail").value;
-    const password = document.getElementById("academicsAdminPassword").value;
+    const email = valueOf("academicsAdminEmail");
+    const password = valueOf("academicsAdminPassword");
     if (email === "admin-academics@detlof.edu.gh" && password === "DetlofAcademics2026!") {
       localStorage.setItem("detlof_academics_admin", "true");
-      document.getElementById("academicsAdminError").classList.add("hidden");
-       document.getElementById("adminLoginScreen").classList.add("hidden");
-      document.getElementById("adminContent").classList.remove("hidden");
-      document.getElementById("adminProfileSection").classList.add("hidden");
+      setHidden("academicsAdminError", true);
+       setHidden("adminLoginScreen", true);
+      setHidden("adminContent", false);
+      setHidden("adminProfileSection", true);
       document.querySelectorAll(".admin-only, .academics-admin-only").forEach((el) => el.classList.remove("hidden"));
       renderPendingApprovals();
     } else {
-      document.getElementById("academicsAdminError").classList.remove("hidden");
+      setHidden("academicsAdminError", false);
     }
   });
 
-  document.getElementById("timetableFile").addEventListener("change", function (e) {
+  onEvent("timetableFile", "change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -2119,15 +2353,15 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
         html += "</tr>";
       });
       html += "</table>";
-      document.getElementById("timetablePreview").innerHTML = html;
+      setHtml("timetablePreview", html);
     };
     reader.readAsText(file);
   });
 
-  document.getElementById("timetableForm").addEventListener("submit", async function (e) {
+  onEvent("timetableForm", "submit", async function (e) {
     e.preventDefault();
-    const file = document.getElementById("timetableFile").files[0];
-    const timetableClass = document.getElementById("timetableClass").value;
+    const file = filesOf("timetableFile")[0];
+    const timetableClass = valueOf("timetableClass");
     if (!timetableClass) { showToast("Select a class first"); return; }
     if (!file) { showToast("Select a CSV/Excel file"); return; }
     
@@ -2175,12 +2409,12 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
       
       showToast("Timetable synced for all " + classRecords.length + " students in " + timetableClass + " (" + schedule.length + " entries).");
       e.target.reset();
-      document.getElementById("timetablePreview").innerHTML = "";
+      setHtml("timetablePreview", "");
     };
     reader.readAsText(file);
   });
 
-  document.getElementById("downloadTimetableTemplate").addEventListener("click", function () {
+  onEvent("downloadTimetableTemplate", "click", function () {
     const csv = "Day,Subject,Time,Venue,Teacher\nMonday,Mathematics,8:00-9:00,JHS 2 Room,Mrs. Addo\nTuesday,English Language,9:00-10:00,JHS 2 Room,Mr. Mensah\n";
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -2192,26 +2426,34 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
   });
 
   function addPendingApproval(type, data) {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const pending = getPendingApprovals();
     pending.push({ id: "pending-" + Date.now(), type, data, status: "pending", submittedAt: stampIso() });
     localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
   }
 
+  function getPendingApprovals() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
   function renderPendingApprovals() {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
-    const pendingList = document.getElementById("pendingList");
-    const noPendingMsg = document.getElementById("noPendingMsg");
-    const pendingApprovals = document.getElementById("pendingApprovals");
-    const adminOnlyItems = document.querySelectorAll(".admin-only");
+    const pending = getPendingApprovals();
+    const pendingList = $id("pendingList");
+    const noPendingMsg = $id("noPendingMsg");
+    const pendingApprovals = $id("pendingApprovals");
     const isAcademicsAdmin = localStorage.getItem("detlof_academics_admin") === "true";
     if (!isAcademicsAdmin) return;
     if (!pending.length) {
-      pendingApprovals.style.display = "none";
-      noPendingMsg.style.display = "block";
+      if (pendingApprovals) pendingApprovals.style.display = "none";
+      if (noPendingMsg) noPendingMsg.style.display = "block";
       return;
     }
-    pendingApprovals.style.display = "block";
-    noPendingMsg.style.display = "none";
+    if (pendingApprovals) pendingApprovals.style.display = "block";
+    if (noPendingMsg) noPendingMsg.style.display = "none";
     let html = "";
     pending.forEach((item, i) => {
       const typeLabel = { results: "📊 Results", timetable: "📅 Timetable", release: "📢 Term Release" }[item.type] || item.type;
@@ -2239,11 +2481,11 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
       html += "</div>";
       html += "</div>";
     });
-    pendingList.innerHTML = html;
+    setHtml("pendingList", html);
   }
 
   window.approvePending = function(index) {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const pending = getPendingApprovals();
     const item = pending[index];
     if (!item) return;
     if (item.type === "results") {
@@ -2261,7 +2503,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
   };
 
   window.rejectPending = function(index) {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    const pending = getPendingApprovals();
     const item = pending[index];
     if (!item) return;
     item.status = "rejected";
@@ -2285,8 +2527,8 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     renderTable(records);
   }
 
-  document.getElementById("approveAllBtn").addEventListener("click", function() {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+  onEvent("approveAllBtn", "click", function() {
+    const pending = getPendingApprovals();
     pending.forEach((item, i) => {
       if (item.status === "pending") {
         window.approvePending(i);
@@ -2294,8 +2536,8 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     });
   });
 
-  document.getElementById("rejectAllBtn").addEventListener("click", function() {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+  onEvent("rejectAllBtn", "click", function() {
+    const pending = getPendingApprovals();
     pending.forEach((item, i) => {
       if (item.status === "pending") {
         window.rejectPending(i);
@@ -2303,16 +2545,16 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     });
   });
 
-  document.getElementById("sendAllTimetablesWhatsAppBtn").addEventListener("click", function() {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+  onEvent("sendAllTimetablesWhatsAppBtn", "click", function() {
+    const pending = getPendingApprovals();
     const timetableItems = pending.filter(item => item.status === "pending" && item.type === "timetable");
     timetableItems.forEach(item => {
       sendTimetableToAllParents(item.data.className, item.data.schedule);
     });
   });
 
-  document.getElementById("sendAllResultsWhatsAppBtn").addEventListener("click", function() {
-    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+  onEvent("sendAllResultsWhatsAppBtn", "click", function() {
+    const pending = getPendingApprovals();
     const resultsItems = pending.filter(item => item.status === "pending" && item.type === "results");
     const terms = [...new Set(resultsItems.map(item => item.data.termKey))];
     terms.forEach(termKey => {
@@ -2342,7 +2584,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
         const classScore = Number(rd.classScore);
         const examScore = Number(rd.examScore);
         const totalScore = Math.round((classScore + examScore) * 100) / 100;
-        const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
+        const grade = gradeFromScore(totalScore);
         rec.termResults[termKey].results.push({
           subject: rd.subject,
           classScore,
@@ -2368,7 +2610,16 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
 
   function processReleaseApproval(data) {
     const records = getStoredRecords();
-    const targetRecords = records.filter(r => data.studentIds.includes(r.id));
+    const releasedIds = (data && Array.isArray(data.studentIds) ? data.studentIds : [])
+      .map((id) => String(id || "").trim().toUpperCase())
+      .filter(Boolean);
+    const targetRecords = releasedIds.length
+      ? records.filter((r) => releasedIds.includes(String(r.studentId || "").trim().toUpperCase()))
+      : records;
+    if (!targetRecords.length) {
+      showToast("No matching students found for this release.");
+      return;
+    }
     targetRecords.forEach((rec) => {
       const allTerms = rec.termResults || {};
       const termCount = ["term1", "term2", "term3"].filter((k) => allTerms[k] && Array.isArray(allTerms[k].results) && allTerms[k].results.length).length;
@@ -2377,7 +2628,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
         ["term1", "term2", "term3"].forEach((tk) => {
           if (allTerms[tk] && Array.isArray(allTerms[tk].results)) {
             allTerms[tk].results.forEach((r) => {
-              const g = r.grade || (r.totalScore >= 90 ? "A" : r.totalScore >= 80 ? "B" : r.totalScore >= 70 ? "C" : r.totalScore >= 60 ? "D" : r.totalScore >= 50 ? "E" : "F");
+              const g = r.grade || gradeFromScore(r.totalScore);
               gradeCount[g] = (gradeCount[g] || 0) + 1;
             });
           }
@@ -2396,7 +2647,6 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
         rec.promotionDate = stampDate();
       }
     });
-    saveStoredRecords(targetRecords);
     const promotionUpdate = {
       id: "promo-" + Date.now(),
       title: "Academic Year Promotion Results",
@@ -2412,7 +2662,16 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
       updates.push({ ...promotionUpdate });
       rec.updates = updates;
     });
-    renderTable(targetRecords);
+    // Write the promoted students back into the FULL list — saving only the targets
+    // would delete every other student from storage.
+    const allRecords = getStoredRecords().map((rec) => {
+      const updated = targetRecords.find(
+        (item) => String(item.studentId || "").toUpperCase() === String(rec.studentId || "").toUpperCase()
+      );
+      return updated || rec;
+    });
+    saveStoredRecords(allRecords);
+    renderTable(allRecords);
     syncRecordsToPortal(targetRecords);
   }
 
@@ -2553,7 +2812,8 @@ const initial = getStoredRecords();
 
       // Show warning if opened via file:// protocol
       if (location.protocol === "file:") {
-        document.getElementById("fileProtocolWarningAdmin").style.display = "block";
+        const warningBanner = $id("fileProtocolWarningAdmin");
+        if (warningBanner) warningBanner.style.display = "block";
       }
     </script>
 </body>

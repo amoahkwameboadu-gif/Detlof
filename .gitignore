@@ -1,0 +1,15 @@
+# Runtime data written by server.py (student records synced from the admin page)
+detlof_data.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node / tooling
+node_modules/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
