@@ -5,28 +5,18 @@
     "Nursery One",
     "Nursery Two",
     "KG 1",
-    "KG 2 Boys",
-    "KG 2 Girls",
+    "KG 2",
+    "Basic 1",
+    "Basic 2",
+    "Basic 3",
+    "Basic 4",
+    "Basic 5",
+    "Basic 6",
+    "Basic 7",
+    "Basic 8",
+    "Basic 9",
     "Lower KG",
     "Upper KG",
-    "Basic 1 Boys",
-    "Basic 1 Girls",
-    "Basic 2 Boys",
-    "Basic 2 Girls",
-    "Basic 3 Boys",
-    "Basic 3 Girls",
-    "Basic 4 Boys",
-    "Basic 4 Girls",
-    "Basic 5 Boys",
-    "Basic 5 Girls",
-    "Basic 6 Boys",
-    "Basic 6 Girls",
-    "Basic 7 Boys",
-    "Basic 7 Girls",
-    "Basic 8 Boys",
-    "Basic 8 Girls",
-    "Basic 9 Boys",
-    "Basic 9 Girls",
     "JHS 1",
     "JHS 2",
     "JHS 3",
@@ -39,28 +29,18 @@
     "Nursery One": "NUR1",
     "Nursery Two": "NUR2",
     "KG 1": "KG1",
-    "KG 2 Boys": "KGB",
-    "KG 2 Girls": "KGG",
+    "KG 2": "KG2",
     "Lower KG": "LKG",
     "Upper KG": "UKG",
-    "Basic 1 Boys": "B1B",
-    "Basic 1 Girls": "B1G",
-    "Basic 2 Boys": "B2B",
-    "Basic 2 Girls": "B2G",
-    "Basic 3 Boys": "B3B",
-    "Basic 3 Girls": "B3G",
-    "Basic 4 Boys": "B4B",
-    "Basic 4 Girls": "B4G",
-    "Basic 5 Boys": "B5B",
-    "Basic 5 Girls": "B5G",
-    "Basic 6 Boys": "B6B",
-    "Basic 6 Girls": "B6G",
-    "Basic 7 Boys": "B7B",
-    "Basic 7 Girls": "B7G",
-    "Basic 8 Boys": "B8B",
-    "Basic 8 Girls": "B8G",
-    "Basic 9 Boys": "B9B",
-    "Basic 9 Girls": "B9G",
+    "Basic 1": "B1",
+    "Basic 2": "B2",
+    "Basic 3": "B3",
+    "Basic 4": "B4",
+    "Basic 5": "B5",
+    "Basic 6": "B6",
+    "Basic 7": "B7",
+    "Basic 8": "B8",
+    "Basic 9": "B9",
     "JHS 1": "JHS1",
     "JHS 2": "JHS2",
     "JHS 3": "JHS3",
@@ -126,7 +106,7 @@
       "GABRIELLA AMISSAL",
       "ZIPPORAH AGYAPONG"
     ],
-    "KG 2 Boys": [
+    "KG 2": [
       "NAPOLEON ODEHYE ARKRAH",
       "KELVIN KWEGYIR ENTSUAH",
       "EDMUND FIIFI MENSAH",
@@ -135,9 +115,7 @@
       "JUSTIN QUANSAH",
       "CYRIL T. ESSELIFIE",
       "AZZAM NSIYA ZILKIFILU",
-      "BENEDICT BORLABI BORTEY"
-    ],
-    "KG 2 Girls": [
+      "BENEDICT BORLABI BORTEY",
       "GEOVANNA K. ARTHUR",
       "VARNIKA A. ESSEL",
       "DOMINION DADZIE",
@@ -148,9 +126,7 @@
       "PATRICIA DADZIE",
       "AMA ANOKYEWAA ADUSEI"
     ],
-    "Lower KG": [],
-    "Upper KG": [],
-    "Basic 1 Boys": [
+    "Basic 1": [
       "AGYAPONG JEHOSAPHAT",
       "AGYAPONG ADEI-KORSAH JAYDEN",
       "AGBETO JUSTICE",
@@ -159,16 +135,14 @@
       "MAC-QUAYSON EMMANUEL",
       "MENSAH ABAKA D-C EPAPHRAS",
       "MENSAH LARTEY NII JOY EZEKIEL",
-      "THOMRSON KSIBU GERALD"
-    ],
-    "Basic 1 Girls": [
+      "THOMRSON KSIBU GERALD",
       "AKUETTEH NAA DESOE URSULA",
       "ANYIDOH RICHLOVE",
       "ESSOUN ABA ADELAINE",
       "KUMEDU AKU SEDEM GWENDOLYN",
       "SAWYERR AKUA ELSIE"
     ],
-    "Basic 2 Boys": [
+    "Basic 2": [
       "ALI JANAL",
       "APPIAH GRIFFEON",
       "ARTHUR GOODSON REGINALD",
@@ -180,9 +154,7 @@
       "MENSAH-SLIPPI PAPA LIBURIOUS",
       "ANDOH ONESIPHOROUS",
       "ODOOM KWAME JENSON",
-      "BOATENG ADOAE JEFFERY"
-    ],
-    "Basic 2 Girls": [
+      "BOATENG ADOAE JEFFERY",
       "AKYERE NANA ESI NELLY",
       "ANIM ABENA FLORA",
       "ANKAM ESSEL AMA KAY-ANN",
@@ -196,7 +168,7 @@
       "WOODE AMEYE ADWOA SELINA",
       "ANDOH DANUELLA"
     ],
-    "Basic 3 Boys": [
+    "Basic 3": [
       "ABAKAH DIVINE",
       "ABAKAH JABEN",
       "ACKROMOND GODWIN",
@@ -213,9 +185,7 @@
       "MENSAH ATTA HUBERT",
       "NYANDOH ANTHONY",
       "TETIEH A. HUMPHREY",
-      "WOODE AMEYE FIIFI DIVINE"
-    ],
-    "Basic 3 Girls": [
+      "WOODE AMEYE FIIFI DIVINE",
       "AMANZULEY N. JENNIFER",
       "ANSAH M-A. LOIS",
       "ANDERSON A. ROSEMOND",
@@ -227,7 +197,7 @@
       "QUANSAH CATHERINE",
       "SAWYER ESI CHRISTOLIGHT"
     ],
-    "Basic 4 Boys": [
+    "Basic 4": [
       "ABDUL AZIZ SAMAD",
       "ALI FAREED",
       "ARHIN TERENCE",
@@ -238,9 +208,7 @@
       "MENSAH BANU FREDRICK",
       "QUAYSON DEGRAFT FYNN",
       "TETIEH ABI LORD",
-      "YENZU KOJO NKUNTIM"
-    ],
-    "Basic 4 Girls": [
+      "YENZU KOJO NKUNTIM",
       "ACKROMOND ALEIHEA",
       "DANSO CHERYL",
       "ESHUN NHYIRABA",
@@ -249,7 +217,7 @@
       "QUIST DOSIC VALERIE",
       "ASMAH NHYIRA RICHLOVE"
     ],
-    "Basic 5 Boys": [
+    "Basic 5": [
       "BASSAW AARON",
       "COMP ESSIEN BENEDICT",
       "KUBANU CALVIN",
@@ -259,9 +227,7 @@
       "NORTEY MENSAH GIDEON",
       "NUISU ALARIC ELIKEM",
       "TAYLOR KORANKYE NATHANIEL",
-      "ENOCK ABDAE"
-    ],
-    "Basic 5 Girls": [
+      "ENOCK ABDAE",
       "ANSAH KWENUA NHYIRA",
       "BLANKSON ANASTASIA",
       "CORBINAH MARY",
@@ -270,7 +236,7 @@
       "MENSAH AUSTIN NAANA",
       "MENSAH SLIPPI IMMACULATE"
     ],
-    "Basic 6 Boys": [
+    "Basic 6": [
       "BAIDEN PAPA QUECI",
       "BAIDOO USMAN",
       "BRUSAH YAKUBU HENRY",
@@ -280,9 +246,7 @@
       "LAMPIEY BISMARK",
       "NYAMSON KWEKU SYLVESTER",
       "QUAYSON JONATHAN",
-      "SALIFU-BRIDGE MICHEAL"
-    ],
-    "Basic 6 Girls": [
+      "SALIFU-BRIDGE MICHEAL",
       "AKUFFO ADZEPA CLARITEL",
       "BOTSIO MICHEALINA",
       "BRACE-FLINTWOOD MICHELLE",
@@ -296,7 +260,7 @@
       "QUAYSON GLORIA",
       "WOODE NICHOLINA"
     ],
-    "Basic 7 Boys": [
+    "Basic 7": [
       "AMOAH LORD MARCUS",
       "ARTHUR CEDERRAI",
       "BAFFOUR OHUSU ANDY",
@@ -304,9 +268,7 @@
       "EDWIN PAPA SAMUEL",
       "MENSAH GODFREY",
       "NUISU ZANEIDE EUGENE",
-      "QUIST AUSTROPP"
-    ],
-    "Basic 7 Girls": [
+      "QUIST AUSTROPP",
       "ACKAH CHRISTIANA",
       "ALI SONIA",
       "AMEGEDE EDWINA SELIKEM",
@@ -327,7 +289,7 @@
       "SAAKAH DANIELLA",
       "THOMPSON MEVILYN"
     ],
-    "Basic 8 Boys": [
+    "Basic 8": [
       "ADU-ATEYI DANIEL",
       "BAIDOO THOMAS",
       "DANSO ROLAND",
@@ -336,9 +298,7 @@
       "MENSAH JOSIAH",
       "NYANDOH PROSPER",
       "NYARKO ANTWI CYRUS",
-      "OMOOME BOETUY KOFI ALBERT"
-    ],
-    "Basic 8 Girls": [
+      "OMOOME BOETUY KOFI ALBERT",
       "BAIDOO SHERRIFA",
       "DOE DELA JOANITA",
       "ESHUN ARENA LEWISA",
@@ -350,11 +310,9 @@
       "TAYLOR KORANKYE EMMANUELLA",
       "THOMPSON ERNESTINA"
     ],
-    "Basic 9 Boys": [
+    "Basic 9": [
       "CUDJOE ERIC",
-      "BOUFFAND MICHAEL ANGE"
-    ],
-    "Basic 9 Girls": [
+      "BOUFFAND MICHAEL ANGE",
       "CUDJOE ERICA",
       "ESHUN GEORGETTE",
       "GOLLEY E. PEDE",
@@ -363,6 +321,8 @@
       "QUAYSON AGNES",
       "THOMFORD ANNA"
     ],
+    "Lower KG": [],
+    "Upper KG": [],
     "JHS 1": [],
     "JHS 2": [],
     "JHS 3": [],
@@ -766,1560 +726,1560 @@
     {
       "fullName": "NAPOLEON ODEHYE ARKRAH",
       "email": "napoleon.odehye.arkrah@detlof.edu.gh",
-      "studentId": "KGB-0001",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0001",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1050"
     },
     {
       "fullName": "KELVIN KWEGYIR ENTSUAH",
       "email": "kelvin.kwegyir.entsuah@detlof.edu.gh",
-      "studentId": "KGB-0002",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0002",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1051"
     },
     {
       "fullName": "EDMUND FIIFI MENSAH",
       "email": "edmund.fiifi.mensah@detlof.edu.gh",
-      "studentId": "KGB-0003",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0003",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1052"
     },
     {
       "fullName": "ARCHIBALD NII A. QUAYSON",
       "email": "archibald.nii.a.quayson@detlof.edu.gh",
-      "studentId": "KGB-0004",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0004",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1053"
     },
     {
       "fullName": "EWARD ELOLO AGBETZI",
       "email": "eward.elolo.agbetzi@detlof.edu.gh",
-      "studentId": "KGB-0005",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0005",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1054"
     },
     {
       "fullName": "JUSTIN QUANSAH",
       "email": "justin.quansah@detlof.edu.gh",
-      "studentId": "KGB-0006",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0006",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1055"
     },
     {
       "fullName": "CYRIL T. ESSELIFIE",
       "email": "cyril.t.esselifie@detlof.edu.gh",
-      "studentId": "KGB-0007",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0007",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1056"
     },
     {
       "fullName": "AZZAM NSIYA ZILKIFILU",
       "email": "azzam.nsiya.zilkifilu@detlof.edu.gh",
-      "studentId": "KGB-0008",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0008",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1057"
     },
     {
       "fullName": "BENEDICT BORLABI BORTEY",
       "email": "benedict.borlabi.bortey@detlof.edu.gh",
-      "studentId": "KGB-0009",
-      "currentClass": "KG 2 Boys",
+      "studentId": "KG2-0009",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1058"
     },
     {
       "fullName": "GEOVANNA K. ARTHUR",
       "email": "geovanna.k.arthur@detlof.edu.gh",
-      "studentId": "KGG-0001",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0010",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1059"
     },
     {
       "fullName": "VARNIKA A. ESSEL",
       "email": "varnika.a.essel@detlof.edu.gh",
-      "studentId": "KGG-0002",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0011",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1060"
     },
     {
       "fullName": "DOMINION DADZIE",
       "email": "dominion.dadzie@detlof.edu.gh",
-      "studentId": "KGG-0003",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0012",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1061"
     },
     {
       "fullName": "GODJOY ASMAH",
       "email": "godjoy.asmah@detlof.edu.gh",
-      "studentId": "KGG-0004",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0013",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1062"
     },
     {
       "fullName": "GODPRAISE ASMAH",
       "email": "godpraise.asmah@detlof.edu.gh",
-      "studentId": "KGG-0005",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0014",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1063"
     },
     {
       "fullName": "MAYA BRITT APPIAH",
       "email": "maya.britt.appiah@detlof.edu.gh",
-      "studentId": "KGG-0006",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0015",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1064"
     },
     {
       "fullName": "HENRITTA STAR ARTHUR",
       "email": "henritta.star.arthur@detlof.edu.gh",
-      "studentId": "KGG-0007",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0016",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1065"
     },
     {
       "fullName": "PATRICIA DADZIE",
       "email": "patricia.dadzie@detlof.edu.gh",
-      "studentId": "KGG-0008",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0017",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1066"
     },
     {
       "fullName": "AMA ANOKYEWAA ADUSEI",
       "email": "ama.anokyewaa.adusei@detlof.edu.gh",
-      "studentId": "KGG-0009",
-      "currentClass": "KG 2 Girls",
+      "studentId": "KG2-0018",
+      "currentClass": "KG 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1067"
     },
     {
       "fullName": "AGYAPONG JEHOSAPHAT",
       "email": "agyapong.jehosaphat@detlof.edu.gh",
-      "studentId": "B1B-0001",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0001",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1068"
     },
     {
       "fullName": "AGYAPONG ADEI-KORSAH JAYDEN",
       "email": "agyapong.adei.korsah.jayden@detlof.edu.gh",
-      "studentId": "B1B-0002",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0002",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1069"
     },
     {
       "fullName": "AGBETO JUSTICE",
       "email": "agbeto.justice@detlof.edu.gh",
-      "studentId": "B1B-0003",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0003",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1070"
     },
     {
       "fullName": "AMOAH MYRON",
       "email": "amoah.myron@detlof.edu.gh",
-      "studentId": "B1B-0004",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0004",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1071"
     },
     {
       "fullName": "MANUKO JOSEPH KLENAM",
       "email": "manuko.joseph.klenam@detlof.edu.gh",
-      "studentId": "B1B-0005",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0005",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1072"
     },
     {
       "fullName": "MAC-QUAYSON EMMANUEL",
       "email": "mac.quayson.emmanuel@detlof.edu.gh",
-      "studentId": "B1B-0006",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0006",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1073"
     },
     {
       "fullName": "MENSAH ABAKA D-C EPAPHRAS",
       "email": "mensah.abaka.d.c.epaphras@detlof.edu.gh",
-      "studentId": "B1B-0007",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0007",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1074"
     },
     {
       "fullName": "MENSAH LARTEY NII JOY EZEKIEL",
       "email": "mensah.lartey.nii.joy.ezekiel@detlof.edu.gh",
-      "studentId": "B1B-0008",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0008",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1075"
     },
     {
       "fullName": "THOMRSON KSIBU GERALD",
       "email": "thomrson.ksibu.gerald@detlof.edu.gh",
-      "studentId": "B1B-0009",
-      "currentClass": "Basic 1 Boys",
+      "studentId": "B1-0009",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1076"
     },
     {
       "fullName": "AKUETTEH NAA DESOE URSULA",
       "email": "akuetteh.naa.desoe.ursula@detlof.edu.gh",
-      "studentId": "B1G-0001",
-      "currentClass": "Basic 1 Girls",
+      "studentId": "B1-0010",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1077"
     },
     {
       "fullName": "ANYIDOH RICHLOVE",
       "email": "anyidoh.richlove@detlof.edu.gh",
-      "studentId": "B1G-0002",
-      "currentClass": "Basic 1 Girls",
+      "studentId": "B1-0011",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1078"
     },
     {
       "fullName": "ESSOUN ABA ADELAINE",
       "email": "essoun.aba.adelaine@detlof.edu.gh",
-      "studentId": "B1G-0003",
-      "currentClass": "Basic 1 Girls",
+      "studentId": "B1-0012",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1079"
     },
     {
       "fullName": "KUMEDU AKU SEDEM GWENDOLYN",
       "email": "kumedu.aku.sedem.gwendolyn@detlof.edu.gh",
-      "studentId": "B1G-0004",
-      "currentClass": "Basic 1 Girls",
+      "studentId": "B1-0013",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1080"
     },
     {
       "fullName": "SAWYERR AKUA ELSIE",
       "email": "sawyerr.akua.elsie@detlof.edu.gh",
-      "studentId": "B1G-0005",
-      "currentClass": "Basic 1 Girls",
+      "studentId": "B1-0014",
+      "currentClass": "Basic 1",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1081"
     },
     {
       "fullName": "ALI JANAL",
       "email": "ali.janal@detlof.edu.gh",
-      "studentId": "B2B-0001",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0001",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1082"
     },
     {
       "fullName": "APPIAH GRIFFEON",
       "email": "appiah.griffeon@detlof.edu.gh",
-      "studentId": "B2B-0002",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0002",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1083"
     },
     {
       "fullName": "ARTHUR GOODSON REGINALD",
       "email": "arthur.goodson.reginald@detlof.edu.gh",
-      "studentId": "B2B-0003",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0003",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1084"
     },
     {
       "fullName": "BORTEY DECENT SHADRACK",
       "email": "bortey.decent.shadrack@detlof.edu.gh",
-      "studentId": "B2B-0004",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0004",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1085"
     },
     {
       "fullName": "CUDJOE HENRY ELKANAH",
       "email": "cudjoe.henry.elkanah@detlof.edu.gh",
-      "studentId": "B2B-0005",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0005",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1086"
     },
     {
       "fullName": "DAKE SWANZY ARCHIBOLD",
       "email": "dake.swanzy.archibold@detlof.edu.gh",
-      "studentId": "B2B-0006",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0006",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1087"
     },
     {
       "fullName": "DANSO CHERER",
       "email": "danso.cherer@detlof.edu.gh",
-      "studentId": "B2B-0007",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0007",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1088"
     },
     {
       "fullName": "MARFRED PALAS LAMPIEY",
       "email": "marfred.palas.lampiey@detlof.edu.gh",
-      "studentId": "B2B-0008",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0008",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1089"
     },
     {
       "fullName": "MENSAH-SLIPPI PAPA LIBURIOUS",
       "email": "mensah.slippi.papa.liburious@detlof.edu.gh",
-      "studentId": "B2B-0009",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0009",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1090"
     },
     {
       "fullName": "ANDOH ONESIPHOROUS",
       "email": "andoh.onesiphorous@detlof.edu.gh",
-      "studentId": "B2B-0010",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0010",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1091"
     },
     {
       "fullName": "ODOOM KWAME JENSON",
       "email": "odoom.kwame.jenson@detlof.edu.gh",
-      "studentId": "B2B-0011",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0011",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1092"
     },
     {
       "fullName": "BOATENG ADOAE JEFFERY",
       "email": "boateng.adoae.jeffery@detlof.edu.gh",
-      "studentId": "B2B-0012",
-      "currentClass": "Basic 2 Boys",
+      "studentId": "B2-0012",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1093"
     },
     {
       "fullName": "AKYERE NANA ESI NELLY",
       "email": "akyere.nana.esi.nelly@detlof.edu.gh",
-      "studentId": "B2G-0001",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0013",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1094"
     },
     {
       "fullName": "ANIM ABENA FLORA",
       "email": "anim.abena.flora@detlof.edu.gh",
-      "studentId": "B2G-0002",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0014",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1095"
     },
     {
       "fullName": "ANKAM ESSEL AMA KAY-ANN",
       "email": "ankam.essel.ama.kay.ann@detlof.edu.gh",
-      "studentId": "B2G-0003",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0015",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1096"
     },
     {
       "fullName": "KOOMSON NHYIRABA QUEEN",
       "email": "koomson.nhyiraba.queen@detlof.edu.gh",
-      "studentId": "B2G-0004",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0016",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1097"
     },
     {
       "fullName": "KUDANU EDINAM JULIET",
       "email": "kudanu.edinam.juliet@detlof.edu.gh",
-      "studentId": "B2G-0005",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0017",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1098"
     },
     {
       "fullName": "MENSAH BERINA",
       "email": "mensah.berina@detlof.edu.gh",
-      "studentId": "B2G-0006",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0018",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1099"
     },
     {
       "fullName": "MENSAH ASEDA KEZIAH",
       "email": "mensah.aseda.keziah@detlof.edu.gh",
-      "studentId": "B2G-0007",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0019",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1100"
     },
     {
       "fullName": "MENSAH ABENA LORENA",
       "email": "mensah.abena.lorena@detlof.edu.gh",
-      "studentId": "B2G-0008",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0020",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1101"
     },
     {
       "fullName": "NAAMA COFFY",
       "email": "naama.coffy@detlof.edu.gh",
-      "studentId": "B2G-0009",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0021",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1102"
     },
     {
       "fullName": "TAY RUTH",
       "email": "tay.ruth@detlof.edu.gh",
-      "studentId": "B2G-0010",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0022",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1103"
     },
     {
       "fullName": "WOODE AMEYE ADWOA SELINA",
       "email": "woode.ameye.adwoa.selina@detlof.edu.gh",
-      "studentId": "B2G-0011",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0023",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1104"
     },
     {
       "fullName": "ANDOH DANUELLA",
       "email": "andoh.danuella@detlof.edu.gh",
-      "studentId": "B2G-0012",
-      "currentClass": "Basic 2 Girls",
+      "studentId": "B2-0024",
+      "currentClass": "Basic 2",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1105"
     },
     {
       "fullName": "ABAKAH DIVINE",
       "email": "abakah.divine@detlof.edu.gh",
-      "studentId": "B3B-0001",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0001",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1106"
     },
     {
       "fullName": "ABAKAH JABEN",
       "email": "abakah.jaben@detlof.edu.gh",
-      "studentId": "B3B-0002",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0002",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1107"
     },
     {
       "fullName": "ACKROMOND GODWIN",
       "email": "ackromond.godwin@detlof.edu.gh",
-      "studentId": "B3B-0003",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0003",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1108"
     },
     {
       "fullName": "ACKROMOND MELVIN",
       "email": "ackromond.melvin@detlof.edu.gh",
-      "studentId": "B3B-0004",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0004",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1109"
     },
     {
       "fullName": "ADAMU JUWAHA-KORU ZUKLIFULU",
       "email": "adamu.juwaha.koru.zuklifulu@detlof.edu.gh",
-      "studentId": "B3B-0005",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0005",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1110"
     },
     {
       "fullName": "ADAMS ADEM PRINCE",
       "email": "adams.adem.prince@detlof.edu.gh",
-      "studentId": "B3B-0006",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0006",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1111"
     },
     {
       "fullName": "AKUFFO N. Y PHILBERT",
       "email": "akuffo.n.y.philbert@detlof.edu.gh",
-      "studentId": "B3B-0007",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0007",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1112"
     },
     {
       "fullName": "AUSTIN MENSAH KWEKU ROBERT",
       "email": "austin.mensah.kweku.robert@detlof.edu.gh",
-      "studentId": "B3B-0008",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0008",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1113"
     },
     {
       "fullName": "BAIDOO A. RAHMAN",
       "email": "baidoo.a.rahman@detlof.edu.gh",
-      "studentId": "B3B-0009",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0009",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1114"
     },
     {
       "fullName": "BAMFO AMFO KWABENA",
       "email": "bamfo.amfo.kwabena@detlof.edu.gh",
-      "studentId": "B3B-0010",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0010",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1115"
     },
     {
       "fullName": "BOHAM LEBRON RODNEY",
       "email": "boham.lebron.rodney@detlof.edu.gh",
-      "studentId": "B3B-0011",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0011",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1116"
     },
     {
       "fullName": "ESSEL TERRENCE",
       "email": "essel.terrence@detlof.edu.gh",
-      "studentId": "B3B-0012",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0012",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1117"
     },
     {
       "fullName": "MENSAH ATTA HERBERT",
       "email": "mensah.atta.herbert@detlof.edu.gh",
-      "studentId": "B3B-0013",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0013",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1118"
     },
     {
       "fullName": "MENSAH ATTA HUBERT",
       "email": "mensah.atta.hubert@detlof.edu.gh",
-      "studentId": "B3B-0014",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0014",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1119"
     },
     {
       "fullName": "NYANDOH ANTHONY",
       "email": "nyandoh.anthony@detlof.edu.gh",
-      "studentId": "B3B-0015",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0015",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1120"
     },
     {
       "fullName": "TETIEH A. HUMPHREY",
       "email": "tetieh.a.humphrey@detlof.edu.gh",
-      "studentId": "B3B-0016",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0016",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1121"
     },
     {
       "fullName": "WOODE AMEYE FIIFI DIVINE",
       "email": "woode.ameye.fiifi.divine@detlof.edu.gh",
-      "studentId": "B3B-0017",
-      "currentClass": "Basic 3 Boys",
+      "studentId": "B3-0017",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1122"
     },
     {
       "fullName": "AMANZULEY N. JENNIFER",
       "email": "amanzuley.n.jennifer@detlof.edu.gh",
-      "studentId": "B3G-0001",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0018",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1123"
     },
     {
       "fullName": "ANSAH M-A. LOIS",
       "email": "ansah.m.a.lois@detlof.edu.gh",
-      "studentId": "B3G-0002",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0019",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1124"
     },
     {
       "fullName": "ANDERSON A. ROSEMOND",
       "email": "anderson.a.rosemond@detlof.edu.gh",
-      "studentId": "B3G-0003",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0020",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1125"
     },
     {
       "fullName": "BAESAW E. ANAVA",
       "email": "baesaw.e.anava@detlof.edu.gh",
-      "studentId": "B3G-0004",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0021",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1126"
     },
     {
       "fullName": "DARZIE EUNICE",
       "email": "darzie.eunice@detlof.edu.gh",
-      "studentId": "B3G-0005",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0022",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1127"
     },
     {
       "fullName": "EMMESAH CLEMENTINA",
       "email": "emmesah.clementina@detlof.edu.gh",
-      "studentId": "B3G-0006",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0023",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1128"
     },
     {
       "fullName": "ENNINFUL ERICA VALERIE",
       "email": "enninful.erica.valerie@detlof.edu.gh",
-      "studentId": "B3G-0007",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0024",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1129"
     },
     {
       "fullName": "LARTEY THEODOSIA",
       "email": "lartey.theodosia@detlof.edu.gh",
-      "studentId": "B3G-0008",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0025",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1130"
     },
     {
       "fullName": "QUANSAH CATHERINE",
       "email": "quansah.catherine@detlof.edu.gh",
-      "studentId": "B3G-0009",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0026",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1131"
     },
     {
       "fullName": "SAWYER ESI CHRISTOLIGHT",
       "email": "sawyer.esi.christolight@detlof.edu.gh",
-      "studentId": "B3G-0010",
-      "currentClass": "Basic 3 Girls",
+      "studentId": "B3-0027",
+      "currentClass": "Basic 3",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1132"
     },
     {
       "fullName": "ABDUL AZIZ SAMAD",
       "email": "abdul.aziz.samad@detlof.edu.gh",
-      "studentId": "B4B-0001",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0001",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1133"
     },
     {
       "fullName": "ALI FAREED",
       "email": "ali.fareed@detlof.edu.gh",
-      "studentId": "B4B-0002",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0002",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1134"
     },
     {
       "fullName": "ARHIN TERENCE",
       "email": "arhin.terence@detlof.edu.gh",
-      "studentId": "B4B-0003",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0003",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1135"
     },
     {
       "fullName": "ASAMENE CEPHAS JACKLORD",
       "email": "asamene.cephas.jacklord@detlof.edu.gh",
-      "studentId": "B4B-0004",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0004",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1136"
     },
     {
       "fullName": "ESHUN LISIOWELL",
       "email": "eshun.lisiowell@detlof.edu.gh",
-      "studentId": "B4B-0005",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0005",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1137"
     },
     {
       "fullName": "ESHUN JULIAN",
       "email": "eshun.julian@detlof.edu.gh",
-      "studentId": "B4B-0006",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0006",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1138"
     },
     {
       "fullName": "KOOMSON KELVIN",
       "email": "koomson.kelvin@detlof.edu.gh",
-      "studentId": "B4B-0007",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0007",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1139"
     },
     {
       "fullName": "MENSAH BANU FREDRICK",
       "email": "mensah.banu.fredrick@detlof.edu.gh",
-      "studentId": "B4B-0008",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0008",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1140"
     },
     {
       "fullName": "QUAYSON DEGRAFT FYNN",
       "email": "quayson.degraft.fynn@detlof.edu.gh",
-      "studentId": "B4B-0009",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0009",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1141"
     },
     {
       "fullName": "TETIEH ABI LORD",
       "email": "tetieh.abi.lord@detlof.edu.gh",
-      "studentId": "B4B-0010",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0010",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1142"
     },
     {
       "fullName": "YENZU KOJO NKUNTIM",
       "email": "yenzu.kojo.nkuntim@detlof.edu.gh",
-      "studentId": "B4B-0011",
-      "currentClass": "Basic 4 Boys",
+      "studentId": "B4-0011",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1143"
     },
     {
       "fullName": "ACKROMOND ALEIHEA",
       "email": "ackromond.aleihea@detlof.edu.gh",
-      "studentId": "B4G-0001",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0012",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1144"
     },
     {
       "fullName": "DANSO CHERYL",
       "email": "danso.cheryl@detlof.edu.gh",
-      "studentId": "B4G-0002",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0013",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1145"
     },
     {
       "fullName": "ESHUN NHYIRABA",
       "email": "eshun.nhyiraba@detlof.edu.gh",
-      "studentId": "B4G-0003",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0014",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1146"
     },
     {
       "fullName": "KUDANU JESSICA",
       "email": "kudanu.jessica@detlof.edu.gh",
-      "studentId": "B4G-0004",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0015",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1147"
     },
     {
       "fullName": "MENSAH NANU LOVE",
       "email": "mensah.nanu.love@detlof.edu.gh",
-      "studentId": "B4G-0005",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0016",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1148"
     },
     {
       "fullName": "QUIST DOSIC VALERIE",
       "email": "quist.dosic.valerie@detlof.edu.gh",
-      "studentId": "B4G-0006",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0017",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1149"
     },
     {
       "fullName": "ASMAH NHYIRA RICHLOVE",
       "email": "asmah.nhyira.richlove@detlof.edu.gh",
-      "studentId": "B4G-0007",
-      "currentClass": "Basic 4 Girls",
+      "studentId": "B4-0018",
+      "currentClass": "Basic 4",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1150"
     },
     {
       "fullName": "BASSAW AARON",
       "email": "bassaw.aaron@detlof.edu.gh",
-      "studentId": "B5B-0001",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0001",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1151"
     },
     {
       "fullName": "COMP ESSIEN BENEDICT",
       "email": "comp.essien.benedict@detlof.edu.gh",
-      "studentId": "B5B-0002",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0002",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1152"
     },
     {
       "fullName": "KUBANU CALVIN",
       "email": "kubanu.calvin@detlof.edu.gh",
-      "studentId": "B5B-0003",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0003",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1153"
     },
     {
       "fullName": "MENSAH DUKU KINGSFORD",
       "email": "mensah.duku.kingsford@detlof.edu.gh",
-      "studentId": "B5B-0004",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0004",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1154"
     },
     {
       "fullName": "MENSAH ABAKAH EZRA",
       "email": "mensah.abakah.ezra@detlof.edu.gh",
-      "studentId": "B5B-0005",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0005",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1155"
     },
     {
       "fullName": "MENSAH KOJO LEONARD",
       "email": "mensah.kojo.leonard@detlof.edu.gh",
-      "studentId": "B5B-0006",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0006",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1156"
     },
     {
       "fullName": "NORTEY MENSAH GIDEON",
       "email": "nortey.mensah.gideon@detlof.edu.gh",
-      "studentId": "B5B-0007",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0007",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1157"
     },
     {
       "fullName": "NUISU ALARIC ELIKEM",
       "email": "nuisu.alaric.elikem@detlof.edu.gh",
-      "studentId": "B5B-0008",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0008",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1158"
     },
     {
       "fullName": "TAYLOR KORANKYE NATHANIEL",
       "email": "taylor.korankye.nathaniel@detlof.edu.gh",
-      "studentId": "B5B-0009",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0009",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1159"
     },
     {
       "fullName": "ENOCK ABDAE",
       "email": "enock.abdae@detlof.edu.gh",
-      "studentId": "B5B-0010",
-      "currentClass": "Basic 5 Boys",
+      "studentId": "B5-0010",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1160"
     },
     {
       "fullName": "ANSAH KWENUA NHYIRA",
       "email": "ansah.kwenua.nhyira@detlof.edu.gh",
-      "studentId": "B5G-0001",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0011",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1161"
     },
     {
       "fullName": "BLANKSON ANASTASIA",
       "email": "blankson.anastasia@detlof.edu.gh",
-      "studentId": "B5G-0002",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0012",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1162"
     },
     {
       "fullName": "CORBINAH MARY",
       "email": "corbinah.mary@detlof.edu.gh",
-      "studentId": "B5G-0003",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0013",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1163"
     },
     {
       "fullName": "DOGBEY EMILY",
       "email": "dogbey.emily@detlof.edu.gh",
-      "studentId": "B5G-0004",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0014",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1164"
     },
     {
       "fullName": "HARRISON ZITA SARAH",
       "email": "harrison.zita.sarah@detlof.edu.gh",
-      "studentId": "B5G-0005",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0015",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1165"
     },
     {
       "fullName": "MENSAH AUSTIN NAANA",
       "email": "mensah.austin.naana@detlof.edu.gh",
-      "studentId": "B5G-0006",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0016",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1166"
     },
     {
       "fullName": "MENSAH SLIPPI IMMACULATE",
       "email": "mensah.slippi.immaculate@detlof.edu.gh",
-      "studentId": "B5G-0007",
-      "currentClass": "Basic 5 Girls",
+      "studentId": "B5-0017",
+      "currentClass": "Basic 5",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1167"
     },
     {
       "fullName": "BAIDEN PAPA QUECI",
       "email": "baiden.papa.queci@detlof.edu.gh",
-      "studentId": "B6B-0001",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0001",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1168"
     },
     {
       "fullName": "BAIDOO USMAN",
       "email": "baidoo.usman@detlof.edu.gh",
-      "studentId": "B6B-0002",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0002",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1169"
     },
     {
       "fullName": "BRUSAH YAKUBU HENRY",
       "email": "brusah.yakubu.henry@detlof.edu.gh",
-      "studentId": "B6B-0003",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0003",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1170"
     },
     {
       "fullName": "DANSO JERRY O-LARM",
       "email": "danso.jerry.o.larm@detlof.edu.gh",
-      "studentId": "B6B-0004",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0004",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1171"
     },
     {
       "fullName": "ERHAN ISAIAH",
       "email": "erhan.isaiah@detlof.edu.gh",
-      "studentId": "B6B-0005",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0005",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1172"
     },
     {
       "fullName": "GYM EKOW MENSAH",
       "email": "gym.ekow.mensah@detlof.edu.gh",
-      "studentId": "B6B-0006",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0006",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1173"
     },
     {
       "fullName": "LAMPIEY BISMARK",
       "email": "lampiey.bismark@detlof.edu.gh",
-      "studentId": "B6B-0007",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0007",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1174"
     },
     {
       "fullName": "NYAMSON KWEKU SYLVESTER",
       "email": "nyamson.kweku.sylvester@detlof.edu.gh",
-      "studentId": "B6B-0008",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0008",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1175"
     },
     {
       "fullName": "QUAYSON JONATHAN",
       "email": "quayson.jonathan@detlof.edu.gh",
-      "studentId": "B6B-0009",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0009",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1176"
     },
     {
       "fullName": "SALIFU-BRIDGE MICHEAL",
       "email": "salifu.bridge.micheal@detlof.edu.gh",
-      "studentId": "B6B-0010",
-      "currentClass": "Basic 6 Boys",
+      "studentId": "B6-0010",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1177"
     },
     {
       "fullName": "AKUFFO ADZEPA CLARITEL",
       "email": "akuffo.adzepa.claritel@detlof.edu.gh",
-      "studentId": "B6G-0001",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0011",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1178"
     },
     {
       "fullName": "BOTSIO MICHEALINA",
       "email": "botsio.michealina@detlof.edu.gh",
-      "studentId": "B6G-0002",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0012",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1179"
     },
     {
       "fullName": "BRACE-FLINTWOOD MICHELLE",
       "email": "brace.flintwood.michelle@detlof.edu.gh",
-      "studentId": "B6G-0003",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0013",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1180"
     },
     {
       "fullName": "GANOR JEMIMA",
       "email": "ganor.jemima@detlof.edu.gh",
-      "studentId": "B6G-0004",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0014",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1181"
     },
     {
       "fullName": "GYASI SARPOMAA MELLISA",
       "email": "gyasi.sarpomaa.mellisa@detlof.edu.gh",
-      "studentId": "B6G-0005",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0015",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1182"
     },
     {
       "fullName": "KOOMSON CHRISTODIA",
       "email": "koomson.christodia@detlof.edu.gh",
-      "studentId": "B6G-0006",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0016",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1183"
     },
     {
       "fullName": "LARTEY VALERIE",
       "email": "lartey.valerie@detlof.edu.gh",
-      "studentId": "B6G-0007",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0017",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1184"
     },
     {
       "fullName": "MENSAH ABENA MAAME",
       "email": "mensah.abena.maame@detlof.edu.gh",
-      "studentId": "B6G-0008",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0018",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1185"
     },
     {
       "fullName": "MENSAH BIBIANA",
       "email": "mensah.bibiana@detlof.edu.gh",
-      "studentId": "B6G-0009",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0019",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1186"
     },
     {
       "fullName": "MEYES NYENZU EFUA NHYIRA",
       "email": "meyes.nyenzu.efua.nhyira@detlof.edu.gh",
-      "studentId": "B6G-0010",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0020",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1187"
     },
     {
       "fullName": "QUAYSON GLORIA",
       "email": "quayson.gloria@detlof.edu.gh",
-      "studentId": "B6G-0011",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0021",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1188"
     },
     {
       "fullName": "WOODE NICHOLINA",
       "email": "woode.nicholina@detlof.edu.gh",
-      "studentId": "B6G-0012",
-      "currentClass": "Basic 6 Girls",
+      "studentId": "B6-0022",
+      "currentClass": "Basic 6",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1189"
     },
     {
       "fullName": "AMOAH LORD MARCUS",
       "email": "amoah.lord.marcus@detlof.edu.gh",
-      "studentId": "B7B-0001",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0001",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1190"
     },
     {
       "fullName": "ARTHUR CEDERRAI",
       "email": "arthur.cederrai@detlof.edu.gh",
-      "studentId": "B7B-0002",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0002",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1191"
     },
     {
       "fullName": "BAFFOUR OHUSU ANDY",
       "email": "baffour.ohusu.andy@detlof.edu.gh",
-      "studentId": "B7B-0003",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0003",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1192"
     },
     {
       "fullName": "CORBINAH DANIEL",
       "email": "corbinah.daniel@detlof.edu.gh",
-      "studentId": "B7B-0004",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0004",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1193"
     },
     {
       "fullName": "EDWIN PAPA SAMUEL",
       "email": "edwin.papa.samuel@detlof.edu.gh",
-      "studentId": "B7B-0005",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0005",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1194"
     },
     {
       "fullName": "MENSAH GODFREY",
       "email": "mensah.godfrey@detlof.edu.gh",
-      "studentId": "B7B-0006",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0006",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1195"
     },
     {
       "fullName": "NUISU ZANEIDE EUGENE",
       "email": "nuisu.zaneide.eugene@detlof.edu.gh",
-      "studentId": "B7B-0007",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0007",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1196"
     },
     {
       "fullName": "QUIST AUSTROPP",
       "email": "quist.austropp@detlof.edu.gh",
-      "studentId": "B7B-0008",
-      "currentClass": "Basic 7 Boys",
+      "studentId": "B7-0008",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1197"
     },
     {
       "fullName": "ACKAH CHRISTIANA",
       "email": "ackah.christiana@detlof.edu.gh",
-      "studentId": "B7G-0001",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0009",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1198"
     },
     {
       "fullName": "ALI SONIA",
       "email": "ali.sonia@detlof.edu.gh",
-      "studentId": "B7G-0002",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0010",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1199"
     },
     {
       "fullName": "AMEGEDE EDWINA SELIKEM",
       "email": "amegede.edwina.selikem@detlof.edu.gh",
-      "studentId": "B7G-0003",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0011",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1200"
     },
     {
       "fullName": "ARTHUR DANIELS ANGEL",
       "email": "arthur.daniels.angel@detlof.edu.gh",
-      "studentId": "B7G-0004",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0012",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1201"
     },
     {
       "fullName": "BOHAM NHYIRA LORRAINE",
       "email": "boham.nhyira.lorraine@detlof.edu.gh",
-      "studentId": "B7G-0005",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0013",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1202"
     },
     {
       "fullName": "COBBINAH BLESS",
       "email": "cobbinah.bless@detlof.edu.gh",
-      "studentId": "B7G-0006",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0014",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1203"
     },
     {
       "fullName": "DARZIE AMA DEBORAH",
       "email": "darzie.ama.deborah@detlof.edu.gh",
-      "studentId": "B7G-0007",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0015",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1204"
     },
     {
       "fullName": "DANSO AGNES",
       "email": "danso.agnes@detlof.edu.gh",
-      "studentId": "B7G-0008",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0016",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1205"
     },
     {
       "fullName": "DANSO ENURADWOA MILDRED",
       "email": "danso.enuradwoa.mildred@detlof.edu.gh",
-      "studentId": "B7G-0009",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0017",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1206"
     },
     {
       "fullName": "DAVIES ARABA ANORIWE",
       "email": "davies.araba.anoriwe@detlof.edu.gh",
-      "studentId": "B7G-0010",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0018",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1207"
     },
     {
       "fullName": "ENNONSON CHARLOTTE",
       "email": "ennonson.charlotte@detlof.edu.gh",
-      "studentId": "B7G-0011",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0019",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1208"
     },
     {
       "fullName": "ESHUN PEIROLINA",
       "email": "eshun.peirolina@detlof.edu.gh",
-      "studentId": "B7G-0012",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0020",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1209"
     },
     {
       "fullName": "GBABRAH PAILINA",
       "email": "gbabrah.pailina@detlof.edu.gh",
-      "studentId": "B7G-0013",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0021",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1210"
     },
     {
       "fullName": "MENSAH KONTIOH EKUA MAAME",
       "email": "mensah.kontioh.ekua.maame@detlof.edu.gh",
-      "studentId": "B7G-0014",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0022",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1211"
     },
     {
       "fullName": "MENSAH JUSTINA",
       "email": "mensah.justina@detlof.edu.gh",
-      "studentId": "B7G-0015",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0023",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1212"
     },
     {
       "fullName": "MOHAMMED HIDAYA SALIFU",
       "email": "mohammed.hidaya.salifu@detlof.edu.gh",
-      "studentId": "B7G-0016",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0024",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1213"
     },
     {
       "fullName": "QUARSHIE GABRIELLA",
       "email": "quarshie.gabriella@detlof.edu.gh",
-      "studentId": "B7G-0017",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0025",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1214"
     },
     {
       "fullName": "SAAKAH DANIELLA",
       "email": "saakah.daniella@detlof.edu.gh",
-      "studentId": "B7G-0018",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0026",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1215"
     },
     {
       "fullName": "THOMPSON MEVILYN",
       "email": "thompson.mevilyn@detlof.edu.gh",
-      "studentId": "B7G-0019",
-      "currentClass": "Basic 7 Girls",
+      "studentId": "B7-0027",
+      "currentClass": "Basic 7",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1216"
     },
     {
       "fullName": "ADU-ATEYI DANIEL",
       "email": "adu.ateyi.daniel@detlof.edu.gh",
-      "studentId": "B8B-0001",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0001",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1217"
     },
     {
       "fullName": "BAIDOO THOMAS",
       "email": "baidoo.thomas@detlof.edu.gh",
-      "studentId": "B8B-0002",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0002",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1218"
     },
     {
       "fullName": "DANSO ROLAND",
       "email": "danso.roland@detlof.edu.gh",
-      "studentId": "B8B-0003",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0003",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1219"
     },
     {
       "fullName": "ENNINFUL ERIC KELVIN",
       "email": "enninful.eric.kelvin@detlof.edu.gh",
-      "studentId": "B8B-0004",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0004",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1220"
     },
     {
       "fullName": "MENSAH KOJO EBENEZER",
       "email": "mensah.kojo.ebenezer@detlof.edu.gh",
-      "studentId": "B8B-0005",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0005",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1221"
     },
     {
       "fullName": "MENSAH JOSIAH",
       "email": "mensah.josiah@detlof.edu.gh",
-      "studentId": "B8B-0006",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0006",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1222"
     },
     {
       "fullName": "NYANDOH PROSPER",
       "email": "nyandoh.prosper@detlof.edu.gh",
-      "studentId": "B8B-0007",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0007",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1223"
     },
     {
       "fullName": "NYARKO ANTWI CYRUS",
       "email": "nyarko.antwi.cyrus@detlof.edu.gh",
-      "studentId": "B8B-0008",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0008",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1224"
     },
     {
       "fullName": "OMOOME BOETUY KOFI ALBERT",
       "email": "omoome.boetuy.kofi.albert@detlof.edu.gh",
-      "studentId": "B8B-0009",
-      "currentClass": "Basic 8 Boys",
+      "studentId": "B8-0009",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1225"
     },
     {
       "fullName": "BAIDOO SHERRIFA",
       "email": "baidoo.sherrifa@detlof.edu.gh",
-      "studentId": "B8G-0001",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0010",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1226"
     },
     {
       "fullName": "DOE DELA JOANITA",
       "email": "doe.dela.joanita@detlof.edu.gh",
-      "studentId": "B8G-0002",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0011",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1227"
     },
     {
       "fullName": "ESHUN ARENA LEWISA",
       "email": "eshun.arena.lewisa@detlof.edu.gh",
-      "studentId": "B8G-0003",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0012",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1228"
     },
     {
       "fullName": "KOUSSANTIE AGNES ABA",
       "email": "koussantie.agnes.aba@detlof.edu.gh",
-      "studentId": "B8G-0004",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0013",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1229"
     },
     {
       "fullName": "KWANSAH MAAME ESI",
       "email": "kwansah.maame.esi@detlof.edu.gh",
-      "studentId": "B8G-0005",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0014",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1230"
     },
     {
       "fullName": "MENSAH NORTEY JOSEPHINE",
       "email": "mensah.nortey.josephine@detlof.edu.gh",
-      "studentId": "B8G-0006",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0015",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1231"
     },
     {
       "fullName": "NKERSIA MIRACLE",
       "email": "nkersia.miracle@detlof.edu.gh",
-      "studentId": "B8G-0007",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0016",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1232"
     },
     {
       "fullName": "QUARSHIE FAUSTINA",
       "email": "quarshie.faustina@detlof.edu.gh",
-      "studentId": "B8G-0008",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0017",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1233"
     },
     {
       "fullName": "TAYLOR KORANKYE EMMANUELLA",
       "email": "taylor.korankye.emmanuella@detlof.edu.gh",
-      "studentId": "B8G-0009",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0018",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1234"
     },
     {
       "fullName": "THOMPSON ERNESTINA",
       "email": "thompson.ernestina@detlof.edu.gh",
-      "studentId": "B8G-0010",
-      "currentClass": "Basic 8 Girls",
+      "studentId": "B8-0019",
+      "currentClass": "Basic 8",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1235"
     },
     {
       "fullName": "CUDJOE ERIC",
       "email": "cudjoe.eric@detlof.edu.gh",
-      "studentId": "B9B-0001",
-      "currentClass": "Basic 9 Boys",
+      "studentId": "B9-0001",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1236"
     },
     {
       "fullName": "BOUFFAND MICHAEL ANGE",
       "email": "bouffand.michael.ange@detlof.edu.gh",
-      "studentId": "B9B-0002",
-      "currentClass": "Basic 9 Boys",
+      "studentId": "B9-0002",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1237"
     },
     {
       "fullName": "CUDJOE ERICA",
       "email": "cudjoe.erica@detlof.edu.gh",
-      "studentId": "B9G-0001",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0003",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1238"
     },
     {
       "fullName": "ESHUN GEORGETTE",
       "email": "eshun.georgette@detlof.edu.gh",
-      "studentId": "B9G-0002",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0004",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1239"
     },
     {
       "fullName": "GOLLEY E. PEDE",
       "email": "golley.e.pede@detlof.edu.gh",
-      "studentId": "B9G-0003",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0005",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1240"
     },
     {
       "fullName": "KOLOEL RIHANNA",
       "email": "koloel.rihanna@detlof.edu.gh",
-      "studentId": "B9G-0004",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0006",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1241"
     },
     {
       "fullName": "ODOI FREDA",
       "email": "odoi.freda@detlof.edu.gh",
-      "studentId": "B9G-0005",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0007",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1242"
     },
     {
       "fullName": "QUAYSON AGNES",
       "email": "quayson.agnes@detlof.edu.gh",
-      "studentId": "B9G-0006",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0008",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1243"
     },
     {
       "fullName": "THOMFORD ANNA",
       "email": "thomford.anna@detlof.edu.gh",
-      "studentId": "B9G-0007",
-      "currentClass": "Basic 9 Girls",
+      "studentId": "B9-0009",
+      "currentClass": "Basic 9",
       "academicYear": "2025 / 2026",
       "loginCode": "DET-1244"
     }
