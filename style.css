@@ -594,3 +594,61 @@ td { padding: 12px 8px; border-bottom: 1px solid var(--line); font-size: 12px; o
 @media (max-width: 480px) {
   .login-card { padding: 24px 16px; border-radius: 12px; }
 }
+
+/* Profile completeness banner */
+.profile-completion {
+  margin: 0 0 16px; padding: 12px 14px; border-radius: 10px;
+  background: linear-gradient(135deg, #f6eefb 0%, #ffffff 100%);
+  border: 1px solid var(--crest-purple-soft);
+}
+.completion-bar {
+  height: 6px; border-radius: 999px; background: #eadfe9; overflow: hidden; margin-bottom: 8px;
+}
+.completion-bar span {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #560f75 0%, #8e24aa 100%);
+  transition: width 400ms ease;
+}
+.completion-text { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.completion-text strong { color: var(--crest-purple); }
+
+/* Identity image */
+.profile-pic-section img { transition: transform 200ms ease, box-shadow 200ms ease; }
+.profile-pic-section img:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(86,15,117,0.22); }
+
+/* Focus visibility for keyboard users */
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid rgba(86, 15, 117, 0.45);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Wider responsive pass for the student portal */
+@media (max-width: 900px) {
+  .row-2 { grid-template-columns: 1fr; }
+  .panel { padding: 16px; }
+  .term-chip { flex: 1 1 auto; justify-content: center; }
+  #termSelector { width: 100%; }
+  #termSelector > * { flex: 1 1 auto; justify-content: center; }
+}
+@media (max-width: 720px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-wrap: wrap; gap: 10px; }
+  .topbar > * { flex: 1 1 auto; }
+  .nav-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .nav-tabs button { white-space: nowrap; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll table { min-width: 560px; }
+  .outline-btn, .btn { width: 100%; justify-content: center; }
+  .field input, .field select, .field textarea { font-size: 16px; }
+  .profile-pic-section { flex-direction: column; align-items: flex-start; text-align: left; }
+}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .stat-value { font-size: 20px; }
+  .panel, .card { border-radius: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

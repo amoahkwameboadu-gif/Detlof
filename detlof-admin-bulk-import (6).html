@@ -535,6 +535,106 @@
       .field input, .field select, .field textarea { min-height: 44px; }
       .timetable-day { min-height: 44px; }
     }
+
+    /* ---------------- identity photo + publish preview ---------------- */
+    .identity-photo-row {
+      display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap;
+      margin-top: 16px; padding: 14px; border: 1px solid var(--line);
+      border-radius: 10px; background: linear-gradient(135deg, #fbf7fd 0%, #ffffff 100%);
+    }
+    .identity-photo-preview { flex: 0 0 auto; }
+    .identity-photo-preview img {
+      width: 104px; height: 104px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--crest-purple-soft); background: #fff;
+      box-shadow: 0 4px 14px rgba(86, 15, 117, 0.14);
+    }
+    .identity-photo-row input[type="file"] { font-size: 12px; max-width: 100%; }
+
+    .preview-modal { position: fixed; inset: 0; z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 18px; }
+    .preview-modal.hidden { display: none; }
+    .preview-modal-backdrop { position: absolute; inset: 0; background: rgba(42, 23, 48, 0.55); backdrop-filter: blur(3px); }
+    .preview-modal-card {
+      position: relative; width: min(1040px, 100%); max-height: 90vh; display: flex; flex-direction: column;
+      background: #fff; border-radius: 14px; box-shadow: 0 24px 60px rgba(42, 23, 48, 0.32); overflow: hidden;
+      animation: previewPop 180ms ease-out;
+    }
+    @keyframes previewPop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+    .preview-modal-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 18px; background: var(--crest-purple); color: #fff;
+    }
+    .preview-modal-head h3 { margin: 0; font-size: 15px; }
+    .preview-close {
+      background: rgba(255, 255, 255, 0.16); border: none; color: #fff; font-size: 22px;
+      line-height: 1; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: background 140ms ease;
+    }
+    .preview-close:hover { background: rgba(255, 255, 255, 0.3); }
+    .preview-modal-body { padding: 16px 18px; overflow: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .preview-pane { min-width: 0; }
+    .preview-pane-title {
+      margin: 0 0 10px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); border-bottom: 2px solid var(--crest-purple-soft); padding-bottom: 6px;
+    }
+    .preview-card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: #fff; }
+    .preview-card + .preview-card { margin-top: 12px; }
+    .preview-card h4 { margin: 0 0 10px; font-size: 14px; color: var(--crest-purple); }
+    .preview-card-body { min-width: 0; }
+    .preview-photo { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid var(--crest-purple-soft); margin-bottom: 10px; }
+    .preview-photo-empty { display: flex; align-items: center; justify-content: center; background: var(--crest-purple-soft); color: var(--crest-purple); font-weight: 800; font-size: 22px; }
+    .preview-row { display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 12px; }
+    .preview-label { flex: 0 0 42%; color: var(--muted); }
+    .preview-value { flex: 1; min-width: 0; font-weight: 600; word-break: break-word; }
+    .preview-value.preview-missing { color: #b87a00; font-weight: 500; font-style: italic; }
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .preview-table th { text-align: left; padding: 6px; border-bottom: 2px solid var(--line); color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .preview-table td { padding: 6px; border-bottom: 1px solid var(--line); }
+    .preview-whatsapp {
+      margin: 8px 0 0; padding: 12px; border-radius: 12px 12px 12px 3px; background: #dcf8c6;
+      color: #0b3d1d; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+      font-family: inherit; max-height: 320px; overflow: auto;
+    }
+    .preview-note { font-size: 11px; color: var(--muted); margin: 6px 0; }
+    .preview-modal-foot {
+      display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+      padding: 14px 18px; border-top: 1px solid var(--line); background: #faf7fc;
+    }
+    .preview-modal-foot .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    @media (max-width: 900px) {
+      .preview-modal-body { grid-template-columns: 1fr; }
+      .preview-modal-card { max-height: 94vh; }
+      .preview-modal-foot { justify-content: stretch; }
+      .preview-modal-foot .btn { flex: 1 1 auto; justify-content: center; }
+      .identity-photo-row { flex-direction: column; align-items: center; text-align: center; }
+      .identity-photo-row > div:last-child { width: 100%; }
+    }
+    @media (max-width: 560px) {
+      .preview-row { flex-direction: column; gap: 2px; }
+      .preview-label { flex: none; }
+      .identity-photo-preview img { width: 84px; height: 84px; }
+      .preview-modal { padding: 0; }
+      .preview-modal-card { border-radius: 0; height: 100vh; max-height: 100vh; }
+    }
+
+    /* ---------------- wider responsive pass ---------------- */
+    @media (max-width: 1024px) {
+      .row-2 { grid-template-columns: 1fr; }
+      .card { padding: 16px; }
+      table { font-size: 11px; }
+    }
+    @media (max-width: 720px) {
+      .admin-shell, main, .container { padding: 12px; }
+      .update-card { padding: 12px; }
+      h2 { font-size: 16px; }
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .table-scroll table { min-width: 620px; }
+      .btn { width: 100%; justify-content: center; }
+      .field input, .field select, .field textarea { font-size: 16px; }
+      .selected-student-summary { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
     </style>
 </head>
 <body>
@@ -980,6 +1080,20 @@
             <button type="button" class="btn btn-teal" id="recordSendReportWhatsAppBtn" style="flex:1;">Send Report via WhatsApp</button>
             <button type="button" class="btn btn-teal" id="recordSendTimetableWhatsAppBtn" style="flex:1;">Send Timetable via WhatsApp</button>
           </div>
+          <div class="identity-photo-row">
+            <div class="identity-photo-preview">
+              <img id="recordIdentityPhoto" src="detlofcreast.svg" alt="Student identity photo" />
+            </div>
+            <div style="flex:1;min-width:200px;">
+              <h3 style="margin:0 0 4px;font-size:13px;">Student Identity Photo</h3>
+              <p style="margin:0 0 10px;font-size:11px;color:var(--muted);">Upload a photo for this student. It is saved to their record and appears automatically as the identity image on their portal profile, reports and the login screen.</p>
+              <input type="file" id="recordIdentityPhotoInput" accept="image/*" />
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                <button type="button" class="btn btn-gold" id="recordIdentityPhotoSave" style="padding:8px 12px;font-size:12px;">Upload &amp; Save to Profile</button>
+                <button type="button" class="btn btn-outline" id="recordIdentityPhotoClear" style="padding:8px 12px;font-size:12px;">Remove Photo</button>
+              </div>
+            </div>
+          </div>
           <form id="resultForm" class="update-card">
             <h3>Publish a Subject Result</h3>
             <p>Class Score is weighted 40% and Exam Score 60%. Totals and grades are calculated automatically.</p>
@@ -1123,8 +1237,63 @@
         </form>
       </section>
 
-      <section class="card" style="margin-bottom:18px;">
-         <h2>8. Broadcast Announcement to All Student Portals</h2>
+        <section class="card" style="margin-bottom:18px;">
+          <h2>9. Preview &amp; Send</h2>
+          <p class="sub">Review exactly what the student will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
+          <div class="row-2">
+            <div class="field">
+              <label for="previewKind">What to preview</label>
+              <select id="previewKind">
+                <option value="report">Student results report</option>
+                <option value="timetable">Student class timetable</option>
+                <option value="profile">Student profile details</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="previewTerm">Term</label>
+              <select id="previewTerm">
+                <option value="term1">First Term</option>
+                <option value="term2" selected>Second Term</option>
+                <option value="term3">Third Term</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-gold" id="openPreviewBtn" style="flex:1;">Preview Before Sending</button>
+            <button type="button" class="btn btn-outline" id="saveContactBtn" style="flex:1;">Save Parent Contact (.vcf)</button>
+            <button type="button" class="btn btn-teal" id="openWhatsAppBtn" style="flex:1;">Open WhatsApp &amp; Send</button>
+          </div>
+          <p class="sub" style="margin:10px 0 0;">Tip: save the contact first, then send. The parent's name will show in the chat list instead of a bare number.</p>
+        </section>
+
+        <div id="publishPreviewModal" class="preview-modal hidden" role="dialog" aria-modal="true" aria-labelledby="publishPreviewTitle">
+          <div class="preview-modal-backdrop" onclick="closePublishPreview()"></div>
+          <div class="preview-modal-card" role="document">
+            <div class="preview-modal-head">
+              <h3 id="publishPreviewTitle">Preview before sending</h3>
+              <button type="button" class="preview-close" onclick="closePublishPreview()" aria-label="Close preview">&times;</button>
+            </div>
+            <div class="preview-modal-body">
+              <section class="preview-pane">
+                <h4 class="preview-pane-title">Student portal view</h4>
+                <div id="publishPreviewPortal"></div>
+              </section>
+              <section class="preview-pane">
+                <h4 class="preview-pane-title">WhatsApp message</h4>
+                <p id="publishPreviewContactState" class="preview-note"></p>
+                <pre id="publishPreviewWhatsapp" class="preview-whatsapp"></pre>
+              </section>
+            </div>
+            <div class="preview-modal-foot">
+              <button type="button" class="btn btn-outline" id="publishPreviewCopy">Copy Message</button>
+              <button type="button" class="btn btn-gold" id="publishPreviewSaveContact">1. Save Contact</button>
+              <button type="button" class="btn btn-teal" id="publishPreviewSend">2. Send on WhatsApp</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="card" style="margin-bottom:18px;">
+          <h2>10. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -1648,18 +1817,106 @@
       return record;
     }
 
+    // Student identity photos are stored inside the student record, so they are
+    // downscaled first: a full-size photo is ~1 MB as a data URL and 244 of them
+    // would exhaust the browser's storage quota.
+    const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
+    const PHOTO_EDGE = 420;
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Could not read the selected image."));
+        reader.readAsDataURL(file);
+      });
+    }
+
     function readAdminProfileImage(file) {
       return new Promise((resolve, reject) => {
         if (!file) return resolve("");
-        if (!file.type.startsWith("image/")) {
-          reject(new Error("Please choose an image file."));
+        if (!file.type || !file.type.startsWith("image/")) {
+          reject(new Error("Please choose an image file (JPG, PNG or WebP)."));
           return;
         }
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result || ""));
-        reader.onerror = () => reject(reader.error || new Error("Could not read the image."));
-        reader.readAsDataURL(file);
+        if (file.size > MAX_PHOTO_BYTES) {
+          reject(new Error("That image is larger than 4 MB. Please choose a smaller photo."));
+          return;
+        }
+        readFileAsDataUrl(file)
+          .then((dataUrl) => downscaleImage(dataUrl, PHOTO_EDGE))
+          .then((small) => {
+            if (!small) resolve(dataUrl);
+            else resolve(small);
+          })
+          .catch(() => resolve(""));
       });
+    }
+
+    // Returns a downscaled square-cropped JPEG data URL, or null when the browser
+    // cannot decode the image (in which case the original is kept).
+    function downscaleImage(dataUrl, maxEdge) {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.onload = function () {
+          try {
+            const size = Math.min(image.naturalWidth || maxEdge, image.naturalHeight || maxEdge);
+            const side = Math.max(1, Math.round(size));
+            const canvas = document.createElement("canvas");
+            canvas.width = side;
+            canvas.height = side;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) { resolve(null); return; }
+            const w = image.naturalWidth;
+            const h = image.naturalHeight;
+            const crop = Math.min(w, h);
+            ctx.drawImage(image, (w - crop) / 2, (h - crop) / 2, crop, crop, 0, 0, side, side);
+            const edge = Math.min(maxEdge, side);
+            if (edge !== side) {
+              const out = document.createElement("canvas");
+              out.width = edge;
+              out.height = edge;
+              const outCtx = out.getContext("2d");
+              outCtx.drawImage(canvas, 0, 0, side, side, 0, 0, edge, edge);
+              resolve(out.toDataURL("image/jpeg", 0.82));
+              return;
+            }
+            resolve(canvas.toDataURL("image/jpeg", 0.82));
+          } catch {
+            resolve(null);
+          }
+        };
+        image.onerror = () => resolve(null);
+        image.src = dataUrl;
+      });
+    }
+
+    // Saves the chosen photo straight onto one specific student's record.
+    async function saveIdentityPhoto(studentId, file) {
+      const records = getStoredRecords();
+      const target = records.find((r) => String(r.studentId).toUpperCase() === String(studentId || "").toUpperCase());
+      if (!target) { showToast("Select a student first"); return false; }
+      let dataUrl = "";
+      try {
+        dataUrl = await readAdminProfileImage(file);
+      } catch (error) {
+        showToast(error.message);
+        return false;
+      }
+      if (!dataUrl) { showToast("Could not read that image. Please try a different file."); return false; }
+
+      const updated = { ...target, profilePic: dataUrl, updatedBy: teacherLabel(), updatedAt: stampIso() };
+      const all = getStoredRecords().map((r) => (String(r.studentId).toUpperCase() === String(target.studentId).toUpperCase() ? updated : r));
+      try {
+        saveStoredRecords(all);
+      } catch {
+        showToast("Storage is full. Delete some student photos or use smaller images.");
+        return false;
+      }
+      renderTable(getStoredRecords());
+      await syncRecordsToPortal([updated]);
+      showToast("Identity photo saved for " + target.fullName + ". It now appears on their portal profile.");
+      return true;
     }
 
     async function submitAdminProfile(event) {
@@ -2399,6 +2656,105 @@
       showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
     });
 
+    function currentPreviewPayload() {
+      const record = getRecordForTypedName();
+      const kind = document.getElementById("previewKind").value;
+      const termKey = document.getElementById("previewTerm").value;
+      const phoneInput = document.getElementById("adminSendParentPhone");
+      const typedPhone = phoneInput ? phoneInput.value.trim() : "";
+      if (typedPhone && record) {
+        record.whatsappNumber = typedPhone;
+        record.profileWhatsApp = typedPhone;
+      }
+
+      if (kind === "timetable") {
+        return {
+          record,
+          title: "Timetable for " + (record ? record.fullName : "student"),
+          portalHtml: buildTimetablePreviewHtml(record && record.timetable),
+          message: record ? buildTimetableMessage(record, record.currentClass, record.timetable) : "",
+        };
+      }
+      if (kind === "profile") {
+        return {
+          record,
+          title: "Profile for " + (record ? record.fullName : "student"),
+          portalHtml: buildPortalPreviewHtml(record),
+          message: record
+            ? "*Detlof Preparatory School - STUDENT PROFILE*\n\n"
+              + "Student: " + record.fullName + "\n"
+              + "Class: " + record.currentClass + "\n"
+              + "Student ID: " + record.studentId + "\n"
+              + "Parent: " + (record.parentName || "Not on file") + "\n"
+              + "Phone: " + (record.parentPhone || "Not on file") + "\n"
+              + "Email: " + (record.email || "") + "\n\n"
+              + "Full details are on the Student Portal.\n" + portalUrl()
+            : "",
+        };
+      }
+      return {
+        record,
+        title: (TERM_LABELS[termKey] || "Term") + " results for " + (record ? record.fullName : "student"),
+        portalHtml: buildResultsPreviewHtml(termKey),
+        message: record ? buildResultsMessage(record, termKey) : "",
+      };
+    }
+
+    bindEvent("openPreviewBtn", "click", function () {
+      const payload = currentPreviewPayload();
+      if (!payload.record) { showToast("Select a student in the Student Records section first"); return; }
+      openPublishPreview(payload);
+    });
+
+    bindEvent("saveContactBtn", "click", function () {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student in the Student Records section first"); return; }
+      saveContactToPhone(record);
+    });
+
+    bindEvent("openWhatsAppBtn", "click", function () {
+      const payload = currentPreviewPayload();
+      if (!payload.record) { showToast("Select a student in the Student Records section first"); return; }
+      if (!payload.message) { showToast("There is nothing to send yet. Publish results or a timetable first."); return; }
+      openWhatsApp(payload.record.whatsappNumber || payload.record.profileWhatsApp || payload.record.parentPhone, payload.message);
+    });
+
+    bindEvent("previewKind", "change", function () {
+      const timetable = this.value === "timetable";
+      document.getElementById("previewTerm").disabled = timetable;
+    });
+
+    // Identity photo upload for one specific student.
+    bindEvent("recordIdentityPhotoInput", "change", function () {
+      const file = this.files && this.files[0];
+      const preview = document.getElementById("recordIdentityPhoto");
+      if (!file || !preview) return;
+      readFileAsDataUrl(file).then((dataUrl) => { preview.src = dataUrl; }).catch(() => {});
+    });
+
+    bindEvent("recordIdentityPhotoSave", "click", async function () {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student in the Student Records section first"); return; }
+      const input = document.getElementById("recordIdentityPhotoInput");
+      const file = input.files && input.files[0];
+      if (!file) { showToast("Choose a photo file first"); return; }
+      const ok = await saveIdentityPhoto(record.studentId, file);
+      if (ok) { input.value = ""; renderRosterList("classGenerateRosterList", document.getElementById("classGenerateClass").value); }
+    });
+
+    bindEvent("recordIdentityPhotoClear", "click", async function () {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student in the Student Records section first"); return; }
+      const records = getStoredRecords();
+      const updated = { ...record, profilePic: "", updatedBy: teacherLabel(), updatedAt: stampIso() };
+      const all = records.map((r) => (String(r.studentId).toUpperCase() === String(record.studentId).toUpperCase() ? updated : r));
+      saveStoredRecords(all);
+      renderTable(getStoredRecords());
+      await syncRecordsToPortal([updated]);
+      document.getElementById("recordIdentityPhoto").src = "detlofcreast.svg";
+      showToast("Identity photo removed for " + record.fullName + ".");
+    });
+
     (function populateSubjectList() {
       const datalist = document.getElementById("resultSubjectList");
       if (!datalist) return;
@@ -3111,8 +3467,9 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
           " &middot; " + item.data.studentCount + " students";
       }
       html += "<div style='margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;'>";
-      html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;' onclick='approvePending(" + i + ")'>Approve</button>";
+      html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;' onclick='approvePending(" + i + ")'>Approve &amp; Publish</button>";
       html += "<button class='btn btn-outline' style='padding:4px 10px;font-size:11px;' onclick='rejectPending(" + i + ")'>Reject</button>";
+      html += "<button class='btn btn-gold' style='padding:4px 10px;font-size:11px;' onclick='previewPending(" + i + ")'>Preview</button>";
       if (item.type === "timetable") {
         html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#25D366;' onclick='sendTimetableToAllParents(" + i + ")'>Send Timetable via WhatsApp</button>";
       }
@@ -3124,6 +3481,68 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     });
     pendingList.innerHTML = html;
   }
+
+  // The Academics Admin can see exactly what will land on the portals (and in
+  // the parent's WhatsApp) before approving.
+  window.previewPending = function (index) {
+    const item = pendingApprovalAt(index);
+    if (!item) { showToast("That item is no longer available."); return; }
+    if (item.type === "results") {
+      const results = item.data.resultsData || [];
+      const sample = results[0];
+      let portalHtml;
+      if (sample) {
+        const record = getStoredRecords().find((r) => r.studentId === sample.studentId) || sample;
+        const termKey = item.data.termKey;
+        const termResults = results
+          .filter((r) => r.studentId === sample.studentId)
+          .map((r) => ({
+            subject: r.subject,
+            classScore: r.classScore,
+            examScore: r.examScore,
+            totalScore: r.totalScore,
+            grade: r.grade,
+            remark: r.remark || "",
+          }));
+        portalHtml = buildPortalPreviewHtml(record) +
+          buildResultsPreviewHtml(termKey).replace("results</h4>", "results</h4>") +
+          '<p class="preview-note">Previewing the first of ' + new Set(results.map((r) => r.studentId)).size +
+          " students in this batch (" + results.length + " result rows in total).</p>" +
+          '<p class="preview-note">This student\'s ' + escapeHtml(TERM_LABELS[termKey] || termKey) +
+          " rows in the batch: " + escapeHtml(termResults.map((r) => r.subject).join(", ")) + ".</p>";
+        openPublishPreview({
+          record,
+          title: "Preview: " + (TERM_LABELS[termKey] || termKey) + " results batch",
+          portalHtml,
+          message: buildResultsMessage({ ...record, termResults: { [termKey]: { results: termResults } } }, termKey),
+        });
+      } else {
+        openPublishPreview({ title: "Preview: results batch", portalHtml: "<p class='preview-note'>This batch has no result rows.</p>", message: "" });
+      }
+      return;
+    }
+    if (item.type === "timetable") {
+      const className = item.data.className;
+      const record = getStoredRecords().find((r) => r.currentClass === className) || {};
+      openPublishPreview({
+        record,
+        title: "Preview: " + className + " timetable",
+        portalHtml: buildTimetablePreviewHtml(item.data.schedule),
+        message: buildTimetableMessage({ ...record, currentClass: className }, className, item.data.schedule),
+      });
+      return;
+    }
+    openPublishPreview({
+      record: getRecordForTypedName(),
+      title: "Preview: " + (TERM_LABELS[item.data.termKey] || item.data.termKey) + " release",
+      portalHtml: buildPortalPreviewHtml(getRecordForTypedName()),
+      message: "*Detlof Preparatory School - " +
+        ((TERM_LABELS[item.data.termKey] || item.data.termKey).toUpperCase()) +
+        " RESULTS RELEASE*\n\nClass: " + (getRecordForTypedName() || {}).currentClass +
+        "\nStudents: " + item.data.studentCount + "\n\nPromotion status is now visible on each student portal." +
+        "\n\n" + portalUrl(),
+    });
+  };
 
   window.approvePending = function(index) {
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
@@ -3299,73 +3718,264 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     syncRecordsToPortal(targetRecords);
   }
 
+  // -------------------------------------------------------------------------
+  // WhatsApp: one number normaliser, one message builder per type, so the
+  // preview an admin reviews is byte-for-byte what the parent receives.
+  // -------------------------------------------------------------------------
+  function whatsappNumber(phone) {
+    const digits = String(phone || "").replace(/\D/g, "");
+    if (!digits) return "";
+    if (digits.startsWith("233")) return digits;
+    if (digits.startsWith("0")) return "233" + digits.slice(1);
+    return "233" + digits;
+  }
+
+  function buildResultsMessage(student, termKey) {
+    const termData = (student.termResults || {})[termKey];
+    if (!termData || !termData.results || !termData.results.length) return "";
+    const termName = TERM_LABELS[termKey] || "Term";
+    let message = "*Detlof Preparatory School - " + termName.toUpperCase() + " RESULTS*\n\n";
+    message += "Student: " + (student.fullName || "") + "\n";
+    message += "Class: " + (student.currentClass || "") + "\n";
+    message += "Student ID: " + (student.studentId || "") + "\n\n";
+    let totalPoints = 0;
+    termData.results.forEach((r) => {
+      const grade = r.grade || gradeFromTotal(r.totalScore || ((Number(r.classScore) || 0) + (Number(r.examScore) || 0)));
+      totalPoints += (GRADE_POINTS[grade] || 0);
+      const total = Number(r.totalScore) || ((Number(r.classScore) || 0) + (Number(r.examScore) || 0));
+      message += "- " + r.subject + ": Class " + (Number(r.classScore) || 0)
+        + " + Exam " + (Number(r.examScore) || 0) + " = " + total + "% (Grade " + grade + ")\n";
+    });
+    const gpa = Math.round((totalPoints / termData.results.length) * 100) / 100;
+    message += "\n*Term GPA: " + gpa + "*";
+    if (student.promotionStatus) {
+      const statusText = {
+        promoted: "Promoted", on_try: "On Trial", repeated: "Repeating", not_promoted: "Not Promoted",
+      }[student.promotionStatus];
+      if (statusText) {
+        message += "\n*Status: " + statusText + "*";
+        if (student.promotedClass) message += " -> " + student.promotedClass;
+      }
+    }
+    message += "\n\nFull results are on the Student Portal.\n" + portalUrl();
+    return message;
+  }
+
+  function buildTimetableMessage(student, className, schedule) {
+    let message = "*Detlof Preparatory School - CLASS TIMETABLE*\n\n";
+    message += "Student: " + (student.fullName || "") + (student.studentId ? " (" + student.studentId + ")" : "") + "\n";
+    message += "Class: " + (className || student.currentClass || "") + "\n\n";
+    if (schedule && schedule.length) {
+      schedule.forEach((item) => {
+        message += "- " + (item.day || "") + ": " + (item.subject || "")
+          + (item.time ? " (" + item.time + ")" : "")
+          + (item.venue ? " - " + item.venue : "")
+          + (item.teacher ? " with " + item.teacher : "") + "\n";
+      });
+    } else {
+      message += "_No timetable has been published for this class yet._\n";
+    }
+    message += "\nFull timetable is on the Student Portal.\n" + portalUrl();
+    return message;
+  }
+
+  function portalUrl() {
+    return "https://detlof.edu.gh/portal";
+  }
+
+  // A vCard the admin can save to their phone, so the parent's name shows up in
+  // the chat list instead of a bare number.
+  function buildContactCard(student) {
+    const phone = whatsappNumber(student.whatsappNumber || student.profileWhatsApp || student.parentPhone);
+    const lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      "N:" + escapeVCard((student.parentName || "").split(" ").reverse().join(" ") + ";Parent;;;") ,
+      "FN:" + escapeVCard((student.parentName || "Parent / Guardian") + " - " + (student.fullName || "")),
+      "ORG:Detlof Preparatory School",
+      "TITLE:Parent / Guardian of " + (student.fullName || ""),
+      "TEL;TYPE=CELL,VOICE:" + phone,
+      "NOTE:" + escapeVCard("Parent of " + (student.fullName || "") + " (" + (student.currentClass || "") + ")"),
+      "URL:" + portalUrl(),
+      "END:VCARD",
+    ];
+    return lines.join("\r\n");
+  }
+
+  function escapeVCard(value) {
+    return String(value == null ? "" : value).replace(/([\\,;])/g, "\\$1").replace(/\n/g, "\\n");
+  }
+
+  function saveContactToPhone(student) {
+    const card = buildContactCard(student);
+    downloadTextFile(
+      safeFileName((student.parentName || "Parent") + " - " + (student.fullName || student.studentId)) + ".vcf",
+      card,
+      "text/vcard"
+    );
+    showToast("Contact card downloaded. Open it on your phone and choose Add to Contacts, then send the message.");
+    return card;
+  }
+
+  function openWhatsApp(phone, message) {
+    const number = whatsappNumber(phone);
+    if (!number) { showToast("No WhatsApp number on file for this student."); return false; }
+    if (!message) { showToast("There is nothing to send yet."); return false; }
+    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent(message), "_blank");
+    return true;
+  }
+
   function sendTimetableViaWhatsApp(className, schedule, studentPhone) {
     if (!studentPhone) return;
-    const formattedPhone = studentPhone.replace(/\D/g, "");
-    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
-    let message = "📅 *Detlof Preparatory School - Class Timetable*\n\n";
-    message += `Class: ${className}\n\n`;
-    schedule.forEach(item => {
-      message += `📌 ${item.day}: ${item.subject} (${item.time}) - ${item.venue}${item.teacher ? " with " + item.teacher : ""}\n`;
-    });
-    message += "\n_View full details on your Student Portal_\nhttps://detlof.edu.gh/portal";
-    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    const message = buildTimetableMessage({ currentClass: className }, className, schedule);
+    openWhatsApp(studentPhone, message);
   }
 
   function sendResultsViaWhatsApp(student, termKey, phone) {
-    const destination = phone || student.profileWhatsApp || student.profileParentPhone;
-    if (!destination) return;
-    const formattedPhone = String(destination).replace(/\D/g, "");
-    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
-    const termData = student.termResults?.[termKey];
-    if (!termData || !termData.results?.length) {
-      showToast("No results found for " + (student.fullName || student.studentId) + " in " + termKey);
-      return;
-    }
-    let message = `📊 *Detlof Preparatory School - ${termKey.replace("term", "Term ").toUpperCase()} Results*\n\n`;
-    message += `Student: ${student.fullName}\nClass: ${student.currentClass}\nStudent ID: ${student.studentId}\n\n`;
-    const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
-    let totalPoints = 0;
-    termData.results.forEach(r => {
-      const grade = r.grade || "—";
-      const points = pointsMap[grade] || 0;
-      totalPoints += points;
-      message += `📚 ${r.subject}: ${r.totalScore}% (Grade ${grade})\n`;
-    });
-    const gpa = termData.results.length ? Math.round((totalPoints / termData.results.length) * 100) / 100 : "—";
-    message += `\n📈 Term GPA: ${gpa}`;
-    if (student.promotionStatus) {
-      const promoText = { promoted: "✅ Promoted", on_try: "⚠️ On Trial", repeated: "🔁 Repeating" }[student.promotionStatus] || "";
-      message += `\n🎓 Status: ${promoText}`;
-      if (student.promotedClass) message += ` → ${student.promotedClass}`;
-    }
-    message += "\n\n_View full details on Student Portal_\nhttps://detlof.edu.gh/portal";
-    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
-  }
-
-  function sendStudentTimetableViaWhatsApp(student, phone) {
-    const destination = phone || student.profileWhatsApp || student.profileParentPhone;
+    const destination = phone || student.whatsappNumber || student.profileWhatsApp || student.parentPhone;
     if (!destination) {
       showToast("No WhatsApp number on file for " + (student.fullName || student.studentId));
       return;
     }
-    const formattedPhone = String(destination).replace(/\D/g, "");
-    const finalPhone = formattedPhone.startsWith("233") ? formattedPhone : "233" + formattedPhone;
-    const schedule = Array.isArray(student.timetable) ? student.timetable : [];
-    let message = "📅 *Detlof Preparatory School - Class Timetable*\n\n";
-    message += `Student: ${student.fullName || ""} (${student.studentId || ""})\nClass: ${student.currentClass || ""}\n\n`;
-    if (schedule.length) {
-      schedule.forEach(item => {
-        message += `📌 ${item.day || ""}: ${item.subject || ""} (${item.time || ""}) - ${item.venue || ""}${item.teacher ? " with " + item.teacher : ""}\n`;
-      });
-    } else {
-      message += "_No timetable has been published for this student yet._\n";
+    const message = buildResultsMessage(student, termKey);
+    if (!message) {
+      showToast("No results found for " + (student.fullName || student.studentId) + " in " + (TERM_LABELS[termKey] || termKey));
+      return;
     }
-    message += "\n_View full details on your Student Portal_";
-    const url = `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    openWhatsApp(destination, message);
+  }
+
+  function sendStudentTimetableViaWhatsApp(student, phone) {
+    const destination = phone || student.whatsappNumber || student.profileWhatsApp || student.parentPhone;
+    if (!destination) {
+      showToast("No WhatsApp number on file for " + (student.fullName || student.studentId));
+      return;
+    }
+    const message = buildTimetableMessage(student, student.currentClass, Array.isArray(student.timetable) ? student.timetable : []);
+    openWhatsApp(destination, message);
+  }
+
+  // -------------------------------------------------------------------------
+  // Publish preview: shows exactly what the student will see on their portal and
+  // exactly what the parent will receive on WhatsApp, before anything is sent.
+  // -------------------------------------------------------------------------
+  function closePublishPreview() {
+    const modal = document.getElementById("publishPreviewModal");
+    if (modal) modal.classList.add("hidden");
+  }
+
+  function whatsappTextToHtml(text) {
+    // Minimal WhatsApp-flavoured rendering of *bold* markers.
+    return escapeHtml(text || "")
+      .replace(/\*([^*]+)\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
+  }
+
+  function profileRow(label, value) {
+    const shown = value == null || String(value).trim() === "" ? "Not on file" : escapeHtml(value);
+    const missing = value == null || String(value).trim() === "" ? " preview-missing" : "";
+    return '<div class="preview-row"><span class="preview-label">' + escapeHtml(label) +
+      '</span><span class="preview-value' + missing + '">' + shown + "</span></div>";
+  }
+
+  function openPublishPreview(options) {
+    const modal = document.getElementById("publishPreviewModal");
+    if (!modal) { showToast("Preview is unavailable on this page."); return; }
+    const record = options.record || null;
+    const phone = whatsappNumber(record && (record.whatsappNumber || record.profileWhatsApp || record.parentPhone));
+    const message = options.message || "";
+
+    document.getElementById("publishPreviewTitle").textContent = options.title || "Preview before sending";
+    document.getElementById("publishPreviewPortal").innerHTML = options.portalHtml || "";
+    document.getElementById("publishPreviewWhatsapp").innerHTML = message
+      ? whatsappTextToHtml(message)
+      : "<p class='preview-note'>There is nothing to send yet for this student.</p>";
+
+    const contactState = document.getElementById("publishPreviewContactState");
+    contactState.textContent = phone
+      ? "Parent number on file: +" + phone
+      : "No parent WhatsApp number on file. Add one in the student's profile first.";
+
+    const saveBtn = document.getElementById("publishPreviewSaveContact");
+    const sendBtn = document.getElementById("publishPreviewSend");
+    saveBtn.disabled = !record || !phone;
+    sendBtn.disabled = !phone || !message;
+    saveBtn.onclick = () => { if (record) saveContactToPhone(record); };
+    sendBtn.onclick = () => { if (openWhatsApp(phone, message)) closePublishPreview(); };
+    document.getElementById("publishPreviewCopy").onclick = () => {
+      if (!message) return;
+      copyText(message);
+    };
+
+    modal.classList.remove("hidden");
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => showToast("Message copied to the clipboard."))
+        .catch(() => showToast("Could not copy the message."));
+      return;
+    }
+    showToast("Clipboard is not available in this browser.");
+  }
+
+  // A faithful mock of the student's portal profile card.
+  function buildPortalPreviewHtml(record) {
+    if (!record) return "<p class='preview-note'>No student selected.</p>";
+    const photo = record.profilePic
+      ? '<img class="preview-photo" src="' + escapeHtml(record.profilePic) + '" alt="" />'
+      : '<div class="preview-photo preview-photo-empty">' + escapeHtml((record.fullName || "?").charAt(0)) + "</div>";
+    return '<div class="preview-card">' + photo +
+      '<div class="preview-card-body">' +
+      '<h4>' + escapeHtml(record.fullName || "") + "</h4>" +
+      profileRow("Class", record.currentClass) +
+      profileRow("Student ID", record.studentId) +
+      profileRow("Email", record.email) +
+      profileRow("Academic Year", record.academicYear) +
+      profileRow("Parent / Guardian", record.parentName) +
+      profileRow("Parent Phone", record.parentPhone || record.profileParentPhone) +
+      profileRow("WhatsApp", record.whatsappNumber || record.profileWhatsApp) +
+      profileRow("Emergency Contact", record.emergencyContact) +
+      profileRow("Home Address", record.homeAddress) +
+      "</div></div>";
+  }
+
+  // A faithful mock of the results table as the student will see it.
+  function buildResultsPreviewHtml(termKey) {
+    const record = getRecordForTypedName();
+    const termData = record && (record.termResults || {})[termKey];
+    const results = termData && Array.isArray(termData.results) ? termData.results : [];
+    const label = TERM_LABELS[termKey] || "Term";
+    if (!results.length) {
+      return "<p class='preview-note'>" + escapeHtml(label) + " has not been published for " +
+        escapeHtml(record ? record.fullName : "this student") + " yet.</p>";
+    }
+    let html = '<div class="preview-card"><h4>' + escapeHtml(label) + " results</h4>";
+    html += '<table class="preview-table"><thead><tr><th>Subject</th><th>Class</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>';
+    results.forEach((r) => {
+      const total = Number(r.totalScore) || ((Number(r.classScore) || 0) + (Number(r.examScore) || 0));
+      const grade = r.grade || gradeFromTotal(total);
+      html += "<tr><td>" + escapeHtml(r.subject) + "</td><td>" + (Number(r.classScore) || 0) +
+        "</td><td>" + (Number(r.examScore) || 0) + "</td><td><strong>" + total +
+        "</strong></td><td>" + escapeHtml(grade) + "</td></tr>";
+    });
+    html += "</tbody></table></div>";
+    return html;
+  }
+
+  function buildTimetablePreviewHtml(schedule) {
+    const rows = Array.isArray(schedule) ? schedule : [];
+    if (!rows.length) return "<p class='preview-note'>No timetable has been published for this class yet.</p>";
+    let html = '<div class="preview-card"><h4>Class timetable</h4>';
+    html += '<table class="preview-table"><thead><tr><th>Day</th><th>Subject</th><th>Time</th><th>Venue</th><th>Teacher</th></tr></thead><tbody>';
+    rows.forEach((r) => {
+      html += "<tr><td>" + escapeHtml(r.day || "") + "</td><td>" + escapeHtml(r.subject || "") +
+        "</td><td>" + escapeHtml(r.time || "") + "</td><td>" + escapeHtml(r.venue || "") +
+        "</td><td>" + escapeHtml(r.teacher || "Not assigned") + "</td></tr>";
+    });
+    html += "</tbody></table></div>";
+    return html;
   }
 
   // These are called from inline onclick attributes in the pending-approvals list,

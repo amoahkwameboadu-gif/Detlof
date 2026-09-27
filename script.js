@@ -268,6 +268,47 @@ function configureStudentProfileAccess() {
   if (picBtn) picBtn.style.display = "none";
 }
 
+// Tells the student which details the school has on file and which are still
+// missing, so an empty field is never a mystery.
+const PROFILE_COMPLETION_FIELDS = [
+  ["profileFullName", "Full name"],
+  ["profileEmail", "Email address"],
+  ["profileClass", "Class"],
+  ["profileGender", "Gender"],
+  ["profileDateOfBirth", "Date of birth"],
+  ["profileBloodGroup", "Blood group"],
+  ["profileParentName", "Parent / guardian name"],
+  ["profileParentRelation", "Relationship"],
+  ["profileParentPhone", "Parent phone"],
+  ["profileWhatsApp", "Parent WhatsApp"],
+  ["profileParentEmail", "Parent email"],
+  ["profileEmergencyContact", "Emergency contact"],
+  ["profileHomeAddress", "Home address"],
+];
+
+function renderProfileCompletion() {
+  const box = document.getElementById("profileCompletion");
+  if (!box) return;
+  const missing = PROFILE_COMPLETION_FIELDS.filter(([id]) => {
+    const field = document.getElementById(id);
+    return !field || !String(field.value || "").trim();
+  });
+  const total = PROFILE_COMPLETION_FIELDS.length;
+  const have = total - missing.length;
+  const pct = Math.round((have / total) * 100);
+
+  box.classList.remove("hidden");
+  if (!missing.length) {
+    box.innerHTML = "<div class='completion-bar'><span style='width:100%'></span></div>" +
+      "<p class='completion-text'>All " + total + " profile details are complete. Everything here is maintained by the school office.</p>";
+    return;
+  }
+  box.innerHTML = "<div class='completion-bar'><span style='width:" + pct + "%'></span></div>" +
+    "<p class='completion-text'><strong>" + have + " of " + total + "</strong> details on file. " +
+    "Still to be added by the school office: " +
+    missing.map(([, label]) => escapeHtml(label)).join(", ") + ".</p>";
+}
+
 function renderPortalForStudent(student) {
   activeStudent = mergeStudentData(activeStudent, student);
   student = activeStudent;
@@ -373,7 +414,6 @@ function renderPortalForStudent(student) {
   const promoGPA = document.getElementById("promotionNoticeGPA");
 
   const promoBadge = document.getElementById("resultsPromoBadge");
-  promotionStatus = student.promotionStatus || calculatePromotionStatus(student);
   if (termCount >= 3 && annualAverage != null && promotionStatus) {
     if (promoBadge) promoBadge.classList.remove("hidden");
     const promoIcon = promoNoticeInner.querySelector(".promo-icon");
@@ -504,11 +544,16 @@ function renderPortalForStudent(student) {
     setProfileValue("profileAllergies", student.allergies);
     setProfileValue("profileInterests", student.interests);
     setProfileValue("profileLoginCode", student.loginCode);
+    setProfileValue("profileStudentId", student.studentId);
+    setProfileValue("profileEmail", student.email);
+    setProfileValue("profileClass", student.currentClass);
+    setProfileValue("profileAcademicYear", student.academicYear || ACADEMIC_YEAR);
     if (student.profilePic) {
       document.getElementById("profilePicPreview").src = student.profilePic;
     } else {
       document.getElementById("profilePicPreview").src = "detlofcreast.svg";
     }
+    renderProfileCompletion(student);
   }
 
   if (profileFormSection) {
@@ -543,9 +588,54 @@ function logoutPortal() {
   activeStudent = null;
   sessionStorage.removeItem("detlof_portal_role");
   sessionStorage.removeItem("detlof_teacher");
+  forgetStudent();
   document.getElementById("portalShell").classList.add("hidden");
   document.getElementById("loginScreen").classList.remove("hidden");
   document.getElementById("loginPassword").value = "";
+}
+
+const REMEMBER_KEY = "detlof_portal_remembered_student";
+
+// Re-open the last signed-in student so their profile is already filled in.
+function rememberStudent(student) {
+  if (!student) return;
+  try {
+    localStorage.setItem(REMEMBER_KEY, JSON.stringify({
+      email: student.email || "",
+      studentId: student.studentId || "",
+      loginCode: student.loginCode || "",
+    }));
+  } catch {
+    /* storage full or unavailable - remembering is best effort */
+  }
+}
+
+function forgetStudent() {
+  try { localStorage.removeItem(REMEMBER_KEY); } catch { /* ignore */ }
+}
+
+async function restoreRememberedStudent() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(REMEMBER_KEY) || "null"); } catch { saved = null; }
+  if (!saved || !saved.email || !saved.studentId) return false;
+
+  // Show the signed-in shell only once we actually have a record.
+  const local = findSyncedStudent({ email: saved.email, studentId: saved.studentId, loginCode: saved.loginCode });
+  let student = local;
+  if (!student) {
+    const response = await fetchPortalApi("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: saved.email, studentId: saved.studentId, password: saved.loginCode }),
+    });
+    if (response && response.ok) {
+      const data = await response.json().catch(() => ({}));
+      if (data.student) student = normalizeStudent(data.student);
+    }
+  }
+  if (!student) { forgetStudent(); return false; }
+  renderPortalForStudent(student);
+  return true;
 }
 
 document.getElementById("portalLoginForm").addEventListener("submit", async (event) => {
@@ -586,11 +676,13 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   }
 
   if (remoteStudent) {
+    rememberStudent(remoteStudent);
     renderPortalForStudent(remoteStudent);
     return;
   }
 
   if (matchedLocal && canUseLocal) {
+    rememberStudent(matchedLocal);
     renderPortalForStudent(matchedLocal);
     return;
   }
@@ -786,3 +878,7 @@ const downloadTimetableBtn = document.getElementById("downloadTimetablePdfBtn");
 if (downloadTimetableBtn) {
   downloadTimetableBtn.onclick = downloadTimetablePDF;
 }
+
+// Open straight into the last student's profile so their details are already
+// filled in, rather than making them sign in on every visit.
+restoreRememberedStudent();
