@@ -33,75 +33,75 @@ def allow_local_portal_api(response):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
 
-DEFAULT_STUDENTS = [
-    {"fullName": "Kristen Denison Esoun", "email": "kristen.esoun@detlof.edu.gh", "studentId": "KG1-0001", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1001"},
-    {"fullName": "Comfort Ewonam Akakpoh", "email": "comfort.akakpoh@detlof.edu.gh", "studentId": "KG1-0002", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1002"},
-    {"fullName": "Marcus Kobby Prah", "email": "marcus.prah@detlof.edu.gh", "studentId": "KG1-0003", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1003"},
-    {"fullName": "Doxa Egyapa Kobina Prah", "email": "doxa.prah@detlof.edu.gh", "studentId": "KG1-0004", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1004"},
-    {"fullName": "Joseph Kudanu", "email": "joseph.kudanu@detlof.edu.gh", "studentId": "KG1-0005", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1005"},
-    {"fullName": "Jesse Odoop", "email": "jesse.odom@detlof.edu.gh", "studentId": "KG1-0006", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1006"},
-    {"fullName": "Elwy Xolarli Dzobo", "email": "elwy.dzobo@detlof.edu.gh", "studentId": "KG1-0007", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1007"},
-    {"fullName": "Nhyiraba Brena", "email": "nhyiraba.brena@detlof.edu.gh", "studentId": "KG1-0008", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1008"},
-    {"fullName": "Robert Anthony Esoun", "email": "robert.esoun@detlof.edu.gh", "studentId": "KG1-0009", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1009"},
-    {"fullName": "Elora Aaryn Amoah", "email": "elora.amoah@detlof.edu.gh", "studentId": "KG1-0010", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1010"},
-    {"fullName": "Fiifi Gabrab", "email": "fiifi.gabrab@detlof.edu.gh", "studentId": "KG1-0011", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1011"},
-    {"fullName": "Reuben Amosah", "email": "reuben.amosah@detlof.edu.gh", "studentId": "KG1-0012", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1012"},
-    {"fullName": "Warrick Oswald Ewua", "email": "warrick.ewua@detlof.edu.gh", "studentId": "KG1-0013", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1013"},
-    {"fullName": "Giovanna Anim", "email": "giovanna.anim@detlof.edu.gh", "studentId": "KG1-0014", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1014"},
-    {"fullName": "Gabriella Ammal", "email": "gabriella.ammal@detlof.edu.gh", "studentId": "KG1-0015", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1015"},
-    {"fullName": "Zipporah Agyapong", "email": "zipporah.agyapong@detlof.edu.gh", "studentId": "KG1-0016", "currentClass": "KG 1", "academicYear": "2025 / 2026", "loginCode": "DET-1016"},
-    {"fullName": "Napoleon Odehy Arkhrah", "email": "napoleon.arkhrah@detlof.edu.gh", "studentId": "KGB-0001", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2001"},
-    {"fullName": "Kelvin Kwakyir Entsua", "email": "kelvin.entsua@detlof.edu.gh", "studentId": "KGB-0002", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2002"},
-    {"fullName": "Edmund Fiifi Mensah", "email": "edmund.mensah@detlof.edu.gh", "studentId": "KGB-0003", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2003"},
-    {"fullName": "Archibald Nii A. Quayson", "email": "archibald.quayson@detlof.edu.gh", "studentId": "KGB-0004", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2004"},
-    {"fullName": "Eward Eloelo Agbetzi", "email": "eward.agbetzi@detlof.edu.gh", "studentId": "KGB-0005", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2005"},
-    {"fullName": "Justin Quansah", "email": "justin.quansah@detlof.edu.gh", "studentId": "KGB-0006", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2006"},
-    {"fullName": "Cyril T. Esselifie", "email": "cyril.esselifie@detlof.edu.gh", "studentId": "KGB-0007", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2007"},
-    {"fullName": "Azzam Nsiya Zilkifilu", "email": "azzam.zilkifilu@detlof.edu.gh", "studentId": "KGB-0008", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2008"},
-    {"fullName": "Benedict Borlabi Bortey", "email": "benedict.bortey@detlof.edu.gh", "studentId": "KGB-0009", "currentClass": "KG 2 Boys", "academicYear": "2025 / 2026", "loginCode": "DET-2009"},
-    {"fullName": "Geovanna K. Arthur", "email": "geovanna.arthur@detlof.edu.gh", "studentId": "KGG-0001", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2010"},
-    {"fullName": "Varnika A. Essel", "email": "varnika.essel@detlof.edu.gh", "studentId": "KGG-0002", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2011"},
-    {"fullName": "Dominion Dadzie", "email": "dominion.dadzie@detlof.edu.gh", "studentId": "KGG-0003", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2012"},
-    {"fullName": "Godjoy Asmah", "email": "godjoy.asmah@detlof.edu.gh", "studentId": "KGG-0004", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2013"},
-    {"fullName": "Godpraise Asmah", "email": "godpraise.asmah@detlof.edu.gh", "studentId": "KGG-0005", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2014"},
-    {"fullName": "Maya Britt Appiah", "email": "maya.appiah@detlof.edu.gh", "studentId": "KGG-0006", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2015"},
-    {"fullName": "Henritta Star Arthur", "email": "henritta.arthur@detlof.edu.gh", "studentId": "KGG-0007", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2016"},
-    {"fullName": "Patricia Dadzie", "email": "patricia.dadzie@detlof.edu.gh", "studentId": "KGG-0008", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2017"},
-    {"fullName": "Ama Anokyeewaa Adusei", "email": "ama.adusei@detlof.edu.gh", "studentId": "KGG-0009", "currentClass": "KG 2 Girls", "academicYear": "2025 / 2026", "loginCode": "DET-2018"},
-    {"fullName": "Percis Woode Agyapong Laorian Boso", "email": "percis.boso@detlof.edu.gh", "studentId": "NUR2-0001", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3001"},
-    {"fullName": "Leon Kojo Afful", "email": "leon.afful@detlof.edu.gh", "studentId": "NUR2-0002", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3002"},
-    {"fullName": "Leo Baijon Quansah", "email": "leo.quansah@detlof.edu.gh", "studentId": "NUR2-0003", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3003"},
-    {"fullName": "Zana Akorful", "email": "zana.akorful@detlof.edu.gh", "studentId": "NUR2-0004", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3004"},
-    {"fullName": "Anthony", "email": "anthony@detlof.edu.gh", "studentId": "NUR2-0005", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3005"},
-    {"fullName": "Armstrong", "email": "armstrong@detlof.edu.gh", "studentId": "NUR2-0006", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3006"},
-    {"fullName": "Zaid Adamu", "email": "zaid.adamu@detlof.edu.gh", "studentId": "NUR2-0007", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3007"},
-    {"fullName": "Precious Essien", "email": "precious.essien@detlof.edu.gh", "studentId": "NUR2-0008", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3008"},
-    {"fullName": "Elsie Abakah Mensah", "email": "elsie.mensah@detlof.edu.gh", "studentId": "NUR2-0009", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3009"},
-    {"fullName": "Uzziah", "email": "uzziah@detlof.edu.gh", "studentId": "NUR2-0010", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3010"},
-    {"fullName": "Blessed", "email": "blessed@detlof.edu.gh", "studentId": "NUR2-0011", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3011"},
-    {"fullName": "Matthew Abakah", "email": "matthew.abakah@detlof.edu.gh", "studentId": "NUR2-0012", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3012"},
-    {"fullName": "Destiny Tay", "email": "destiny.tay@detlof.edu.gh", "studentId": "NUR2-0013", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3013"},
-    {"fullName": "Firdaus Baidoo", "email": "firdaus.baidoo@detlof.edu.gh", "studentId": "NUR2-0014", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3014"},
-    {"fullName": "Marcel Isibu Thompson", "email": "marcel.thompson@detlof.edu.gh", "studentId": "NUR2-0015", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3015"},
-    {"fullName": "Nhyira Edusei", "email": "nhyira.edusei@detlof.edu.gh", "studentId": "NUR2-0016", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3016"},
-    {"fullName": "Eliana Mensah", "email": "eliana.mensah@detlof.edu.gh", "studentId": "NUR2-0017", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3017"},
-    {"fullName": "Lara Mensah", "email": "lara.mensah@detlof.edu.gh", "studentId": "NUR2-0018", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3018"},
-    {"fullName": "Laurian Danso", "email": "laurian.danso@detlof.edu.gh", "studentId": "NUR2-0019", "currentClass": "Nursery Two", "academicYear": "2025 / 2026", "loginCode": "DET-3019"},
-    {"fullName": "Fiifi Sowyer", "email": "fiifi.sowyer@detlof.edu.gh", "studentId": "CRE-0001", "currentClass": "Creche", "academicYear": "2025 / 2026", "loginCode": "DET-4001"},
-    {"fullName": "Nessa Jesusline Afful", "email": "nessa.afful@detlof.edu.gh", "studentId": "CRE-0002", "currentClass": "Creche", "academicYear": "2025 / 2026", "loginCode": "DET-4002"},
-    {"fullName": "Kofi Moses", "email": "kofi.moses@detlof.edu.gh", "studentId": "CRE-0003", "currentClass": "Creche", "academicYear": "2025 / 2026", "loginCode": "DET-4003"},
-    {"fullName": "Obrenpong", "email": "obrenpong@detlof.edu.gh", "studentId": "CRE-0004", "currentClass": "Creche", "academicYear": "2025 / 2026", "loginCode": "DET-4004"},
-    {"fullName": "Enyimyam", "email": "enyiam@detlof.edu.gh", "studentId": "CRE-0005", "currentClass": "Creche", "academicYear": "2025 / 2026", "loginCode": "DET-4005"},
-    {"fullName": "Thiery O. Ankrah", "email": "thiery.anrah@detlof.edu.gh", "studentId": "NUR1-0001", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5001"},
-    {"fullName": "Ohemaa", "email": "ohemaa@detlof.edu.gh", "studentId": "NUR1-0002", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5002"},
-    {"fullName": "Duo La", "email": "duola@detlof.edu.gh", "studentId": "NUR1-0003", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5003"},
-    {"fullName": "Calista Obeng Appiah", "email": "calista.appiah@detlof.edu.gh", "studentId": "NUR1-0004", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5004"},
-    {"fullName": "Naa Agele", "email": "naa.agele@detlof.edu.gh", "studentId": "NUR1-0005", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5005"},
-    {"fullName": "Kendrick", "email": "kendrick@detlof.edu.gh", "studentId": "NUR1-0006", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5006"},
-    {"fullName": "Janet", "email": "janet@detlof.edu.gh", "studentId": "NUR1-0007", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5007"},
-    {"fullName": "Wisdom", "email": "wisdom@detlof.edu.gh", "studentId": "NUR1-0008", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5008"},
-    {"fullName": "Zulaiha Ali", "email": "zulaiha.ali@detlof.edu.gh", "studentId": "NUR1-0009", "currentClass": "Nursery One", "academicYear": "2025 / 2026", "loginCode": "DET-5009"},
+ROSTER_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_roster.json")
+
+FALLBACK_CLASS_ORDER = [
+    "Creche", "Nursery One", "Nursery Two", "KG 1", "KG 2 Boys", "KG 2 Girls",
+    "Lower KG", "Upper KG",
+    "Basic 1 Boys", "Basic 1 Girls", "Basic 2 Boys", "Basic 2 Girls",
+    "Basic 3 Boys", "Basic 3 Girls", "Basic 4 Boys", "Basic 4 Girls",
+    "Basic 5 Boys", "Basic 5 Girls", "Basic 6 Boys", "Basic 6 Girls",
+    "Basic 7 Boys", "Basic 7 Girls", "Basic 8 Boys", "Basic 8 Girls",
+    "Basic 9 Boys", "Basic 9 Girls",
+    "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3",
 ]
+
+
+def load_roster():
+    """Read the shared roster (detlof_roster.json) used by every portal."""
+    try:
+        with open(ROSTER_FILE, "r", encoding="utf-8") as handle:
+            data = json.load(handle)
+        if isinstance(data, dict) and isinstance(data.get("students"), list) and data["students"]:
+            return data
+    except Exception:
+        pass
+    return {"academicYear": "2025 / 2026", "classOrder": FALLBACK_CLASS_ORDER, "students": []}
+
+
+ROSTER = load_roster()
+ACADEMIC_YEAR = ROSTER.get("academicYear", "2025 / 2026")
+CLASS_ORDER = ROSTER.get("classOrder") or FALLBACK_CLASS_ORDER
+CLASS_ROSTER = ROSTER.get("classRoster") or {}
+
+# Starting results, identical to the browser portals (detlof-report.js) so a
+# student sees the same thing whether the API or localStorage answers.
+DEFAULT_RESULTS = [
+    {"subject": "Mathematics", "classScore": 32, "examScore": 56, "totalScore": 88, "grade": "B", "remark": "Very good"},
+    {"subject": "English Language", "classScore": 34, "examScore": 60, "totalScore": 94, "grade": "A", "remark": "Excellent progress"},
+    {"subject": "Integrated Science", "classScore": 30, "examScore": 55, "totalScore": 85, "grade": "B", "remark": "Keep it up"},
+    {"subject": "Computing / ICT", "classScore": 28, "examScore": 50, "totalScore": 78, "grade": "C", "remark": "Good work"},
+    {"subject": "Social Studies", "classScore": 30, "examScore": 52, "totalScore": 82, "grade": "B", "remark": "Good effort"},
+]
+
+# Profile fields the administrator maintains; the API must not drop them.
+PROFILE_FIELDS = [
+    "fullName", "email", "currentClass", "academicYear", "gender", "dateOfBirth",
+    "bloodGroup", "parentName", "parentRelation", "parentPhone", "profileParentPhone",
+    "whatsappNumber", "profileWhatsApp", "parentEmail", "emergencyContact",
+    "homeAddress", "allergies", "interests", "adminNotes", "profilePic", "loginCode",
+]
+
+
+def seed_default_results(students):
+    """Give every roster student the same starting First Term results."""
+    seeded = []
+    for student in students:
+        record = dict(student)
+        term_results = dict(record.get("termResults") or {})
+        if not term_results.get("term1"):
+            term_results["term1"] = {
+                "results": [dict(row) for row in DEFAULT_RESULTS],
+                "gpa": None,
+                "subjectCount": len(DEFAULT_RESULTS),
+            }
+        record["termResults"] = term_results
+        seeded.append(record)
+    return seeded
+
+
+DEFAULT_STUDENTS = seed_default_results(ROSTER.get("students") or [])
+
 
 RESULTS = [
     {"subject": "Mathematics", "classScore": 32, "examScore": 56, "totalScore": 88, "grade": "B", "remark": "Very good"},
@@ -119,15 +119,37 @@ ANNOUNCEMENTS = [
 
 
 def load_students():
+    """Seed the full official roster, then overlay anything previously saved."""
+    merged = {}
+    order = []
+    for student in DEFAULT_STUDENTS:
+        sid = str(student.get("studentId", "")).strip().upper()
+        if not sid:
+            continue
+        merged[sid] = dict(student)
+        order.append(sid)
+
+    stored = []
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, "r", encoding="utf-8") as handle:
                 data = json.load(handle)
             if isinstance(data, list):
-                return [normalize_student(dict(item)) for item in data if isinstance(item, dict)]
+                stored = [item for item in data if isinstance(item, dict)]
         except Exception:
-            pass
-    return [normalize_student(dict(s)) for s in DEFAULT_STUDENTS]
+            stored = []
+
+    for item in stored:
+        sid = str(item.get("studentId", "")).strip().upper()
+        if not sid:
+            continue
+        if sid in merged:
+            merged[sid].update(item)
+        else:
+            merged[sid] = dict(item)
+            order.append(sid)
+
+    return [normalize_student(merged[sid]) for sid in order]
 
 
 def save_students():
@@ -153,6 +175,26 @@ def find_student(email, student_id, password):
     return None
 
 
+def normalize_name(name):
+    return " ".join(str(name or "").split()).upper()
+
+
+def roster_lookup(name=None, student_id=None):
+    """Return the official roster record for a name or Student ID, if one exists."""
+    if student_id:
+        wanted_id = str(student_id).strip().upper()
+        for student in DEFAULT_STUDENTS:
+            if str(student.get("studentId", "")).strip().upper() == wanted_id:
+                return student
+    if not name:
+        return None
+    wanted = normalize_name(name)
+    for student in DEFAULT_STUDENTS:
+        if normalize_name(student.get("fullName")) == wanted:
+            return student
+    return None
+
+
 def normalize_student(incoming):
     student = dict(incoming or {})
     parent_phone = str(student.get("parentPhone") or student.get("profileParentPhone") or "").strip()
@@ -161,6 +203,12 @@ def normalize_student(incoming):
     student["profileParentPhone"] = parent_phone
     student["whatsappNumber"] = whatsapp_number
     student["profileWhatsApp"] = whatsapp_number
+    roster = roster_lookup(student.get("fullName"), student.get("studentId"))
+    if roster:
+        # Keep the official roster spelling and class on every record.
+        student["fullName"] = roster["fullName"]
+        if not student.get("currentClass"):
+            student["currentClass"] = roster.get("currentClass", "")
     return student
 
 
@@ -254,6 +302,12 @@ def student_update():
 @app.route("/api/results")
 def results():
     return jsonify(RESULTS)
+
+
+@app.route("/api/roster")
+def roster():
+    """Expose the official roster so the browser portals can stay in sync."""
+    return jsonify(ROSTER)
 
 
 @app.route("/api/announcements")

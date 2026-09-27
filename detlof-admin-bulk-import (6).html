@@ -645,15 +645,24 @@
                   <option>KG 2 Girls</option>
                   <option>Lower KG</option>
                   <option>Upper KG</option>
-                  <option>Basic 1</option>
-                  <option>Basic 2</option>
-                  <option>Basic 3</option>
-                  <option>Basic 4</option>
-                  <option>Basic 5</option>
-                  <option selected>Basic 6</option>
-                  <option>Basic 7</option>
-                  <option>Basic 8</option>
-                  <option>Basic 9</option>
+                  <option>Basic 1 Boys</option>
+                  <option>Basic 1 Girls</option>
+                  <option>Basic 2 Boys</option>
+                  <option>Basic 2 Girls</option>
+                  <option>Basic 3 Boys</option>
+                  <option>Basic 3 Girls</option>
+                  <option>Basic 4 Boys</option>
+                  <option>Basic 4 Girls</option>
+                  <option>Basic 5 Boys</option>
+                  <option>Basic 5 Girls</option>
+                  <option>Basic 6 Boys</option>
+                  <option>Basic 6 Girls</option>
+                  <option>Basic 7 Boys</option>
+                  <option>Basic 7 Girls</option>
+                  <option>Basic 8 Boys</option>
+                  <option>Basic 8 Girls</option>
+                  <option>Basic 9 Boys</option>
+                  <option>Basic 9 Girls</option>
                   <option>JHS 1</option>
                   <option>JHS 2</option>
                   <option>JHS 3</option>
@@ -695,15 +704,24 @@
                 <option>KG 2 Girls</option>
                 <option>Lower KG</option>
                 <option>Upper KG</option>
-                <option>Basic 1</option>
-                <option>Basic 2</option>
-                <option>Basic 3</option>
-                <option>Basic 4</option>
-                <option>Basic 5</option>
-                <option>Basic 6</option>
-                <option>Basic 7</option>
-                <option>Basic 8</option>
-                <option>Basic 9</option>
+                <option>Basic 1 Boys</option>
+                <option>Basic 1 Girls</option>
+                <option>Basic 2 Boys</option>
+                <option>Basic 2 Girls</option>
+                <option>Basic 3 Boys</option>
+                <option>Basic 3 Girls</option>
+                <option>Basic 4 Boys</option>
+                <option>Basic 4 Girls</option>
+                <option>Basic 5 Boys</option>
+                <option>Basic 5 Girls</option>
+                <option>Basic 6 Boys</option>
+                <option>Basic 6 Girls</option>
+                <option>Basic 7 Boys</option>
+                <option>Basic 7 Girls</option>
+                <option>Basic 8 Boys</option>
+                <option>Basic 8 Girls</option>
+                <option>Basic 9 Boys</option>
+                <option>Basic 9 Girls</option>
                 <option>JHS 1</option>
                 <option>JHS 2</option>
                 <option>JHS 3</option>
@@ -715,6 +733,14 @@
             <div class="field">
               <label>Prefix for Login Codes (e.g. KG1, KGG, NUR2)</label>
               <input type="text" id="classGeneratePrefix" placeholder="Auto-generated from class name" />
+            </div>
+            <div class="field">
+              <label>Students in Selected Class</label>
+              <input type="text" id="classGenerateStudentName" list="classGenerateNames" autocomplete="off" placeholder="Roster names load automatically when a class is selected" />
+              <datalist id="classGenerateNames"></datalist>
+              <div id="classGenerateRosterList" style="margin-top:8px;max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff;font-size:11px;">
+                <p style="color:var(--muted);text-align:center;padding:12px;margin:0;">Select a class above to see its roster.</p>
+              </div>
             </div>
             <div class="field">
               <label>Starting Number</label>
@@ -745,15 +771,24 @@
                 <option>KG 2 Girls</option>
                 <option>Lower KG</option>
                 <option>Upper KG</option>
-                <option>Basic 1</option>
-                <option>Basic 2</option>
-                <option>Basic 3</option>
-                <option>Basic 4</option>
-                <option>Basic 5</option>
-                <option>Basic 6</option>
-                <option>Basic 7</option>
-                <option>Basic 8</option>
-                <option>Basic 9</option>
+                <option>Basic 1 Boys</option>
+                <option>Basic 1 Girls</option>
+                <option>Basic 2 Boys</option>
+                <option>Basic 2 Girls</option>
+                <option>Basic 3 Boys</option>
+                <option>Basic 3 Girls</option>
+                <option>Basic 4 Boys</option>
+                <option>Basic 4 Girls</option>
+                <option>Basic 5 Boys</option>
+                <option>Basic 5 Girls</option>
+                <option>Basic 6 Boys</option>
+                <option>Basic 6 Girls</option>
+                <option>Basic 7 Boys</option>
+                <option>Basic 7 Girls</option>
+                <option>Basic 8 Boys</option>
+                <option>Basic 8 Girls</option>
+                <option>Basic 9 Boys</option>
+                <option>Basic 9 Girls</option>
                 <option>JHS 1</option>
                 <option>JHS 2</option>
                 <option>JHS 3</option>
@@ -776,6 +811,10 @@
           <h2>2. Student Profile, Contact &amp; Photo</h2>
           <p class="sub">Administrator-only controls for the details shown on each student's individual profile.</p>
           <form id="adminProfileForm">
+            <div class="field">
+              <label for="adminProfileClassFilter">Filter Suggestions by Class</label>
+              <select id="adminProfileClassFilter"></select>
+            </div>
             <div class="field">
               <label for="adminProfileStudentName">Student</label>
               <input id="adminProfileStudentName" list="adminProfileStudentNames" autocomplete="off" placeholder="Type a student's full name or Student ID" required />
@@ -801,26 +840,106 @@
             </div>
             <div class="row-2">
               <div class="field">
-                <label for="adminProfileParentName">Parent / Guardian Full Name</label>
-                <input id="adminProfileParentName" type="text" placeholder="e.g. Mrs. Ama Owusu" />
+                <label for="adminProfileClass">Assigned Class Category</label>
+                <select id="adminProfileClass"></select>
+                <small style="display:block;margin-top:5px;color:var(--muted);font-size:11px;">Changing this moves the student to a different class on their portal.</small>
               </div>
               <div class="field">
-                <label for="adminProfileParentPhone">Parent / Guardian Phone</label>
-                <input id="adminProfileParentPhone" type="tel" placeholder="e.g. 0244123456" />
+                <label for="adminProfileEmail">Student Email</label>
+                <input id="adminProfileEmail" type="email" placeholder="e.g. name@detlof.edu.gh" />
               </div>
             </div>
             <div class="row-2">
               <div class="field">
+                <label for="adminProfileAcademicYear">Academic Year</label>
+                <select id="adminProfileAcademicYear">
+                  <option>2025 / 2026</option>
+                  <option>2026 / 2027</option>
+                  <option>2024 / 2025</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="adminProfileGender">Gender</label>
+                <select id="adminProfileGender">
+                  <option value="">Not stated</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileDob">Date of Birth</label>
+                <input id="adminProfileDob" type="date" />
+              </div>
+              <div class="field">
+                <label for="adminProfileBloodGroup">Blood Group</label>
+                <input id="adminProfileBloodGroup" type="text" placeholder="e.g. O+" />
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileParentName">Parent / Guardian Full Name</label>
+                <input id="adminProfileParentName" type="text" placeholder="e.g. Mrs. Ama Owusu" />
+              </div>
+              <div class="field">
+                <label for="adminProfileParentRelation">Relationship to Student</label>
+                <select id="adminProfileParentRelation">
+                  <option value="">Not stated</option>
+                  <option>Mother</option>
+                  <option>Father</option>
+                  <option>Guardian</option>
+                  <option>Aunt</option>
+                  <option>Uncle</option>
+                  <option>Grandparent</option>
+                  <option>Sibling</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileParentPhone">Parent / Guardian Phone</label>
+                <input id="adminProfileParentPhone" type="tel" placeholder="e.g. 0244123456" />
+              </div>
+              <div class="field">
                 <label for="adminProfileWhatsApp">Active Parent WhatsApp Number</label>
                 <input id="adminProfileWhatsApp" type="tel" placeholder="e.g. 0244123456" />
               </div>
+            </div>
+            <div class="row-2">
               <div class="field">
-                <label for="adminProfileHomeAddress">Home Address</label>
-                <input id="adminProfileHomeAddress" type="text" placeholder="e.g. 12 School Road, Accra" />
+                <label for="adminProfileParentEmail">Parent / Guardian Email</label>
+                <input id="adminProfileParentEmail" type="email" placeholder="e.g. parent@example.com" />
+              </div>
+              <div class="field">
+                <label for="adminProfileEmergencyContact">Emergency Contact (Name &amp; Number)</label>
+                <input id="adminProfileEmergencyContact" type="text" placeholder="e.g. Uncle Kojo — 0244000000" />
               </div>
             </div>
+            <div class="field">
+              <label for="adminProfileHomeAddress">Home Address</label>
+              <input id="adminProfileHomeAddress" type="text" placeholder="e.g. 12 School Road, Accra" />
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileAllergies">Allergies / Health Notes</label>
+                <input id="adminProfileAllergies" type="text" placeholder="e.g. None known" />
+              </div>
+              <div class="field">
+                <label for="adminProfileInterests">Interests / Talents</label>
+                <input id="adminProfileInterests" type="text" placeholder="e.g. Drawing, athletics" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="adminProfileNotes">Administrative Notes</label>
+              <textarea id="adminProfileNotes" placeholder="Internal notes for staff — not shown on the student portal."></textarea>
+            </div>
             <div id="adminProfileError" class="admin-login-error hidden" style="margin-top:-8px;"></div>
-            <button class="btn btn-gold" type="submit" style="width:100%;justify-content:center;">Save Student Profile Details</button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-gold" type="submit" style="flex:1;justify-content:center;">Save Student Profile Details</button>
+              <button class="btn btn-outline" type="button" id="downloadStudentProfileCsv" style="flex:1;justify-content:center;">Download This Profile</button>
+            </div>
 
             <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;">
             <h3 style="margin:0 0 8px;font-size:13px;">Send Student Report &amp; Timetable via WhatsApp</h3>
@@ -875,21 +994,30 @@
                    <option value="term3">Third Term</option>
                  </select>
                </div>
-               <div class="field">
-                 <label for="resultsFile">CSV / Excel File</label>
-                 <input type="file" id="resultsFile" accept=".csv,.xlsx,.xls" required />
-               </div>
-             </div>
-             <div class="field">
-               <label>Preview / Parsed Data</label>
-               <div id="resultsPreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
-             </div>
-             <div style="display:flex;gap:10px;margin-top:12px;">
-               <button class="btn btn-teal" type="submit">Upload &amp; Publish Results</button>
-               <button type="button" class="btn btn-outline" id="downloadResultsTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
-             </div>
+                <div class="field">
+                  <label for="resultsFile">CSV File</label>
+                  <input type="file" id="resultsFile" accept=".csv,text/csv" required />
+                </div>
+              </div>
+              <div class="field">
+                <label>Preview / Parsed Data</label>
+                <div id="resultsPreview" style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;">
+                  <p style="color:var(--muted);text-align:center;padding:20px;margin:0;">Choose a CSV file to preview its contents here.</p>
+                </div>
+              </div>
+              <div class="field">
+                <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:600;color:var(--ink);">
+                  <input type="checkbox" id="resultsPublishNow" style="width:auto;" />
+                  Publish to student portals immediately (skip Academic Admin approval)
+                </label>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn btn-teal" type="submit">Upload &amp; Publish Results</button>
+                <button type="button" class="btn btn-outline" id="downloadResultsTemplate" style="padding:7px 11px;font-size:11px;">Download CSV Template</button>
+                <button type="button" class="btn btn-outline" id="downloadRosterTemplateBtn" style="padding:7px 11px;font-size:11px;">Download Class Roster Template</button>
+              </div>
 </form>
-          </section>
+           </section>
 
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
            <h3 style="margin:0 0 8px;font-size:14px;">📢 Release Term Results &amp; Calculate Promotions</h3>
@@ -920,8 +1048,142 @@
         </section>
        </div>
 
-      <section class="card" style="margin-bottom:18px;">
-        <h2>3. Class Timetable Management</h2>
+        <section class="card" style="margin-bottom:18px;">
+          <h2>4. Select a Student for Records &amp; Actions</h2>
+          <p class="sub">Choose a class, then pick a student from the roster to publish results, send portal updates, or send reports and timetables to their parent.</p>
+          <div class="row-2">
+            <div class="field">
+              <label for="recordClass">Class</label>
+              <select id="recordClass"></select>
+            </div>
+            <div class="field">
+              <label for="recordStudentName">Student</label>
+              <input type="text" id="recordStudentName" list="recordStudentNames" autocomplete="off" placeholder="Roster names load automatically when a class is selected" />
+              <datalist id="recordStudentNames"></datalist>
+            </div>
+          </div>
+          <div id="selectedStudentSummary" class="selected-student-summary hidden">
+            <div class="avatar" id="ssAvatar">?</div>
+            <div>
+              <div class="ss-main" id="ssMain">Select a student</div>
+              <div class="ss-sub" id="ssSub">Class · Student ID · Email</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-gold" id="downloadStudentRecordCsvBtn" style="flex:1;">Download Student Results (CSV)</button>
+            <button type="button" class="btn btn-gold" id="downloadStudentReportPdfBtn" style="flex:1;">Download Student Full Report (PDF)</button>
+            <button type="button" class="btn btn-teal" id="recordSendReportWhatsAppBtn" style="flex:1;">Send Report via WhatsApp</button>
+            <button type="button" class="btn btn-teal" id="recordSendTimetableWhatsAppBtn" style="flex:1;">Send Timetable via WhatsApp</button>
+          </div>
+          <form id="resultForm" class="update-card">
+            <h3>Publish a Subject Result</h3>
+            <p>Class Score is weighted 40% and Exam Score 60%. Totals and grades are calculated automatically.</p>
+            <div class="row-2">
+              <div class="field">
+                <label for="resultTerm">Term</label>
+                <select id="resultTerm">
+                  <option value="term1">First Term</option>
+                  <option value="term2">Second Term</option>
+                  <option value="term3">Third Term</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="resultSubject">Subject</label>
+                <input type="text" id="resultSubject" list="resultSubjectList" placeholder="e.g. Mathematics" required />
+                <datalist id="resultSubjectList"></datalist>
+              </div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="resultClassScore">Class Score (40%)</label>
+                <input type="number" id="resultClassScore" min="0" max="40" value="30" required />
+              </div>
+              <div class="field">
+                <label for="resultExamScore">Exam Score (60%)</label>
+                <input type="number" id="resultExamScore" min="0" max="60" value="54" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="resultRemark">Teacher's Remark</label>
+              <input type="text" id="resultRemark" placeholder="e.g. Very good" />
+            </div>
+            <div class="field">
+              <label for="resultPublishAllClasses">Publish to every student in this class (optional)</label>
+              <input type="text" id="resultPublishAllClasses" list="recordStudentNames" placeholder="Leave blank to publish only to the selected student" />
+            </div>
+            <button class="btn btn-gold" type="submit">Save Result to Student Portal</button>
+          </form>
+          <form id="portalUpdateForm" class="update-card">
+            <h3>Send an Individual Portal Update</h3>
+            <p>This appears on the selected student's dashboard and announcements.</p>
+            <div class="row-2">
+              <div class="field">
+                <label for="updateTitle">Title</label>
+                <input type="text" id="updateTitle" placeholder="e.g. Term 2 results published" required />
+              </div>
+              <div class="field">
+                <label for="updateCategory">Category</label>
+                <select id="updateCategory">
+                  <option>Results Update</option>
+                  <option>Timetable Update</option>
+                  <option>School Notice</option>
+                  <option>Individual Update</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="updateMessage">Message</label>
+              <textarea id="updateMessage" placeholder="Type the update the student will read on their portal…" required></textarea>
+            </div>
+            <button class="btn btn-teal" type="submit">Send Update to Student</button>
+          </form>
+        </section>
+
+        <section class="card" style="margin-bottom:18px;">
+          <h2>5. Download Existing Data</h2>
+          <p class="sub">Download what is already in the portal: the class roster, published results and the live timetable. Files download straight to your device.</p>
+          <div class="field">
+            <label>Class</label>
+            <select id="exportClass"></select>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-gold" id="exportClassRosterBtn" style="flex:1;">Class Roster (CSV)</button>
+            <button type="button" class="btn btn-gold" id="exportClassResultsBtn" style="flex:1;">Published Results (CSV)</button>
+            <button type="button" class="btn btn-gold" id="exportClassTimetableBtn" style="flex:1;">Class Timetable (CSV)</button>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+            <button type="button" class="btn btn-outline" id="exportAllResultsBtn" style="flex:1;">All Published Results (CSV)</button>
+            <button type="button" class="btn btn-outline" id="exportFullRegisterBtn" style="flex:1;">Full Register (CSV)</button>
+          </div>
+          <div id="exportStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
+        </section>
+
+        <section class="card" style="margin-bottom:18px;">
+          <h2>6. All Generated Student Credentials</h2>
+          <p class="sub">Every roster student is pre-loaded with a Student ID, email and Login Code. Download a single student's login details or the full register.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <button type="button" class="btn btn-gold" id="downloadAllBtn" style="flex:1;">Download All Credentials (CSV)</button>
+            <button type="button" class="btn btn-outline" id="resyncAllBtn" style="flex:1;">Re-sync All to Student Portal</button>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Class</th>
+                  <th>Student ID</th>
+                  <th>Login Code</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="codesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+       <section class="card" style="margin-bottom:18px;">
+         <h2>7. Class Timetable Management</h2>
         <p class="sub">Upload a CSV/Excel timetable for an entire class. The timetable will automatically apply to all students in that class.</p>
         <form id="timetableForm">
           <div class="field">
@@ -935,15 +1197,24 @@
               <option>KG 2 Girls</option>
               <option>Lower KG</option>
               <option>Upper KG</option>
-              <option>Basic 1</option>
-              <option>Basic 2</option>
-              <option>Basic 3</option>
-              <option>Basic 4</option>
-              <option>Basic 5</option>
-              <option>Basic 6</option>
-              <option>Basic 7</option>
-              <option>Basic 8</option>
-              <option>Basic 9</option>
+              <option>Basic 1 Boys</option>
+              <option>Basic 1 Girls</option>
+              <option>Basic 2 Boys</option>
+              <option>Basic 2 Girls</option>
+              <option>Basic 3 Boys</option>
+              <option>Basic 3 Girls</option>
+              <option>Basic 4 Boys</option>
+              <option>Basic 4 Girls</option>
+              <option>Basic 5 Boys</option>
+              <option>Basic 5 Girls</option>
+              <option>Basic 6 Boys</option>
+              <option>Basic 6 Girls</option>
+              <option>Basic 7 Boys</option>
+              <option>Basic 7 Girls</option>
+              <option>Basic 8 Boys</option>
+              <option>Basic 8 Girls</option>
+              <option>Basic 9 Boys</option>
+              <option>Basic 9 Girls</option>
               <option>JHS 1</option>
               <option>JHS 2</option>
               <option>JHS 3</option>
@@ -954,23 +1225,34 @@
           </div>
           <div class="row-2">
             <div class="field">
-              <label for="timetableFile">CSV / Excel File (Day,Subject,Time,Venue,Teacher)</label>
-              <input type="file" id="timetableFile" accept=".csv,.xlsx,.xls" />
+              <label for="timetableFile">CSV File (Day,Subject,Time,Venue,Teacher)</label>
+              <input type="file" id="timetableFile" accept=".csv,text/csv" />
             </div>
             <div class="field">
               <label>Preview / Parsed Data</label>
-              <div id="timetablePreview" style="max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;font-family:monospace;"></div>
+              <div id="timetablePreview" style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;">
+                <p style="color:var(--muted);text-align:center;padding:20px;margin:0;">Choose a CSV file to preview its contents here.</p>
+              </div>
             </div>
           </div>
-          <div style="display:flex;gap:10px;margin-top:12px;">
-            <button class="btn btn-teal" type="submit">Upload & Sync Timetable to Class</button>
-            <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">⬇ Download CSV Template</button>
+          <div class="field">
+            <label>Students Receiving This Timetable</label>
+            <input type="text" id="timetableStudentName" list="timetableNames" autocomplete="off" placeholder="Pick a student to send an individual timetable" />
+            <datalist id="timetableNames"></datalist>
+            <div id="timetableRosterList" style="margin-top:8px;max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;background:#fff;font-size:11px;">
+              <p style="color:var(--muted);text-align:center;padding:12px;margin:0;">Select a class above to see who receives this timetable.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+            <button class="btn btn-teal" type="submit">Upload &amp; Sync Timetable to Class</button>
+            <button type="button" class="btn btn-outline" id="downloadTimetableTemplate" style="padding:7px 11px;font-size:11px;">Download CSV Template</button>
+            <button type="button" class="btn btn-outline" id="downloadTimetableTemplateForClass" style="padding:7px 11px;font-size:11px;">Download Existing Timetable</button>
           </div>
         </form>
       </section>
 
       <section class="card" style="margin-bottom:18px;">
-        <h2>4. Broadcast Announcement to All Student Portals</h2>
+         <h2>8. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -978,7 +1260,7 @@
             <div class="field"><label>Category</label><select id="annCategory"><option>Results Update</option><option>Timetable Update</option><option>School Notice</option><option>Individual Update</option></select></div>
           </div>
           <div class="field"><label>Message</label><textarea id="annMessage" placeholder="Type the announcement students will see on their portal…" required></textarea></div>
-          <div class="field"><label>Target Class (optional)</label><input id="annClass" placeholder="Leave blank to send to all classes" /></div>
+          <div class="field"><label>Target Class (optional)</label><input id="annClass" list="annClassList" placeholder="Leave blank to send to all classes" /><datalist id="annClassList"></datalist></div>
           <button class="btn btn-teal" type="submit">Broadcast to All Portals</button>
         </form>
       </section>
@@ -986,104 +1268,37 @@
   </div>
   </main>
 
+  <script src="detlof-roster.js"></script>
+  <script src="detlof-report.js"></script>
   <script>
     const STORAGE_KEY = "detlof_bulk_import_codes";
 
-    const defaultSeedCodes = [
-      { fullName: "Kristen Denison Esoun", email: "kristen.esoun@detlof.edu.gh", studentId: "KG1-0001", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1001" },
-      { fullName: "Comfort Ewonam Akakpoh", email: "comfort.akakpoh@detlof.edu.gh", studentId: "KG1-0002", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1002" },
-      { fullName: "Marcus Kobby Prah", email: "marcus.prah@detlof.edu.gh", studentId: "KG1-0003", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1003" },
-      { fullName: "Doxa Egyapa Kobina Prah", email: "doxa.prah@detlof.edu.gh", studentId: "KG1-0004", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1004" },
-      { fullName: "Joseph Kudanu", email: "joseph.kudanu@detlof.edu.gh", studentId: "KG1-0005", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1005" },
-      { fullName: "Jesse Odoop", email: "jesse.odom@detlof.edu.gh", studentId: "KG1-0006", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1006" },
-      { fullName: "Elwy Xolarli Dzobo", email: "elwy.dzobo@detlof.edu.gh", studentId: "KG1-0007", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1007" },
-      { fullName: "Nhyiraba Brena", email: "nhyiraba.brena@detlof.edu.gh", studentId: "KG1-0008", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1008" },
-      { fullName: "Robert Anthony Esoun", email: "robert.esoun@detlof.edu.gh", studentId: "KG1-0009", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1009" },
-      { fullName: "Elora Aaryn Amoah", email: "elora.amoah@detlof.edu.gh", studentId: "KG1-0010", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1010" },
-      { fullName: "Fiifi Gabrab", email: "fiifi.gabrab@detlof.edu.gh", studentId: "KG1-0011", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1011" },
-      { fullName: "Reuben Amosah", email: "reuben.amosah@detlof.edu.gh", studentId: "KG1-0012", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1012" },
-      { fullName: "Warrick Oswald Ewua", email: "warrick.ewua@detlof.edu.gh", studentId: "KG1-0013", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1013" },
-      { fullName: "Giovanna Anim", email: "giovanna.anim@detlof.edu.gh", studentId: "KG1-0014", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1014" },
-      { fullName: "Gabriella Ammal", email: "gabriella.ammal@detlof.edu.gh", studentId: "KG1-0015", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1015" },
-      { fullName: "Zipporah Agyapong", email: "zipporah.agyapong@detlof.edu.gh", studentId: "KG1-0016", currentClass: "KG 1", academicYear: "2025 / 2026", loginCode: "DET-1016" },
-      { fullName: "Napoleon Odehy Arkhrah", email: "napoleon.arkhrah@detlof.edu.gh", studentId: "KGB-0001", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2001" },
-      { fullName: "Kelvin Kwakyir Entsua", email: "kelvin.entsua@detlof.edu.gh", studentId: "KGB-0002", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2002" },
-      { fullName: "Edmund Fiifi Mensah", email: "edmund.mensah@detlof.edu.gh", "studentId": "KGB-0003", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2003" },
-      { fullName: "Archibald Nii A. Quayson", email: "archibald.quayson@detlof.edu.gh", studentId: "KGB-0004", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2004" },
-      { fullName: "Eward Eloelo Agbetzi", email: "eward.agbetzi@detlof.edu.gh", studentId: "KGB-0005", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2005" },
-      { fullName: "Justin Quansah", email: "justin.quansah@detlof.edu.gh", studentId: "KGB-0006", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2006" },
-      { fullName: "Cyril T. Esselifie", email: "cyril.esselifie@detlof.edu.gh", studentId: "KGB-0007", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2007" },
-      { fullName: "Azzam Nsiya Zilkifilu", email: "azzam.zilkifilu@detlof.edu.gh", studentId: "KGB-0008", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2008" },
-      { fullName: "Benedict Borlabi Bortey", email: "benedict.bortey@detlof.edu.gh", studentId: "KGB-0009", currentClass: "KG 2 Boys", academicYear: "2025 / 2026", loginCode: "DET-2009" },
-      { fullName: "Geovanna K. Arthur", email: "geovanna.arthur@detlof.edu.gh", studentId: "KGG-0001", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2010" },
-      { fullName: "Varnika A. Essel", email: "varnika.essel@detlof.edu.gh", studentId: "KGG-0002", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2011" },
-      { fullName: "Dominion Dadzie", email: "dominion.dadzie@detlof.edu.gh", studentId: "KGG-0003", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2012" },
-      { fullName: "Godjoy Asmah", email: "godjoy.asmah@detlof.edu.gh", studentId: "KGG-0004", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2013" },
-      { fullName: "Godpraise Asmah", email: "godpraise.asmah@detlof.edu.gh", studentId: "KGG-0005", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2014" },
-      { fullName: "Maya Britt Appiah", email: "maya.appiah@detlof.edu.gh", studentId: "KGG-0006", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2015" },
-      { fullName: "Henritta Star Arthur", email: "henritta.arthur@detlof.edu.gh", studentId: "KGG-0007", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2016" },
-      { fullName: "Patricia Dadzie", email: "patricia.dadzie@detlof.edu.gh", studentId: "KGG-0008", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2017" },
-      { fullName: "Ama Anokyeewaa Adusei", email: "ama.adusei@detlof.edu.gh", studentId: "KGG-0009", currentClass: "KG 2 Girls", academicYear: "2025 / 2026", loginCode: "DET-2018" },
-      { fullName: "Percis Woode Agyapong Laorian Boso", email: "percis.boso@detlof.edu.gh", studentId: "NUR2-0001", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3001" },
-      { fullName: "Leon Kojo Afful", email: "leon.afful@detlof.edu.gh", studentId: "NUR2-0002", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3002" },
-      { fullName: "Leo Baijon Quansah", email: "leo.quansah@detlof.edu.gh", studentId: "NUR2-0003", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3003" },
-      { fullName: "Zana Akorful", email: "zana.akorful@detlof.edu.gh", studentId: "NUR2-0004", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3004" },
-      { fullName: "Anthony", email: "anthony@detlof.edu.gh", studentId: "NUR2-0005", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3005" },
-      { fullName: "Armstrong", email: "armstrong@detlof.edu.gh", studentId: "NUR2-0006", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3006" },
-      { fullName: "Zaid Adamu", email: "zaid.adamu@detlof.edu.gh", studentId: "NUR2-0007", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3007" },
-      { fullName: "Precious Essien", email: "precious.essien@detlof.edu.gh", studentId: "NUR2-0008", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3008" },
-      { fullName: "Elsie Abakah Mensah", email: "elsie.mensah@detlof.edu.gh", studentId: "NUR2-0009", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3009" },
-      { fullName: "Uzziah", email: "uzziah@detlof.edu.gh", studentId: "NUR2-0010", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3010" },
-      { fullName: "Blessed", email: "blessed@detlof.edu.gh", studentId: "NUR2-0011", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3011" },
-      { fullName: "Matthew Abakah", email: "matthew.abakah@detlof.edu.gh", studentId: "NUR2-0012", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3012" },
-      { fullName: "Destiny Tay", email: "destiny.tay@detlof.edu.gh", studentId: "NUR2-0013", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3013" },
-      { fullName: "Firdaus Baidoo", email: "firdaus.baidoo@detlof.edu.gh", studentId: "NUR2-0014", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3014" },
-      { fullName: "Marcel Isibu Thompson", email: "marcel.thompson@detlof.edu.gh", studentId: "NUR2-0015", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3015" },
-      { fullName: "Nhyira Edusei", email: "nhyira.edusei@detlof.edu.gh", studentId: "NUR2-0016", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3016" },
-      { fullName: "Eliana Mensah", email: "eliana.mensah@detlof.edu.gh", studentId: "NUR2-0017", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3017" },
-      { fullName: "Lara Mensah", email: "lara.mensah@detlof.edu.gh", studentId: "NUR2-0018", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3018" },
-      { fullName: "Laurian Danso", email: "laurian.danso@detlof.edu.gh", studentId: "NUR2-0019", currentClass: "Nursery Two", academicYear: "2025 / 2026", loginCode: "DET-3019" },
-      { fullName: "Fiifi Sowyer", email: "fiifi.sowyer@detlof.edu.gh", studentId: "CRE-0001", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4001" },
-      { fullName: "Nessa Jesusline Afful", email: "nessa.afful@detlof.edu.gh", studentId: "CRE-0002", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4002" },
-      { fullName: "Kofi Moses", email: "kofi.moses@detlof.edu.gh", studentId: "CRE-0003", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4003" },
-      { fullName: "Obrenpong", email: "obrenpong@detlof.edu.gh", studentId: "CRE-0004", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4004" },
-      { fullName: "Enyimyam", email: "enyiam@detlof.edu.gh", studentId: "CRE-0005", currentClass: "Creche", academicYear: "2025 / 2026", loginCode: "DET-4005" },
-      { fullName: "Thiery O. Ankrah", email: "thiery.anrah@detlof.edu.gh", studentId: "NUR1-0001", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5001" },
-      { fullName: "Ohemaa", email: "ohemaa@detlof.edu.gh", studentId: "NUR1-0002", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5002" },
-      { fullName: "Duo La", email: "duola@detlof.edu.gh", studentId: "NUR1-0003", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5003" },
-      { fullName: "Calista Obeng Appiah", email: "calista.appiah@detlof.edu.gh", studentId: "NUR1-0004", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5004" },
-      { fullName: "Naa Agele", email: "naa.agele@detlof.edu.gh", studentId: "NUR1-0005", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5005" },
-      { fullName: "Kendrick", email: "kendrick@detlof.edu.gh", studentId: "NUR1-0006", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5006" },
-      { fullName: "Janet", email: "janet@detlof.edu.gh", studentId: "NUR1-0007", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5007" },
-      { fullName: "Wisdom", email: "wisdom@detlof.edu.gh", studentId: "NUR1-0008", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5008" },
-      { fullName: "Zulaiha Ali", email: "zulaiha.ali@detlof.edu.gh", studentId: "NUR1-0009", currentClass: "Nursery One", academicYear: "2025 / 2026", loginCode: "DET-5009" },
+    // Same default results the student portal starts from, so the admin can see
+    // and export exactly what a student sees.
+    const defaultSeedCodes = detlofSeedDefaultResults(detlofBuildRosterStudents());
+
+
+    // Roster is the single source of truth (detlof-roster.js) shared with the student portal.
+    const quickGenerateNames = DETLOF_CLASS_ORDER.reduce((map, className) => {
+      map[className] = detlofRosterNamesForClass(className).join("|");
+      return map;
+    }, {});
+
+    const SUBJECT_SUGGESTIONS = [
+      "Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies",
+      "Creative Arts and Design", "Computing", "Science", "Religious Education",
+      "Literature-in-English", "Civic Education", "Physical Education", "French", "ICT",
+      "Ghanaian Language", "Rarh", "Customs", "History", "Geography", "Economics",
     ];
 
-    const quickGenerateNames = {
-      "Creche": "FIIFI SOWYER|NESSA JESUSLINE AFFUL|KOFI MOSES|OBREMPONG|ENYIMYAM",
-      "Nursery One": "THIERY O. ANKRAH|OHEMAA|DUALA|CALISTA OBENG APPIAH|NAA AGELE|KENDRICK|JANET|WISDOM|ZULAIHA ALI",
-      "Nursery Two": "PERCIS WOODE AGYAPONG LAURIAN BANSO|LEON KOJO AFFUL|LEO BAIJON QUANSAH|ZANA AKORFUL|ANTHONY|ARMSTRONG|ZAID ADAMU|PRECIOUS ESSIEN|ELSIE ABAKAH MENSAH|UZZIAH|BLESSED|MATTHEW ABAKAH|DESTINY TAY|FIRDAUS BAIDOO|MARCEL ISIBU THOMPSON|NHYIRA EDUSEI|ELIANA MENSAH|LARA MENSAH|LAURIAN DANSO",
-      "KG 1": "KRISTEN DENNISON ESSOUN|COMFORT EWONAM AKAKPOH|MARCUS KOBBY PRAH|DOXA EGYAPA KOBINA PRAH|JOSEPH KUDANU|JESSE ODOOM|ELWY XOLARLI DZOBO|NHYIRABA BRENU|ROBERT ANTHONY ESSOUN|ELORA AARYN AMOAH|FIIFI GARBRAH|RUEBEN AMISSAH|WARRICK OSWALD EWUAH|GIOVANA ANIM|GABRIELLA AMISSAL|ZIPPORAH AGYAPONG",
-      "KG 2 Boys": "NAPOLEON ODEHYE ARKRAH|KELVIN KWEGYIR ENTSUAH|EDMUND FIIFI MENSAH|ARCHIBALD NII A. QUAYSON|EWARD ELOLO AGBETZI|JUSTIN QUANSAH|CYRIL T. ESSELIFIE|AZZAM NSIYA ZILKIFILU|BENEDICT BORLABI BORTEY",
-      "KG 2 Girls": "GEOVANNA K. ARTHUR|VARNIKA A. ESSEL|DOMINION DADZIE|GODJOY ASMAH|GODPRAISE ASMAH|MAYA BRITT APPIAH|HENRITTA STAR ARTHUR|PATRICIA DADZIE|AMA ANOKYEWAA ADUSEI",
-      "Lower KG": "",
-      "Upper KG": "",
-      "Basic 1": "",
-      "Basic 2": "",
-      "Basic 3": "",
-      "Basic 4": "",
-      "Basic 5": "",
-      "Basic 6": "",
-      "Basic 7": "",
-      "Basic 8": "",
-      "Basic 9": "",
-      "JHS 1": "",
-      "JHS 2": "",
-      "JHS 3": "",
-      "SHS 1": "",
-      "SHS 2": "",
-      "SHS 3": "",
-    };
+    function rosterRecordMatch(value) {
+      const query = String(value || "").trim();
+      if (!query) return null;
+      const byId = defaultSeedCodes.find((s) => String(s.studentId).toUpperCase() === query.toUpperCase());
+      if (byId) return byId;
+      const target = detlofNormalizeName(query);
+      return defaultSeedCodes.find((s) => detlofNormalizeName(s.fullName) === target) || null;
+    }
 
     function populateQuickGenerateNames() {
       const className = document.getElementById("currentClass").value;
@@ -1093,14 +1308,101 @@
       datalist.innerHTML = names.map((name) => "<option value=\"" + escapeHtml(name) + "\"></option>").join("");
     }
 
+    function rosterNamesForClassSelect(selectId) {
+      const select = document.getElementById(selectId);
+      if (!select) return [];
+      return detlofRosterNamesForClass(select.value);
+    }
+
+    function fillDatalist(datalistId, names) {
+      const datalist = document.getElementById(datalistId);
+      if (!datalist) return;
+      datalist.innerHTML = names
+        .slice()
+        .sort((a, b) => a.localeCompare(b))
+        .map((name) => "<option value=\"" + escapeHtml(name) + "\"></option>")
+        .join("");
+    }
+
+    function renderRosterList(containerId, className) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const names = detlofRosterNamesForClass(className);
+      if (!names.length) {
+        container.innerHTML = "<p style='color:var(--muted);text-align:center;padding:12px;margin:0;'>No roster students are defined for " + escapeHtml(className || "this class") + " yet.</p>";
+        return;
+      }
+      const generated = new Set(
+        getStoredRecords()
+          .filter((record) => record.currentClass === className)
+          .map((record) => detlofNormalizeName(record.fullName))
+      );
+      container.innerHTML =
+        "<p style='margin:0 0 8px;color:var(--muted);'><strong>" + escapeHtml(className) + "</strong> &middot; " +
+        names.length + " students &middot; " + generated.size + " with credentials</p>" +
+        names
+          .map((name) => {
+            const hasCredentials = generated.has(detlofNormalizeName(name));
+            return "<div style='display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--line);'>" +
+              "<span>" + escapeHtml(name) + "</span>" +
+              "<span class='" + (hasCredentials ? "synced-badge" : "id-pill") + "'>" +
+              (hasCredentials ? "Ready" : "Generate") + "</span></div>";
+          })
+          .join("");
+    }
+
+    function refreshClassNameTargets() {
+      const generateClass = document.getElementById("classGenerateClass");
+      if (generateClass) {
+        fillDatalist("classGenerateNames", rosterNamesForClassSelect("classGenerateClass"));
+        renderRosterList("classGenerateRosterList", generateClass.value);
+        const prefixInput = document.getElementById("classGeneratePrefix");
+        if (prefixInput && !prefixInput.value.trim() && generateClass.value) {
+          prefixInput.placeholder = "Auto: " + detlofPrefixForClass(generateClass.value);
+        }
+      }
+      const timetableClass = document.getElementById("timetableClass");
+      if (timetableClass) {
+        fillDatalist("timetableNames", rosterNamesForClassSelect("timetableClass"));
+        renderRosterList("timetableRosterList", timetableClass.value);
+      }
+      const downloadClass = document.getElementById("downloadClassSelect");
+      if (downloadClass && downloadClass.value) renderDownloadClassStudentList(downloadClass.value);
+      populateQuickGenerateNames();
+    }
+
+    function applyRosterIdentityToSingleForm() {
+      const nameInput = document.getElementById("fullName");
+      const roster = rosterRecordMatch(nameInput.value.trim());
+      if (!roster) return;
+      const classSelect = document.getElementById("currentClass");
+      if (classSelect && roster.currentClass) {
+        classSelect.value = roster.currentClass;
+        populateQuickGenerateNames();
+      }
+      const emailInput = document.getElementById("email");
+      if (emailInput && !emailInput.value.trim()) emailInput.value = roster.email;
+      const idInput = document.getElementById("studentId");
+      if (idInput && !idInput.value.trim()) idInput.value = roster.studentId;
+      const codeInput = document.getElementById("loginCode");
+      if (codeInput && !codeInput.value.trim()) codeInput.value = roster.loginCode;
+    }
+
     function getStoredRecords() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) && parsed.length
-          ? parsed.map((record) => mergeStoredRecord({}, record))
-          : defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
+        const parsed = raw ? JSON.parse(raw) : null;
+        const map = new Map();
+        defaultSeedCodes.forEach((record) => map.set(String(record.studentId).toUpperCase(), mergeStoredRecord({}, record)));
+        if (Array.isArray(parsed)) {
+          parsed.forEach((record) => {
+            if (!record || !record.studentId) return;
+            const key = String(record.studentId).toUpperCase();
+            const existing = map.get(key);
+            map.set(key, mergeStoredRecord(existing || {}, record));
+          });
+        }
+        return Array.from(map.values());
       } catch {
         return defaultSeedCodes.map((record) => mergeStoredRecord({}, record));
       }
@@ -1158,8 +1460,13 @@
       initRoleUI();
       const seed = getStoredRecords();
       renderTable(seed);
+      populateProfileClassSelect();
+      populateProfileFilterSelect();
+      populateExportClassSelect();
       populateAdminProfileStudents();
-      populateQuickGenerateNames();
+      fillDatalist("annClassList", DETLOF_CLASS_ORDER);
+      fillDatalist("resultSubjectList", SUBJECT_SUGGESTIONS);
+      refreshClassNameTargets();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
       syncRecordsToPortal(seed);
@@ -1208,16 +1515,25 @@
           showMainPanel();
          }, 400);
        });
-       document.getElementById("currentClass").addEventListener("change", populateQuickGenerateNames);
-     }
+        bindEvent("currentClass", "change", function () {
+          populateQuickGenerateNames();
+          const nameInput = document.getElementById("fullName");
+          if (nameInput) nameInput.value = "";
+          refreshClassNameTargets();
+        });
+        bindEvent("classGenerateClass", "change", refreshClassNameTargets);
+        bindEvent("timetableClass", "change", refreshClassNameTargets);
+        bindEvent("fullName", "change", applyRosterIdentityToSingleForm);
+        bindEvent("fullName", "blur", applyRosterIdentityToSingleForm);
+      }
 
-     function escapeHtml(value) {
-      return String(value == null ? "" : value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    // escapeHtml, the grading helpers and the report builders come from
+    // detlof-report.js, which is loaded just above this script.
+
+    function bindEvent(id, event, handler) {
+      const element = document.getElementById(id);
+      if (element && handler) element.addEventListener(event, handler);
+      return element;
     }
 
     function teacherLabel() { return isTeacher ? teacherName : "Administrator"; }
@@ -1251,6 +1567,12 @@
 
     function mergeStoredRecord(existing, incoming) {
       const merged = { ...(existing || {}), ...(incoming || {}) };
+      const roster = rosterRecordMatch(merged.fullName) || rosterRecordMatch(merged.studentId);
+      if (roster) {
+        merged.fullName = roster.fullName;
+        if (!merged.currentClass) merged.currentClass = roster.currentClass;
+        if (!merged.email) merged.email = roster.email;
+      }
       const existingParentPhone = (existing && (existing.parentPhone || existing.profileParentPhone)) || "";
       const existingWhatsApp = (existing && (existing.whatsappNumber || existing.profileWhatsApp)) || "";
       const incomingParentPhone = (incoming && (incoming.parentPhone || incoming.profileParentPhone)) || "";
@@ -1314,45 +1636,118 @@
     }
 
     function populateAdminProfileStudents() {
-      const records = getStoredRecords();
       const datalist = document.getElementById("adminProfileStudentNames");
       if (!datalist) return;
-      datalist.innerHTML = records.flatMap((record) => [
-        "<option value=\"" + escapeHtml(record.fullName || "") + "\"></option>",
-        "<option value=\"" + escapeHtml(record.studentId || "") + "\"></option>",
-      ]).join("");
+      const filterSelect = document.getElementById("adminProfileClassFilter");
+      const filterClass = filterSelect ? filterSelect.value : "";
+      const records = getStoredRecords().filter((record) => !filterClass || record.currentClass === filterClass);
+      datalist.innerHTML = "";
+      records.forEach((record) => {
+        if (!record.fullName) return;
+        const option = document.createElement("option");
+        option.value = record.fullName;
+        const idOption = document.createElement("option");
+        idOption.value = record.studentId;
+        datalist.appendChild(option);
+        datalist.appendChild(idOption);
+      });
+    }
+
+    function populateProfileFilterSelect() {
+      const select = document.getElementById("adminProfileClassFilter");
+      if (!select) return;
+      const current = select.value || "KG 1";
+      select.innerHTML = "<option value=\"\">All classes (" + getStoredRecords().length + " students)</option>" +
+        DETLOF_CLASS_ORDER
+          .map((name) => {
+            const count = getStoredRecords().filter((r) => r.currentClass === name).length;
+            return "<option value=\"" + escapeHtml(name) + "\"" + (name === current ? " selected" : "") + ">" +
+              escapeHtml(name) + " (" + count + ")</option>";
+          })
+          .join("");
     }
 
     function findAdminProfileRecord(value) {
-      const query = String(value || "").trim().toLowerCase();
+      const query = String(value || "").trim();
       if (!query) return null;
-      return getStoredRecords().find((record) =>
-        String(record.studentId || "").trim().toLowerCase() === query ||
-        String(record.fullName || "").trim().toLowerCase() === query
-      ) || null;
+      const records = getStoredRecords();
+      const byId = records.find((record) => String(record.studentId || "").trim().toUpperCase() === query.toUpperCase());
+      if (byId) return byId;
+      const normalized = detlofNormalizeName(query);
+      return records.find((record) => detlofNormalizeName(record.fullName) === normalized) || null;
+    }
+
+    const PROFILE_FIELDS = [
+      "adminProfileEmail", "adminProfileClass", "adminProfileAcademicYear", "adminProfileGender",
+      "adminProfileDob", "adminProfileBloodGroup", "adminProfileParentName", "adminProfileParentRelation",
+      "adminProfileParentPhone", "adminProfileWhatsApp", "adminProfileParentEmail",
+      "adminProfileEmergencyContact", "adminProfileHomeAddress", "adminProfileAllergies",
+      "adminProfileInterests", "adminProfileNotes",
+    ];
+
+    function populateProfileClassSelect() {
+      const select = document.getElementById("adminProfileClass");
+      if (!select) return;
+      const current = select.value;
+      select.innerHTML = DETLOF_CLASS_ORDER
+        .map((name) => "<option" + (name === current ? " selected" : "") + ">" + escapeHtml(name) + "</option>")
+        .join("");
+      if (!select.value) select.value = DETLOF_CLASS_ORDER[0];
+    }
+
+    // Resolve the selected record without touching the form. Saving must never
+    // reload the fields first, or unsaved edits would be discarded.
+    function findProfileRecord() {
+      return findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
     }
 
     function loadAdminProfileRecord() {
-      const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      const record = findProfileRecord();
       const summary = document.getElementById("adminProfileSummary");
+      populateProfileClassSelect();
       if (!record) {
         summary.classList.add("hidden");
-        document.getElementById("adminProfileParentName").value = "";
-        document.getElementById("adminProfileParentPhone").value = "";
-        document.getElementById("adminProfileWhatsApp").value = "";
-        document.getElementById("adminProfileHomeAddress").value = "";
+        PROFILE_FIELDS.forEach((id) => {
+          const field = document.getElementById(id);
+          if (field) field.value = "";
+        });
         document.getElementById("adminProfilePicPreview").src = "detlofcreast.svg";
         return null;
       }
-      document.getElementById("adminProfileParentName").value = record.parentName || "";
-      document.getElementById("adminProfileParentPhone").value = record.parentPhone || record.profileParentPhone || "";
-      document.getElementById("adminProfileWhatsApp").value = record.whatsappNumber || record.profileWhatsApp || "";
-      document.getElementById("adminProfileHomeAddress").value = record.homeAddress || "";
+      const values = {
+        adminProfileEmail: record.email || "",
+        adminProfileClass: record.currentClass || DETLOF_CLASS_ORDER[0],
+        adminProfileAcademicYear: record.academicYear || "2025 / 2026",
+        adminProfileGender: record.gender || "",
+        adminProfileDob: record.dateOfBirth || "",
+        adminProfileBloodGroup: record.bloodGroup || "",
+        adminProfileParentName: record.parentName || "",
+        adminProfileParentRelation: record.parentRelation || "",
+        adminProfileParentPhone: record.parentPhone || record.profileParentPhone || "",
+        adminProfileWhatsApp: record.whatsappNumber || record.profileWhatsApp || "",
+        adminProfileParentEmail: record.parentEmail || "",
+        adminProfileEmergencyContact: record.emergencyContact || "",
+        adminProfileHomeAddress: record.homeAddress || "",
+        adminProfileAllergies: record.allergies || "",
+        adminProfileInterests: record.interests || "",
+        adminProfileNotes: record.adminNotes || "",
+      };
+      Object.keys(values).forEach((id) => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        if (field.tagName === "SELECT" && ![...field.options].some((o) => o.value === values[id])) {
+          field.value = field.options[0] ? field.options[0].value : "";
+          return;
+        }
+        field.value = values[id];
+      });
       document.getElementById("adminProfilePicPreview").src = record.profilePic || "detlofcreast.svg";
       document.getElementById("adminProfileAvatar").src = record.profilePic || "detlofcreast.svg";
       document.getElementById("adminProfileSummaryName").textContent = record.fullName || record.studentId;
       document.getElementById("adminProfileSummaryMeta").textContent =
         (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || "");
+      const sendPhone = document.getElementById("adminSendParentPhone");
+      if (sendPhone && !sendPhone.value.trim()) sendPhone.value = record.whatsappNumber || record.parentPhone || "";
       summary.classList.remove("hidden");
       return record;
     }
@@ -1375,16 +1770,30 @@
       event.preventDefault();
       const errorBox = document.getElementById("adminProfileError");
       errorBox.classList.add("hidden");
-      const record = loadAdminProfileRecord();
+      const record = findProfileRecord();
       if (!record) {
-        errorBox.textContent = "Select a generated student before saving profile details.";
+        errorBox.textContent = "Select a student from the register before saving profile details.";
         errorBox.classList.remove("hidden");
         return;
       }
-      const parentName = document.getElementById("adminProfileParentName").value.trim();
-      const parentPhone = document.getElementById("adminProfileParentPhone").value.trim();
-      const whatsappNumber = document.getElementById("adminProfileWhatsApp").value.trim();
-      const homeAddress = document.getElementById("adminProfileHomeAddress").value.trim();
+      const readValue = (id) => {
+        const field = document.getElementById(id);
+        return field ? String(field.value || "").trim() : "";
+      };
+
+      const parentName = readValue("adminProfileParentName");
+      const parentPhone = readValue("adminProfileParentPhone");
+      const whatsappNumber = readValue("adminProfileWhatsApp");
+      const newClass = readValue("adminProfileClass") || record.currentClass;
+
+      const emailField = document.getElementById("adminProfileEmail");
+      const email = readValue("adminProfileEmail");
+      if (emailField && email && !emailField.checkValidity()) {
+        errorBox.textContent = "Please enter a valid email address for the student.";
+        errorBox.classList.remove("hidden");
+        return;
+      }
+
       const imageInput = document.getElementById("adminProfilePicInput");
       const imageFile = imageInput.files && imageInput.files[0];
       let profilePic = record.profilePic || "";
@@ -1395,27 +1804,81 @@
         errorBox.classList.remove("hidden");
         return;
       }
+
       const updated = mergeStoredRecord(record, {
+        email: email || record.email,
+        currentClass: newClass,
+        academicYear: readValue("adminProfileAcademicYear") || record.academicYear || "2025 / 2026",
+        gender: readValue("adminProfileGender"),
+        dateOfBirth: readValue("adminProfileDob"),
+        bloodGroup: readValue("adminProfileBloodGroup"),
         parentName,
+        parentRelation: readValue("adminProfileParentRelation"),
         parentPhone,
         profileParentPhone: parentPhone,
         whatsappNumber,
         profileWhatsApp: whatsappNumber,
-        homeAddress,
+        parentEmail: readValue("adminProfileParentEmail"),
+        emergencyContact: readValue("adminProfileEmergencyContact"),
+        homeAddress: readValue("adminProfileHomeAddress"),
+        allergies: readValue("adminProfileAllergies"),
+        interests: readValue("adminProfileInterests"),
+        adminNotes: readValue("adminProfileNotes"),
         profilePic: profilePic || record.profilePic || "",
-        updatedBy: "Administrator",
+        updatedBy: teacherLabel(),
         updatedAt: stampIso(),
       });
+
+      // mergeStoredRecord re-applies the canonical roster name, so an admin class
+      // change is kept but the student's identity stays exactly as on the roster.
       const records = getStoredRecords().map((item) =>
         String(item.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : item
       );
       saveStoredRecords(records);
       renderTable(records);
       populateAdminProfileStudents();
+      refreshClassNameTargets();
+      populateRecordStudents();
       await syncRecordsToPortal([updated]);
       loadAdminProfileRecord();
-      showToast("Profile details saved for " + updated.fullName + ".");
+      const classChanged = newClass !== record.currentClass;
+      showToast("Profile saved for " + updated.fullName + (classChanged ? " and moved to " + newClass + "." : "."));
     }
+
+    bindEvent("downloadStudentProfileCsv", "click", function () {
+      // Resolve the record without reloading the form, so the export reflects
+      // exactly what is currently on screen.
+      const record = findProfileRecord();
+      if (!record) { showToast("Select a student first"); return; }
+      const value = (id) => {
+        const field = document.getElementById(id);
+        return field ? String(field.value || "").trim() : "";
+      };
+      const lines = [
+        csvRow(["Field", "Value"]),
+        csvRow(["Full Name", record.fullName]),
+        csvRow(["Student ID", record.studentId]),
+        csvRow(["Assigned Class", value("adminProfileClass") || record.currentClass]),
+        csvRow(["Academic Year", value("adminProfileAcademicYear") || record.academicYear]),
+        csvRow(["Student Email", value("adminProfileEmail") || record.email]),
+        csvRow(["Login Code / PIN", record.loginCode]),
+        csvRow(["Gender", value("adminProfileGender")]),
+        csvRow(["Date of Birth", value("adminProfileDob")]),
+        csvRow(["Blood Group", value("adminProfileBloodGroup")]),
+        csvRow(["Parent / Guardian Name", value("adminProfileParentName")]),
+        csvRow(["Relationship to Student", value("adminProfileParentRelation")]),
+        csvRow(["Parent Phone", value("adminProfileParentPhone")]),
+        csvRow(["Parent WhatsApp", value("adminProfileWhatsApp")]),
+        csvRow(["Parent Email", value("adminProfileParentEmail")]),
+        csvRow(["Emergency Contact", value("adminProfileEmergencyContact")]),
+        csvRow(["Home Address", value("adminProfileHomeAddress")]),
+        csvRow(["Allergies / Health Notes", value("adminProfileAllergies")]),
+        csvRow(["Interests / Talents", value("adminProfileInterests")]),
+        csvRow(["Administrative Notes", value("adminProfileNotes")]),
+      ];
+      downloadTextFile(record.studentId + "_profile.csv", lines.join("\r\n"), "text/csv");
+      showToast("Downloaded the profile for " + record.fullName + ".");
+    });
 
     function renderTable(records) {
       const tbody = document.getElementById("codesTableBody");
@@ -1469,64 +1932,217 @@
       URL.revokeObjectURL(url);
     }
 
+    function resultsRowsForRecords(records) {
+      const rows = [csvRow([
+        "Student Name", "Student ID", "Class", "Academic Year", "Term", "Subject",
+        "Class Score (40%)", "Exam Score (60%)", "Total (100%)", "Grade", "Remark",
+      ])];
+      records.forEach((record) => {
+        const terms = record.termResults || {};
+        Object.keys(TERM_LABELS).forEach((termKey) => {
+          const termData = terms[termKey];
+          if (!termData || !Array.isArray(termData.results)) return;
+          termData.results.forEach((result) => {
+            const total = Number(result.totalScore) || (Number(result.classScore || 0) + Number(result.examScore || 0));
+            rows.push(csvRow([
+              record.fullName, record.studentId, record.currentClass,
+              record.academicYear || "2025 / 2026", TERM_LABELS[termKey], result.subject,
+              Number(result.classScore) || 0, Number(result.examScore) || 0, total,
+              result.grade || gradeFromTotal(total), result.remark || "",
+            ]));
+          });
+        });
+      });
+      return rows;
+    }
+
+    function populateExportClassSelect() {
+      const select = document.getElementById("exportClass");
+      if (!select) return;
+      const current = select.value || "KG 1";
+      select.innerHTML = DETLOF_CLASS_ORDER
+        .map((name) => "<option" + (name === current ? " selected" : "") + ">" + escapeHtml(name) + "</option>")
+        .join("");
+      if (!select.value) select.value = DETLOF_CLASS_ORDER[0];
+    }
+
+    function setExportStatus(message, tone) {
+      const el = document.getElementById("exportStatus");
+      if (!el) return;
+      el.textContent = message;
+      el.style.color = tone === "error"
+        ? "#d9003b"
+        : tone === "ok"
+          ? "var(--crest-green)"
+          : "var(--muted)";
+    }
+
+    function exportClassName() {
+      const select = document.getElementById("exportClass");
+      return select && select.value ? select.value : "";
+    }
+
+    function safeFileName(value) {
+      return String(value || "").replace(/[^A-Za-z0-9 _-]/g, "").replace(/\s+/g, "_") || "export";
+    }
+
+    bindEvent("exportClassRosterBtn", "click", function () {
+      const className = exportClassName();
+      if (!className) { setExportStatus("Choose a class first.", "error"); return; }
+      const records = getStoredRecords().filter((r) => r.currentClass === className);
+      if (!records.length) { setExportStatus("No students found in " + className + ".", "error"); return; }
+      const lines = [csvRow(["Full Name", "Class", "Student ID", "Student Email", "Academic Year", "Login Code"])];
+      records.forEach((rec) => lines.push(csvRow([rec.fullName, rec.currentClass, rec.studentId, rec.email, rec.academicYear || "2025 / 2026", rec.loginCode])));
+      downloadTextFile(safeFileName(className) + "_roster.csv", lines.join("\r\n"), "text/csv");
+      setExportStatus("Downloaded the " + className + " roster (" + records.length + " students).", "ok");
+      showToast("Downloaded the " + className + " roster.");
+    });
+
+    bindEvent("exportClassResultsBtn", "click", function () {
+      const className = exportClassName();
+      if (!className) { setExportStatus("Choose a class first.", "error"); return; }
+      const records = getStoredRecords().filter((r) => r.currentClass === className);
+      const lines = resultsRowsForRecords(records);
+      if (lines.length < 2) { setExportStatus("No results have been published for " + className + " yet.", "error"); return; }
+      downloadTextFile(safeFileName(className) + "_published_results.csv", lines.join("\r\n"), "text/csv");
+      setExportStatus("Downloaded " + (lines.length - 1) + " published result row(s) for " + className + ".", "ok");
+      showToast("Downloaded the published results for " + className + ".");
+    });
+
+    bindEvent("exportClassTimetableBtn", "click", function () {
+      const className = exportClassName();
+      if (!className) { setExportStatus("Choose a class first.", "error"); return; }
+      const records = getStoredRecords().filter((r) => r.currentClass === className);
+      const schedule = records.length && Array.isArray(records[0].timetable) ? records[0].timetable : [];
+      if (!schedule.length) { setExportStatus("No timetable has been published for " + className + " yet.", "error"); return; }
+      const lines = [csvRow(["Day", "Subject", "Time", "Venue", "Teacher"])];
+      schedule.forEach((entry) => lines.push(csvRow([entry.day, entry.subject, entry.time, entry.venue, entry.teacher])));
+      downloadTextFile(safeFileName(className) + "_timetable.csv", lines.join("\r\n"), "text/csv");
+      setExportStatus("Downloaded the " + className + " timetable (" + schedule.length + " lessons).", "ok");
+      showToast("Downloaded the " + className + " timetable.");
+    });
+
+    bindEvent("exportAllResultsBtn", "click", function () {
+      const lines = resultsRowsForRecords(getStoredRecords());
+      if (lines.length < 2) { setExportStatus("No results have been published anywhere yet.", "error"); return; }
+      downloadTextFile("detlof_all_published_results.csv", lines.join("\r\n"), "text/csv");
+      setExportStatus("Downloaded " + (lines.length - 1) + " published result row(s) across all classes.", "ok");
+      showToast("Downloaded all published results.");
+    });
+
+    bindEvent("exportFullRegisterBtn", "click", function () {
+      downloadAllCodes();
+      setExportStatus("Downloaded the full register (" + getStoredRecords().length + " students).", "ok");
+    });
+
+    bindEvent("downloadStudentReportPdfBtn", "click", function () {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student first"); return; }
+      const terms = collectPublishedTerms(record);
+      if (!terms.length) { showToast("No results have been published for " + record.fullName + " yet."); return; }
+      const html = renderFullResultsReportHTML(record);
+      const opened = openPrintPreview(html, "Please allow pop-ups to preview and download the report.");
+      if (opened) showToast("Opened the full report for " + record.fullName + ".");
+    });
+
+    bindEvent("adminProfileClassFilter", "change", function () {
+      populateAdminProfileStudents();
+    });
+
+    bindEvent("adminProfileClass", "change", function () {
+      const nameInput = document.getElementById("adminProfileStudentName");
+      if (nameInput) nameInput.value = "";
+    });
+
+    bindEvent("adminProfileStudentName", "change", loadAdminProfileRecord);
+
     function downloadAllCodes() {
       const records = getStoredRecords();
+      const escapeCell = (value) => '"' + String(value == null ? "" : value).replaceAll('"', '""') + '"';
       const lines = [
-        "Detlof Preparatory School - Bulk Student Login Codes",
-        "Generated: " + new Date().toLocaleString(),
-        "Total Students: " + records.length,
-        "============================================================",
-        "",
+        ["Full Name", "Class", "Student ID", "Student Email", "Academic Year", "Login Code", "Parent Name", "Parent Phone", "WhatsApp", "Home Address"]
+          .map(escapeCell).join(","),
       ];
       records.forEach((rec) => {
-        lines.push(
-          "Student: " + rec.fullName + "\n" +
-          "Class: " + rec.currentClass + "\n" +
-          "Student ID: " + rec.studentId + "\n" +
-          "Student Email: " + rec.email + "\n" +
-          "Login Code / PIN: " + rec.loginCode + "\n" +
-          "Portal: detlof-student-portal.html\n" +
-          "------------------------------------------------------------"
-        );
+        lines.push([
+          rec.fullName, rec.currentClass, rec.studentId, rec.email, rec.academicYear, rec.loginCode,
+          rec.parentName || "", rec.parentPhone || "", rec.whatsappNumber || "", rec.homeAddress || "",
+        ].map(escapeCell).join(","));
       });
-      const blob = new Blob([lines.join("\r\n")], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "detlof-all-student-codes-" + new Date().toISOString().slice(0, 10) + ".txt";
+      link.download = "detlof-all-student-credentials-" + new Date().toISOString().slice(0, 10) + ".csv";
       link.click();
       URL.revokeObjectURL(url);
-      showToast("Downloaded login codes for " + records.length + " students.");
+      showToast("Downloaded credentials for " + records.length + " students.");
+    }
+
+    function downloadRecordResultsCSV(record) {
+      if (!record) return;
+      const terms = record.termResults || {};
+      const escapeCell = (value) => '"' + String(value == null ? "" : value).replaceAll('"', '""') + '"';
+      const lines = [[
+        "Student Name", "Student ID", "Class", "Academic Year", "Term", "Subject",
+        "Class Score (40%)", "Exam Score (60%)", "Total (100%)", "Grade", "Remark",
+      ].map(escapeCell).join(",")];
+      const labels = { term1: "First Term", term2: "Second Term", term3: "Third Term" };
+      Object.keys(labels).forEach((termKey) => {
+        const termData = terms[termKey];
+        if (!termData || !Array.isArray(termData.results)) return;
+        termData.results.forEach((result) => {
+          lines.push([
+            record.fullName, record.studentId, record.currentClass, record.academicYear || "2025 / 2026",
+            labels[termKey], result.subject,
+            Number(result.classScore) || 0, Number(result.examScore) || 0,
+            Number(result.totalScore) || (Number(result.classScore || 0) + Number(result.examScore || 0)),
+            result.grade || "—", result.remark || "",
+          ].map(escapeCell).join(","));
+        });
+      });
+      const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = record.studentId + "-results.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Downloaded results for " + record.fullName + ".");
     }
 
     function populateRecordStudents() {
       const classSelect = document.getElementById("recordClass");
-      const studentNames = document.getElementById("recordStudentNames");
-      const studentNameInput = document.getElementById("recordStudentName");
-      const classes = [
-        "Creche", "Nursery 1", "Nursery 2", "KG 1", "KG 2",
-        "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "Basic 7", "Basic 8", "Basic 9",
-        "JHS 1", "JHS 2", "JHS 3",
-      ];
-      const selectedClass = classSelect.value || classes[0];
-      classSelect.innerHTML = classes.map((name) => "<option>" + name + "</option>").join("");
-      classSelect.value = classes.includes(selectedClass) ? selectedClass : classes[0];
-      const records = getStoredRecords();
-      const classStudents = records
-        .filter((record) => record.currentClass === classSelect.value)
-        .map((record) => record.fullName);
-      studentNames.innerHTML = classStudents.map((name) => "<option value='" + escapeHtml(name) + "'>").join("");
-      if (studentNameInput.value && !classStudents.includes(studentNameInput.value)) studentNameInput.value = "";
+      if (!classSelect) return;
+      const selectedClass = classSelect.value || "Basic 1 Boys";
+      classSelect.innerHTML = DETLOF_CLASS_ORDER
+        .map((name) => "<option" + (name === selectedClass ? " selected" : "") + ">" + escapeHtml(name) + "</option>")
+        .join("");
+      if (classSelect.value !== selectedClass) classSelect.value = DETLOF_CLASS_ORDER[0];
+      const classStudents = getStudentsForClass(classSelect.value);
+      fillDatalist("recordStudentNames", classStudents);
       updateSelectedStudentSummary(getRecordForTypedName());
     }
 
+    function getStudentsForClass(className) {
+      const records = getStoredRecords().filter((record) => record.currentClass === className);
+      const names = records.map((record) => record.fullName).filter(Boolean);
+      detlofRosterNamesForClass(className).forEach((name) => {
+        if (names.indexOf(name) === -1) names.push(name);
+      });
+      return names;
+    }
+
     function getRecordForTypedName() {
-      const selectedClass = document.getElementById("recordClass").value;
-      const typedName = document.getElementById("recordStudentName").value.trim();
+      const classSelect = document.getElementById("recordClass");
+      const nameInput = document.getElementById("recordStudentName");
+      if (!classSelect || !nameInput) return null;
+      const typedName = nameInput.value.trim();
       if (!typedName) return null;
+      const normalized = detlofNormalizeName(typedName);
       return getStoredRecords().find(
-        (record) => record.currentClass === selectedClass && record.fullName.trim().toLowerCase() === typedName.toLowerCase()
-      );
+        (record) => record.currentClass === classSelect.value && detlofNormalizeName(record.fullName) === normalized
+      ) || rosterRecordMatch(typedName) || null;
     }
 
     function updateSelectedStudentSummary(record) {
@@ -1563,7 +2179,7 @@
       setTimeout(() => toast.classList.remove("show"), 4000);
     }
 
-    document.getElementById("singleForm").addEventListener("submit", async (e) => {
+    bindEvent("singleForm", "submit", async (e) => {
       e.preventDefault();
       const fullName = document.getElementById("fullName").value.trim();
       const emailInput = document.getElementById("email");
@@ -1596,7 +2212,7 @@
       e.target.reset();
     });
 
-    document.getElementById("classGenerateForm").addEventListener("submit", async (e) => {
+    bindEvent("classGenerateForm", "submit", async (e) => {
       e.preventDefault();
       const className = document.getElementById("classGenerateClass").value;
       const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
@@ -1664,7 +2280,7 @@
       showToast("Generated " + generated + " credentials for " + className);
     });
 
-    document.getElementById("downloadClassExcelBtn").addEventListener("click", function () {
+    bindEvent("downloadClassExcelBtn", "click", function () {
       const className = document.getElementById("classGenerateClass").value;
       const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
       const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
@@ -1707,7 +2323,7 @@
       showToast("Downloaded credentials for " + className);
     });
 
-    document.getElementById("downloadExistingClassExcelBtn").addEventListener("click", function () {
+    bindEvent("downloadExistingClassExcelBtn", "click", function () {
       const className = document.getElementById("classGenerateClass").value;
       const prefix = document.getElementById("classGeneratePrefix").value.trim() || className.replace(/\s+/g, "").toUpperCase().slice(0, 4);
       const startNum = parseInt(document.getElementById("classGenerateStart").value || "1", 10);
@@ -1739,9 +2355,9 @@
       showToast("Downloaded " + classRecords.length + " existing credentials for " + className);
     });
 
-    document.getElementById("downloadClassSelect").addEventListener("change", function () {
-      const className = this.value;
+    function renderDownloadClassStudentList(className) {
       const listEl = document.getElementById("downloadClassStudentList");
+      if (!listEl) return;
       if (!className) {
         listEl.innerHTML = "<p style='color:var(--muted);text-align:center;padding:20px;'>Select a class above to view students.</p>";
         return;
@@ -1761,12 +2377,16 @@
             "<strong>" + escapeHtml(rec.fullName) + "</strong><br>" +
             "<small style='color:var(--muted);'>" + escapeHtml(rec.studentId) + " · " + escapeHtml(rec.email) + "</small>" +
           "</div>" +
-          "<a href='" + url + "' download='" + escapeHtml(rec.studentId) + "_credentials.csv' class='btn btn-teal' style='padding:6px 10px;font-size:11px;'>⬇ Download</a>" +
+          "<a href='" + url + "' download='" + escapeHtml(rec.studentId) + "_credentials.csv' class='btn btn-teal' style='padding:6px 10px;font-size:11px;'>Download</a>" +
         "</div>";
       }).join("");
+    }
+
+    bindEvent("downloadClassSelect", "change", function () {
+      renderDownloadClassStudentList(this.value);
     });
 
-    document.getElementById("downloadClassCredentialsBtn").addEventListener("click", function () {
+    bindEvent("downloadClassCredentialsBtn", "click", function () {
       const className = document.getElementById("downloadClassSelect").value;
       const statusEl = document.getElementById("downloadClassStatus");
       
@@ -1800,12 +2420,12 @@
       showToast("Downloaded " + classRecords.length + " credentials for " + className);
     });
 
-    document.getElementById("adminProfileStudentName").addEventListener("input", loadAdminProfileRecord);
-    document.getElementById("adminProfileForm").addEventListener("submit", submitAdminProfile);
-    document.getElementById("adminChangePicBtn").addEventListener("click", () => {
+    bindEvent("adminProfileStudentName", "input", loadAdminProfileRecord);
+    bindEvent("adminProfileForm", "submit", submitAdminProfile);
+    bindEvent("adminChangePicBtn", "click", () => {
       document.getElementById("adminProfilePicInput").click();
     });
-    document.getElementById("adminProfilePicInput").addEventListener("change", function () {
+    bindEvent("adminProfilePicInput", "change", function () {
       const file = this.files && this.files[0];
       if (!file) return;
       readAdminProfileImage(file).then((dataUrl) => {
@@ -1815,7 +2435,7 @@
       });
     });
 
-    document.getElementById("sendStudentReportWhatsAppBtn").addEventListener("click", function () {
+    bindEvent("sendStudentReportWhatsAppBtn", "click", function () {
       const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
       const phone = document.getElementById("adminSendParentPhone").value.trim();
       const termKey = document.getElementById("adminSendTerm").value;
@@ -1825,7 +2445,7 @@
       showToast("Opening WhatsApp with " + record.fullName + "'s report…");
     });
 
-    document.getElementById("sendStudentTimetableWhatsAppBtn").addEventListener("click", function () {
+    bindEvent("sendStudentTimetableWhatsAppBtn", "click", function () {
       const record = findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
       const phone = document.getElementById("adminSendParentPhone").value.trim();
       if (!record) { showToast("Select a student first"); return; }
@@ -1834,42 +2454,68 @@
       showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
     });
 
-    document.getElementById("fullName").addEventListener("input", function () {
+    bindEvent("fullName", "input", function () {
       const emailInput = document.getElementById("email");
-      emailInput.value = generateEmailFromName(this.value);
+      const roster = rosterRecordMatch(this.value.trim());
+      emailInput.value = roster ? roster.email : generateEmailFromName(this.value);
     });
 
-    document.getElementById("resyncAllBtn").addEventListener("click", async () => {
+    bindEvent("resyncAllBtn", "click", async () => {
       await syncRecordsToPortal(getStoredRecords());
     });
 
-    document.getElementById("downloadAllBtn").addEventListener("click", downloadAllCodes);
+    bindEvent("downloadAllBtn", "click", downloadAllCodes);
 
-    document.getElementById("recordClass").addEventListener("change", populateRecordStudents);
+    bindEvent("recordClass", "change", populateRecordStudents);
 
-    document.getElementById("recordStudentName").addEventListener("input", () => {
+    bindEvent("recordStudentName", "input", () => {
       updateSelectedStudentSummary(getRecordForTypedName());
     });
 
-    document.getElementById("resultForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+    bindEvent("recordStudentName", "change", () => {
       const record = getRecordForTypedName();
-      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
-      const termKey = document.getElementById("resultTerm").value;
-      const classScore = Number(document.getElementById("resultClassScore").value);
-      const examScore = Number(document.getElementById("resultExamScore").value);
-      const totalScore = Math.round((classScore + examScore) * 100) / 100;
-      const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
-      const result = {
-        subject: document.getElementById("resultSubject").value.trim(),
-        classScore,
-        examScore,
-        totalScore,
-        grade,
-        remark: document.getElementById("resultRemark").value.trim() || "Keep it up",
-        updatedBy: teacherLabel(),
-        updatedAt: stampIso(),
-      };
+      if (record) {
+        const phoneInput = document.getElementById("adminSendParentPhone");
+        if (phoneInput && !phoneInput.value.trim()) {
+          phoneInput.value = record.whatsappNumber || record.parentPhone || "";
+        }
+      }
+      updateSelectedStudentSummary(getRecordForTypedName());
+    });
+
+    bindEvent("downloadStudentRecordCsvBtn", "click", () => {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student first"); return; }
+      downloadRecordResultsCSV(record);
+    });
+
+    bindEvent("recordSendReportWhatsAppBtn", "click", () => {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student first"); return; }
+      const phone = (document.getElementById("adminSendParentPhone").value || "").trim() ||
+        record.whatsappNumber || record.parentPhone || "";
+      if (!phone) { showToast("Enter a parent WhatsApp number first"); return; }
+      sendResultsViaWhatsApp(record, document.getElementById("adminSendTerm").value, phone);
+      showToast("Opening WhatsApp with " + record.fullName + "'s report…");
+    });
+
+    bindEvent("recordSendTimetableWhatsAppBtn", "click", () => {
+      const record = getRecordForTypedName();
+      if (!record) { showToast("Select a student first"); return; }
+      const phone = (document.getElementById("adminSendParentPhone").value || "").trim() ||
+        record.whatsappNumber || record.parentPhone || "";
+      if (!phone) { showToast("Enter a parent WhatsApp number first"); return; }
+      sendStudentTimetableViaWhatsApp(record, phone);
+      showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
+    });
+
+    (function populateSubjectList() {
+      const datalist = document.getElementById("resultSubjectList");
+      if (!datalist) return;
+      datalist.innerHTML = SUBJECT_SUGGESTIONS.map((s) => "<option value=\"" + escapeHtml(s) + "\"></option>").join("");
+    })();
+
+    function applyResultToRecord(record, termKey, result) {
       if (!record.termResults) record.termResults = {};
       if (!record.termResults[termKey]) record.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
       const termData = record.termResults[termKey];
@@ -1880,9 +2526,55 @@
       termData.gpa = calculateGPASimple(filtered);
       termData.updatedBy = teacherLabel();
       termData.updatedAt = stampIso();
-      await updateStudentRecord(record.studentId, { termResults: record.termResults });
-      event.target.reset();
-      document.getElementById("resultTerm").value = termKey;
+      return record.termResults;
+    }
+
+    bindEvent("resultForm", "submit", async (event) => {
+      event.preventDefault();
+      const record = getRecordForTypedName();
+      if (!record) { window.alert("Type a student's full name from the selected class."); return; }
+      const termKey = document.getElementById("resultTerm").value;
+      const subject = document.getElementById("resultSubject").value.trim();
+      if (!subject) { window.alert("Enter a subject."); return; }
+      const classScore = Number(document.getElementById("resultClassScore").value);
+      const examScore = Number(document.getElementById("resultExamScore").value);
+      const totalScore = Math.round((classScore + examScore) * 100) / 100;
+      const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
+      const result = {
+        subject,
+        classScore,
+        examScore,
+        totalScore,
+        grade,
+        remark: document.getElementById("resultRemark").value.trim() || "Keep it up",
+        updatedBy: teacherLabel(),
+        updatedAt: stampIso(),
+      };
+
+      const bulkTarget = document.getElementById("resultPublishAllClasses").value.trim();
+      if (bulkTarget) {
+        const normalized = detlofNormalizeName(bulkTarget);
+        const targets = getStoredRecords().filter(
+          (item) => detlofNormalizeName(item.fullName) === normalized ||
+            (detlofNormalizeName(item.fullName) + " " + String(item.currentClass).toUpperCase()) === normalized
+        );
+        if (!targets.length) { window.alert("No student matched \"" + bulkTarget + "\"."); return; }
+        const records = getStoredRecords();
+        const updated = [];
+        targets.forEach((target) => {
+          const index = records.findIndex((item) => item.studentId === target.studentId);
+          if (index < 0) return;
+          records[index].termResults = applyResultToRecord(records[index], termKey, result);
+          updated.push(records[index]);
+        });
+        saveStoredRecords(records);
+        renderTable(records);
+        await syncRecordsToPortal(updated);
+        showToast("Result published to " + updated.length + " student portal(s).");
+        return;
+      }
+
+      await updateStudentRecord(record.studentId, { termResults: applyResultToRecord(record, termKey, result) });
       showToast("Result saved for " + record.fullName + " (" + termKey.replace("term", "Term ") + ").");
     });
 
@@ -1893,42 +2585,51 @@
       return Math.round((totalPoints / results.length) * 100) / 100;
     }
 
-    document.getElementById("releaseResultsForm").addEventListener("submit", async (event) => {
+    bindEvent("releaseResultsForm", "submit", async (event) => {
       event.preventDefault();
       const termKey = document.getElementById("releaseTerm").value;
       const mode = document.getElementById("promotionMode").value;
       const record = getRecordForTypedName();
       const records = getStoredRecords();
       let targetRecords = [];
-      if (mode === "auto" && record) {
-        targetRecords = records.filter((r) => r.currentClass === record.currentClass);
-      } else if (mode === "auto") {
-        targetRecords = records.filter((r) => (r.currentClass || "JHS 2") === "JHS 2");
+      if (mode === "auto") {
+        const targetClass = record ? record.currentClass : document.getElementById("recordClass").value;
+        targetRecords = records.filter((r) => r.currentClass === targetClass);
       } else if (record) {
         targetRecords = [record];
       } else {
-        window.alert("Select a student or use auto mode.");
+        window.alert("Select a student or choose a class to release results for.");
         return;
       }
       if (!targetRecords.length) {
         window.alert("No students found for promotion calculation.");
         return;
       }
-      addPendingApproval("release", { termKey, mode, studentCount: targetRecords.length, studentIds: targetRecords.map(r => r.id), createdBy: teacherLabel(), createdAt: stampIso() });
+      targetRecords.forEach((target) => {
+        const released = target.releasedTerms || [];
+        if (released.indexOf(termKey) === -1) released.push(termKey);
+        target.releasedTerms = released;
+      });
+      saveStoredRecords(records);
+      renderTable(records);
+      await syncRecordsToPortal(targetRecords);
+      addPendingApproval("release", {
+        termKey,
+        mode,
+        studentCount: targetRecords.length,
+        studentIds: targetRecords.map((r) => r.studentId),
+        createdBy: teacherLabel(),
+        createdAt: stampIso(),
+      });
       showToast("Term " + termKey.replace("term", "") + " release with promotions queued for Academic Admin approval (" + targetRecords.length + " students).");
-      event.target.reset();
-      document.getElementById("releaseTerm").value = termKey;
-      document.getElementById("promotionMode").value = mode;
       renderPendingApprovals();
     });
 
     function nextClassSimple(currentClass) {
-      const progression = ["Creche", "KG", "Lower KG", "Upper KG", "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3"];
-      const idx = progression.indexOf(currentClass);
-      return idx >= 0 && idx < progression.length - 1 ? progression[idx + 1] : currentClass;
+      return detlofNextClass(currentClass);
     }
 
-    document.getElementById("portalUpdateForm").addEventListener("submit", async (event) => {
+    bindEvent("portalUpdateForm", "submit", async (event) => {
       event.preventDefault();
       const record = getRecordForTypedName();
       if (!record) { window.alert("Type a student's full name from the selected class."); return; }
@@ -1949,7 +2650,7 @@
       showToast("Portal update sent to " + record.fullName + ".");
     });
 
-    document.getElementById("announcementForm").addEventListener("submit", async (event) => {
+    bindEvent("announcementForm", "submit", async (event) => {
       event.preventDefault();
       const title = document.getElementById("annTitle").value.trim();
       const message = document.getElementById("annMessage").value.trim();
@@ -1981,113 +2682,387 @@
        showToast("Broadcast announcement sent to " + (targetClass || "all") + " student portal(s).");
      });
 
+  // ---------------------------------------------------------------------------
+  // CSV parsing + preview
+  // ---------------------------------------------------------------------------
+  // Proper RFC-4180 parsing: quoted fields, escaped quotes (""), embedded commas
+  // and newlines, CRLF line endings, and a UTF-8 byte-order mark.
   function parseCSV(text) {
-    const rows = text.trim().split(/\r?\n/);
-    return rows.map((row) => {
-      const cols = row.split(",").map((c) => c.trim().replace(/^["']|["']$/g, ""));
-      return cols;
-    });
+    const input = String(text || "").replace(/^\uFEFF/, "");
+    const rows = [];
+    let row = [];
+    let field = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < input.length; i += 1) {
+      const ch = input[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (input[i + 1] === '"') { field += '"'; i += 1; } else { inQuotes = false; }
+        } else {
+          field += ch;
+        }
+        continue;
+      }
+      if (ch === '"') { inQuotes = true; continue; }
+      if (ch === ",") { row.push(field); field = ""; continue; }
+      if (ch === "\r") { continue; }
+      if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; continue; }
+      field += ch;
+    }
+    row.push(field);
+    if (row.length > 1 || row[0] !== "") rows.push(row);
+    return rows.filter((cells) => cells.some((cell) => String(cell).trim() !== ""));
   }
 
-  document.getElementById("resultsFile").addEventListener("change", function (e) {
+  function looksLikeSpreadsheetBinary(text) {
+    const sample = String(text || "").slice(0, 400);
+    if (!sample) return true;
+    // A real CSV decodes as readable text; .xlsx is a zip and produces replacement chars.
+    const bad = (sample.match(/\uFFFD/g) || []).length;
+    const readable = (sample.match(/[\w ,;:'"\-\n]/g) || []).length / sample.length;
+    return bad > 0 || readable < 0.75;
+  }
+
+  // Resolve a column by exact match, then prefix, then contains — while avoiding
+  // accidental matches such as "Class Score" being read as the "Class" column.
+  function matchHeaderIndex(headers, aliases, options) {
+    const opts = options || {};
+    const blocked = (opts.block || []).map((h) => String(h).toLowerCase());
+    const cleaned = headers.map((h) => String(h).toLowerCase().replace(/[^a-z0-9]/g, ""));
+    const isUsable = (i) => !blocked.some((b) => cleaned[i].indexOf(b.replace(/[^a-z0-9]/g, "")) !== -1);
+
+    for (const alias of aliases) {
+      const target = alias.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const exact = cleaned.findIndex((h, i) => h === target && isUsable(i));
+      if (exact !== -1) return exact;
+    }
+    for (const alias of aliases) {
+      const target = alias.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const starts = cleaned.findIndex((h, i) => h.indexOf(target) === 0 && isUsable(i));
+      if (starts !== -1) return starts;
+    }
+    for (const alias of aliases) {
+      const target = alias.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const contains = cleaned.findIndex((h, i) => h.indexOf(target) !== -1 && isUsable(i));
+      if (contains !== -1) return contains;
+    }
+    return -1;
+  }
+
+  function readCSVFile(file, onRows, onError) {
+    if (!file) { if (onError) onError("No file selected."); return; }
+    const name = String(file.name || "").toLowerCase();
+    if (/\.(xlsx|xls|xlsm)$/.test(name)) {
+      if (onError) {
+        onError("\"" + file.name + "\" is an Excel workbook. Open it in Excel or Google Sheets and use File \u2192 Save As \u2192 CSV, then upload the .csv file.");
+      }
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const text = String(evt.target.result || "");
+      if (looksLikeSpreadsheetBinary(text)) {
+        if (onError) onError("\"" + file.name + "\" could not be read as CSV. If it is an Excel file, save it as CSV and try again.");
+        return;
+      }
+      const rows = parseCSV(text);
+      if (!rows.length) { if (onError) onError("\"" + file.name + "\" is empty or has no readable rows."); return; }
+      onRows(rows, file);
+    };
+    reader.onerror = () => { if (onError) onError("Could not read \"" + file.name + "\"."); };
+    reader.readAsText(file);
+  }
+
+  function renderPreviewTable(containerId, rows, meta) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const info = meta || {};
+    if (!rows || !rows.length) { container.innerHTML = "<p style='color:var(--muted);padding:8px;margin:0;'>No rows to preview.</p>"; return; }
+
+    const header = rows[0];
+    const body = rows.slice(1);
+    const maxRows = info.maxRows || 60;
+
+    let html = "<div style='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;font-size:11px;color:var(--muted);'>";
+    if (info.fileName) html += "<span class='id-pill'>" + escapeHtml(info.fileName) + "</span>";
+    html += "<span>" + body.length + " data row" + (body.length === 1 ? "" : "s") + "</span>";
+    html += "<span>" + header.length + " columns</span>";
+    if (info.note) html += "<span style='color:var(--crest-green);font-weight:700;'>" + escapeHtml(info.note) + "</span>";
+    if (info.error) html += "<span style='color:#d9003b;font-weight:700;'>" + escapeHtml(info.error) + "</span>";
+    html += "</div>";
+
+    if (info.mapping && info.mapping.length) {
+      html += "<div style='font-size:10px;color:var(--muted);margin-bottom:8px;'>Detected columns: " +
+        info.mapping.map((m) => escapeHtml(m.label) + " \u2192 " + escapeHtml(m.value)).join(" &middot; ").replace(/&middot;/g, "\u00b7") + "</div>";
+    }
+
+    html += "<table style='width:100%;border-collapse:collapse;font-size:10px;background:#fff;'>";
+    html += "<thead><tr>" + header.map((h) => "<th style='border:1px solid var(--line);padding:5px;font-weight:800;text-align:left;background:var(--crest-purple-soft);position:sticky;top:0;'>" + escapeHtml(h) + "</th>").join("") + "</tr></thead><tbody>";
+    body.slice(0, maxRows).forEach((row) => {
+      html += "<tr>" + header.map((_, c) => "<td style='border:1px solid var(--line);padding:4px;'>" + escapeHtml(row[c] == null ? "" : row[c]) + "</td>").join("") + "</tr>";
+    });
+    html += "</tbody></table>";
+    if (body.length > maxRows) {
+      html += "<p style='font-size:10px;color:var(--muted);padding:6px 0 0;margin:0;'>Showing the first " + maxRows + " of " + body.length + " rows. All rows will be imported.</p>";
+    }
+    container.innerHTML = html;
+  }
+
+  function renderPreviewError(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = "<div style='background:#ffe4ea;border:1px solid #d9003b;color:#b3002e;padding:10px 12px;border-radius:6px;font-size:11px;'>" +
+      escapeHtml(message) + "</div>";
+  }
+
+  function downloadTextFile(filename, content, mime) {
+    const blob = new Blob(["\uFEFF" + content], { type: (mime || "text/csv") + ";charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function csvCell(value) {
+    return '"' + String(value == null ? "" : value).replace(/"/g, '""') + '"';
+  }
+
+  function csvRow(values) {
+    return values.map(csvCell).join(",");
+  }
+
+  function gradeFromTotal(total) {
+    const score = Number(total) || 0;
+    if (score >= 80) return "A";
+    if (score >= 70) return "B";
+    if (score >= 60) return "C";
+    if (score >= 50) return "D";
+    if (score >= 40) return "E";
+    return "F";
+  }
+
+  const RESULTS_COLUMN_ALIASES = {
+    name: ["Student Name", "Full Name", "Name", "Student"],
+    class: ["Class", "Class Category", "Assigned Class", "Current Class"],
+    studentId: ["Student ID", "StudentId", "ID", "Student Code"],
+    subject: ["Subject", "Subject Name"],
+    classScore: ["Class Score", "ClassScore", "Class Score (40%)", "SBA"],
+    examScore: ["Exam Score", "ExamScore", "Exam Score (60%)", "Exam"],
+  };
+
+  const TIMETABLE_COLUMN_ALIASES = {
+    day: ["Day", "Day of Week", "Weekday"],
+    subject: ["Subject", "Subject Name"],
+    time: ["Time", "Period", "Time Slot"],
+    venue: ["Venue", "Classroom", "Room", "Location"],
+    teacher: ["Teacher", "Subject Teacher", "Tutor"],
+  };
+
+  function detectResultsColumns(headers) {
+    return {
+      nameIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.name),
+      classIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.class, { block: ["classscore", "class score"] }),
+      studentIdIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.studentId),
+      subjectIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.subject),
+      classScoreIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.classScore),
+      examScoreIdx: matchHeaderIndex(headers, RESULTS_COLUMN_ALIASES.examScore),
+      remarkIdx: matchHeaderIndex(headers, ["Remark", "Teacher Remark", "Teacher's Remark", "Comment"]),
+    };
+  }
+
+  function detectTimetableColumns(headers) {
+    return {
+      dayIdx: matchHeaderIndex(headers, TIMETABLE_COLUMN_ALIASES.day),
+      subjectIdx: matchHeaderIndex(headers, TIMETABLE_COLUMN_ALIASES.subject),
+      timeIdx: matchHeaderIndex(headers, TIMETABLE_COLUMN_ALIASES.time),
+      venueIdx: matchHeaderIndex(headers, TIMETABLE_COLUMN_ALIASES.venue),
+      teacherIdx: matchHeaderIndex(headers, TIMETABLE_COLUMN_ALIASES.teacher),
+    };
+  }
+
+  function describeMapping(headers, idx) {
+    const labels = { nameIdx: "Name", classIdx: "Class", studentIdIdx: "Student ID", subjectIdx: "Subject", classScoreIdx: "Class Score", examScoreIdx: "Exam Score", remarkIdx: "Remark", dayIdx: "Day", timeIdx: "Time", venueIdx: "Venue", teacherIdx: "Teacher" };
+    return Object.keys(idx)
+      .filter((k) => idx[k] >= 0)
+      .map((k) => ({ label: labels[k] || k, value: headers[idx[k]] }));
+  }
+
+  function findStudentRecord(existing, studentName, studentClass, studentId) {
+    if (studentId) {
+      const byId = existing.find((r) => String(r.studentId).toUpperCase() === String(studentId).trim().toUpperCase());
+      if (byId) return byId;
+    }
+    const normalized = detlofNormalizeName(studentName);
+    if (!normalized) return null;
+    if (studentClass) {
+      const byNameAndClass = existing.find((r) => detlofNormalizeName(r.fullName) === normalized && r.currentClass === studentClass);
+      if (byNameAndClass) return byNameAndClass;
+    }
+    return existing.find((r) => detlofNormalizeName(r.fullName) === normalized) || null;
+  }
+
+
+  bindEvent("resultsFile", "change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      const csv = parseCSV(evt.target.result);
-      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
-      csv.forEach((row, i) => {
-        html += "<tr>";
-        row.forEach((cell) => {
-          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
+    readCSVFile(file, function (rows, f) {
+      const headers = rows[0];
+      const cols = detectResultsColumns(headers);
+      const missing = [];
+      if (cols.subjectIdx < 0) missing.push("Subject");
+      if (cols.classScoreIdx < 0) missing.push("Class Score");
+      if (cols.examScoreIdx < 0) missing.push("Exam Score");
+      if (cols.nameIdx < 0 && cols.studentIdIdx < 0) missing.push("Student Name or Student ID");
+
+      if (missing.length) {
+        renderPreviewTable("resultsPreview", rows, {
+          fileName: f.name,
+          mapping: describeMapping(headers, cols),
+          error: "Missing required column(s): " + missing.join(", ") + ". Download the template for the correct format.",
         });
-        html += "</tr>";
+        return;
+      }
+
+      const existing = getStoredRecords();
+      let matched = 0;
+      rows.slice(1).forEach((row) => {
+        if (findStudentRecord(existing, row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx])) matched += 1;
       });
-      html += "</table>";
-      document.getElementById("resultsPreview").innerHTML = html;
-    };
-    reader.readAsText(file);
+
+      renderPreviewTable("resultsPreview", rows, {
+        fileName: f.name,
+        mapping: describeMapping(headers, cols),
+        note: matched + " of " + (rows.length - 1) + " rows match a student in the register",
+      });
+    }, function (message) {
+      renderPreviewError("resultsPreview", message);
+    });
   });
 
-  document.getElementById("bulkResultsForm").addEventListener("submit", async function (e) {
+  bindEvent("bulkResultsForm", "submit", async function (e) {
     e.preventDefault();
     const file = document.getElementById("resultsFile").files[0];
-    if (!file) return;
+    if (!file) { showToast("Select a CSV file first"); return; }
     const termKey = document.getElementById("resultsTerm").value;
-    const reader = new FileReader();
-    reader.onload = async function (evt) {
-      const csv = parseCSV(evt.target.result);
-      if (csv.length < 2) return;
-      const headers = csv[0];
-      const nameIdx = headers.findIndex((h) => h.toLowerCase().includes("name"));
-      const classIdx = headers.findIndex((h) => h.toLowerCase().includes("class"));
-      const studentIdIdx = headers.findIndex((h) => h.toLowerCase().includes("student id"));
-      const subjectIdx = headers.findIndex((h) => h.toLowerCase().includes("subject"));
-      const classScoreIdx = headers.findIndex((h) => h.toLowerCase().includes("class score"));
-      const examScoreIdx = headers.findIndex((h) => h.toLowerCase().includes("exam score"));
+    const publishNow = document.getElementById("resultsPublishNow") && document.getElementById("resultsPublishNow").checked;
+
+    readCSVFile(file, async function (rows) {
+      if (rows.length < 2) { showToast("The file needs a header row and at least one data row."); return; }
+      const headers = rows[0];
+      const cols = detectResultsColumns(headers);
+      if (cols.subjectIdx < 0 || cols.classScoreIdx < 0 || cols.examScoreIdx < 0) {
+        renderPreviewError("resultsPreview", "The file is missing the Subject, Class Score or Exam Score column. Download the template for the correct format.");
+        showToast("Missing required columns in the uploaded file");
+        return;
+      }
+
       const existing = getStoredRecords();
-      let matchedCount = 0;
+      const records = getStoredRecords();
       const resultsData = [];
-      csv.slice(1).forEach((row) => {
-        const studentName = row[nameIdx] || "";
-        const studentClass = row[classIdx] || "";
-        const studentId = row[studentIdIdx] || "";
-        const subject = row[subjectIdx] || "";
-        const classScore = row[classScoreIdx] || "";
-        const examScore = row[examScoreIdx] || "";
-        let rec = null;
-        if (studentId) {
-          rec = existing.find((r) => String(r.studentId).toUpperCase() === String(studentId).toUpperCase());
+      const unmatched = [];
+
+      rows.slice(1).forEach((row) => {
+        const rec = findStudentRecord(existing, row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx]);
+        if (!rec) {
+          if (String(row[cols.subjectIdx] || "").trim()) {
+            unmatched.push([row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx]].filter(Boolean).join(" / "));
+          }
+          return;
         }
-        if (!rec && studentName && studentClass) {
-          rec = existing.find((r) => r.fullName.toLowerCase() === studentName.toLowerCase() && r.currentClass === studentClass);
-        }
-        if (!rec && studentName) {
-          rec = existing.find((r) => r.fullName.toLowerCase() === studentName.toLowerCase());
-        }
-        if (rec) {
-          matchedCount++;
-          resultsData.push({
-            studentId: rec.studentId,
-            subject,
-            classScore,
-            examScore,
-          });
-        }
+        const classScore = Number(String(row[cols.classScoreIdx]).replace("%", "").trim());
+        const examScore = Number(String(row[cols.examScoreIdx]).replace("%", "").trim());
+        if (Number.isNaN(classScore) || Number.isNaN(examScore)) return;
+        const totalScore = Math.round((classScore + examScore) * 100) / 100;
+        resultsData.push({
+          studentId: rec.studentId,
+          fullName: rec.fullName,
+          class: rec.currentClass,
+          subject: String(row[cols.subjectIdx] || "").trim(),
+          classScore,
+          examScore,
+          totalScore,
+          grade: gradeFromTotal(totalScore),
+          remark: String(row[cols.remarkIdx] || "").trim() || "Keep it up",
+        });
       });
-      addPendingApproval("results", { termKey, resultsData, matchedCount, createdBy: teacherLabel(), createdAt: stampIso() });
-      showToast("Results for " + termKey.replace("term", "Term ") + " queued for Academic Admin approval (" + matchedCount + " students matched).");
-      e.target.reset();
-      document.getElementById("resultsPreview").innerHTML = "";
+
+      if (!resultsData.length) {
+        renderPreviewError("resultsPreview", "No rows could be matched to students in the register. Check the Student Name / Student ID column, or generate the class credentials first.");
+        showToast("No students matched the uploaded file");
+        return;
+      }
+
+      renderPreviewTable("resultsPreview", rows, {
+        fileName: file.name,
+        mapping: describeMapping(headers, cols),
+        note: resultsData.length + " result row(s) ready for " + termKey.replace("term", "Term ") +
+          (unmatched.length ? " \u00b7 " + unmatched.length + " row(s) did not match a student" : ""),
+      });
+
+      if (publishNow) {
+        await publishResultsToPortals(termKey, resultsData);
+        showToast("Published " + resultsData.length + " result row(s) to " + termKey.replace("term", "Term ") + " student portals.");
+      } else {
+        addPendingApproval("results", { termKey, resultsData, matchedCount: new Set(resultsData.map((r) => r.studentId)).size, createdBy: teacherLabel(), createdAt: stampIso() });
+        showToast("Results for " + termKey.replace("term", "Term ") + " queued for Academic Admin approval (" + new Set(resultsData.map((r) => r.studentId)).size + " students matched).");
+      }
       renderPendingApprovals();
+    }, function (message) {
+      renderPreviewError("resultsPreview", message);
+      showToast("Could not read the uploaded file");
+    });
+  });
+
+  bindEvent("downloadResultsTemplate", "click", function () {
+    const className = document.getElementById("recordClass").value;
+    const roster = getStoredRecords().filter((r) => r.currentClass === className);
+    const subjects = ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"];
+    const lines = [csvRow(["Student Name", "Class", "Student ID", "Subject", "Class Score", "Exam Score", "Remark"])];
+    if (roster.length) {
+      roster.slice(0, 12).forEach((rec) => {
+        subjects.forEach((subject) => {
+          lines.push(csvRow([rec.fullName, rec.currentClass, rec.studentId, subject, "", "", ""]));
+        });
+      });
+    } else {
+      lines.push(csvRow(["KRISTEN DENNISON ESSOUN", "KG 1", "KG1-0001", "Mathematics", "32", "56", "Very good"]));
     }
-    reader.readAsText(file);
+    downloadTextFile("results-upload-template.csv", lines.join("\r\n"), "text/csv");
+    showToast("Downloaded the results template" + (roster.length ? " for " + roster.length + " " + className + " student(s)." : "."));
   });
 
-  document.getElementById("downloadResultsTemplate").addEventListener("click", function () {
-    const csv = "Student Name,Class,Student ID,Subject,Class Score,Exam Score\nJohn Doe,KG 1,KG1-0001,Mathematics,32,56\n";
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "results-upload-template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+  bindEvent("downloadRosterTemplateBtn", "click", function () {
+    const className = document.getElementById("recordClass").value;
+    const roster = getStoredRecords().filter((r) => r.currentClass === className);
+    if (!roster.length) { showToast("No students found in " + className); return; }
+    const lines = [csvRow(["Student Name", "Class", "Student ID", "Subject", "Class Score", "Exam Score", "Remark"])];
+    roster.forEach((rec) => {
+      ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"].forEach((subject) => {
+        lines.push(csvRow([rec.fullName, rec.currentClass, rec.studentId, subject, "", "", ""]));
+      });
+    });
+    downloadTextFile(className.replace(/\s+/g, "_") + "_results_template.csv", lines.join("\r\n"), "text/csv");
+    showToast("Downloaded a results template for " + roster.length + " " + className + " student(s).");
   });
 
-  document.getElementById("academicsAdminLoginLink").addEventListener("click", function (e) {
+  bindEvent("academicsAdminLoginLink", "click", function (e) {
     e.preventDefault();
     document.querySelector(".admin-login-form").classList.add("hidden");
     document.getElementById("academicsAdminLoginScreen").classList.remove("hidden");
   });
 
-  document.getElementById("backToTeacherLogin").addEventListener("click", function (e) {
+  bindEvent("backToTeacherLogin", "click", function (e) {
     e.preventDefault();
     document.getElementById("academicsAdminLoginScreen").classList.add("hidden");
     document.querySelector(".admin-login-form").classList.remove("hidden");
   });
 
-document.getElementById("academicsAdminLoginBtn").addEventListener("click", function (e) {
+bindEvent("academicsAdminLoginBtn", "click", function (e) {
     e.preventDefault();
     const email = document.getElementById("academicsAdminEmail").value;
     const password = document.getElementById("academicsAdminPassword").value;
@@ -2104,91 +3079,106 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     }
   });
 
-  document.getElementById("timetableFile").addEventListener("change", function (e) {
+  bindEvent("timetableFile", "change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      const csv = parseCSV(evt.target.result);
-      let html = "<table style='width:100%;border-collapse:collapse;font-size:10px;'><tr>";
-      csv.forEach((row, i) => {
-        html += "<tr>";
-        row.forEach((cell) => {
-          html += (i === 0 ? "<th style='border:1px solid #ddd;padding:4px;font-weight:bold;'>" : "<td style='border:1px solid #ddd;padding:4px;'>") + cell + (i === 0 ? "</th>" : "</td>");
-        });
-        html += "</tr>";
+    readCSVFile(file, function (rows, f) {
+      const headers = rows[0];
+      const cols = detectTimetableColumns(headers);
+      const missing = [];
+      if (cols.dayIdx < 0) missing.push("Day");
+      if (cols.subjectIdx < 0) missing.push("Subject");
+      renderPreviewTable("timetablePreview", rows, {
+        fileName: f.name,
+        mapping: describeMapping(headers, cols),
+        error: missing.length ? "Missing required column(s): " + missing.join(", ") + ". Download the template for the correct format." : "",
       });
-      html += "</table>";
-      document.getElementById("timetablePreview").innerHTML = html;
-    };
-    reader.readAsText(file);
+    }, function (message) {
+      renderPreviewError("timetablePreview", message);
+    });
   });
 
-  document.getElementById("timetableForm").addEventListener("submit", async function (e) {
+  bindEvent("timetableForm", "submit", async function (e) {
     e.preventDefault();
     const file = document.getElementById("timetableFile").files[0];
     const timetableClass = document.getElementById("timetableClass").value;
     if (!timetableClass) { showToast("Select a class first"); return; }
-    if (!file) { showToast("Select a CSV/Excel file"); return; }
-    
-    const reader = new FileReader();
-    reader.onload = async function (evt) {
-      const csv = parseCSV(evt.target.result);
-      if (csv.length < 2) { showToast("Invalid file format"); return; }
-      const headers = csv[0].map(h => h.toLowerCase().trim());
-      const dayIdx = headers.indexOf("day");
-      const subjectIdx = headers.indexOf("subject");
-      const timeIdx = headers.indexOf("time");
-      const venueIdx = headers.indexOf("venue");
-      const teacherIdx = headers.indexOf("teacher");
-      const schedule = csv.slice(1).map(row => ({
-        day: row[dayIdx] || "",
-        subject: row[subjectIdx] || "",
-        time: row[timeIdx] || "",
-        venue: row[venueIdx] || "",
-        teacher: row[teacherIdx] || "Not assigned",
-      })).filter(r => r.day && r.subject);
-      
-      if (!schedule.length) { showToast("No valid timetable entries found"); return; }
-      
-      // Apply timetable to all students in the class
+    if (!file) { showToast("Select a CSV file"); return; }
+
+    readCSVFile(file, async function (rows) {
+      if (rows.length < 2) { showToast("The file needs a header row and at least one lesson row."); return; }
+      const headers = rows[0];
+      const cols = detectTimetableColumns(headers);
+      if (cols.dayIdx < 0 || cols.subjectIdx < 0) {
+        renderPreviewError("timetablePreview", "The file is missing the Day or Subject column. Download the template for the correct format.");
+        showToast("Missing required columns in the uploaded file");
+        return;
+      }
+
+      const schedule = rows.slice(1).map((row) => ({
+        day: String(row[cols.dayIdx] || "").trim(),
+        subject: String(row[cols.subjectIdx] || "").trim(),
+        time: String(row[cols.timeIdx] || "").trim(),
+        venue: String(row[cols.venueIdx] || "").trim(),
+        teacher: String(row[cols.teacherIdx] || "").trim() || "Not assigned",
+      })).filter((r) => r.day && r.subject);
+
+      if (!schedule.length) { showToast("No valid timetable entries found in the file."); return; }
+
       const records = getStoredRecords();
       const classRecords = records.filter((record) => record.currentClass === timetableClass);
       if (!classRecords.length) {
         showToast("No students found in " + timetableClass);
         return;
       }
-      
+
+      const stamp = stampIso();
+      const stamped = schedule.map((entry) => ({ ...entry, updatedBy: teacherLabel(), updatedAt: stamp }));
       const updatedRecords = classRecords.map((record) => ({
         ...record,
-        timetable: schedule.map((entry) => ({ ...entry, updatedBy: teacherLabel(), updatedAt: stampIso() })),
+        timetable: stamped,
         updatedBy: teacherLabel(),
-        updatedAt: stampIso(),
+        updatedAt: stamp,
       }));
-      
+
       const otherRecords = records.filter((record) => record.currentClass !== timetableClass);
-      const allRecords = [...otherRecords, ...updatedRecords];
-      saveStoredRecords(allRecords);
-      renderTable(allRecords);
+      saveStoredRecords([...otherRecords, ...updatedRecords]);
+      renderTable(getStoredRecords());
       updateSelectedStudentSummary(getRecordForTypedName());
       await syncRecordsToPortal(updatedRecords);
-      
-      showToast("Timetable synced for all " + classRecords.length + " students in " + timetableClass + " (" + schedule.length + " entries).");
+
+      showToast("Timetable synced for all " + classRecords.length + " students in " + timetableClass + " (" + schedule.length + " lessons).");
       e.target.reset();
-      document.getElementById("timetablePreview").innerHTML = "";
-    };
-    reader.readAsText(file);
+      document.getElementById("timetableFile").value = "";
+    }, function (message) {
+      renderPreviewError("timetablePreview", message);
+      showToast("Could not read the uploaded file");
+    });
   });
 
-  document.getElementById("downloadTimetableTemplate").addEventListener("click", function () {
-    const csv = "Day,Subject,Time,Venue,Teacher\nMonday,Mathematics,8:00-9:00,JHS 2 Room,Mrs. Addo\nTuesday,English Language,9:00-10:00,JHS 2 Room,Mr. Mensah\n";
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "timetable-upload-template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+  bindEvent("downloadTimetableTemplate", "click", function () {
+    const className = document.getElementById("timetableClass").value;
+    const lines = [csvRow(["Day", "Subject", "Time", "Venue", "Teacher"])];
+    [
+      ["Monday", "Mathematics", "8:00 - 9:00", (className || "KG 1") + " Room", "Mrs. Addo"],
+      ["Monday", "English Language", "9:00 - 10:00", (className || "KG 1") + " Room", "Mr. Mensah"],
+      ["Tuesday", "Integrated Science", "8:00 - 9:00", "Science Lab", "Mrs. Owusu"],
+      ["Wednesday", "Computing / ICT", "10:30 - 11:30", "ICT Lab", "Mr. Kofi"],
+      ["Thursday", "Social Studies", "11:30 - 12:30", (className || "KG 1") + " Room", "Ms. Aidoo"],
+    ].forEach((row) => lines.push(csvRow(row)));
+    downloadTextFile("timetable-upload-template.csv", lines.join("\r\n"), "text/csv");
+    showToast("Downloaded the timetable template.");
+  });
+
+  bindEvent("downloadTimetableTemplateForClass", "click", function () {
+    const className = document.getElementById("timetableClass").value;
+    const records = getStoredRecords().filter((r) => r.currentClass === className);
+    const schedule = records.length && Array.isArray(records[0].timetable) ? records[0].timetable : [];
+    if (!schedule.length) { showToast("No timetable has been published for " + className + " yet."); return; }
+    const lines = [csvRow(["Day", "Subject", "Time", "Venue", "Teacher"])];
+    schedule.forEach((entry) => lines.push(csvRow([entry.day, entry.subject, entry.time, entry.venue, entry.teacher])));
+    downloadTextFile(className.replace(/\s+/g, "_") + "_timetable.csv", lines.join("\r\n"), "text/csv");
+    showToast("Downloaded the current " + className + " timetable.");
   });
 
   function addPendingApproval(type, data) {
@@ -2214,27 +3204,30 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     noPendingMsg.style.display = "none";
     let html = "";
     pending.forEach((item, i) => {
-      const typeLabel = { results: "📊 Results", timetable: "📅 Timetable", release: "📢 Term Release" }[item.type] || item.type;
+      const typeLabel = { results: "Results", timetable: "Timetable", release: "Term Release" }[item.type] || item.type;
       html += "<div style='border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:#fff;'>";
       html += "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>";
-      html += "<strong>" + typeLabel + "</strong>";
-      html += "<span style='font-size:11px;color:var(--muted);'>Submitted: " + item.submittedAt + "</span>";
+      html += "<strong>" + escapeHtml(typeLabel) + "</strong>";
+      html += "<span style='font-size:11px;color:var(--muted);'>Submitted: " + escapeHtml(item.submittedAt) + "</span>";
       html += "</div>";
       if (item.type === "results") {
-        html += "Term: " + item.data.termKey + " | " + item.data.matchedCount + " students matched";
+        html += "Term: " + escapeHtml(TERM_LABELS[item.data.termKey] || item.data.termKey) +
+          " &middot; " + item.data.matchedCount + " students matched &middot; " +
+          (item.data.resultsData || []).length + " result row(s)";
       } else if (item.type === "timetable") {
-        html += "Class: " + item.data.className + " | " + item.data.schedule.length + " entries";
+        html += "Class: " + escapeHtml(item.data.className) + " &middot; " + (item.data.schedule || []).length + " lessons";
       } else if (item.type === "release") {
-        html += "Term: " + item.data.termKey + " | Mode: " + item.data.mode;
+        html += "Term: " + escapeHtml(TERM_LABELS[item.data.termKey] || item.data.termKey) + " &middot; Mode: " + escapeHtml(item.data.mode) +
+          " &middot; " + item.data.studentCount + " students";
       }
       html += "<div style='margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;'>";
-      html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;' onclick='approvePending(" + i + ")'>✅ Approve</button>";
-      html += "<button class='btn btn-outline' style='padding:4px 10px;font-size:11px;' onclick='rejectPending(" + i + ")'>❌ Reject</button>";
+      html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;' onclick='approvePending(" + i + ")'>Approve</button>";
+      html += "<button class='btn btn-outline' style='padding:4px 10px;font-size:11px;' onclick='rejectPending(" + i + ")'>Reject</button>";
       if (item.type === "timetable") {
-        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#25D366;' onclick='sendTimetableToAllParents(\"" + item.data.className.replace(/"/g, '\\"') + "\", " + JSON.stringify(item.data.schedule).replace(/"/g, '"') + ")'>📱 Send via WhatsApp</button>";
+        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#25D366;' onclick='sendTimetableToAllParents(" + i + ")'>Send Timetable via WhatsApp</button>";
       }
       if (item.type === "results") {
-        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#128C7E;border-color:#128C7E;' onclick='sendResultsToAllParents(\"" + item.data.termKey + "\")'>📊 Send Results via WhatsApp</button>";
+        html += "<button class='btn btn-teal' style='padding:4px 10px;font-size:11px;background:#128C7E;' onclick='sendResultsToAllParents(" + i + ")'>Send Results via WhatsApp</button>";
       }
       html += "</div>";
       html += "</div>";
@@ -2285,7 +3278,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     renderTable(records);
   }
 
-  document.getElementById("approveAllBtn").addEventListener("click", function() {
+  bindEvent("approveAllBtn", "click", function() {
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     pending.forEach((item, i) => {
       if (item.status === "pending") {
@@ -2294,7 +3287,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     });
   });
 
-  document.getElementById("rejectAllBtn").addEventListener("click", function() {
+  bindEvent("rejectAllBtn", "click", function() {
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     pending.forEach((item, i) => {
       if (item.status === "pending") {
@@ -2303,7 +3296,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     });
   });
 
-  document.getElementById("sendAllTimetablesWhatsAppBtn").addEventListener("click", function() {
+  bindEvent("sendAllTimetablesWhatsAppBtn", "click", function() {
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     const timetableItems = pending.filter(item => item.status === "pending" && item.type === "timetable");
     timetableItems.forEach(item => {
@@ -2311,7 +3304,7 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     });
   });
 
-  document.getElementById("sendAllResultsWhatsAppBtn").addEventListener("click", function() {
+  bindEvent("sendAllResultsWhatsAppBtn", "click", function() {
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     const resultsItems = pending.filter(item => item.status === "pending" && item.type === "results");
     const terms = [...new Set(resultsItems.map(item => item.data.termKey))];
@@ -2485,28 +3478,42 @@ document.getElementById("academicsAdminLoginBtn").addEventListener("click", func
     window.open(url, "_blank");
   }
 
-  function sendResultsToAllParents(termKey) {
-    const records = getStoredRecords();
-    let count = 0;
-    records.forEach(student => {
-      if (student.profileWhatsApp || student.profileParentPhone) {
-        sendResultsViaWhatsApp(student, termKey);
-        count++;
-      }
-    });
-    showToast("WhatsApp results opened for " + count + " parent(s).");
+  // These are called from inline onclick attributes in the pending-approvals list,
+  // so they take the approval index and read the payload from storage rather than
+  // embedding JSON into the markup.
+  function pendingApprovalAt(index) {
+    const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
+    return pending[index] || null;
   }
 
-  function sendTimetableToAllParents(className, schedule) {
-    const records = getStoredRecords();
-    const classStudents = records.filter(r => r.currentClass === className);
-    classStudents.forEach(student => {
-      const phone = student.profileWhatsApp || student.profileParentPhone;
-      if (phone) {
-        sendTimetableViaWhatsApp(className, schedule, phone);
+  function sendResultsToAllParents(index) {
+    const item = pendingApprovalAt(index);
+    if (!item || item.type !== "results") { showToast("That results item is no longer available."); return; }
+    const termKey = item.data.termKey;
+    const studentIds = new Set((item.data.resultsData || []).map((r) => r.studentId));
+    const records = getStoredRecords().filter((s) => studentIds.has(s.studentId));
+    let count = 0;
+    records.forEach((student) => {
+      if (student.profileWhatsApp || student.profileParentPhone) {
+        sendResultsViaWhatsApp(student, termKey);
+        count += 1;
       }
     });
-    showToast("WhatsApp messages opened for " + classStudents.filter(s => s.profileWhatsApp || s.profileParentPhone).length + " parent(s).");
+    showToast("WhatsApp results opened for " + count + " parent(s) in " + (TERM_LABELS[termKey] || termKey) + ".");
+  }
+
+  function sendTimetableToAllParents(index) {
+    const item = pendingApprovalAt(index);
+    if (!item || item.type !== "timetable") { showToast("That timetable item is no longer available."); return; }
+    const className = item.data.className;
+    const schedule = item.data.schedule;
+    const classStudents = getStoredRecords().filter((r) => r.currentClass === className);
+    classStudents.forEach((student) => {
+      const phone = student.profileWhatsApp || student.profileParentPhone;
+      if (phone) sendTimetableViaWhatsApp(className, schedule, phone);
+    });
+    const reachable = classStudents.filter((s) => s.profileWhatsApp || s.profileParentPhone).length;
+    showToast("WhatsApp messages opened for " + reachable + " parent(s) in " + className + ".");
   }
 
   function buildStudentPortalUrl(student) {
