@@ -500,9 +500,17 @@ function renderTermSummaryRowHTML(results, label) {
     '<td>' + (distStr || "&mdash;") + '</td></tr>';
 }
 
+// Prints a report in a new window. A blocked pop-up is a normal outcome, so it
+// reports itself rather than failing silently: it uses the page's own feedback
+// helper when one is loaded.
 function openPrintPreview(html, blockedMessage) {
   const printWindow = window.open("", "_blank");
-  if (!printWindow) { window.alert(blockedMessage); return false; }
+  if (!printWindow) {
+    const message = "Your browser blocked the pop-up. Allow pop-ups for this site, then try again.";
+    if (typeof window.reportWarning === "function") window.reportWarning(message);
+    else window.alert(blockedMessage || message);
+    return false;
+  }
   printWindow.document.write(html);
   printWindow.document.close();
   printWindow.focus();

@@ -394,7 +394,6 @@
                 <div style="position:relative;">
                 <img id="profilePicPreview" src="detlofcreast.svg" alt="Profile Picture" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
                   <input type="file" id="profilePicInput" accept="image/*" style="display:none;" />
-                  <button type="button" id="changePicBtn" style="display:none;">Change photo</button>
                 </div>
                 <div style="font-size:12px;color:var(--muted);">
                   <strong>Profile Picture</strong>
@@ -471,6 +470,8 @@
   <!-- ==========================================================================
        3. EDITABLE PORTAL DATA & BULK-IMPORT SYNC LOGIC
        ========================================================================== -->
+
+  <div id="toastBox" class="toast-stack" aria-live="polite"></div>
 
   <script src="detlof-roster.js"></script>
   <script src="detlof-school.js"></script>

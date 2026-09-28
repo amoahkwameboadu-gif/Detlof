@@ -263,10 +263,9 @@ function configureStudentProfileAccess() {
       field.setAttribute("aria-readonly", "true");
     }
   });
+  // Identity photos are maintained by the school office, so the picker is hidden.
   const picInput = document.getElementById("profilePicInput");
-  const picBtn = document.getElementById("changePicBtn");
   if (picInput) picInput.style.display = "none";
-  if (picBtn) picBtn.style.display = "none";
 }
 
 // Tells the student which details the school has on file and which are still
@@ -569,7 +568,7 @@ function renderPortalForStudent(student) {
       };
       Object.assign(activeStudent, updated);
       saveSyncedStudents();
-      window.alert("Profile updated. Only your name can be changed; other details are managed by the school administrator.");
+      reportSuccess("Profile updated. Only your name can be changed here - other details are managed by the school office.");
     };
   }
 
@@ -721,7 +720,7 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
 });
 
 function downloadMyLoginCode() {
-  if (!activeStudent) { window.alert("Please sign in to download your login code."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your login code."); return; }
   const content = [
     "Detlof Preparatory School - Student Portal Login",
     "Student: " + activeStudent.fullName,
@@ -743,7 +742,7 @@ function downloadMyLoginCode() {
 
 
 function downloadResultsPDF() {
-  if (!activeStudent) { window.alert("Please sign in to download your results."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your results."); return; }
   openPrintPreview(renderFullResultsReportHTML(activeStudent), "Please allow pop-ups to preview and download results.");
 }
 
@@ -753,18 +752,69 @@ function activeTermKey() {
   return value === "all" ? "all" : value;
 }
 
+// ---- feedback -----------------------------------------------------------------
+// Every action says what happened. Success, warning and failure look different and
+// nothing blocks the page waiting for the student to dismiss a browser dialog.
+const TOAST_ICONS = { success: "✓", error: "!", warning: "!", info: "i" };
+
+function showToast(message, type) {
+  const box = document.getElementById("toastBox");
+  if (!box) { window.alert(message); return null; }
+  const kind = type || "info";
+  const toast = document.createElement("div");
+  toast.className = "toast toast-" + kind;
+  toast.setAttribute("role", kind === "error" ? "alert" : "status");
+  const icon = document.createElement("span");
+  icon.className = "toast-icon";
+  icon.textContent = TOAST_ICONS[kind] || "i";
+  const text = document.createElement("span");
+  text.className = "toast-text";
+  text.textContent = message;
+  const close = document.createElement("button");
+  close.type = "button";
+  close.className = "toast-close";
+  close.setAttribute("aria-label", "Dismiss");
+  close.textContent = "×";
+  close.addEventListener("click", () => toast.remove());
+  toast.appendChild(icon);
+  toast.appendChild(text);
+  toast.appendChild(close);
+  box.appendChild(toast);
+  while (box.children.length > 3) box.removeChild(box.firstChild);
+  setTimeout(() => {
+    toast.classList.add("toast-out");
+    setTimeout(() => toast.remove(), 260);
+  }, kind === "error" ? 7000 : 3800);
+  return toast;
+}
+
+function reportSuccess(message) { return showToast(message, "success"); }
+function reportError(message) { return showToast(message, "error"); }
+function reportWarning(message) { return showToast(message, "warning"); }
+function reportUnexpected(context, error) {
+  const detail = error && error.message ? error.message : String(error);
+  reportError(context + ": " + detail);
+  if (window.console && console.error) console.error(context, error);
+}
+
+window.addEventListener("error", function (event) { reportUnexpected("Something went wrong", event.error || event.message); });
+window.addEventListener("unhandledrejection", function (event) { reportUnexpected("A background task failed", event.reason); });
+
+// openPrintPreview lives in detlof-report.js and reports blocked pop-ups through
+// reportWarning above, so there is a single implementation for both portals.
+
 function downloadMyResults() {
-  if (!activeStudent) { window.alert("Please sign in to download your full results."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your full results."); return; }
   const terms = collectPublishedTerms(activeStudent);
   if (!terms.length) {
-    window.alert("No results have been published for your class yet. Your report will be ready once results are uploaded.");
+    reportWarning("No results have been published for your class yet. Your report appears as soon as results are uploaded.");
     return;
   }
   const termKey = activeTermKey();
   if (termKey !== "all") {
     const match = terms.find((t) => t.key === termKey);
     if (!match) {
-      window.alert((TERM_LABELS[termKey] || "That term") + " has not been published yet.");
+      reportWarning((TERM_LABELS[termKey] || "That term") + " has not been published yet.");
       return;
     }
     openPrintPreview(
@@ -831,21 +881,21 @@ function renderBillsTab(student) {
 }
 
 function downloadMyBills() {
-  if (!activeStudent) { window.alert("Please sign in to download your bill statement."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your bill statement."); return; }
   const totals = detlofBillTotals(activeStudent);
   if (totals.billed <= 0) {
-    window.alert("No fees have been billed to your account yet. Your statement will appear once the school office publishes it.");
+    reportWarning("No fees have been billed to your account yet. Your statement appears once the school office publishes it.");
     return;
   }
   openPrintPreview(renderBillStatementHTML(activeStudent), "Please allow pop-ups to preview and download your bill statement.");
 }
 
 function downloadResultsCSV() {
-  if (!activeStudent) { window.alert("Please sign in to download your results."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your results."); return; }
   const terms = collectPublishedTerms(activeStudent);
   const termKey = activeTermKey();
   const selected = termKey === "all" ? terms : terms.filter((t) => t.key === termKey);
-  if (!selected.length) { window.alert("No results have been published for the selected term yet."); return; }
+  if (!selected.length) { reportWarning("No results have been published for the selected term yet."); return; }
 
   const header = ["Student Name", "Student ID", "Class", "Academic Year", "Term", "Subject", "Class Score (40%)", "Exam Score (60%)", "Total (100%)", "Grade", "Remark"];
   const escapeCell = (value) => '"' + String(value == null ? "" : value).replaceAll('"', '""') + '"';
@@ -879,7 +929,7 @@ function downloadResultsCSV() {
 }
 
 function downloadTimetablePDF() {
-  if (!activeStudent) { window.alert("Please sign in to download your timetable."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your timetable."); return; }
   const defaultSchedule = [
     { day: "Monday", time: "8:00 – 9:00", subject: "Mathematics", teacher: "Mrs. Addo", venue: (activeStudent.currentClass || "KG 1") + " Room" },
     { day: "Monday", time: "9:00 – 10:00", subject: "English Language", teacher: "Mr. Mensah", venue: (activeStudent.currentClass || "KG 1") + " Room" },
@@ -917,7 +967,7 @@ function downloadTimetablePDF() {
   html += '</body></html>';
 
   const printWindow = window.open("", "_blank");
-  if (!printWindow) { window.alert("Please allow pop-ups to preview and download your timetable."); return; }
+  if (!printWindow) { reportWarning("Your browser blocked the pop-up. Allow pop-ups for this site, then try again."); return; }
   printWindow.document.write(html);
   printWindow.document.close();
   printWindow.focus();
@@ -925,7 +975,7 @@ function downloadTimetablePDF() {
 }
 
 function downloadMyTimetable() {
-  if (!activeStudent) { window.alert("Please sign in to download your timetable."); return; }
+  if (!activeStudent) { reportWarning("Sign in to download your timetable."); return; }
   downloadTimetablePDF();
 }
 
