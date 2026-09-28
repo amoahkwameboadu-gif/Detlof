@@ -404,6 +404,43 @@ function renderFullResultsReportHTML(student) {
   return html;
 }
 
+// A printable fee statement for one student, in Ghana cedis.
+function renderBillStatementHTML(student) {
+  const totals = detlofBillTotals(student);
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<title>Fee Statement - ' + escapeHtml(student.fullName) + '</title>' +
+    '<style>' + REPORT_STYLES + '</style></head><body>';
+  html += reportHeaderHTML(student, "School Fee Statement");
+
+  html += '<h2>Fee Summary</h2>';
+  html += '<div class="gpa-box"><strong>Total Billed:</strong> ' + detlofFormatCedis(totals.billed) +
+    ' &middot; <strong>Total Paid:</strong> ' + detlofFormatCedis(totals.paid) +
+    ' &middot; <strong>Balance:</strong> <strong>' + detlofFormatCedis(totals.balance) + '</strong></div>';
+
+  html += '<h2>Fee Breakdown</h2>';
+  html += '<table><thead><tr><th>Fee Item</th><th class="num">Amount Billed</th><th class="num">Amount Paid</th>' +
+    '<th class="num">Balance</th><th>Status</th><th>Note</th></tr></thead><tbody>';
+  totals.bills.forEach((bill) => {
+    const status = detlofFeeStatus(bill);
+    const colours = BILL_STATUS_COLOURS[status] || BILL_STATUS_COLOURS["Not Applicable"];
+    html += '<tr><td><strong>' + escapeHtml(bill.item) + "</strong></td>" +
+      '<td class="num">' + detlofFormatCedis(bill.amount) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.paid) + "</td>" +
+      '<td class="num"><strong>' + detlofFormatCedis(detlofBillBalance(bill)) + "</strong></td>" +
+      '<td><span class="promo-badge" style="background:' + colours.bg + ';color:' + colours.fg + ';">' + status + "</span></td>" +
+      '<td class="remark">' + escapeHtml(bill.note || "—") + "</td></tr>";
+  });
+  html += "</tbody></table>";
+
+  html += '<div class="gpa-box"><strong>Residence / Compound:</strong> ' +
+    escapeHtml(student.compound || "Not on file") +
+    (student.club ? ' &middot; <strong>Club:</strong> ' + escapeHtml(student.club) : "") + "</div>";
+
+  html += '<p class="remark">Please quote the Student ID when making payment. Payments are confirmed at the school office.</p>';
+  html += '<div class="footer">Generated from Detlof Student Portal &middot; ' + new Date().toLocaleDateString("en-GB") + "</div>";
+  return html + "</body></html>";
+}
+
 function renderAnnualSummaryHTML(student) {
   const terms = collectPublishedTerms(student);
   let html = '<h2>Term Summary &amp; Cumulative Performance</h2>';

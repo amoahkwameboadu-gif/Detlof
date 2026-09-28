@@ -76,7 +76,7 @@
 
           <div class="field">
             <label for="loginStudentId">Student ID</label>
-            <input type="text" id="loginStudentId" placeholder="e.g. DPS-24-0187 or DPS-25-0301" autocomplete="off" required />
+            <input type="text" id="loginStudentId" placeholder="e.g. KG1-0001 or B3-0012" autocomplete="off" required />
           </div>
 
           <div class="field">
@@ -87,8 +87,14 @@
             </div>
           </div>
 
-          <button type="submit" class="primary-btn">Sign in to Portal →</button>
+          <button type="submit" class="primary-btn" id="portalLoginBtn">Sign in to Portal →</button>
+          <p id="loginProgress" class="login-progress hidden" role="status">Checking your details…</p>
         </form>
+
+        <div class="login-hint">
+          <strong>Lost your details?</strong>
+          <span>Your Login Code and Student ID are on the slip your class teacher gave you. Ask the school office if you cannot find it.</span>
+        </div>
 
         <div style="font-size:11px;color:var(--muted);margin-top:18px;text-align:center;">
           Teacher or Administrator? <a style="color:var(--crest-purple);text-decoration:underline;" href="detlof-admin-bulk-import%20(6).html">Access admin panel</a>
@@ -115,6 +121,7 @@
         <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg> Dashboard</button>
         <button class="nav-btn" data-tab="results" onclick="switchTab('results')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> My Results <span id="resultsPromoBadge" class="hidden" style="background:var(--crest-gold);color:var(--ink-deep);font-size:9px;padding:2px 6px;border-radius:10px;font-weight:800;">New</span></button>
         <button class="nav-btn" data-tab="timetable" onclick="switchTab('timetable')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 17H5V8h14v12z"/></svg> My Timetable</button>
+        <button class="nav-btn" data-tab="bills" onclick="switchTab('bills')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 21 17V7a2 2 0 0 0-2-2zm-2 .72V8H5V5h14v3.72c-.62.36-1 .99-1 1.58 0 .59.38 1.22 1 1.58V15H5v-3.12c.62-.36 1-.99 1-1.58 0-.59-.38-1.22-1-1.58zM12 18c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg> My Bills <span id="billsNavBadge" class="hidden" style="background:var(--crest-gold);color:var(--ink-deep);font-size:9px;padding:2px 6px;border-radius:10px;font-weight:800;">!</span></button>
         <button class="nav-btn" data-tab="announcements" onclick="switchTab('announcements')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V8h2v3zm0-4h-2V4h2v3z"/></svg> Announcements</button>
         <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> My Profile</button>
       </nav>
@@ -183,6 +190,17 @@
           </div>
 
           <div class="two-col">
+            <div class="panel">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <h2 style="margin:0;font-size:16px;"> My Bills</h2>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button class="outline-btn" onclick="switchTab('bills')">See breakdown →</button>
+                  <button class="outline-btn" onclick="downloadMyBills()">Download Statement</button>
+                </div>
+              </div>
+              <div class="bill-summary" id="billSummaryCards" style="margin-top:14px;"></div>
+            </div>
+
             <div class="panel">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
                 <h2 style="margin:0;font-size:16px;"> My Results Summary</h2>
@@ -318,6 +336,45 @@
           </div>
         </section>
 
+        <!-- TAB: BILLS -->
+        <section id="tab-bills" class="portal-tab hidden">
+          <div class="panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div>
+                <h2 style="margin:0 0 4px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 21 17V7a2 2 0 0 0-2-2zm-2 .72V8H5V5h14v3.72c-.62.36-1 .99-1 1.58 0 .59.38 1.22 1 1.58V15H5v-3.12c.62-.36 1-.99 1-1.58 0-.59-.38-1.22-1-1.58zM12 18c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg> School Fees &amp; Club Dues</h2>
+                <p id="billsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
+              </div>
+              <button class="outline-btn" onclick="downloadMyBills()"> Download Bill Statement</button>
+            </div>
+
+            <div class="bill-summary" id="billSummaryCards"></div>
+
+            <div class="table-scroll"><table id="billsTable">
+              <thead>
+                <tr>
+                  <th>Fee Item</th>
+                  <th class="num">Amount Billed</th>
+                  <th class="num">Amount Paid</th>
+                  <th class="num">Balance</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="billsTableBody"></tbody>
+              <tfoot>
+                <tr>
+                  <td><strong>Total</strong></td>
+                  <td class="num" id="billsTotalBilled"><strong>0.00</strong></td>
+                  <td class="num" id="billsTotalPaid"><strong>0.00</strong></td>
+                  <td class="num" id="billsBalance"><strong>0.00</strong></td>
+                  <td id="billsOverallStatus">Not Applicable</td>
+                </tr>
+              </tfoot>
+            </table></div>
+
+            <p style="font-size:11px;color:var(--muted);margin:14px 0 0;">Amounts are in Ghana cedis (GHS). Payments are confirmed at the school office. Please quote your Student ID when paying.</p>
+          </div>
+        </section>
+
         <!-- TAB: ANNOUNCEMENTS -->
         <section id="tab-announcements" class="portal-tab hidden">
           <div class="panel">
@@ -366,8 +423,12 @@
                 <div class="field"><label for="profileGender">Gender</label><input type="text" id="profileGender" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
+                <div class="field"><label for="profileCompound">Residence / Compound</label><input type="text" id="profileCompound" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileClub">Club / Activity</label><input type="text" id="profileClub" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="profileGender">Gender</label><input type="text" id="profileGender" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
                 <div class="field"><label for="profileDateOfBirth">Date of Birth</label><input type="text" id="profileDateOfBirth" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
-                <div class="field"><label for="profileBloodGroup">Blood Group</label><input type="text" id="profileBloodGroup" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
                 <div class="field"><label for="profileParentPhone">Parent/Guardian Phone Number</label><input type="tel" id="profileParentPhone" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
@@ -412,6 +473,7 @@
        ========================================================================== -->
 
   <script src="detlof-roster.js"></script>
+  <script src="detlof-school.js"></script>
   <script src="detlof-report.js"></script>
   <script src="script.js"></script>
   <script>

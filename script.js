@@ -252,6 +252,7 @@ const ADMIN_MANAGED_PROFILE_FIELDS = [
   "profileBloodGroup", "profileParentPhone", "profileWhatsApp", "profileParentEmail",
   "profileEmergencyContact", "profileHomeAddress", "profileAllergies", "profileInterests",
   "profileEmail", "profileStudentId", "profileClass", "profileAcademicYear", "profileLoginCode",
+  "profileCompound", "profileClub",
 ];
 
 function configureStudentProfileAccess() {
@@ -543,6 +544,8 @@ function renderPortalForStudent(student) {
     setProfileValue("profileHomeAddress", student.homeAddress);
     setProfileValue("profileAllergies", student.allergies);
     setProfileValue("profileInterests", student.interests);
+    setProfileValue("profileCompound", student.compound);
+    setProfileValue("profileClub", student.club);
     setProfileValue("profileLoginCode", student.loginCode);
     setProfileValue("profileStudentId", student.studentId);
     setProfileValue("profileEmail", student.email);
@@ -573,15 +576,27 @@ function renderPortalForStudent(student) {
   const profileTable = document.getElementById("profileTableBody");
   if (profileTable) profileTable.innerHTML = "";
 
+  renderBillsTab(student);
   updateTermDownloadLabel();
 }
 
 function switchTab(tabName) {
   document.querySelectorAll(".portal-tab").forEach((element) => element.classList.add("hidden"));
-  document.getElementById("tab-" + tabName).classList.remove("hidden");
+  document.querySelectorAll(".nav-btn").forEach((button) => button.classList.remove("active"));
+  const panel = document.getElementById("tab-" + tabName);
+  if (panel) {
+    panel.classList.remove("hidden");
+    // Re-trigger the entry animation so switching tabs feels alive.
+    panel.classList.remove("tab-enter");
+    void panel.offsetWidth;
+    panel.classList.add("tab-enter");
+  }
   document.querySelectorAll(".nav-btn").forEach((button) => {
     button.classList.toggle("active", button.getAttribute("data-tab") === tabName);
   });
+  if (activeStudent) {
+    if (tabName === "bills") renderBillsTab(activeStudent);
+  }
 }
 
 function logoutPortal() {
@@ -646,6 +661,16 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   const errorBox = document.getElementById("loginErrorBox");
   errorBox.classList.add("hidden");
 
+  // Show progress so the wait for the school server never looks like a dead click.
+  const loginBtn = document.getElementById("portalLoginBtn");
+  const loginProgress = document.getElementById("loginProgress");
+  if (loginBtn) { loginBtn.classList.add("is-loading"); loginBtn.disabled = true; }
+  if (loginProgress) loginProgress.classList.remove("hidden");
+  const setBusy = (busy) => {
+    if (loginBtn) { loginBtn.classList.toggle("is-loading", busy); loginBtn.disabled = busy; }
+    if (loginProgress) loginProgress.classList.toggle("hidden", !busy);
+  };
+
   const matchedLocal = findSyncedStudent({ email, studentId, loginCode: password });
   const payload = { email, studentId, password, syncedRecord: matchedLocal || null };
   let remoteStudent = null;
@@ -664,6 +689,7 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
       if (matchedLocal && window.location.protocol === "file:") {
         canUseLocal = true;
       } else {
+        setBusy(false);
         errorBox.textContent = "We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.";
         errorBox.classList.remove("hidden");
         return;
@@ -677,16 +703,19 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
 
   if (remoteStudent) {
     rememberStudent(remoteStudent);
+    setBusy(false);
     renderPortalForStudent(remoteStudent);
     return;
   }
 
   if (matchedLocal && canUseLocal) {
     rememberStudent(matchedLocal);
+    setBusy(false);
     renderPortalForStudent(matchedLocal);
     return;
   }
 
+  setBusy(false);
   errorBox.textContent = "We could not sign you in with those details. Verify your Email, Student ID, and generated Login Code.";
   errorBox.classList.remove("hidden");
 });
@@ -745,6 +774,70 @@ function downloadMyResults() {
     return;
   }
   downloadResultsPDF();
+}
+
+// ---- fees & club dues -------------------------------------------------------
+function renderBillsTab(student) {
+  const body = document.getElementById("billsTableBody");
+  if (!body) return;
+  const totals = detlofBillTotals(student);
+
+  document.getElementById("billsSubtitle").textContent =
+    student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "") +
+    " · Academic Year " + (student.academicYear || ACADEMIC_YEAR);
+
+  body.innerHTML = totals.bills.map((bill) => {
+    const status = detlofFeeStatus(bill);
+    const colours = BILL_STATUS_COLOURS[status] || BILL_STATUS_COLOURS["Not Applicable"];
+    return "<tr>" +
+      "<td><strong>" + escapeHtml(bill.item) + "</strong>" +
+      (bill.note ? '<br><small style="color:var(--muted);">' + escapeHtml(bill.note) + "</small>" : "") + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.amount) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.paid) + "</td>" +
+      '<td class="num"><strong>' + detlofFormatCedis(detlofBillBalance(bill)) + "</strong></td>" +
+      '<td><span class="bill-pill" style="background:' + colours.bg + ';color:' + colours.fg + ';">' + status + "</span></td>" +
+      "</tr>";
+  }).join("");
+
+  document.getElementById("billsTotalBilled").textContent = detlofFormatCedis(totals.billed);
+  document.getElementById("billsTotalPaid").textContent = detlofFormatCedis(totals.paid);
+  document.getElementById("billsBalance").textContent = detlofFormatCedis(totals.balance);
+  const overall = document.getElementById("billsOverallStatus");
+  const overallColours = BILL_STATUS_COLOURS[totals.status] || BILL_STATUS_COLOURS["Not Applicable"];
+  overall.textContent = totals.status;
+  overall.style.color = overallColours.fg;
+
+  const pct = totals.billed > 0 ? Math.min(100, Math.round((totals.paid / totals.billed) * 100)) : 0;
+  document.getElementById("billSummaryCards").innerHTML =
+    '<div class="bill-card"><span class="bill-card-label">Total Billed</span>' +
+    '<span class="bill-card-value">' + detlofFormatCedis(totals.billed) + "</span></div>" +
+    '<div class="bill-card ok"><span class="bill-card-label">Paid</span>' +
+    '<span class="bill-card-value">' + detlofFormatCedis(totals.paid) + "</span></div>" +
+    '<div class="bill-card ' + (totals.balance > 0 ? "danger" : "ok") + '"><span class="bill-card-label">Balance</span>' +
+    '<span class="bill-card-value">' + detlofFormatCedis(totals.balance) + "</span></div>" +
+    '<div class="bill-card wide"><span class="bill-card-label">Payment progress</span>' +
+    '<span class="bill-card-value">' + pct + "%</span>" +
+    '<span class="bill-progress"><span style="width:' + pct + '%;background:' + (totals.balance > 0 ? "var(--crest-gold)" : "var(--crest-green)") + ';"></span></span></div>';
+
+  const badge = document.getElementById("billsNavBadge");
+  if (badge) {
+    if (totals.balance > 0) {
+      badge.classList.remove("hidden");
+      badge.textContent = detlofFormatCedis(totals.balance).replace("GHS ", "");
+    } else {
+      badge.classList.add("hidden");
+    }
+  }
+}
+
+function downloadMyBills() {
+  if (!activeStudent) { window.alert("Please sign in to download your bill statement."); return; }
+  const totals = detlofBillTotals(activeStudent);
+  if (totals.billed <= 0) {
+    window.alert("No fees have been billed to your account yet. Your statement will appear once the school office publishes it.");
+    return;
+  }
+  openPrintPreview(renderBillStatementHTML(activeStudent), "Please allow pop-ups to preview and download your bill statement.");
 }
 
 function downloadResultsCSV() {

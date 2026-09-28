@@ -536,6 +536,49 @@
       .timetable-day { min-height: 44px; }
     }
 
+    /* ---------------- class results grid + billing ---------------- */
+    .subject-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .subject-chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px 5px 10px;
+      border-radius: 999px; background: var(--crest-purple-soft); color: var(--crest-purple);
+      font-size: 11px; font-weight: 700;
+    }
+    .subject-chip button {
+      border: none; background: rgba(86, 15, 117, 0.14); color: var(--crest-purple);
+      width: 18px; height: 18px; border-radius: 50%; cursor: pointer; line-height: 1; font-size: 13px;
+    }
+    .subject-chip button:hover { background: var(--crest-purple); color: #fff; }
+    .results-grid-wrap { max-height: 460px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+    .results-grid { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 11px; }
+    .results-grid th, .results-grid td { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); padding: 4px 6px; }
+    .results-grid thead th { position: sticky; top: 0; z-index: 3; background: #f4eef8; color: var(--crest-purple); text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .results-grid thead tr:nth-child(2) th { top: 30px; z-index: 3; background: #fbf8fd; color: var(--muted); }
+    .results-grid .sticky-col { position: sticky; left: 0; z-index: 2; background: #fff; text-align: left; min-width: 170px; box-shadow: 1px 0 0 var(--line); }
+    .results-grid thead .sticky-col { z-index: 4; background: #f4eef8; }
+    .results-grid td.num { text-align: right; }
+    .results-grid input {
+      width: 62px; padding: 4px 5px; text-align: right; border: 1px solid var(--line);
+      border-radius: 4px; font-size: 12px; font-family: inherit;
+    }
+    .results-grid input:focus { border-color: var(--crest-purple); outline: 2px solid rgba(86, 15, 117, 0.25); }
+    .results-grid tr.row-complete { background: rgba(229, 243, 234, 0.55); }
+    .results-grid tr.row-partial { background: rgba(255, 243, 196, 0.5); }
+    .results-grid .row-grade { font-weight: 800; text-align: center; }
+    .results-grid .empty-cell { text-align: center; color: var(--muted); padding: 22px; }
+    .summary-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .summary-chip { padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .summary-chip.ok { background: #e5f3ea; color: #3f7d55; }
+    .summary-chip.warn { background: #fff3c4; color: #b87a00; }
+    .summary-chip.muted { background: #f1f5f9; color: #64748b; }
+    #adminBillsTable input { width: 100%; text-align: right; padding: 6px; border: 1px solid var(--line); border-radius: 4px; }
+    #adminBillsTable tfoot td { background: #faf7fc; font-weight: 700; }
+    #adminBillsTable .bill-balance, #adminBillsTable tfoot td { text-align: right; }
+
+    @media (max-width: 720px) {
+      .results-grid .sticky-col { min-width: 120px; }
+      .results-grid input { width: 54px; }
+    }
+
     /* ---------------- identity photo + publish preview ---------------- */
     .identity-photo-row {
       display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap;
@@ -599,6 +642,14 @@
       padding: 14px 18px; border-top: 1px solid var(--line); background: #faf7fc;
     }
     .preview-modal-foot .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .bulk-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; margin-bottom: 7px; background: #fff;
+    }
+    .bulk-row-info { min-width: 0; display: flex; flex-direction: column; }
+    .bulk-row-info strong { font-size: 12px; }
+    .bulk-row-info span { font-size: 11px; color: var(--muted); }
+    .bulk-row .btn { text-decoration: none; white-space: nowrap; flex: 0 0 auto; }
 
     @media (max-width: 900px) {
       .preview-modal-body { grid-template-columns: 1fr; }
@@ -813,7 +864,7 @@
         </section>
 
         <section class="card admin-profile-section" id="adminProfileSection" style="margin-bottom:18px;">
-          <h2>2. Student Profile, Contact &amp; Photo</h2>
+          <h2>4. Student Profile, Contact &amp; Photo</h2>
           <p class="sub">Administrator-only controls for the details shown on each student's individual profile.</p>
           <form id="adminProfileForm">
             <div class="field">
@@ -940,6 +991,52 @@
               <label for="adminProfileNotes">Administrative Notes</label>
               <textarea id="adminProfileNotes" placeholder="Internal notes for staff — not shown on the student portal."></textarea>
             </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="adminProfileCompound">Residence / Compound</label>
+                <select id="adminProfileCompound"></select>
+                <small style="display:block;margin-top:5px;color:var(--muted);font-size:11px;">Day student, a residential compound, or the boarding house.</small>
+              </div>
+              <div class="field">
+                <label for="adminProfileClub">Club / Activity</label>
+                <input id="adminProfileClub" list="adminProfileClubList" placeholder="e.g. Football, Choir, Debate" />
+                <datalist id="adminProfileClubList"></datalist>
+              </div>
+            </div>
+            <div class="field">
+              <label>Fee &amp; Billing (GHS)</label>
+              <p class="sub" style="margin:0 0 10px;">Enter the amount billed and the amount received for each fee head. Leave the amount at 0 for a head that does not apply to this student.</p>
+              <div class="table-scroll">
+                <table id="adminBillsTable">
+                  <thead>
+                    <tr>
+                      <th>Fee Item</th>
+                      <th style="width:130px;">Amount Billed (GHS)</th>
+                      <th style="width:130px;">Amount Paid (GHS)</th>
+                      <th style="width:110px;">Balance</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminBillsBody"></tbody>
+                  <tfoot>
+                    <tr>
+                      <td><strong>Total</strong></td>
+                      <td id="adminBillsTotalBilled" class="num"><strong>0.00</strong></td>
+                      <td id="adminBillsTotalPaid" class="num"><strong>0.00</strong></td>
+                      <td id="adminBillsBalance" class="num"><strong>0.00</strong></td>
+                      <td id="adminBillsStatus">Not Applicable</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="field" style="margin-top:10px;">
+                <label for="adminBillsAddItem">Add a custom fee head (optional)</label>
+                <div style="display:flex;gap:8px;">
+                  <input id="adminBillsAddItem" type="text" placeholder="e.g. Books, Transport, Uniform" />
+                  <button type="button" class="btn btn-outline" id="adminBillsAddItemBtn" style="white-space:nowrap;">Add</button>
+                </div>
+              </div>
+            </div>
             <div id="adminProfileError" class="admin-login-error hidden" style="margin-top:-8px;"></div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button class="btn btn-gold" type="submit" style="flex:1;justify-content:center;">Save Student Profile Details</button>
@@ -1054,7 +1151,7 @@
        </div>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>4. Select a Student for Records &amp; Actions</h2>
+          <h2>5. Select a Student for Records &amp; Actions</h2>
           <p class="sub">Choose a class, then pick a student from the roster to publish results, send portal updates, or send reports and timetables to their parent.</p>
           <div class="row-2">
             <div class="field">
@@ -1158,8 +1255,51 @@
           </form>
         </section>
 
+        <section class="card" class-results-card" style="margin-bottom:18px;">
+          <h2>6. Publish Class Results</h2>
+          <p class="sub">Enter the whole class's scores in one table. When you publish, every student in that class gets their own results filled in on their portal automatically.</p>
+          <div class="row-2">
+            <div class="field">
+              <label for="classResultsClass">Class</label>
+              <select id="classResultsClass"></select>
+            </div>
+            <div class="field">
+              <label for="classResultsTerm">Term</label>
+              <select id="classResultsTerm">
+                <option value="term1">First Term</option>
+                <option value="term2">Second Term</option>
+                <option value="term3">Third Term</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Subjects in this table</label>
+            <p class="sub" style="margin:0 0 8px;">Every student in the class has a column pair for each subject &mdash; class score (40%) then exam score (60%). Totals and grades are worked out for you.</p>
+            <div class="subject-chips" id="classResultsSubjects"></div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+              <input type="text" id="classResultsAddSubject" list="resultSubjectList" placeholder="Add a subject, e.g. French" style="flex:1;min-width:180px;" />
+              <button type="button" class="btn btn-outline" id="classResultsAddSubjectBtn">Add Subject</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Class score entry</label>
+            <div class="table-scroll results-grid-wrap">
+              <table id="classResultsTable" class="results-grid">
+                <thead id="classResultsHead"></thead>
+                <tbody id="classResultsBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="classResultsSummary" class="results-summary"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-teal" id="classResultsPublish" style="flex:1;">Publish to All Student Portals</button>
+            <button type="button" class="btn btn-outline" id="classResultsQueue" style="flex:1;">Queue for Academics Admin Approval</button>
+            <button type="button" class="btn btn-outline" id="classResultsClear" style="flex:1;">Clear Table</button>
+          </div>
+        </section>
+
         <section class="card" style="margin-bottom:18px;">
-          <h2>5. Download Existing Data</h2>
+          <h2>7. Download Existing Data</h2>
           <p class="sub">Download what is already in the portal: the class roster, published results and the live timetable. Files download straight to your device.</p>
           <div class="field">
             <label>Class</label>
@@ -1178,7 +1318,7 @@
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>6. All Generated Student Credentials</h2>
+          <h2>8. All Generated Student Credentials</h2>
           <p class="sub">Every roster student is pre-loaded with a Student ID, email and Login Code. Download a single student's login details or the full register.</p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
             <button type="button" class="btn btn-gold" id="downloadAllBtn" style="flex:1;">Download All Credentials (CSV)</button>
@@ -1202,7 +1342,7 @@
         </section>
 
        <section class="card" style="margin-bottom:18px;">
-         <h2>7. Class Timetable Management</h2>
+         <h2>9. Class Timetable Management</h2>
         <p class="sub">Upload a CSV/Excel timetable for an entire class. The timetable will automatically apply to all students in that class.</p>
         <form id="timetableForm">
           <div class="field">
@@ -1238,7 +1378,7 @@
       </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>9. Preview &amp; Send</h2>
+          <h2>10. Preview &amp; Send</h2>
           <p class="sub">Review exactly what the student will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
           <div class="row-2">
             <div class="field">
@@ -1292,8 +1432,28 @@
           </div>
         </div>
 
+        <div id="whatsappFallbackModal" class="preview-modal hidden" role="dialog" aria-modal="true" aria-labelledby="whatsappFallbackTitle">
+          <div class="preview-modal-backdrop" onclick="closeWhatsAppFallback()"></div>
+          <div class="preview-modal-card" role="document">
+            <div class="preview-modal-head">
+              <h3 id="whatsappFallbackTitle">Finish sending on WhatsApp</h3>
+              <button type="button" class="preview-close" onclick="closeWhatsAppFallback()" aria-label="Close">&times;</button>
+            </div>
+            <div class="preview-modal-body" style="grid-template-columns: 1fr;">
+              <section class="preview-pane">
+                <p class="preview-note" id="whatsappFallbackNumber"></p>
+                <a id="whatsappFallbackLink" class="btn btn-teal" href="#" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;">Open WhatsApp chat</a>
+                <div id="whatsappBulkList" style="margin-top:12px;"></div>
+              </section>
+            </div>
+            <div class="preview-modal-foot">
+              <button type="button" class="btn btn-outline" onclick="closeWhatsAppFallback()">Close</button>
+            </div>
+          </div>
+        </div>
+
         <section class="card" style="margin-bottom:18px;">
-          <h2>10. Broadcast Announcement to All Student Portals</h2>
+          <h2>11. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -1310,6 +1470,7 @@
   </main>
 
   <script src="detlof-roster.js"></script>
+  <script src="detlof-school.js"></script>
   <script src="detlof-report.js"></script>
   <script>
     const STORAGE_KEY = "detlof_bulk_import_codes";
@@ -1344,6 +1505,11 @@
         }
       });
     }
+
+    // Declared up here because the boot sequence renders the class-results table
+    // and the billing rows before their function definitions are reached.
+    let activeResultSubjects = ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"];
+    let activeBillItems = DETLOF_FEE_ITEMS.slice();
 
     // Roster is the single source of truth (detlof-roster.js) shared with the student portal.
     const quickGenerateNames = DETLOF_CLASS_ORDER.reduce((map, className) => {
@@ -1531,9 +1697,15 @@
       populateProfileClassSelect();
       populateProfileFilterSelect();
       populateExportClassSelect();
+      populateCompoundSelect();
+      populateClubList();
       populateAdminProfileStudents();
       fillDatalist("annClassList", DETLOF_CLASS_ORDER);
       fillDatalist("resultSubjectList", SUBJECT_SUGGESTIONS);
+      const classResultsSelect = document.getElementById("classResultsClass");
+      if (classResultsSelect && !classResultsSelect.value) classResultsSelect.selectedIndex = 0;
+      renderClassResultSubjects();
+      renderClassResultsGrid();
       refreshClassNameTargets();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
@@ -1750,7 +1922,7 @@
       "adminProfileDob", "adminProfileBloodGroup", "adminProfileParentName", "adminProfileParentRelation",
       "adminProfileParentPhone", "adminProfileWhatsApp", "adminProfileParentEmail",
       "adminProfileEmergencyContact", "adminProfileHomeAddress", "adminProfileAllergies",
-      "adminProfileInterests", "adminProfileNotes",
+      "adminProfileInterests", "adminProfileNotes", "adminProfileClub",
     ];
 
     function populateProfileClassSelect() {
@@ -1760,23 +1932,136 @@
       if (select && !select.value) select.selectedIndex = 0;
     }
 
+    // Residence and club options come from detlof-school.js so both portals agree.
+    function populateCompoundSelect() {
+      const select = document.getElementById("adminProfileCompound");
+      if (!select) return;
+      const current = select.value;
+      select.innerHTML = DETLOF_COMPOUNDS
+        .map((name) => "<option" + (name === current ? " selected" : "") + ">" + escapeHtml(name) + "</option>")
+        .join("");
+    }
+
+    function populateClubList() {
+      fillDatalist("adminProfileClubList", DETLOF_CLUBS);
+    }
+
+    // ---- billing -------------------------------------------------------
+    function renderAdminBills(record) {
+      activeBillItems = detlofNormaliseBills(record || {}).map((bill) => bill.item);
+      if (!activeBillItems.length) activeBillItems = DETLOF_FEE_ITEMS.slice();
+      drawAdminBillRows(record || {});
+    }
+
+    function drawAdminBillRows(record) {
+      const body = document.getElementById("adminBillsBody");
+      if (!body) return;
+      const existing = new Map(detlofNormaliseBills(record).map((b) => [String(b.item), b]));
+      body.innerHTML = activeBillItems.map((item) => {
+        const bill = existing.get(String(item)) || { amount: 0, paid: 0, note: "" };
+        const safe = escapeHtml(item);
+        return '<tr data-bill-item="' + safe + '">' +
+          "<td><strong>" + safe + "</strong></td>" +
+          '<td class="num"><input type="number" min="0" step="0.01" class="bill-amount" value="' + (Number(bill.amount) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
+          '<td class="num"><input type="number" min="0" step="0.01" class="bill-paid" value="' + (Number(bill.paid) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
+          '<td class="num bill-balance">0.00</td>' +
+          '<td><span class="bill-status" style="display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">Not Applicable</span></td>' +
+          "</tr>";
+      }).join("");
+      updateAdminBillTotals();
+    }
+
+    function collectAdminBills() {
+      const rows = document.querySelectorAll("#adminBillsBody tr[data-bill-item]");
+      const out = [];
+      rows.forEach((row) => {
+        const item = row.getAttribute("data-bill-item");
+        const amount = Number(row.querySelector(".bill-amount").value) || 0;
+        const paid = Number(row.querySelector(".bill-paid").value) || 0;
+        out.push({ item: item, amount: amount, paid: paid, note: "" });
+      });
+      return out;
+    }
+
+    function updateAdminBillTotals() {
+      const bills = collectAdminBills();
+      const totals = bills.reduce((acc, bill) => {
+        acc.billed += bill.amount;
+        acc.paid += bill.paid;
+        return acc;
+      }, { billed: 0, paid: 0 });
+      const balance = Math.max(0, totals.billed - totals.paid);
+      const status = totals.billed <= 0 ? "Not Applicable" : totals.paid <= 0 ? "Owing" : totals.paid >= totals.billed ? "Paid" : "Part Paid";
+      const colours = BILL_STATUS_COLOURS[status] || BILL_STATUS_COLOURS["Not Applicable"];
+
+      const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      setText("adminBillsTotalBilled", totals.billed.toFixed(2));
+      setText("adminBillsTotalPaid", totals.paid.toFixed(2));
+      setText("adminBillsBalance", balance.toFixed(2));
+      const statusEl = document.getElementById("adminBillsStatus");
+      if (statusEl) {
+        statusEl.textContent = status;
+        statusEl.style.color = colours.fg;
+      }
+
+      const rows = document.querySelectorAll("#adminBillsBody tr[data-bill-item]");
+      rows.forEach((row, index) => {
+        const bill = bills[index];
+        if (!bill) return;
+        const billStatus = detlofFeeStatus(bill);
+        const billColours = BILL_STATUS_COLOURS[billStatus] || BILL_STATUS_COLOURS["Not Applicable"];
+        const balanceCell = row.querySelector(".bill-balance");
+        const statusCell = row.querySelector(".bill-status");
+        if (balanceCell) balanceCell.textContent = detlofBillBalance(bill).toFixed(2);
+        if (statusCell) {
+          statusCell.textContent = billStatus;
+          statusCell.style.background = billColours.bg;
+          statusCell.style.color = billColours.fg;
+        }
+      });
+      return { billed: totals.billed, paid: totals.paid, balance: balance, status: status };
+    }
+
     // Resolve the selected record without touching the form. Saving must never
     // reload the fields first, or unsaved edits would be discarded.
     function findProfileRecord() {
       return findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
     }
 
+    bindEvent("adminBillsAddItemBtn", "click", function () {
+      const input = document.getElementById("adminBillsAddItem");
+      const item = input.value.trim();
+      if (!item) return;
+      if (activeBillItems.indexOf(item) !== -1) { showToast("\"" + item + "\" is already in the list."); return; }
+      activeBillItems.push(item);
+      drawAdminBillRows(findProfileRecord() || {});
+      input.value = "";
+      showToast("Added \"" + item + "\" to this student's fees. Set an amount to include it.");
+    });
+
+    bindEvent("adminBillsBody", "input", function () {
+      updateAdminBillTotals();
+    });
+
     function loadAdminProfileRecord() {
       const record = findProfileRecord();
       const summary = document.getElementById("adminProfileSummary");
       populateProfileClassSelect();
+      populateCompoundSelect();
+      populateClubList();
       if (!record) {
         summary.classList.add("hidden");
         PROFILE_FIELDS.forEach((id) => {
           const field = document.getElementById(id);
           if (field) field.value = "";
         });
+        const compoundField = document.getElementById("adminProfileCompound");
+        if (compoundField) compoundField.value = DETLOF_COMPOUNDS[0];
         document.getElementById("adminProfilePicPreview").src = "detlofcreast.svg";
+        drawAdminBillRows({});
         return null;
       }
       const values = {
@@ -1796,6 +2081,7 @@
         adminProfileAllergies: record.allergies || "",
         adminProfileInterests: record.interests || "",
         adminProfileNotes: record.adminNotes || "",
+        adminProfileClub: record.club || "",
       };
       Object.keys(values).forEach((id) => {
         const field = document.getElementById(id);
@@ -1806,6 +2092,11 @@
         }
         field.value = values[id];
       });
+      const compoundField = document.getElementById("adminProfileCompound");
+      if (compoundField) {
+        const value = record.compound || "Day Students";
+        compoundField.value = DETLOF_COMPOUNDS.indexOf(value) !== -1 ? value : DETLOF_COMPOUNDS[0];
+      }
       document.getElementById("adminProfilePicPreview").src = record.profilePic || "detlofcreast.svg";
       document.getElementById("adminProfileAvatar").src = record.profilePic || "detlofcreast.svg";
       document.getElementById("adminProfileSummaryName").textContent = record.fullName || record.studentId;
@@ -1814,6 +2105,7 @@
       const sendPhone = document.getElementById("adminSendParentPhone");
       if (sendPhone && !sendPhone.value.trim()) sendPhone.value = record.whatsappNumber || record.parentPhone || "";
       summary.classList.remove("hidden");
+      renderAdminBills(record);
       return record;
     }
 
@@ -1977,6 +2269,11 @@
         allergies: readValue("adminProfileAllergies"),
         interests: readValue("adminProfileInterests"),
         adminNotes: readValue("adminProfileNotes"),
+        club: readValue("adminProfileClub"),
+        compound: (function () {
+          const select = document.getElementById("adminProfileCompound");
+          return select ? select.value : (record.compound || "Day Students");
+        })(),
         profilePic: profilePic || record.profilePic || "",
         updatedBy: teacherLabel(),
         updatedAt: stampIso(),
@@ -1984,6 +2281,9 @@
 
       // mergeStoredRecord re-applies the canonical roster name, so an admin class
       // change is kept but the student's identity stays exactly as on the roster.
+      // Fee amounts are edited in the billing table, not the text inputs.
+      detlofApplyBills(updated, collectAdminBills());
+
       const records = getStoredRecords().map((item) =>
         String(item.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : item
       );
@@ -2654,6 +2954,277 @@
       if (!phone) { showToast("Enter a parent WhatsApp number first"); return; }
       sendStudentTimetableViaWhatsApp(record, phone);
       showToast("Opening WhatsApp with " + record.fullName + "'s timetable…");
+    });
+
+    // -------------------------------------------------------------------------
+    // Publish a whole class's results at once. One table, every student in the
+    // class, class score + exam score per subject. Publishing writes each
+    // student's own results so their portal fills in automatically.
+    // -------------------------------------------------------------------------
+    const CLASS_SELECT_IDS_WITH_RESULTS = ["classResultsClass"];
+
+    function classResultsSubjects() {
+      return activeResultSubjects.slice();
+    }
+
+    function renderClassResultSubjects() {
+      const wrap = document.getElementById("classResultsSubjects");
+      if (!wrap) return;
+      wrap.innerHTML = activeResultSubjects
+        .map((subject) => "<span class='subject-chip'>" + escapeHtml(subject) +
+          "<button type='button' data-remove-subject=\"" + escapeHtml(subject) + "\" aria-label='Remove " + escapeHtml(subject) + "'>&times;</button></span>")
+        .join("") || "<span style='font-size:11px;color:var(--muted);'>No subjects yet - add at least one below.</span>";
+    }
+
+    function studentsForClassResults() {
+      const className = document.getElementById("classResultsClass").value;
+      const records = getStoredRecords().filter((record) => record.currentClass === className);
+      const names = records.map((record) => record.fullName);
+      detlofRosterNamesForClass(className).forEach((name) => {
+        if (names.indexOf(name) === -1) names.push(name);
+      });
+      return { className: className, records: records, names: names };
+    }
+
+    function renderClassResultsGrid() {
+      const head = document.getElementById("classResultsHead");
+      const body = document.getElementById("classResultsBody");
+      if (!head || !body) return;
+      const { className, names } = studentsForClassResults();
+      const termKey = document.getElementById("classResultsTerm").value;
+
+      let html = "<tr><th class='sticky-col'>Student</th>";
+      activeResultSubjects.forEach((subject) => {
+        html += "<th colspan='2' class='subject-head'>" + escapeHtml(subject) + "</th>";
+      });
+      html += "<th class='total-col'>Total</th><th class='grade-col'>Grade</th></tr>";
+      html += "<tr><th class='sticky-col'></th>";
+      activeResultSubjects.forEach(() => { html += "<th class='sub-head'>Class (40)</th><th class='sub-head'>Exam (60)</th>"; });
+      html += "<th class='sub-head'></th><th class='sub-head'></th></tr>";
+      head.innerHTML = html;
+
+      if (!names.length) {
+        body.innerHTML = '<tr><td colspan="' + (1 + activeResultSubjects.length * 2 + 2) +
+          '" class="empty-cell">No students found in ' + escapeHtml(className) + ".</td></tr>";
+        renderClassResultsSummary();
+        return;
+      }
+
+      // Pre-fill from what is already published so editing is non-destructive.
+      const existing = new Map();
+      getStoredRecords().forEach((record) => {
+        const termData = (record.termResults || {})[termKey];
+        if (termData && Array.isArray(termData.results)) {
+          existing.set(detlofNormalizeName(record.fullName), new Map(termData.results.map((r) => [r.subject, r])));
+        }
+      });
+
+      body.innerHTML = names.map((name) => {
+        const rowExisting = existing.get(detlofNormalizeName(name)) || new Map();
+        const inputs = activeResultSubjects.map((subject) => {
+          const cell = rowExisting.get(subject);
+          const classScore = cell ? Number(cell.classScore) || 0 : "";
+          const examScore = cell ? Number(cell.examScore) || 0 : "";
+          const sid = escapeHtml(name);
+          return '<td class="num"><input type="number" min="0" max="40" step="0.5" data-student="' + sid +
+            '" data-subject="' + escapeHtml(subject) + '" data-kind="class" value="' + classScore + '" placeholder="0" /></td>' +
+            '<td class="num"><input type="number" min="0" max="60" step="0.5" data-student="' + sid +
+            '" data-subject="' + escapeHtml(subject) + '" data-kind="exam" value="' + examScore + '" placeholder="0" /></td>';
+        }).join("");
+        return '<tr data-student-row="' + escapeHtml(name) + '">' +
+          '<td class="sticky-col"><strong>' + escapeHtml(name) + "</strong></td>" + inputs +
+          '<td class="num row-total">—</td><td class="row-grade">—</td></tr>';
+      }).join("");
+
+      recalcClassResultsTotals();
+    }
+
+    function recalcClassResultsTotals() {
+      const rows = document.querySelectorAll("#classResultsBody tr[data-student-row]");
+      let complete = 0;
+      let partial = 0;
+      rows.forEach((row) => {
+        let total = 0;
+        let filled = 0;
+        row.querySelectorAll("input[data-kind]").forEach((input) => {
+          const value = Number(input.value);
+          if (!input.value || Number.isNaN(value)) return;
+          filled += 1;
+          total += value;
+        });
+        const totalCell = row.querySelector(".row-total");
+        const gradeCell = row.querySelector(".row-grade");
+        const isComplete = activeResultSubjects.length > 0 && filled === activeResultSubjects.length * 2;
+        const average = filled ? Math.round((total / activeResultSubjects.length) * 100) / 100 : 0;
+        if (isComplete) complete += 1;
+        else if (filled > 0) partial += 1;
+
+        row.classList.toggle("row-complete", isComplete);
+        row.classList.toggle("row-partial", !isComplete && filled > 0);
+        if (totalCell) totalCell.textContent = filled ? String(Math.round(total * 100) / 100) : "—";
+        if (gradeCell) {
+          gradeCell.textContent = isComplete ? calculateGrade(average) : (filled ? "—" : "—");
+          gradeCell.dataset.grade = isComplete ? calculateGrade(average) : "";
+        }
+      });
+      renderClassResultsSummary(complete, partial, rows.length);
+    }
+
+    function renderClassResultsSummary(complete, partial, total) {
+      const box = document.getElementById("classResultsSummary");
+      if (!box) return;
+      const className = document.getElementById("classResultsClass").value;
+      if (complete === undefined) { complete = 0; partial = 0; total = studentsForClassResults().names.length; }
+      const ready = total > 0 && complete === total;
+      box.innerHTML = "<p style='margin:0 0 8px;'><strong>" + escapeHtml(className) + "</strong> &middot; " + total + " students &middot; " +
+        activeResultSubjects.length + " subjects</p>" +
+        "<div class='summary-chips'>" +
+        "<span class='summary-chip ok'>" + complete + " ready</span>" +
+        "<span class='summary-chip warn'>" + partial + " partly filled</span>" +
+        "<span class='summary-chip muted'>" + Math.max(0, total - complete - partial) + " empty</span>" +
+        "</div>" +
+        (ready
+          ? "<p style='margin:8px 0 0;color:var(--crest-green);font-size:12px;'>Every student has a complete score set. Ready to publish.</p>"
+          : "<p style='margin:8px 0 0;color:var(--crest-gold);font-size:12px;'>Rows with all subjects filled will be published; partly filled rows are skipped and reported back to you.</p>");
+      return { complete: complete, partial: partial, total: total };
+    }
+
+    // Turns the grid into { studentId -> results[] } for one term.
+    function collectClassResults() {
+      const termKey = document.getElementById("classResultsTerm").value;
+      const { records } = studentsForClassResults();
+      const byName = new Map(records.map((record) => [detlofNormalizeName(record.fullName), record]));
+      const payload = [];
+      const skipped = [];
+
+      document.querySelectorAll("#classResultsBody tr[data-student-row]").forEach((row) => {
+        const name = row.getAttribute("data-student-row");
+        const record = byName.get(detlofNormalizeName(name));
+        const results = [];
+        // Inputs are generated in subject order, so the two lists line up.
+        const classInputs = row.querySelectorAll("input[data-kind='class']");
+        const examInputs = row.querySelectorAll("input[data-kind='exam']");
+        activeResultSubjects.forEach((subject, index) => {
+          const classInput = classInputs[index];
+          const examInput = examInputs[index];
+          const classScore = classInput && classInput.value !== "" ? Number(classInput.value) : null;
+          const examScore = examInput && examInput.value !== "" ? Number(examInput.value) : null;
+          if (classScore === null || examScore === null) return;
+          if (Number.isNaN(classScore) || Number.isNaN(examScore)) return;
+          const totalScore = Math.round((classScore + examScore) * 100) / 100;
+          results.push({
+            subject: subject,
+            classScore: classScore,
+            examScore: examScore,
+            totalScore: totalScore,
+            grade: gradeFromTotal(totalScore),
+            remark: "Keep it up",
+            updatedBy: teacherLabel(),
+            updatedAt: stampIso(),
+          });
+        });
+        if (!record) { skipped.push({ name: name, reason: "not in the register" }); return; }
+        if (results.length !== activeResultSubjects.length) {
+          skipped.push({ name: name, reason: results.length + " of " + activeResultSubjects.length + " subjects" });
+          return;
+        }
+        payload.push({ studentId: record.studentId, fullName: record.fullName, class: record.currentClass, results: results });
+      });
+
+      return { termKey: termKey, payload: payload, skipped: skipped };
+    }
+
+    async function publishClassResults(queueForApproval) {
+      const collected = collectClassResults();
+      if (!collected.payload.length) {
+        showToast("No student has a complete score set yet.");
+        return;
+      }
+      if (collected.skipped.length) {
+        const proceed = window.confirm(
+          collected.skipped.length + " student(s) are not fully filled in and will be skipped:\n\n" +
+          collected.skipped.slice(0, 12).map((s) => "• " + s.name + " (" + s.reason + ")").join("\n") +
+          (collected.skipped.length > 12 ? "\n… and " + (collected.skipped.length - 12) + " more" : "") +
+          "\n\nPublish the " + collected.payload.length + " complete student(s) anyway?"
+        );
+        if (!proceed) return;
+      }
+
+      if (queueForApproval) {
+        const resultsData = [];
+        collected.payload.forEach((entry) => {
+          entry.results.forEach((result) => {
+            resultsData.push({
+              studentId: entry.studentId,
+              subject: result.subject,
+              classScore: result.classScore,
+              examScore: result.examScore,
+              totalScore: result.totalScore,
+              grade: result.grade,
+              remark: result.remark,
+            });
+          });
+        });
+        addPendingApproval("results", {
+          termKey: collected.termKey,
+          resultsData: resultsData,
+          matchedCount: collected.payload.length,
+          createdBy: teacherLabel(),
+          createdAt: stampIso(),
+        });
+        renderPendingApprovals();
+        showToast("Queued " + collected.payload.length + " students for Academics Admin approval.");
+        return;
+      }
+
+      const resultsData = [];
+      collected.payload.forEach((entry) => {
+        entry.results.forEach((result) => {
+          resultsData.push({
+            studentId: entry.studentId,
+            subject: result.subject,
+            classScore: result.classScore,
+            examScore: result.examScore,
+            totalScore: result.totalScore,
+            grade: result.grade,
+            remark: result.remark,
+          });
+        });
+      });
+      await publishResultsToPortals(collected.termKey, resultsData);
+      showToast("Published " + collected.payload.length + " students' " +
+        (TERM_LABELS[collected.termKey] || collected.termKey) + " results to their portals." +
+        (collected.skipped.length ? " " + collected.skipped.length + " skipped." : ""));
+    }
+
+    bindEvent("classResultsClass", "change", renderClassResultsGrid);
+    bindEvent("classResultsTerm", "change", renderClassResultsGrid);
+    bindEvent("classResultsBody", "input", recalcClassResultsTotals);
+    bindEvent("classResultsSubjects", "click", function (event) {
+      const target = event.target.closest("[data-remove-subject]");
+      if (!target) return;
+      const subject = target.getAttribute("data-remove-subject");
+      if (activeResultSubjects.length <= 1) { showToast("Keep at least one subject."); return; }
+      activeResultSubjects = activeResultSubjects.filter((s) => s !== subject);
+      renderClassResultSubjects();
+      renderClassResultsGrid();
+    });
+    bindEvent("classResultsAddSubjectBtn", "click", function () {
+      const input = document.getElementById("classResultsAddSubject");
+      const subject = input.value.trim();
+      if (!subject) return;
+      if (activeResultSubjects.indexOf(subject) !== -1) { showToast("\"" + subject + "\" is already in the table."); return; }
+      activeResultSubjects.push(subject);
+      input.value = "";
+      renderClassResultSubjects();
+      renderClassResultsGrid();
+    });
+    bindEvent("classResultsPublish", "click", () => publishClassResults(false));
+    bindEvent("classResultsQueue", "click", () => publishClassResults(true));
+    bindEvent("classResultsClear", "click", function () {
+      document.querySelectorAll("#classResultsBody input").forEach((input) => { input.value = ""; });
+      recalcClassResultsTotals();
+      showToast("Cleared the score entries. Student identities are unchanged.");
     });
 
     function currentPreviewPayload() {
@@ -3624,48 +4195,68 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
 
   function publishResultsToPortals(termKey, resultsData) {
     const existing = getStoredRecords();
-    resultsData.forEach(rd => {
-      const rec = existing.find(r => r.studentId === rd.studentId);
-      if (rec) {
-        const updates = Array.isArray(rec.updates) ? rec.updates : [];
-        updates.push({
-          id: "result-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5),
-          title: termKey.replace("term", "Term ") + " " + rd.subject + " Result",
-          category: "Results Update",
-          message: "Subject: " + rd.subject + " | Class: " + rd.classScore + " | Exam: " + rd.examScore,
-          date: stampDate(),
-          createdAt: stampIso(),
-          createdBy: "Academics Admin",
-          individual: true,
-        });
-        rec.updates = updates;
-        if (!rec.termResults) rec.termResults = {};
-        if (!rec.termResults[termKey]) rec.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
-        const classScore = Number(rd.classScore);
-        const examScore = Number(rd.examScore);
-        const totalScore = Math.round((classScore + examScore) * 100) / 100;
-        const grade = totalScore >= 80 ? "A" : totalScore >= 70 ? "B" : totalScore >= 60 ? "C" : totalScore >= 50 ? "D" : totalScore >= 40 ? "E" : "F";
-        rec.termResults[termKey].results.push({
-          subject: rd.subject,
-          classScore,
-          examScore,
-          totalScore,
-          grade,
-        });
+    const termName = TERM_LABELS[termKey] || "Term";
+    const touched = new Map();
+
+    resultsData.forEach((rd) => {
+      const rec = existing.find((r) => r.studentId === rd.studentId);
+      if (!rec) return;
+      if (!rec.termResults) rec.termResults = {};
+      if (!rec.termResults[termKey]) rec.termResults[termKey] = { results: [], gpa: null, subjectCount: 0 };
+
+      const classScore = Number(rd.classScore) || 0;
+      const examScore = Number(rd.examScore) || 0;
+      const totalScore = Math.round((classScore + examScore) * 100) / 100;
+      const result = {
+        subject: rd.subject,
+        classScore,
+        examScore,
+        totalScore,
+        grade: rd.grade || gradeFromTotal(totalScore),
+        remark: rd.remark || "Keep it up",
+        updatedBy: rd.updatedBy || teacherLabel(),
+        updatedAt: rd.updatedAt || stampIso(),
+      };
+
+      // Replace any earlier entry for the same subject so re-publishing a class
+      // updates the scores instead of stacking duplicates.
+      const results = rec.termResults[termKey].results.filter((item) => item.subject !== result.subject);
+      results.push(result);
+      rec.termResults[termKey].results = results;
+      touched.set(rec.studentId, { rec: rec, count: results.length });
+    });
+
+    existing.forEach((rec) => {
+      const termData = rec.termResults && rec.termResults[termKey];
+      if (termData && termData.results.length) {
+        const totalPoints = termData.results.reduce((sum, r) => sum + (GRADE_POINTS[r.grade] || 0), 0);
+        termData.gpa = Math.round((totalPoints / termData.results.length) * 100) / 100;
+        termData.subjectCount = termData.results.length;
+        termData.updatedBy = teacherLabel();
+        termData.updatedAt = stampIso();
       }
     });
-    existing.forEach(rec => {
-      if (rec.termResults && rec.termResults[termKey] && rec.termResults[termKey].results.length) {
-        const pointsMap = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
-        const results = rec.termResults[termKey].results;
-        const totalPoints = results.reduce((sum, r) => sum + (pointsMap[r.grade] || 0), 0);
-        rec.termResults[termKey].gpa = Math.round((totalPoints / results.length) * 100) / 100;
-        rec.termResults[termKey].subjectCount = results.length;
-      }
+
+    // One dashboard notice per student, not one per subject.
+    touched.forEach(({ rec, count }) => {
+      const updates = Array.isArray(rec.updates) ? rec.updates : [];
+      updates.push({
+        id: "result-" + Date.now() + "-" + rec.studentId,
+        title: termName + " results published",
+        category: "Results Update",
+        message: count + " subject results for " + termName + " are now available on your portal.",
+        date: stampDate(),
+        createdAt: stampIso(),
+        createdBy: teacherLabel(),
+        individual: true,
+      });
+      rec.updates = updates;
     });
+
     saveStoredRecords(existing);
     syncRecordsToPortal(existing);
     renderTable(existing);
+    return touched.size;
   }
 
   function processReleaseApproval(data) {
@@ -3817,12 +4408,77 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     return card;
   }
 
+  // Opening a window can be blocked (browsers allow only one popup per click,
+  // so bulk sends are blocked almost immediately). When that happens we show the
+  // link for the user to click instead of failing silently.
   function openWhatsApp(phone, message) {
     const number = whatsappNumber(phone);
     if (!number) { showToast("No WhatsApp number on file for this student."); return false; }
     if (!message) { showToast("There is nothing to send yet."); return false; }
-    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent(message), "_blank");
-    return true;
+    const url = "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
+
+    let opened = null;
+    try {
+      opened = window.open(url, "_blank", "noopener");
+    } catch {
+      opened = null;
+    }
+    if (opened) return true;
+
+    // Popup blocked: hand the link over so the send still works.
+    const modal = document.getElementById("whatsappFallbackModal");
+    if (modal) {
+      const link = document.getElementById("whatsappFallbackLink");
+      const numberEl = document.getElementById("whatsappFallbackNumber");
+      if (link) {
+        link.href = url;
+        link.textContent = "Open WhatsApp chat with +" + number;
+      }
+      if (numberEl) numberEl.textContent = "+" + number;
+      modal.classList.remove("hidden");
+    }
+    showToast("Your browser blocked the pop-up. Tap the link to finish sending.");
+    return false;
+  }
+
+  // Bulk sends used to open one window per parent, which browsers block after the
+  // first one. Instead we list the recipients so each chat is opened deliberately.
+  function openBulkWhatsAppPanel(title, rows) {
+    const modal = document.getElementById("whatsappFallbackModal");
+    const list = document.getElementById("whatsappBulkList");
+    const numberEl = document.getElementById("whatsappFallbackNumber");
+    const link = document.getElementById("whatsappFallbackLink");
+    if (!modal || !list) { showToast("Recipient list is unavailable on this page."); return; }
+
+    const reachable = rows.filter((row) => row.number && row.message);
+    document.getElementById("whatsappFallbackTitle").textContent = title;
+    if (numberEl) numberEl.textContent = reachable.length + " parent(s) with a number on file";
+    if (link) { link.href = "#"; link.textContent = ""; }
+
+    if (!reachable.length) {
+      list.innerHTML = "<p class='preview-note'>No parent in this batch has a WhatsApp number on file. Add numbers in each student's profile first.</p>";
+      modal.classList.remove("hidden");
+      showToast("No parent numbers on file for " + (reachable.length ? "this batch" : "this class"));
+      return;
+    }
+
+    list.innerHTML = "<p class='preview-note'>Your browser only allows one chat window per click, so tap each parent to open their chat with the message already written.</p>" +
+      reachable.map((row) => {
+        const url = "https://wa.me/" + row.number + "?text=" + encodeURIComponent(row.message);
+        return '<div class="bulk-row">' +
+          '<div class="bulk-row-info"><strong>' + escapeHtml(row.name || row.number) + '</strong><span>+' + escapeHtml(row.number) + "</span></div>" +
+          '<a class="btn btn-teal" href="' + url + '" target="_blank" rel="noopener">Open Chat</a>' +
+          "</div>";
+      }).join("") +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">' +
+      '<button type="button" class="btn btn-outline" id="whatsappCopyNumbers">Copy All Numbers</button>' +
+      "</div>";
+
+    const copyBtn = document.getElementById("whatsappCopyNumbers");
+    if (copyBtn) {
+      copyBtn.onclick = () => copyText(reachable.map((r) => r.name + " " + r.number).join("\n"));
+    }
+    modal.classList.remove("hidden");
   }
 
   function sendTimetableViaWhatsApp(className, schedule, studentPhone) {
@@ -3861,6 +4517,11 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
   // -------------------------------------------------------------------------
   function closePublishPreview() {
     const modal = document.getElementById("publishPreviewModal");
+    if (modal) modal.classList.add("hidden");
+  }
+
+  function closeWhatsAppFallback() {
+    const modal = document.getElementById("whatsappFallbackModal");
     if (modal) modal.classList.add("hidden");
   }
 
@@ -3991,15 +4652,20 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     if (!item || item.type !== "results") { showToast("That results item is no longer available."); return; }
     const termKey = item.data.termKey;
     const studentIds = new Set((item.data.resultsData || []).map((r) => r.studentId));
-    const records = getStoredRecords().filter((s) => studentIds.has(s.studentId));
-    let count = 0;
-    records.forEach((student) => {
-      if (student.profileWhatsApp || student.profileParentPhone) {
-        sendResultsViaWhatsApp(student, termKey);
-        count += 1;
-      }
-    });
-    showToast("WhatsApp results opened for " + count + " parent(s) in " + (TERM_LABELS[termKey] || termKey) + ".");
+    const rows = getStoredRecords()
+      .filter((student) => studentIds.has(student.studentId))
+      .map((student) => {
+        const termData = (student.termResults || {})[termKey];
+        const results = termData && Array.isArray(termData.results) ? termData.results : [];
+        if (!results.length) return null;
+        return {
+          name: student.fullName,
+          number: whatsappNumber(student.whatsappNumber || student.profileWhatsApp || student.parentPhone),
+          message: buildResultsMessage(student, termKey),
+        };
+      })
+      .filter(Boolean);
+    openBulkWhatsAppPanel((TERM_LABELS[termKey] || termKey) + " results to parents", rows);
   }
 
   function sendTimetableToAllParents(index) {
@@ -4007,13 +4673,27 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     if (!item || item.type !== "timetable") { showToast("That timetable item is no longer available."); return; }
     const className = item.data.className;
     const schedule = item.data.schedule;
-    const classStudents = getStoredRecords().filter((r) => r.currentClass === className);
-    classStudents.forEach((student) => {
-      const phone = student.profileWhatsApp || student.profileParentPhone;
-      if (phone) sendTimetableViaWhatsApp(className, schedule, phone);
+    const rows = getStudentsForClassSelect(className)
+      .filter((student) => student.fullName)
+      .map((student) => ({
+        name: student.fullName,
+        number: whatsappNumber(student.whatsappNumber || student.profileWhatsApp || student.parentPhone),
+        message: buildTimetableMessage(student, className, schedule),
+      }));
+    openBulkWhatsAppPanel(className + " timetable to parents", rows);
+  }
+
+  // Students of a class, including any that exist only in the roster.
+  function getStudentsForClassSelect(className) {
+    const records = getStoredRecords().filter((record) => record.currentClass === className);
+    const names = records.map((record) => record.fullName);
+    detlofRosterNamesForClass(className).forEach((name) => {
+      if (names.indexOf(name) === -1) {
+        records.push({ fullName: name });
+        names.push(name);
+      }
     });
-    const reachable = classStudents.filter((s) => s.profileWhatsApp || s.profileParentPhone).length;
-    showToast("WhatsApp messages opened for " + reachable + " parent(s) in " + className + ".");
+    return records;
   }
 
   function buildStudentPortalUrl(student) {
