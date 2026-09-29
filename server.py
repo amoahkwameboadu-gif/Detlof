@@ -36,11 +36,20 @@ def allow_local_portal_api(response):
 ROSTER_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_roster.json")
 
 FALLBACK_CLASS_ORDER = [
-    "Creche", "Nursery One", "Nursery Two", "KG 1", "KG 2",
-    "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5",
-    "Basic 6", "Basic 7", "Basic 8", "Basic 9",
-    "Lower KG", "Upper KG",
-    "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3",
+    "Creche",
+    "Nursery One",
+    "Nursery Two",
+    "KG 1",
+    "KG 2",
+    "Basic 1",
+    "Basic 2",
+    "Basic 3",
+    "Basic 4",
+    "Basic 5",
+    "Basic 6",
+    "Basic 7",
+    "Basic 8",
+    "Basic 9"
 ]
 
 

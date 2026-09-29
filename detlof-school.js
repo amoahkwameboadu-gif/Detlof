@@ -76,19 +76,7 @@ const DETLOF_SUBJECTS_UPPER_PRIMARY = DETLOF_SUBJECTS_LOWER_PRIMARY.concat([
   "Computing",
 ]);
 
-const DETLOF_SUBJECTS_JUNIOR_HIGH = [
-  "English Language",
-  "Mathematics",
-  "Science",
-  "Social Studies",
-  "Computing",
-  "Ghanaian Language",
-  "French",
-  "Creative Arts and Design",
-  "Career Technology",
-  "Religious and Moral Education",
-  "Physical Education and Health",
-];
+const DETLOF_SUBJECTS_JUNIOR_HIGH = ["English Language", "Mathematics", "Science", "Social Studies", "Computing","Ghanaian Language", "French", "Creative Arts and Design", "Career Technology","Religious and Moral Education", "Physical Education and Health",];
 
 // Level groupings, used to resolve a class to its curriculum.
 function detlofCurriculumKey(className) {
@@ -96,11 +84,8 @@ function detlofCurriculumKey(className) {
   if (/^Basic\s*[1-3]$/.test(name)) return "lowerPrimary";
   if (/^Basic\s*[4-6]$/.test(name)) return "upperPrimary";
   if (/^Basic\s*[7-9]$/.test(name)) return "juniorHigh";
-  if (/^JHS\s*[1-3]$/.test(name)) return "juniorHigh";
-  if (/^SHS\s*[1-3]$/.test(name)) return "seniorHigh";
   if (/^KG/.test(name) || /Nursery/.test(name)) return "kindergarten";
   if (/^Creche$/i.test(name)) return "creche";
-  if (/^Lower KG$/i.test(name) || /^Upper KG$/i.test(name)) return "kindergarten";
   return "lowerPrimary";
 }
 
@@ -110,7 +95,6 @@ const DETLOF_CURRICULUM = {
   lowerPrimary: { label: "Key Phase 2 - Lower Primary (B1-B3)", subjects: DETLOF_SUBJECTS_LOWER_PRIMARY },
   upperPrimary: { label: "Key Phase 3 - Upper Primary (B4-B6)", subjects: DETLOF_SUBJECTS_UPPER_PRIMARY },
   juniorHigh: { label: "Key Phase 4 - Common Core Programme (B7-B9)", subjects: DETLOF_SUBJECTS_JUNIOR_HIGH },
-  seniorHigh: { label: "Key Phase 5 - Senior High School", subjects: DETLOF_SUBJECTS_JUNIOR_HIGH.concat(["Elective Mathematics", "Elective Science", "Elective Humanities"]) },
 };
 
 // The subjects a given class actually teaches.

@@ -20,15 +20,7 @@ const DETLOF_CLASS_ORDER = [
   "Basic 6",
   "Basic 7",
   "Basic 8",
-  "Basic 9",
-  "Lower KG",
-  "Upper KG",
-  "JHS 1",
-  "JHS 2",
-  "JHS 3",
-  "SHS 1",
-  "SHS 2",
-  "SHS 3"
+  "Basic 9"
 ];
 
 const DETLOF_CLASS_PREFIX = {
@@ -37,8 +29,6 @@ const DETLOF_CLASS_PREFIX = {
   "Nursery Two": "NUR2",
   "KG 1": "KG1",
   "KG 2": "KG2",
-  "Lower KG": "LKG",
-  "Upper KG": "UKG",
   "Basic 1": "B1",
   "Basic 2": "B2",
   "Basic 3": "B3",
@@ -47,13 +37,7 @@ const DETLOF_CLASS_PREFIX = {
   "Basic 6": "B6",
   "Basic 7": "B7",
   "Basic 8": "B8",
-  "Basic 9": "B9",
-  "JHS 1": "JHS1",
-  "JHS 2": "JHS2",
-  "JHS 3": "JHS3",
-  "SHS 1": "SHS1",
-  "SHS 2": "SHS2",
-  "SHS 3": "SHS3"
+  "Basic 9": "B9"
 };
 
 const DETLOF_CLASS_ROSTER = {
@@ -328,15 +312,7 @@ const DETLOF_CLASS_ROSTER = {
     "ODOI FREDA",
     "QUAYSON AGNES",
     "THOMFORD ANNA"
-  ],
-  "Lower KG": [],
-  "Upper KG": [],
-  "JHS 1": [],
-  "JHS 2": [],
-  "JHS 3": [],
-  "SHS 1": [],
-  "SHS 2": [],
-  "SHS 3": []
+  ]
 };
 
 
@@ -400,9 +376,20 @@ function detlofRosterClassForName(name) {
 }
 
 const DETLOF_PROMOTION_LADDER = [
-  "Creche", "Nursery One", "Nursery Two", "KG 1", "KG 2",
-  "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6", "Basic 7", "Basic 8", "Basic 9",
-  "JHS 1", "JHS 2", "JHS 3", "SHS 1", "SHS 2", "SHS 3",
+  "Creche",
+  "Nursery One",
+  "Nursery Two",
+  "KG 1",
+  "KG 2",
+  "Basic 1",
+  "Basic 2",
+  "Basic 3",
+  "Basic 4",
+  "Basic 5",
+  "Basic 6",
+  "Basic 7",
+  "Basic 8",
+  "Basic 9"
 ];
 
 function detlofClassLevel(className) {

@@ -541,6 +541,26 @@
       .timetable-day { min-height: 44px; }
     }
 
+    /* ---------------- student records maintenance ---------------- */
+    .maint-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .maint-panel {
+      padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff;
+      display: flex; flex-direction: column; gap: 12px; min-width: 0;
+    }
+    .maint-title { margin: 0; font-size: 14px; }
+    .maint-note { margin: 0; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+    .maint-meta {
+      margin: 0; font-size: 11px; color: var(--muted); background: #faf7fc;
+      padding: 9px 11px; border-radius: 8px; word-break: break-word;
+    }
+    .maint-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .maint-actions .btn { flex: 1 1 150px; justify-content: center; }
+    @media (max-width: 640px) {
+      .maint-grid { grid-template-columns: 1fr; }
+      .maint-panel { padding: 13px; }
+      .maint-actions .btn { width: 100%; flex: 1 1 100%; }
+    }
+
     /* ---------------- guided step list (class results, upload flows) ---------------- */
     .step-list { list-style: none; margin: 0; padding: 0; }
     .step-list > li {
@@ -571,6 +591,30 @@
     .pending-approval.approved { border-left: 4px solid var(--crest-green) !important; background: #f7fdf9 !important; }
     .pending-approval.rejected { border-left: 4px solid #d9003b !important; background: #fef7f8 !important; }
     .pending-approval.pending { border-left: 4px solid var(--crest-gold) !important; }
+
+    /* ---------------- heading icons ----------------
+       Solid glyphs on a subtle tinted tile so each section is recognisable at a
+       glance. The icon inherits the heading colour, so it stays in step. */
+    .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; }
+    .icon-sm { width: 15px; height: 15px; }
+    .icon-md { width: 20px; height: 20px; }
+    .icon-lg { width: 26px; height: 26px; }
+    .icon-xl { width: 34px; height: 34px; }
+    .heading-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; margin-right: 10px; border-radius: 10px;
+      background: var(--crest-purple-soft); color: var(--crest-purple);
+      vertical-align: middle; flex: 0 0 auto;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .card:hover .heading-icon { transform: scale(1.06) rotate(-3deg); }
+    .btn > .icon, .outline-btn > .icon, .primary-btn > .icon,
+    .nav-btn > .icon, .cred-action > .icon, .step-head .icon { margin-right: 6px; }
+    .btn > .icon:last-child, .outline-btn > .icon:last-child { margin-right: 0; }
+    @media (max-width: 420px) {
+      .heading-icon { width: 28px; height: 28px; margin-right: 8px; }
+      .heading-icon .icon { width: 17px; height: 17px; }
+    }
 
     /* ---------------- collapsible class credentials ---------------- */
     .cred-toolbar {
@@ -1006,7 +1050,114 @@
     @media (prefers-reduced-motion: reduce) {
       * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
-    </style>
+      /* ---------------- mobile layer ----------------
+       Appended last so it wins the cascade. One coherent set of rules for every
+       width from a 320px phone up, so a section cannot be half-styled by one
+       breakpoint and missed by another. */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body { overflow-x: hidden; max-width: 100%; }
+
+    /* Flex and grid children default to min-width:auto, so a long name or a long
+       button label cannot shrink and instead pushes the page sideways. */
+    .admin-shell > *, main > *, .card > *, .row-2 > *, .maint-panel > *,
+    .editor-fields > *, .step-list > li, .preview-modal-card > * {
+      min-width: 0;
+    }
+    h1, h2, h3, .card h2, .step-head strong, .maint-title, .editor-name,
+    .cred-class, .cred-table td, .cred-table th, .btn, .field label, select, input {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .field input, .field select, .field textarea { max-width: 100%; }
+
+    @media (max-width: 1024px) {
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .table-scroll table { min-width: 460px; }
+      #adminBillsTable table, #editorBillsTable table { min-width: 480px; }
+    }
+
+    @media (max-width: 900px) {
+      /* Every row of buttons inside a card becomes a full-width stack, whatever
+         its markup, so no action is squeezed into an unreadable sliver. */
+      .card > div[style*="flex-wrap:wrap"] > .btn,
+      .card > div[style*="flex-wrap:wrap"] > a.btn,
+      .panel > div[style*="flex-wrap:wrap"] > .btn,
+      .maint-actions > .btn,
+      .editor-bulk > .btn,
+      .step-list > li > div > .btn,
+      .bulk-row .btn {
+        flex: 1 1 100%; width: 100%; justify-content: center;
+      }
+      .row-2, .editor-fields, .maint-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      .admin-main { padding: 12px; }
+      .card { padding: 13px; }
+      .topbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      .topbar > * { width: 100%; }
+      .top-actions { width: 100%; flex-wrap: wrap; }
+      .top-actions .btn { flex: 1 1 auto; justify-content: center; }
+      .field input, .field select, .field textarea { width: 100%; }
+      .field select { font-size: 15px; text-overflow: ellipsis; }
+      .step-list > li { padding-left: 40px; }
+      .preview-modal-body { grid-template-columns: minmax(0, 1fr); }
+      .preview-modal-foot { flex-direction: column; }
+      .preview-modal-foot .btn { width: 100%; }
+    }
+
+    @media (max-width: 560px) {
+      .card { padding: 12px; }
+      .card h2 { font-size: 15px; }
+      .card p.sub { font-size: 11.5px; }
+      .table-scroll { margin-left: -4px; margin-right: -4px; }
+      .table-scroll table { min-width: 420px; font-size: 11px; }
+      .btn { min-height: 44px; }
+      .field input, .field select, .field textarea { min-height: 44px; }
+      .cred-head { padding: 10px 6px; gap: 8px; }
+      .cred-class { font-size: 14px; }
+      .maint-panel { padding: 12px; }
+      .step-head strong { font-size: 13px; }
+      .step-head p { font-size: 11px; }
+      .bulk-row { flex-direction: column; align-items: stretch; }
+      .bulk-row .btn { width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 11px; }
+      .card h2 { font-size: 14px; }
+      .btn { font-size: 12.5px; padding: 10px 11px; }
+      .field select { font-size: 14px; }
+      .table-scroll table { min-width: 380px; }
+      .cred-count { min-width: 22px; padding: 2px 6px; font-size: 10px; }
+      .preview-modal-head h3 { font-size: 13px; }
+    }
+
+    @media (max-width: 360px) {
+      .card { padding: 10px; }
+      .card h2 { font-size: 13.5px; }
+      .field label { font-size: 10.5px; }
+      .table-scroll table { min-width: 340px; }
+      .cred-toolbar-actions .btn { font-size: 11.5px; padding: 8px 9px; }
+    }
+
+    @media (max-height: 520px) {
+      .preview-modal-card { max-height: 100vh; }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .btn { min-height: 46px; }
+      .field input, .field select, .field textarea { min-height: 46px; }
+      .cred-head { min-height: 48px; }
+      .cred-action { min-height: 36px; display: inline-flex; align-items: center; }
+      .preview-close { min-width: 36px; min-height: 36px; }
+    }
+
+    @media (min-width: 1500px) {
+      .admin-shell, main { max-width: 1440px; margin-left: auto; margin-right: auto; }
+    }
+
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -1088,7 +1239,7 @@
     <div class="grid">
       <div>
         <section class="card" style="margin-bottom:18px;">
-          <h2>1. Quick Generate Single Student Login Code</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.65 10A6 6 0 0 0 7 6a6 6 0 1 0 4.65 10H13l2 2h2v2h2v-2h2v-2h-2v-2h-6.35A6 6 0 0 0 12.65 10zM7 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></span>1. Quick Generate Single Student Login Code</h2>
           <p class="sub">Create a unique Student ID and Login Code/PIN for any class from Creche to JHS 3.</p>
           <form id="singleForm">
             <div class="field">
@@ -1124,7 +1275,7 @@
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>2. Generate Credentials for Entire Class</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.31 0-6 1.79-6 4v2h12v-2c0-2.21-2.69-4-6-4zm8.5-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm.5 2c-.7 0-1.36.1-2 .27 1.24.9 2 2.2 2 3.73V20h6v-2c0-2.21-2.69-4-6-4z"/></svg></span>2. Generate Credentials for Entire Class</h2>
           <p class="sub">Select a class, generate unique login codes for all students in that class, and download as Excel.</p>
           <form id="classGenerateForm">
             <div class="field">
@@ -1152,15 +1303,15 @@
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button type="submit" class="btn btn-teal" style="flex:1;">Generate & Sync All</button>
-              <button type="button" class="btn btn-gold" id="downloadClassExcelBtn" style="flex:1;">⬇ Download Excel (New)</button>
-              <button type="button" class="btn btn-gold" id="downloadExistingClassExcelBtn" style="flex:1;">⬇ Download Excel (Existing)</button>
+              <button type="button" class="btn btn-gold" id="downloadClassExcelBtn" style="flex:1;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 16l-5-5h3V5h4v6h3l-5 5zM4 18h2v2h12v-2h2v4H4v-4z"/></svg> Download Excel (New)</button>
+              <button type="button" class="btn btn-gold" id="downloadExistingClassExcelBtn" style="flex:1;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 16l-5-5h3V5h4v6h3l-5 5zM4 18h2v2h12v-2h2v4H4v-4z"/></svg> Download Excel (Existing)</button>
             </div>
             <div id="classGenerateStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
           </form>
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>3. Download Credentials by Class</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 16l-5-5h3V5h4v6h3l-5 5zM4 18h2v2h12v-2h2v4H4v-4z"/></svg></span>3. Download Credentials by Class</h2>
           <p class="sub">Download existing student credentials as Excel for any class. Includes students created via single or class generation.</p>
           <form id="downloadClassCredentialsForm">
             <div class="field">
@@ -1170,7 +1321,7 @@
                 
               </select>
             </div>
-            <button type="button" class="btn btn-gold" id="downloadClassCredentialsBtn" style="width:100%;justify-content:center;">⬇ Download Excel for Class</button>
+            <button type="button" class="btn btn-gold" id="downloadClassCredentialsBtn" style="width:100%;justify-content:center;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 16l-5-5h3V5h4v6h3l-5 5zM4 18h2v2h12v-2h2v4H4v-4z"/></svg> Download Excel for Class</button>
             <div id="downloadClassStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
           </form>
           <hr style="margin:18px 0;border-color:var(--line);" />
@@ -1181,7 +1332,7 @@
         </section>
 
         <section class="card admin-profile-section" id="adminProfileSection" style="margin-bottom:18px;">
-          <h2>4. Student Profile, Contact &amp; Photo</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z"/></svg></span>4. Student Profile, Contact &amp; Photo</h2>
           <p class="sub">Administrator-only controls for the details shown on each student's individual profile.</p>
           <form id="adminProfileForm">
             <div class="field">
@@ -1204,7 +1355,7 @@
               <div style="position:relative;">
                 <img id="adminProfilePicPreview" src="detlofcreast.svg" alt="Student profile picture" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
                 <input type="file" id="adminProfilePicInput" accept="image/*" style="display:none;" />
-                <button type="button" id="adminChangePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center;">📷</button>
+                <button type="button" id="adminChangePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 3L7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9z"/></svg></button>
               </div>
               <div style="font-size:12px;color:var(--muted);">
                 <strong>Profile Picture</strong>
@@ -1386,23 +1537,23 @@
         </section>
 
       <section class="card academics-admin-only" style="margin-bottom:18px;">
-        <h2>🔍 Academic Admin Verification & Preview</h2>
+        <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span> Academic Admin Verification &amp; Preview</h2>
            <p class="sub">Review and approve pending results, timetables, and term releases before publishing to student portals.</p>
            <div id="pendingApprovals" style="display:none;">
              <h4 style="margin:12px 0 8px;">Pending Approvals</h4>
              <div id="pendingList" style="max-height:300px;overflow:auto;"></div>
 <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-                <button class="btn btn-gold" id="approveAllBtn">✅ Approve & Publish All</button>
-                <button class="btn btn-outline" id="rejectAllBtn">❌ Reject All</button>
-                <button class="btn btn-teal" id="sendAllTimetablesWhatsAppBtn">📱 Send All Timetables via WhatsApp</button>
-                <button class="btn btn-teal" id="sendAllResultsWhatsAppBtn" style="background:#128C7E;border-color:#128C7E;">📊 Send All Results via WhatsApp</button>
+                <button class="btn btn-gold" id="approveAllBtn"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>Approve &amp; Publish All</button>
+                <button class="btn btn-outline" id="rejectAllBtn"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Reject All</button>
+                <button class="btn btn-teal" id="sendAllTimetablesWhatsAppBtn"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3C6.48 3 2 7.03 2 12c0 2.4 1 4.6 2.7 6.2L3 21l3-1.6A8.9 8.9 0 0 0 12 21c5.52 0 10-4.03 10-9S17.52 3 12 3zM8 10.4a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zm4 0a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zm4 0a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg> Send All Timetables via WhatsApp</button>
+                <button class="btn btn-teal" id="sendAllResultsWhatsAppBtn" style="background:#128C7E;border-color:#128C7E;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 19h16v2H4v-2zM6 10h3v7H6v-7zm5 0h3v7h-3v-7zm5-4h3v11h-3V6z"/></svg> Send All Results via WhatsApp</button>
               </div>
            </div>
            <p id="noPendingMsg" style="color:var(--muted);text-align:center;padding:20px;">No pending items awaiting approval.</p>
          </section>
 
          <section class="card" style="margin-bottom:18px;">
-           <h2>📊 Bulk Upload Term Results (Excel/CSV)</h2>
+           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3l5 5h-3v6h-4V8H7l5-5zM4 17h2v2h12v-2h2v4H4v-4z"/></svg></span> Bulk Upload Term Results (Excel/CSV)</h2>
            <p class="sub">Upload a CSV file with columns: Student Name, Class, Student ID, Subject, SBA 1, SBA 2, Project, Exam Score. The system will match students by name to send results to their portals.</p>
            <form id="bulkResultsForm">
              <div class="row-2">
@@ -1440,7 +1591,7 @@
            </section>
 
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
-           <h3 style="margin:0 0 8px;font-size:14px;">📢 Release Term Results &amp; Calculate Promotions</h3>
+           <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
            <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
              Click to finalize the selected term. For Term 3, the system will automatically calculate
              cumulative GPA, grade distribution across all terms, determine promotion status, and send
@@ -1468,8 +1619,61 @@
         </section>
        </div>
 
+        <section class="card" style="margin-bottom:18px;">
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>5. Student Records Maintenance</h2>
+          <p class="sub">Correct a misspelt name, admit a new student with their own login code, reissue a lost code, or mark a student who has left the school.</p>
+
+          <div class="maint-grid">
+            <div class="maint-panel">
+              <h3 class="maint-title">Correct a student's name</h3>
+              <p class="maint-note">The name you set here is what the student and their parents see. The original register spelling is kept on record.</p>
+              <div class="field">
+                <label for="maintStudentName">Find the student</label>
+                <input type="text" id="maintStudentName" list="maintStudentNames" autocomplete="off" placeholder="Type their name, or pick from section 5" />
+                <datalist id="maintStudentNames"></datalist>
+              </div>
+              <div class="field">
+                <label for="maintName">Corrected full name</label>
+                <input type="text" id="maintName" placeholder="e.g. JOSEPHINE ADJEI MENSAH" autocomplete="off" />
+              </div>
+              <p class="maint-meta" id="maintMeta">Select a student in section 5 to correct their details.</p>
+              <div class="maint-actions">
+                <button type="button" class="btn btn-gold" id="maintSaveName">Save Corrected Name</button>
+                <button type="button" class="btn btn-outline" id="maintRetireBtn">Mark as Left School</button>
+                <button type="button" class="btn btn-outline" id="maintRegenCode">Reissue Login Code</button>
+              </div>
+            </div>
+
+            <div class="maint-panel">
+              <h3 class="maint-title">Admit a new student</h3>
+              <p class="maint-note">Creates the record, generates a Student ID, email and Login Code for the class, and opens their portal.</p>
+              <div class="row-2">
+                <div class="field">
+                  <label for="maintClass">Class</label>
+                  <select id="maintClass"></select>
+                </div>
+                <div class="field">
+                  <label for="maintYear">Academic Year</label>
+                  <select id="maintYear">
+                    <option>2025 / 2026</option>
+                    <option>2026 / 2027</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="maintNewName">Student's full name</label>
+                <input type="text" id="maintNewName" placeholder="e.g. AMA SERWAH BOATENG" autocomplete="off" />
+              </div>
+              <div class="maint-actions">
+                <button type="button" class="btn btn-teal" id="maintAddStudent">Admit &amp; Generate Login Code</button>
+              </div>
+              <p class="maint-note" style="margin-top:12px;">The new student's ID follows the class prefix and continues from the highest number in use, so nothing collides.</p>
+            </div>
+          </div>
+        </section>
+
         <section class="card" style="margin-bottom:18px;" id="portalEditorSection">
-          <h2>5. Student Portal Editor</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3zm-1 13l5-5-1.4-1.4L11 12.2 9.4 10.6 8 12l3 3z"/></svg></span>6. Student Portal Editor</h2>
           <p class="sub">Everything the school controls on a student's own portal is edited here. Pick a student, change what you need, and save — it appears on their portal straight away.</p>
 
           <div class="row-2">
@@ -1603,7 +1807,7 @@
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>6. Select a Student for Records &amp; Actions</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></span>7. Select a Student for Records &amp; Actions</h2>
           <p class="sub">Choose a class, then pick a student from the roster to publish results, send portal updates, or send reports and timetables to their parent.</p>
           <div class="row-2">
             <div class="field">
@@ -1672,7 +1876,7 @@
         </section>
 
         <section class="card" class-results-card" style="margin-bottom:18px;">
-          <h2>6. Publish Class Results</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 20h16v2H2V2h2v18zm3-3V10h2v7H7zm4 0V6h2v11h-2zm4 0v-4h2v4h-2z"/></svg></span>8. Publish Class Results</h2>
           <p class="sub">Enter the whole class's scores in one table. When you publish, every student in that class gets their own results filled in on their portal automatically.</p>
           <div class="row-2">
             <div class="field">
@@ -1725,7 +1929,7 @@
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>7. Download Existing Data</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg></span>9. Download Existing Data</h2>
           <p class="sub">Download what is already in the portal: the class roster, published results and the live timetable. Files download straight to your device.</p>
           <div class="field">
             <label>Class</label>
@@ -1744,7 +1948,7 @@
         </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>8. All Generated Student Credentials</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h2v2H3V5zm4 0h14v2H7V5zM3 11h2v2H3v-2zm4 0h14v2H7v-2zm-4 6h2v2H3v-2zm4 0h14v2H7v-2z"/></svg></span>10. All Generated Student Credentials</h2>
           <p class="sub">Every roster student has a Student ID, email and Login Code. Open a class to see and download its credentials.</p>
           <div class="cred-toolbar">
             <div class="field" style="margin:0;flex:1 1 220px;">
@@ -1771,7 +1975,7 @@
         </section>
 
        <section class="card" style="margin-bottom:18px;">
-         <h2>9. Class Timetable Management</h2>
+         <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 18H5V10h14v10zM5 8V6h14v2H5z"/></svg></span>11. Class Timetable Management</h2>
         <p class="sub">Upload a CSV/Excel timetable for an entire class. The timetable will automatically apply to all students in that class.</p>
         <form id="timetableForm">
           <div class="field">
@@ -1807,7 +2011,7 @@
       </section>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>10. Preview &amp; Send</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.05-1.32A10 10 0 1 0 12 2zm5.8 14.16c-.25.7-1.45 1.34-2 1.4-.5.05-.98.23-3.3-.7-2.78-1.1-4.55-3.94-4.69-4.13-.14-.19-1.13-1.5-1.13-2.86 0-1.36.71-2.03.96-2.31.25-.28.55-.35.73-.35l.52.01c.17 0 .4-.07.62.47.25.6.83 2.06.9 2.21.07.14.12.31.02.5-.1.19-.15.31-.29.47l-.43.5c-.14.14-.29.29-.12.57.16.28.73 1.2 1.57 1.94 1.08.96 1.98 1.26 2.26 1.4.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.38-.24.66-.14.28.1 1.78.86 2.09 1.03.31.17.52.26.71.4.19.14.58.49.74.69.16.19.16.38.08.59-.08.21-.38.81-.53 1.1-.15.28-.3.65-.3 1.05 0 1.55.87 3.04.95 3.25.09.21 1.9 2.95 4.6 4.1 2.6 1.12 4.6.9 5.05.7.45-.2 1.45-1.2 1.65-2.35.2-1.15.1-2.15.1-2.2 0-.05-.2-.28-.28-.58z"/></svg></span>12. Preview &amp; Send</h2>
           <p class="sub">Choose the class and the student, review exactly what they will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
           <div class="row-2">
             <div class="field">
@@ -1895,7 +2099,7 @@
         </div>
 
         <section class="card" style="margin-bottom:18px;">
-          <h2>11. Broadcast Announcement to All Student Portals</h2>
+          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>13. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
           <div class="row-2">
@@ -1911,6 +2115,7 @@
   </div>
   </main>
 
+  <script src="detlof-icons.js"></script>
   <script src="detlof-roster.js"></script>
   <script src="detlof-school.js"></script>
   <script src="detlof-report.js"></script>
@@ -1927,7 +2132,7 @@
     const CLASS_SELECT_IDS = [
       "currentClass", "classGenerateClass", "downloadClassSelect", "timetableClass",
       "recordClass", "exportClass", "adminProfileClass",
-      "editorClass", "editorClassFees", "classResultsClass", "previewClass",
+      "editorClass", "editorClassFees", "classResultsClass", "previewClass", "maintClass",
     ];
 
     function populateClassSelects() {
@@ -2171,7 +2376,9 @@
       refreshPreviewTargets();
       fillDatalist("editorClassList", DETLOF_CLASS_ORDER);
       fillDatalist("previewStudentNames", []);
+      fillDatalist("maintStudentNames", activeRecords().map((r) => r.fullName));
       loadEditor();
+      loadMaintenance();
       refreshPreviewTargets();
       refreshClassNameTargets();
       populateRecordStudents();
@@ -2274,12 +2481,18 @@
 
     function mergeStoredRecord(existing, incoming) {
       const merged = { ...(existing || {}), ...(incoming || {}) };
+      // A name corrected by the school office wins over the register spelling, so
+      // a misspelt name on the roster can be put right and stays right.
+      const corrected = String(merged.nameOverride || "").trim();
       const roster = rosterRecordMatch(merged.fullName) || rosterRecordMatch(merged.studentId);
       if (roster) {
-        merged.fullName = roster.fullName;
+        merged.fullName = corrected || roster.fullName;
         if (!merged.currentClass) merged.currentClass = roster.currentClass;
         if (!merged.email) merged.email = roster.email;
+      } else if (corrected) {
+        merged.fullName = corrected;
       }
+      if (corrected) merged.nameOverride = corrected;
       const existingParentPhone = (existing && (existing.parentPhone || existing.profileParentPhone)) || "";
       const existingWhatsApp = (existing && (existing.whatsappNumber || existing.profileWhatsApp)) || "";
       const incomingParentPhone = (incoming && (incoming.parentPhone || incoming.profileParentPhone)) || "";
@@ -2816,20 +3029,23 @@
     function renderTable(records) {
       const container = document.getElementById("codesTableBody");
       if (!container) return;
+      // A student who has left the school drops out of the working lists, but
+      // their record is kept so past results and fees stay intact.
+      const live = (records || []).filter((rec) => !isRetired(rec));
       const totalEl = document.getElementById("credentialsTotal");
-      if (totalEl) totalEl.textContent = records.length + " students";
+      if (totalEl) totalEl.textContent = live.length + " students";
 
       // Drop a group from the open set when it no longer exists.
-      const classNames = new Set(records.map((rec) => rec.currentClass));
+      const classNames = new Set(live.map((rec) => rec.currentClass));
       openCredentialGroups = new Set([...openCredentialGroups].filter((name) => classNames.has(name)));
 
-      if (!records.length) {
+      if (!live.length) {
         container.innerHTML = '<tr><td colspan="6" class="empty-cell">No students found.</td></tr>';
         return;
       }
 
       const groups = new Map();
-      records.forEach((rec) => {
+      live.forEach((rec) => {
         if (!groups.has(rec.currentClass)) groups.set(rec.currentClass, []);
         groups.get(rec.currentClass).push(rec);
       });
@@ -2972,7 +3188,7 @@
     function downloadLoginDetails(rec) {
       const content = [
         "Detlof Preparatory School - Student Portal Login",
-        "Student: " + rec.fullName,
+        "Student: " + resolvedStudentName(rec),
         "Class: " + rec.currentClass,
         "Student ID: " + rec.studentId,
         "Student Email: " + rec.email,
@@ -3874,6 +4090,237 @@
     });
 
     bindEvent("classResultsQueue", "click", submitClassResultsForReview);
+
+    // -------------------------------------------------------------------------
+    // Student maintenance. The roster is the starting point, but names are often
+    // misspelt and new students arrive mid-year, so the school office needs to
+    // correct a name, admit a student, or retire one who has left.
+    // -------------------------------------------------------------------------
+    // Resolves the student's real name: an admin correction wins over the roster.
+    function resolvedStudentName(record) {
+      return (record && (record.nameOverride || record.fullName)) || "";
+    }
+
+    function isRetired(record) {
+      return record && record.status === "retired";
+    }
+
+    // Next free Student ID in a class, so a new admission never collides.
+    function nextStudentId(className) {
+      const prefix = detlofPrefixForClass(className) || "DPS";
+      const used = new Set(
+        getStoredRecords()
+          .filter((r) => r.currentClass === className)
+          .map((r) => String(r.studentId || "").toUpperCase())
+      );
+      for (let n = 1; n <= 9999; n += 1) {
+        const candidate = prefix + "-" + String(n).padStart(4, "0");
+        if (!used.has(candidate)) return candidate;
+      }
+      return prefix + "-" + Date.now();
+    }
+
+    function nextLoginCode() {
+      const used = new Set(getStoredRecords().map((r) => String(r.loginCode || "").toUpperCase()));
+      for (let n = 1001; n <= 99999; n += 1) {
+        const candidate = "DET-" + n;
+        if (!used.has(candidate)) return candidate;
+      }
+      return "DET-" + Date.now();
+    }
+
+    function makeUniqueEmail(fullName, className) {
+      let base = detlofRosterEmailFor(fullName).split("@")[0];
+      if (!base) base = String(className || "student").toLowerCase().replace(/[^a-z0-9]+/g, ".");
+      const domain = detlofRosterEmailFor("a@b").split("@")[1] || "detlof.edu.gh";
+      const used = new Set(getStoredRecords().map((r) => String(r.email || "").toLowerCase()));
+      let candidate = base + "@" + domain;
+      let n = 2;
+      while (used.has(candidate)) {
+        candidate = base + n + "@" + domain;
+        n += 1;
+      }
+      return candidate;
+    }
+
+    // ---- correct a name ------------------------------------------------------
+    async function saveNameOverride() {
+      const record = findProfileRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const nameInput = document.getElementById("maintName");
+      const newName = detlofNormalizeName(nameInput.value);
+      if (!newName) { reportWarning("Enter the student's full name."); return; }
+      if (newName === resolvedStudentName(record)) {
+        reportInfo("That is already the student's name.");
+        return;
+      }
+      const previous = resolvedStudentName(record);
+      const updated = mergeStoredRecord(record, {
+        fullName: newName,
+        nameOverride: newName,
+        rosterName: record.rosterName || record.fullName,
+        nameCorrectedAt: stampIso(),
+        nameCorrectedBy: teacherLabel(),
+        updatedAt: stampIso(),
+      });
+      // The roster file keeps the original spelling; the record carries the correction.
+      const all = getStoredRecords().map((r) =>
+        String(r.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : r);
+      saveStoredRecords(all);
+      renderTable(getStoredRecords());
+      renderTable(getStoredRecords());
+      await syncRecordsToPortal([updated]);
+      loadMaintenance();
+      reportSuccess("Name changed to " + newName + " (was " + previous + "). It now shows on the student's portal.");
+    }
+
+    // ---- admit a new student -------------------------------------------------
+    function addNewStudent() {
+      const className = document.getElementById("maintClass").value;
+      if (!className) { reportWarning("Choose a class for the new student."); return; }
+      const name = detlofNormalizeName(document.getElementById("maintNewName").value);
+      if (!name) { reportWarning("Enter the new student's full name."); return; }
+
+      const existing = getStoredRecords().some((r) => detlofNormalizeName(r.fullName) === name);
+      if (existing) { reportWarning("\"" + name + "\" is already on the register. Edit the existing record instead."); return; }
+
+      const studentId = nextStudentId(className);
+      const record = {
+        fullName: name,
+        nameOverride: name,
+        rosterName: name,
+        email: makeUniqueEmail(name, className),
+        studentId: studentId,
+        currentClass: className,
+        academicYear: document.getElementById("maintYear").value || "2025 / 2026",
+        loginCode: nextLoginCode(),
+        compound: "Day Students",
+        status: "active",
+        isNewAdmission: true,
+        addedAt: stampIso(),
+        addedBy: teacherLabel(),
+        termResults: {},
+        bills: detlofNormaliseBills({}),
+        updatedAt: stampIso(),
+      };
+
+      saveStoredRecords([...getStoredRecords(), record]);
+      renderTable(getStoredRecords());
+      renderTable(getStoredRecords());
+      syncRecordsToPortal([record]);
+      document.getElementById("maintNewName").value = "";
+      loadMaintenance();
+      reportSuccess(name + " admitted to " + className + " with ID " + studentId
+        + " and Login Code " + record.loginCode + ".");
+    }
+
+    // ---- retire or restore a student ----------------------------------------
+    async function toggleRetired() {
+      const record = findProfileRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const retiring = !isRetired(record);
+      if (retiring && !window.confirm("Mark " + resolvedStudentName(record)
+        + " as having left the school?\n\nThey will be removed from the class lists and the "
+        + "credentials list. Their record is kept so past results stay intact.")) {
+        reportInfo("Cancelled. Nothing was changed.");
+        return;
+      }
+      const updated = Object.assign({}, record, {
+        status: retiring ? "retired" : "active",
+        leftSchoolAt: retiring ? stampIso() : "",
+        updatedAt: stampIso(),
+      });
+      const all = getStoredRecords().map((r) =>
+        String(r.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : r);
+      saveStoredRecords(all);
+      renderTable(getStoredRecords());
+      renderTable(getStoredRecords());
+      await syncRecordsToPortal([updated]);
+      loadMaintenance();
+      if (retiring) {
+        reportSuccess(resolvedStudentName(record) + " marked as having left the school.");
+      } else {
+        reportSuccess(resolvedStudentName(record) + " is active again.");
+      }
+    }
+
+    // ---- reissue a login code ----------------------------------------------
+    async function regenerateLoginCode() {
+      const record = findProfileRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const previous = record.loginCode;
+      const updated = Object.assign({}, record, { loginCode: nextLoginCode(), updatedAt: stampIso() });
+      const all = getStoredRecords().map((r) =>
+        String(r.studentId).toUpperCase() === String(updated.studentId).toUpperCase() ? updated : r);
+      saveStoredRecords(all);
+      renderTable(getStoredRecords());
+      await syncRecordsToPortal([updated]);
+      loadMaintenance();
+      reportSuccess("New Login Code for " + resolvedStudentName(record) + " is " + updated.loginCode
+        + " (was " + previous + "). Give them the new one; the old one stops working.");
+    }
+
+    // ---- keep the lists free of retired students -----------------------------
+    function activeRecords() {
+      return getStoredRecords().filter((r) => !isRetired(r));
+    }
+
+    function loadMaintenance() {
+      const record = findProfileRecord();
+      const nameField = document.getElementById("maintName");
+      const idField = document.getElementById("maintMeta");
+      const btn = document.getElementById("maintRetireBtn");
+      if (!record) {
+        if (nameField) nameField.value = "";
+        if (idField) idField.textContent = "Select a student in section 5 to correct their details.";
+        if (btn) { btn.textContent = "Mark as Left School"; btn.disabled = true; }
+        return;
+      }
+      if (nameField) nameField.value = resolvedStudentName(record);
+      if (idField) {
+        const parts = [
+          record.studentId,
+          record.email,
+          "Login Code " + record.loginCode,
+          record.academicYear || "",
+        ].filter(Boolean);
+        const corrected = record.rosterName && record.rosterName !== resolvedStudentName(record)
+          ? " · roster spelling: " + record.rosterName
+          : "";
+        idField.textContent = parts.join(" · ") + corrected;
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = isRetired(record) ? "Restore to School" : "Mark as Left School";
+      }
+    }
+
+    bindEvent("maintName", "input", function () {
+      const record = findProfileRecord();
+      if (record) {
+        const next = detlofNormalizeName(this.value);
+        this.value = next;
+      }
+    });
+    bindEvent("maintSaveName", "click", function () {
+      withFeedback(this, "Saving the name", saveNameOverride);
+    });
+    bindEvent("maintAddStudent", "click", addNewStudent);
+    bindEvent("maintRetireBtn", "click", function () {
+      withFeedback(this, "Updating the student record", toggleRetired);
+    });
+    bindEvent("maintRegenCode", "click", function () {
+      withFeedback(this, "Reissuing the login code", regenerateLoginCode);
+    });
+    bindEvent("maintStudentName", "input", function () {
+      if (this.value.trim()) {
+        const record = getStoredRecords().find((r) => detlofNormalizeName(r.fullName) === detlofNormalizeName(this.value));
+        const nameField = document.getElementById("maintName");
+        if (record && nameField) nameField.value = resolvedStudentName(record);
+        loadMaintenance();
+      }
+    });
+    bindEvent("maintStudentName", "change", loadMaintenance);
 
     // -------------------------------------------------------------------------
     // Student Portal Editor — the single place that changes what a student sees

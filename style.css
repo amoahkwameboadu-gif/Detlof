@@ -905,9 +905,199 @@ tbody tr:hover { background: rgba(86, 15, 117, 0.035); }
 }
 .login-card .logo, .login-hero .logo, .login-screen img[src$="detlofcreast.svg"] { animation: crestFloat 5s ease-in-out infinite; }
 
+/* ---------------- heading icons ----------------
+   Solid glyphs on a tinted tile so each panel is recognisable at a glance. */
+.icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; }
+.icon-sm { width: 15px; height: 15px; }
+.icon-md { width: 20px; height: 20px; }
+.icon-lg { width: 26px; height: 26px; }
+.icon-xl { width: 34px; height: 34px; }
+.heading-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin-right: 10px; border-radius: 10px;
+  background: var(--crest-purple-soft); color: var(--crest-purple);
+  vertical-align: middle; flex: 0 0 auto;
+  transition: transform 180ms ease;
+}
+.panel:hover .heading-icon { transform: scale(1.06) rotate(-3deg); }
+.btn > .icon, .outline-btn > .icon, .primary-btn > .icon, .nav-btn > .icon { margin-right: 6px; }
+@media (max-width: 420px) {
+  .heading-icon { width: 27px; height: 27px; margin-right: 8px; }
+  .heading-icon .icon { width: 16px; height: 16px; }
+}
+
+/* ===========================================================================
+   Mobile layer
+   Appended last so it wins the cascade. One coherent set of rules for every
+   width from a 320px phone up to a wide laptop, so a component cannot be
+   half-styled by one breakpoint and missed by another.
+   =========================================================================== */
+
+/* Stop iOS inflating text in landscape, which is what makes a layout "look
+   broken" on a phone, and keep the page itself from scrolling sideways. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Flex and grid children default to min-width:auto, which stops them shrinking
+   and pushes a long name or a long button label out of the page. This is the
+   single most common cause of a horizontally broken layout. */
+.portal-shell > *,
+.admin-shell > *,
+.card > *,
+.panel > *,
+.two-col > *,
+.row-2 > *,
+.maint-panel > *,
+.editor-fields > * {
+  min-width: 0;
+}
+
+/* Long names, class names and headings wrap instead of overflowing. */
+h1, h2, h3, h4,
+.card h2,
+.panel h2,
+.maint-title,
+.editor-name,
+.cred-class,
+.nav-btn,
+.btn,
+.outline-btn,
+.primary-btn,
+table,
+.field label,
+select,
+input {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Longest-first: tablet, then phone, then small phone, then very small phone. */
+@media (max-width: 1024px) {
+  .portal-main { min-width: 0; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll table { min-width: 460px; }
+  .cred-table { min-width: 480px; }
+  #billsTable table, #resultsTable { min-width: 440px; }
+}
+
+@media (max-width: 900px) {
+  /* Any row of buttons inside a card becomes a full-width stack, whatever its
+     markup, so no action is ever squeezed into an unreadable sliver. */
+  .card > div[style*="flex-wrap:wrap"] > .btn,
+  .card > div[style*="flex-wrap:wrap"] > .outline-btn,
+  .card > div[style*="flex-wrap:wrap"] > a.btn,
+  .panel > div[style*="flex-wrap:wrap"] > .btn,
+  .panel > div[style*="flex-wrap:wrap"] > .outline-btn,
+  .maint-actions > .btn,
+  .editor-bulk > .btn,
+  .step-list > li > div > .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    justify-content: center;
+  }
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  /* Portal navigation: a compact scrollable strip rather than seven tall rows. */
+  .portal-shell { flex-direction: column; }
+  .sidebar { width: 100%; padding: 10px 10px 6px; }
+  .sidebar .brand { justify-content: center; margin-bottom: 8px; }
+  .brand-logo { width: 40px; height: 47px; }
+  .nav-list {
+    flex-direction: row; gap: 6px; margin-top: 0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding-bottom: 4px;
+  }
+  .nav-btn {
+    flex: 0 0 auto; scroll-snap-align: start;
+    padding: 8px 12px; font-size: 12.5px; white-space: nowrap;
+  }
+  .nav-btn .icon { width: 15px; height: 15px; }
+  .topbar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .topbar > * { width: 100%; }
+  .two-col, .row-2, .maint-grid, .editor-fields { grid-template-columns: minmax(0, 1fr); }
+  .panel, .card { padding: 13px; }
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bill-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bill-card.wide { grid-column: 1 / -1; }
+  .stat-card { padding: 12px; }
+  .field input, .field select, .field textarea { width: 100%; max-width: 100%; }
+  /* Long class names in a picker need a smaller face to fit a phone. */
+  .field select { font-size: 15px; text-overflow: ellipsis; }
+  #termSelector { width: 100%; }
+  #termSelector > * { flex: 1 1 100%; width: 100%; justify-content: center; }
+}
+
+@media (max-width: 560px) {
+  .summary-grid { grid-template-columns: minmax(0, 1fr); }
+  .bill-summary { grid-template-columns: minmax(0, 1fr); }
+  .panel, .card { padding: 12px; }
+  .card h2, .panel h2 { font-size: 15px; }
+  .card p.sub { font-size: 11.5px; }
+  .table-scroll table { min-width: 420px; }
+  .table-scroll { margin-left: -4px; margin-right: -4px; }
+  .table-scroll table { font-size: 11px; }
+  .btn, .outline-btn, .primary-btn { min-height: 44px; }
+  .nav-btn { min-height: 40px; }
+  .maint-panel { padding: 12px; }
+  .editor-fields { gap: 10px; }
+  .bill-card-value { font-size: 18px; }
+  .stat-value { font-size: 19px; }
+}
+
+@media (max-width: 420px) {
+  .panel, .card { padding: 11px; }
+  .card h2, .panel h2 { font-size: 14px; }
+  .nav-btn { font-size: 12px; padding: 7px 10px; }
+  .table-scroll table { min-width: 380px; }
+  .btn, .outline-btn, .primary-btn { font-size: 12.5px; padding: 10px 11px; }
+  .field select { font-size: 14px; }
+  .bill-card-value, .stat-value { font-size: 17px; }
+  .brand strong { font-size: 12px; }
+}
+
+@media (max-width: 360px) {
+  .panel, .card { padding: 10px; }
+  .summary-grid, .bill-summary { grid-template-columns: minmax(0, 1fr); }
+  .table-scroll table { min-width: 340px; }
+  .card h2, .panel h2 { font-size: 13.5px; }
+  .field label { font-size: 10.5px; }
+}
+
+/* Very short screens: the phone has a keyboard open. */
+@media (max-height: 520px) {
+  .nav-list { padding-bottom: 2px; }
+  .sidebar { padding-top: 6px; padding-bottom: 4px; }
+  .brand-logo { width: 32px; height: 38px; }
+}
+
+/* Coarse pointers: comfortable tap targets. */
+@media (hover: none) and (pointer: coarse) {
+  .btn, .outline-btn, .primary-btn, .nav-btn { min-height: 46px; }
+  .field input, .field select, .field textarea { min-height: 46px; }
+  .cred-head { min-height: 48px; }
+  .cred-action { min-height: 36px; display: inline-flex; align-items: center; }
+  .toast-close { min-width: 32px; min-height: 32px; }
+}
+
+/* Large screens: cap the reading width rather than stretching to the edges. */
+@media (min-width: 1280px) {
+  .portal-main > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .login-card .logo, .login-hero .logo { animation: none; }
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

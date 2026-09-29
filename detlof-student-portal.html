@@ -197,7 +197,7 @@
           <div class="two-col">
             <div class="panel">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <h2 style="margin:0;font-size:16px;"> My Bills</h2>
+                <h2 style="margin:0;font-size:16px;"><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 2h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm2 4v2h12V6H6zm0 4v2h12v-2H6zm0 4v2h8v-2H6z"/></svg></span><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 2h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm2 4v2h12V6H6zm0 4v2h12v-2H6zm0 4v2h8v-2H6z"/></svg></span> My Bills</h2>
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="outline-btn" onclick="switchTab('bills')">See breakdown →</button>
                 <button class="outline-btn" onclick="downloadMyBills()">Statement</button>
@@ -209,7 +209,7 @@
 
             <div class="panel">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <h2 style="margin:0;font-size:16px;"> My Results Summary</h2>
+                <h2 style="margin:0;font-size:16px;"><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 19h16v2H4v-2zM6 10h3v7H6v-7zm5 0h3v7h-3v-7zm5-4h3v11h-3V6z"/></svg></span><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 19h16v2H4v-2zM6 10h3v7H6v-7zm5 0h3v7h-3v-7zm5-4h3v11h-3V6z"/></svg></span> My Results Summary</h2>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <button class="outline-btn" onclick="switchTab('results')">Full Report →</button>
                   <button class="outline-btn" onclick="downloadMyResults()">Download Full Results</button>
@@ -347,7 +347,7 @@
           <div class="panel">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
               <div>
-                <h2 style="margin:0 0 4px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 21 17V7a2 2 0 0 0-2-2zm-2 .72V8H5V5h14v3.72c-.62.36-1 .99-1 1.58 0 .59.38 1.22 1 1.58V15H5v-3.12c.62-.36 1-.99 1-1.58 0-.59-.38-1.22-1-1.58zM12 18c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg> School Fees &amp; Club Dues</h2>
+                <h2 style="margin:0 0 4px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 21 17V7a2 2 0 0 0-2-2zm-2 .72V8H5V5h14v3.72c-.62.36-1 .99-1 1.58 0 .59.38 1.22 1 1.58V15H5v-3.12c.62-.36 1-.99 1-1.58 0-.59-.38-1.22-1-1.58zM12 18c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 2h16v20l-3-2-3 2-3-2-3 2V2zm3 4v2h10V6H7zm0 4v2h10v-2H7zm0 4v2h7v-2H7z"/></svg></span><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 2h16v20l-3-2-3 2-3-2-3 2V2zm3 4v2h10V6H7zm0 4v2h10v-2H7zm0 4v2h7v-2H7z"/></svg></span> School Fees &amp; Club Dues</h2>
                 <p id="billsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
               </div>
               <button class="outline-btn" onclick="downloadMyBills()">Statement</button>
@@ -387,7 +387,7 @@
         <!-- TAB: ANNOUNCEMENTS -->
         <section id="tab-announcements" class="portal-tab hidden">
           <div class="panel">
-            <h2 style="margin:0 0 14px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V8h2v3zm0-4h-2V4h2v3z"/></svg> School Announcements</h2>
+            <h2 style="margin:0 0 14px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V8h2v3zm0-4h-2V4h2v3z"/></svg><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span> School Announcements</h2>
             <div id="announcementsContainer" style="display:grid;gap:12px;"></div>
           </div>
         </section>
@@ -482,6 +482,7 @@
 
   <div id="toastBox" class="toast-stack" aria-live="polite"></div>
 
+  <script src="detlof-icons.js"></script>
   <script src="detlof-roster.js"></script>
   <script src="detlof-school.js"></script>
   <script src="detlof-report.js"></script>

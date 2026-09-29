@@ -44,8 +44,14 @@ function normalizeStudent(student) {
   normalized.profileWhatsApp = whatsappNumber;
   const roster = rosterMatch(normalized.fullName) || rosterMatch(normalized.studentId);
   if (roster) {
-    normalized.fullName = roster.fullName;
+    // A name the school office corrected wins over the register spelling, so a
+    // misspelt name on the roster can be put right and shows correctly here.
+    const corrected = String(normalized.nameOverride || "").trim();
+    normalized.fullName = corrected || roster.fullName;
     if (!normalized.currentClass) normalized.currentClass = roster.currentClass;
+  } else {
+    const corrected = String(normalized.nameOverride || "").trim();
+    if (corrected) normalized.fullName = corrected;
   }
   return normalized;
 }
