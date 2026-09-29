@@ -198,10 +198,11 @@
             <div class="panel">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
                 <h2 style="margin:0;font-size:16px;"> My Bills</h2>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                  <button class="outline-btn" onclick="switchTab('bills')">See breakdown →</button>
-                  <button class="outline-btn" onclick="downloadMyBills()">Download Statement</button>
-                </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="outline-btn" onclick="switchTab('bills')">See breakdown →</button>
+                <button class="outline-btn" onclick="downloadMyBills()">Statement</button>
+                <button class="primary-btn" style="padding:9px 12px;font-size:12px;" onclick="downloadMyReceipt()">Save Receipt (PDF)</button>
+              </div>
               </div>
               <div class="bill-summary" id="billSummaryCards" style="margin-top:14px;"></div>
             </div>
@@ -349,7 +350,10 @@
                 <h2 style="margin:0 0 4px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path fill="currentColor" d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 21 17V7a2 2 0 0 0-2-2zm-2 .72V8H5V5h14v3.72c-.62.36-1 .99-1 1.58 0 .59.38 1.22 1 1.58V15H5v-3.12c.62-.36 1-.99 1-1.58 0-.59-.38-1.22-1-1.58zM12 18c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg> School Fees &amp; Club Dues</h2>
                 <p id="billsSubtitle" style="margin:0 0 16px;color:var(--muted);font-size:12px;"></p>
               </div>
-              <button class="outline-btn" onclick="downloadMyBills()"> Download Bill Statement</button>
+              <button class="outline-btn" onclick="downloadMyBills()">Statement</button>
+              <button class="outline-btn" id="saveReceiptBtn" onclick="downloadMyReceipt()">Save Receipt (PDF)</button>
+              <button class="outline-btn" onclick="sendReceiptBySms()">Send by SMS</button>
+              <button class="outline-btn" onclick="sendReceiptByWhatsApp()">Send by WhatsApp</button>
             </div>
 
             <div class="bill-summary" id="billSummaryCards"></div>
@@ -376,7 +380,7 @@
               </tfoot>
             </table></div>
 
-            <p style="font-size:11px;color:var(--muted);margin:14px 0 0;">Amounts are in Ghana cedis (GHS). Payments are confirmed at the school office. Please quote your Student ID when paying.</p>
+            <p style="font-size:11px;color:var(--muted);margin:14px 0 0;">All amounts are in the Ghana Cedi (GHS). Send the receipt to the number the school office has on file &mdash; it opens your phone's SMS or WhatsApp with the message already written.</p>
           </div>
         </section>
 

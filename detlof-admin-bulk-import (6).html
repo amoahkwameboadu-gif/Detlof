@@ -541,6 +541,92 @@
       .timetable-day { min-height: 44px; }
     }
 
+    /* ---------------- collapsible class credentials ---------------- */
+    .cred-toolbar {
+      display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px;
+      padding: 12px; border-radius: 10px; background: linear-gradient(135deg, #f6eefb 0%, #ffffff 100%);
+      border: 1px solid var(--crest-purple-soft);
+    }
+    .cred-toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .cred-meta { font-size: 11px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+    .cred-groups-table { width: 100%; border-collapse: collapse; }
+    .cred-groups-table > tbody > tr > td { border: none; padding: 0; }
+    .cred-group > td { border-bottom: 1px solid var(--line) !important; }
+    .cred-head {
+      display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+      padding: 12px 10px; background: transparent; border: none; cursor: pointer;
+      border-radius: 8px; transition: background 160ms ease, transform 160ms ease;
+    }
+    .cred-head:hover { background: #faf5fd; }
+    .cred-head:focus-visible { outline: 3px solid rgba(86, 15, 117, 0.35); outline-offset: -2px; }
+    .cred-caret {
+      flex: 0 0 auto; width: 9px; height: 9px; border-right: 2px solid var(--crest-purple);
+      border-bottom: 2px solid var(--crest-purple); transform: rotate(-45deg);
+      transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1); margin-right: 2px;
+    }
+    .cred-group.is-open .cred-caret { transform: rotate(45deg); }
+    .cred-class { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--crest-purple-dark); }
+    .cred-count {
+      flex: 0 0 auto; min-width: 26px; text-align: center; padding: 2px 8px; border-radius: 999px;
+      background: var(--crest-purple-soft); color: var(--crest-purple); font-size: 11px; font-weight: 800;
+    }
+    .cred-head-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+    .cred-action {
+      padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;
+      background: #f3e7f7; color: var(--crest-purple); border: 1px solid transparent;
+      transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+    }
+    .cred-action:hover { background: var(--crest-purple); color: #fff; transform: translateY(-1px); }
+    .cred-rows > td { padding: 0 0 10px !important; }
+    .cred-rows.is-revealing { animation: credReveal 240ms ease-out; }
+    @keyframes credReveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    .cred-placeholder { margin: 0; padding: 4px 10px 10px 28px; font-size: 11px; color: var(--muted); }
+    .cred-table { width: 100%; border-collapse: collapse; font-size: 12px; background: #fcfafd; border-radius: 8px; }
+    .cred-table th {
+      text-align: left; padding: 8px 10px; font-size: 9.5px; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--line);
+    }
+    .cred-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    .cred-name { display: block; color: var(--crest-purple-dark); font-weight: 700; }
+    .cred-table small { display: block; color: var(--muted); font-size: 11px; }
+    .cred-row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .cred-row-actions .btn { padding: 5px 9px; font-size: 11px; }
+    .empty-cell { text-align: center; color: var(--muted); padding: 22px; }
+    @media (max-width: 640px) {
+      .cred-head { flex-wrap: wrap; }
+      .cred-head-actions { margin-left: 0; width: 100%; }
+      .cred-toolbar-actions { width: 100%; }
+      .cred-toolbar-actions .btn { flex: 1 1 auto; }
+      .cred-table { min-width: 520px; }
+    }
+
+    /* ---------------- purposeful, restrained motion ---------------- */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card { animation: cardIn 320ms ease-out both; }
+    /* Stagger only the first handful so the page does not feel like a slideshow. */
+    .card:nth-of-type(1) { animation-delay: 0ms; }
+    .card:nth-of-type(2) { animation-delay: 40ms; }
+    .card:nth-of-type(3) { animation-delay: 80ms; }
+    .card:nth-of-type(4) { animation-delay: 120ms; }
+    .card:nth-of-type(5) { animation-delay: 160ms; }
+    .card:nth-of-type(n+6) { animation-delay: 200ms; }
+
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(242, 201, 0, 0.5); }
+      70% { box-shadow: 0 0 0 10px rgba(242, 201, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(242, 201, 0, 0); }
+    }
+    .needs-attention { animation: pulseRing 2.4s ease-out 2; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card, .cred-rows.is-revealing { animation: none !important; }
+      .needs-attention { animation: none !important; }
+      .cred-caret { transition: none !important; }
+    }
+
     /* ---------------- class results grid + billing ---------------- */
     .subject-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .subject-chip {
@@ -1200,19 +1286,20 @@
                   <thead>
                     <tr>
                       <th>Fee Item</th>
-                      <th style="width:130px;">Amount Billed (GHS)</th>
-                      <th style="width:130px;">Amount Paid (GHS)</th>
-                      <th style="width:110px;">Balance</th>
-                      <th>Status</th>
+                  <th style="width:130px;">Amount Billed (GHS)</th>
+                  <th style="width:130px;">Amount Paid (GHS)</th>
+                  <th style="width:120px;">Balance (GHS)</th>
+                  <th style="width:120px;">Pesewas Due</th>
+                  <th>Status</th>
                     </tr>
                   </thead>
                   <tbody id="adminBillsBody"></tbody>
                   <tfoot>
                     <tr>
                       <td><strong>Total</strong></td>
-                      <td id="adminBillsTotalBilled" class="num"><strong>0.00</strong></td>
-                      <td id="adminBillsTotalPaid" class="num"><strong>0.00</strong></td>
-                      <td id="adminBillsBalance" class="num"><strong>0.00</strong></td>
+                      <td id="adminBillsTotalBilled" class="num"><strong>GHS 0.00</strong></td>
+                      <td id="adminBillsTotalPaid" class="num"><strong>GHS 0.00</strong></td>
+                      <td id="adminBillsBalance" class="num"><strong>GHS 0.00</strong></td>
                       <td id="adminBillsStatus">Not Applicable</td>
                     </tr>
                   </tfoot>
@@ -1384,17 +1471,18 @@
             <div class="editor-block">
               <h3>Fees &amp; Club Dues (GHS)</h3>
               <p>These appear on the student's <strong>My Bills</strong> tab, with the balance and a downloadable statement.</p>
-              <div class="table-scroll">
-                <table id="editorBillsTable">
-                  <thead>
-                    <tr>
-                      <th>Fee Item</th>
-                      <th style="width:140px;">Amount Billed</th>
-                      <th style="width:140px;">Amount Paid</th>
-                      <th style="width:110px;">Balance</th>
-                      <th style="width:110px;">Status</th>
-                    </tr>
-                  </thead>
+          <div class="table-scroll">
+            <table id="editorBillsTable">
+              <thead>
+                <tr>
+                  <th>Fee Item</th>
+                  <th style="width:140px;">Amount Billed</th>
+                  <th style="width:140px;">Amount Paid</th>
+                  <th style="width:120px;">Balance</th>
+                  <th style="width:120px;">Pesewas Due</th>
+                  <th style="width:110px;">Status</th>
+                </tr>
+              </thead>
                   <tbody id="editorBillsBody"></tbody>
                   <tfoot>
                     <tr>
@@ -1458,6 +1546,11 @@
               </div>
             </div>
 
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold" id="editorReceiptPdfBtn" style="flex:1;">Save Receipt (PDF)</button>
+              <button type="button" class="btn btn-outline" id="editorReceiptSmsBtn" style="flex:1;">Send Receipt by SMS</button>
+              <button type="button" class="btn btn-outline" id="editorReceiptWhatsAppBtn" style="flex:1;">Send Receipt by WhatsApp</button>
+            </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button type="button" class="btn btn-gold" id="editorSaveBtn" style="flex:1;">Save to Student Portal</button>
               <button type="button" class="btn btn-teal" id="editorSendMessageBtn" style="flex:1;">Save &amp; Add Message</button>
@@ -1614,23 +1707,26 @@
 
         <section class="card" style="margin-bottom:18px;">
           <h2>8. All Generated Student Credentials</h2>
-          <p class="sub">Every roster student is pre-loaded with a Student ID, email and Login Code. Download a single student's login details or the full register.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-            <button type="button" class="btn btn-gold" id="downloadAllBtn" style="flex:1;">Download All Credentials (CSV)</button>
-            <button type="button" class="btn btn-outline" id="resyncAllBtn" style="flex:1;">Re-sync All to Student Portal</button>
+          <p class="sub">Every roster student has a Student ID, email and Login Code. Open a class to see and download its credentials.</p>
+          <div class="cred-toolbar">
+            <div class="field" style="margin:0;flex:1 1 220px;">
+              <label for="credentialsSearch">Find a student</label>
+              <input type="search" id="credentialsSearch" placeholder="Name, Student ID, email or login code" />
+            </div>
+            <div class="cred-toolbar-actions">
+              <span class="cred-meta"><span id="credentialsTotal">0</span> students · <span id="credentialsMatchCount"></span></span>
+              <button type="button" class="btn btn-gold" id="downloadAllBtn" style="padding:8px 12px;font-size:12px;">Download All (CSV)</button>
+              <button type="button" class="btn btn-outline" id="resyncAllBtn" style="padding:8px 12px;font-size:12px;">Re-sync all</button>
+              <button type="button" class="btn btn-outline" id="credentialsExpandAll" style="padding:8px 12px;font-size:12px;">Expand all</button>
+              <button type="button" class="btn btn-outline" id="credentialsCollapseAll" style="padding:8px 12px;font-size:12px;">Collapse all</button>
+            </div>
+          </div>
+          <div id="credentialsEmpty" class="editor-empty hidden" style="margin-top:12px;">
+            <strong>No student matches that search.</strong>
+            <span>Try a different name, Student ID, email or login code.</span>
           </div>
           <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Class</th>
-                  <th>Student ID</th>
-                  <th>Login Code</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+            <table class="cred-groups-table">
               <tbody id="codesTableBody"></tbody>
             </table>
           </div>
@@ -1806,6 +1902,11 @@
     // the billing rows and the portal editor before their functions are reached.
     let activeResultSubjects = ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"];
     let activeBillItems = DETLOF_FEE_ITEMS.slice();
+
+    // Which class groups are open in the credentials list, and the search text.
+    let openCredentialGroups = new Set();
+    let credentialSearch = "";
+    let pendingCsvRows = [];
 
     const CLASS_SELECT_IDS_EDITOR = ["editorClass", "editorClassFees"]; // see CLASS_SELECT_IDS
 
@@ -2279,6 +2380,7 @@
           '<td class="num"><input type="number" min="0" step="0.01" class="bill-amount" value="' + (Number(bill.amount) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
           '<td class="num"><input type="number" min="0" step="0.01" class="bill-paid" value="' + (Number(bill.paid) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
           '<td class="num bill-balance">0.00</td>' +
+          '<td class="num bill-pesewas">&mdash;</td>' +
           '<td><span class="bill-status" style="display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">Not Applicable</span></td>' +
           "</tr>";
       }).join("");
@@ -2312,9 +2414,9 @@
         const el = document.getElementById(id);
         if (el) el.textContent = text;
       };
-      setText("adminBillsTotalBilled", totals.billed.toFixed(2));
-      setText("adminBillsTotalPaid", totals.paid.toFixed(2));
-      setText("adminBillsBalance", balance.toFixed(2));
+      setText("adminBillsTotalBilled", detlofFormatCedis(totals.billed));
+      setText("adminBillsTotalPaid", detlofFormatCedis(totals.paid));
+      setText("adminBillsBalance", detlofFormatCedis(balance));
       const statusEl = document.getElementById("adminBillsStatus");
       if (statusEl) {
         statusEl.textContent = status;
@@ -2329,7 +2431,9 @@
         const billColours = BILL_STATUS_COLOURS[billStatus] || BILL_STATUS_COLOURS["Not Applicable"];
         const balanceCell = row.querySelector(".bill-balance");
         const statusCell = row.querySelector(".bill-status");
-        if (balanceCell) balanceCell.textContent = detlofBillBalance(bill).toFixed(2);
+        if (balanceCell) balanceCell.textContent = detlofFormatCedis(detlofBillBalance(bill));
+        const pesewaCell = row.querySelector(".bill-pesewas");
+        if (pesewaCell) pesewaCell.textContent = detlofFormatPesewas(detlofBillBalance(bill));
         if (statusCell) {
           statusCell.textContent = billStatus;
           statusCell.style.background = billColours.bg;
@@ -2647,37 +2751,171 @@
       reportSuccess("Downloaded the profile for " + record.fullName + ".");
     });
 
+    // One collapsible group per class, so 244 students are never one long scroll.
+    // Only the groups the admin opens render their rows. Declared up here because
+    // showMainPanel() runs during boot, before the functions below are reached.
+    function studentMatchesSearch(rec) {
+      if (!credentialSearch) return true;
+      const query = credentialSearch.toLowerCase();
+      return [rec.fullName, rec.studentId, rec.email, rec.loginCode, rec.currentClass]
+        .some((value) => String(value || "").toLowerCase().indexOf(query) !== -1);
+    }
+
     function renderTable(records) {
-      const tbody = document.getElementById("codesTableBody");
-      if (!tbody) return;
-      tbody.innerHTML = "";
+      const container = document.getElementById("codesTableBody");
+      if (!container) return;
+      const totalEl = document.getElementById("credentialsTotal");
+      if (totalEl) totalEl.textContent = records.length + " students";
+
+      // Drop a group from the open set when it no longer exists.
+      const classNames = new Set(records.map((rec) => rec.currentClass));
+      openCredentialGroups = new Set([...openCredentialGroups].filter((name) => classNames.has(name)));
+
+      if (!records.length) {
+        container.innerHTML = '<tr><td colspan="6" class="empty-cell">No students found.</td></tr>';
+        return;
+      }
+
+      const groups = new Map();
       records.forEach((rec) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML =
-          "<td><strong style='color:var(--crest-purple-dark);display:block;'>" +
-          escapeHtml(rec.fullName) +
-          "</strong><small style='color:var(--muted);'>" +
-          escapeHtml(rec.email) +
-          "</small></td>" +
-          "<td>" +
-          escapeHtml(rec.currentClass) +
-          "</td>" +
-          "<td><span class='id-pill'>" +
-          escapeHtml(rec.studentId) +
-          "</span></td>" +
-          "<td><span class='code-pill'>" +
-          escapeHtml(rec.loginCode) +
-          "</span></td>" +
-          "<td><span class='synced-badge'>✓ Active</span></td>" +
-          "<td>" +
-          "<button class='btn btn-teal download-code-btn' style='padding:6px 10px;font-size:11px;margin-bottom:4px;' type='button'>Download Login Details</button>" +
-          "<button class='btn btn-gold test-portal-btn' style='padding:6px 10px;font-size:11px;background:#f2b500;border-color:#f2b500;color:#2a1730;' type='button'>🔗 Test in Student Portal</button>" +
-          "</td>";
-        tr.querySelector(".download-code-btn").addEventListener("click", () => downloadLoginDetails(rec));
-        tr.querySelector(".test-portal-btn").addEventListener("click", () => openStudentPortalForStudent(rec));
-        tbody.appendChild(tr);
+        if (!groups.has(rec.currentClass)) groups.set(rec.currentClass, []);
+        groups.get(rec.currentClass).push(rec);
+      });
+
+      const ordered = DETLOF_CLASS_ORDER.filter((name) => groups.has(name));
+      groups.forEach((value, name) => { if (ordered.indexOf(name) === -1) ordered.push(name); });
+
+      const visible = ordered.filter((name) => groups.get(name).some(studentMatchesSearch));
+      const matchLabel = document.getElementById("credentialsMatchCount");
+      if (matchLabel) {
+        matchLabel.textContent = credentialSearch
+          ? visible.length + " of " + ordered.length + " classes match"
+          : ordered.length + " classes";
+      }
+      const noneEl = document.getElementById("credentialsEmpty");
+      if (noneEl) noneEl.classList.toggle("hidden", visible.length > 0);
+
+      container.innerHTML = visible.map((className) => {
+        const rows = groups.get(className).filter(studentMatchesSearch);
+        const isOpen = credentialSearch ? true : openCredentialGroups.has(className);
+        const headId = "cred-group-" + String(className).replace(/[^A-Za-z0-9]/g, "");
+        return '<tr class="cred-group ' + (isOpen ? "is-open" : "") + '" data-class="' + escapeHtml(className) + '">' +
+          '<td colspan="6">' +
+          '<button type="button" class="cred-head" aria-expanded="' + (isOpen ? "true" : "false") + '" aria-controls="' + headId + '">' +
+          '<span class="cred-caret" aria-hidden="true"></span>' +
+          '<span class="cred-class">' + escapeHtml(className) + "</span>" +
+          '<span class="cred-count">' + rows.length + "</span>" +
+          '<span class="cred-head-actions">' +
+          '<span class="cred-action" data-cred-action="download-class">Download class</span>' +
+          '<span class="cred-action" data-cred-action="send-class">Send to parents</span>' +
+          '<span class="cred-action" data-cred-action="toggle-all">' + (isOpen ? "Close" : "Open all") + "</span>" +
+          "</span>" +
+          "</button></td></tr>" +
+          // Rows are only built for an open group, so 244 students are never
+          // built at once and a collapsed list stays cheap to render.
+          '<tr class="cred-rows" id="' + headId + '"><td colspan="6">' +
+          (isOpen
+            ? '<table class="cred-table"><thead><tr>' +
+              "<th>Student</th><th>Student ID</th><th>Login Code</th><th>Status</th><th>Actions</th>" +
+              "</tr></thead><tbody>" +
+              rows.map((rec) => credentialRowHtml(rec)).join("") +
+              "</tbody></table>"
+            : '<p class="cred-placeholder">' + rows.length + " student" + (rows.length === 1 ? "" : "s") +
+              " &mdash; open this class to see their login details.</p>") +
+          "</td></tr>";
+      }).join("");
+
+      // Wire the group controls.
+      container.querySelectorAll(".cred-group").forEach((groupRow) => {
+        const className = groupRow.getAttribute("data-class");
+        const head = groupRow.querySelector(".cred-head");
+        if (head) {
+          head.addEventListener("click", (event) => {
+            if (event.target.closest("[data-cred-action]")) return;
+            toggleCredentialGroup(className);
+          });
+        }
+      });
+      container.querySelectorAll("[data-cred-action='download-class']").forEach((el) => {
+        el.addEventListener("click", (event) => {
+          event.stopPropagation();
+          downloadClassCredentials(getStoredRecords().filter((r) => r.currentClass === el.closest(".cred-group").getAttribute("data-class")));
+        });
+      });
+      container.querySelectorAll("[data-cred-action='send-class']").forEach((el) => {
+        el.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const className = el.closest(".cred-group").getAttribute("data-class");
+          const rows = getStoredRecords().filter((r) => r.currentClass === className).map((student) => ({
+            name: student.fullName,
+            number: whatsappNumber(student.whatsappNumber || student.profileWhatsApp || student.parentPhone),
+            message: buildParentCredentialsMessage(student),
+          }));
+          openBulkWhatsAppPanel(className + " login details to parents", rows);
+        });
+      });
+      container.querySelectorAll("[data-cred-action='toggle-all']").forEach((el) => {
+        el.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const className = el.closest(".cred-group").getAttribute("data-class");
+          setCredentialGroupOpen(className, !openCredentialGroups.has(className));
+        });
+      });
+      container.querySelectorAll(".download-code-btn").forEach((el) => {
+        const rec = getStoredRecords().find((r) => r.studentId === el.getAttribute("data-id"));
+        if (rec) el.addEventListener("click", () => downloadLoginDetails(rec));
+      });
+      container.querySelectorAll(".test-portal-btn").forEach((el) => {
+        const rec = getStoredRecords().find((r) => r.studentId === el.getAttribute("data-id"));
+        if (rec) el.addEventListener("click", () => openStudentPortalForStudent(rec));
       });
     }
+
+    function credentialRowHtml(rec) {
+      const id = escapeHtml(rec.studentId);
+      return "<tr>" +
+        "<td><strong class='cred-name'>" + escapeHtml(rec.fullName) + "</strong>" +
+        "<small style='color:var(--muted);'>" + escapeHtml(rec.email) + "</small></td>" +
+        "<td><span class='id-pill'>" + id + "</span></td>" +
+        "<td><span class='code-pill'>" + escapeHtml(rec.loginCode) + "</span></td>" +
+        "<td><span class='synced-badge'>Active</span></td>" +
+        "<td class='cred-row-actions'>" +
+        "<button class='btn btn-teal download-code-btn' data-id='" + id + "' type='button'>Download</button>" +
+        "<button class='btn btn-gold test-portal-btn' data-id='" + id + "' type='button'>Open Portal</button>" +
+        "</td></tr>";
+    }
+
+    function setCredentialGroupOpen(className, open) {
+      if (open) openCredentialGroups.add(className);
+      else openCredentialGroups.delete(className);
+      // Rows are built on open, so the group has to be re-rendered.
+      renderTable(getStoredRecords());
+    }
+
+    function toggleCredentialGroup(className) {
+      setCredentialGroupOpen(className, !openCredentialGroups.has(className));
+    }
+
+    bindEvent("credentialsSearch", "input", function () {
+      credentialSearch = this.value.trim();
+      renderTable(getStoredRecords());
+    });
+
+    bindEvent("credentialsExpandAll", "click", function () {
+      const container = document.getElementById("codesTableBody");
+      if (!container) return;
+      const classes = [...new Set(getStoredRecords().map((r) => r.currentClass))];
+      const allOpen = classes.length > 0 && classes.every((name) => openCredentialGroups.has(name));
+      openCredentialGroups = new Set(allOpen ? [] : classes);
+      renderTable(getStoredRecords());
+      reportInfo(allOpen ? "Collapsed all classes." : "Opened all " + classes.length + " classes.");
+    });
+
+    bindEvent("credentialsCollapseAll", "click", function () {
+      openCredentialGroups = new Set();
+      renderTable(getStoredRecords());
+      reportInfo("Collapsed all classes.");
+    });
 
     function downloadLoginDetails(rec) {
       const content = [
@@ -2971,6 +3209,7 @@
     function reportSuccess(message) { return showToast(message, "success"); }
     function reportError(message) { return showToast(message, "error"); }
     function reportWarning(message) { return showToast(message, "warning"); }
+    function reportInfo(message) { return showToast(message, "info"); }
 
     // Any error that escapes a handler becomes visible instead of silent.
     function reportUnexpected(context, error) {
@@ -3600,8 +3839,6 @@
       remark: ["Remark", "Teacher Remark", "Comment"],
     };
 
-    let pendingCsvRows = [];
-
     function parseClassResultsCsv(file) {
       readCSVFile(file, function (rows, f) {
         const headers = rows[0];
@@ -3823,11 +4060,10 @@
       const balance = Math.max(0, sums.billed - sums.paid);
       const status = sums.billed <= 0 ? "Not Applicable" : sums.paid <= 0 ? "Owing" : sums.paid >= sums.billed ? "Paid" : "Part Paid";
       const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
-      setText("editorBillsTotalBilled", sums.billed.toFixed(2));
-      setText("editorBillsTotalPaid", sums.paid.toFixed(2));
-      setText("editorBillsBalance", balance.toFixed(2));
-      const statusEl = document.getElementById("editorBillsStatus");
-      if (statusEl) statusEl.textContent = status;
+      setText("editorBillsTotalBilled", detlofFormatCedis(sums.billed));
+      setText("editorBillsTotalPaid", detlofFormatCedis(sums.paid));
+      setText("editorBillsBalance", detlofFormatCedis(balance));
+      setText("editorBillsStatus", status);
       return { billed: sums.billed, paid: sums.paid, balance: balance, status: status };
     }
 
@@ -3842,6 +4078,7 @@
           '<td class="num"><input type="number" min="0" step="0.01" class="bill-amount" value="' + (Number(stored.amount) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
           '<td class="num"><input type="number" min="0" step="0.01" class="bill-paid" value="' + (Number(stored.paid) || 0) + '" style="width:100%;padding:6px;text-align:right;" /></td>' +
           '<td class="num bill-balance">0.00</td>' +
+          '<td class="num bill-pesewas">—</td>' +
           '<td><span class="bill-status" style="display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">Not Applicable</span></td>' +
           "</tr>";
       }).join("");
@@ -3962,6 +4199,7 @@
         '<td class="num"><input type="number" min="0" step="0.01" class="bill-amount" value="0" style="width:100%;padding:6px;text-align:right;" /></td>' +
         '<td class="num"><input type="number" min="0" step="0.01" class="bill-paid" value="0" style="width:100%;padding:6px;text-align:right;" /></td>' +
         '<td class="num bill-balance">0.00</td>' +
+        '<td class="num bill-pesewas">&mdash;</td>' +
         '<td><span class="bill-status" style="display:inline-block;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;">Not Applicable</span></td>' +
         "</tr>");
       input.value = "";
@@ -4051,6 +4289,82 @@
       const section = document.getElementById("adminProfileSection");
       if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
       reportSuccess("Loaded " + record.fullName + "'s full profile form.");
+    });
+
+    // ---- receipts to the parent ------------------------------------------------
+    function receiptTextForSms(record) {
+      const totals = detlofBillTotals(record);
+      return "DETLOF PREPARATORY SCHOOL - FEE RECEIPT\n"
+        + "Receipt No: " + buildReceiptNumber(record) + "\n"
+        + "Student: " + record.fullName + " (" + record.studentId + ")\n"
+        + "Class: " + (record.currentClass || "") + "\n"
+        + "Total billed: " + detlofFormatCedis(totals.billed) + "\n"
+        + "Amount paid: " + detlofFormatCedis(totals.paid) + "\n"
+        + "Balance: " + detlofFormatCedis(totals.balance) + "\n"
+        + "Status: " + totals.status + "\n"
+        + "Please quote the receipt number for any enquiry.";
+    }
+
+    function receiptTextForWhatsApp(record) {
+      const totals = detlofBillTotals(record);
+      return "*Detlof Preparatory School - Fee Receipt*\n\n"
+        + "Receipt No: " + buildReceiptNumber(record) + "\n"
+        + "Student: " + record.fullName + "\nClass: " + (record.currentClass || "") + "\n\n"
+        + "Total billed: " + detlofFormatCedis(totals.billed) + "\n"
+        + "Amount paid: " + detlofFormatCedis(totals.paid) + "\n"
+        + "Balance: " + detlofFormatCedis(totals.balance) + "\n"
+        + "Status: " + totals.status + "\n\n"
+        + "The receipt can be saved as a PDF from the Student Portal. Thank you.";
+    }
+
+    function sendReceiptSmsFlow(record) {
+      if (!record) { reportWarning("Select a student first."); return; }
+      const number = whatsappNumber(record.parentPhone || record.profileParentPhone || record.whatsappNumber);
+      if (!number) {
+        reportWarning("No parent phone number is on file. Add one in this student's details first.");
+        return;
+      }
+      const href = "sms:" + number + "?body=" + encodeURIComponent(receiptTextForSms(record));
+      const opened = window.open(href, "_blank");
+      if (opened === null) window.location.href = href;
+      reportSuccess("Opening your phone's SMS app to text the receipt to +" + number + ".");
+    }
+
+    bindEvent("editorReceiptPdfBtn", "click", function () {
+      const record = editorRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const totals = detlofBillTotals(record);
+      if (totals.billed <= 0) { reportWarning("No fees are on this student's account yet, so there is no receipt to save."); return; }
+      withFeedback(this, "Building the receipt", async () => {
+        await saveEditor();
+        if (openPrintPreview(renderFeeReceiptHTML(record), "Please allow pop-ups to save the receipt.")) {
+          reportSuccess("Receipt " + buildReceiptNumber(record) + " opened. Choose 'Save as PDF' to keep it.");
+        }
+      });
+    });
+
+    bindEvent("editorReceiptSmsBtn", "click", function () {
+      const record = editorRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const totals = detlofBillTotals(record);
+      if (totals.billed <= 0) { reportWarning("No fees are on this student's account yet, so there is no receipt to send."); return; }
+      withFeedback(this, "Sending the receipt", async () => {
+        await saveEditor();
+        sendReceiptSmsFlow(record);
+      });
+    });
+
+    bindEvent("editorReceiptWhatsAppBtn", "click", function () {
+      const record = editorRecord();
+      if (!record) { reportWarning("Select a student first."); return; }
+      const totals = detlofBillTotals(record);
+      if (totals.billed <= 0) { reportWarning("No fees are on this student's account yet, so there is no receipt to send."); return; }
+      withFeedback(this, "Sending the receipt", async () => {
+        await saveEditor();
+        const number = whatsappNumber(record.whatsappNumber || record.profileWhatsApp || record.parentPhone);
+        if (!number) { reportWarning("No parent WhatsApp number is on file. Add one in this student's details first."); return; }
+        openWhatsApp(number, receiptTextForWhatsApp(record));
+      });
     });
 
     function currentPreviewPayload() {
@@ -5502,7 +5816,17 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
       reportSuccess("Report opened. Save it as PDF, then tap 'Open WhatsApp' to send it to +" + number + ".");
     }
 
-    // These are called from inline onclick attributes in the pending-approvals list,
+    function buildParentCredentialsMessage(student) {
+    return "*Detlof Preparatory School - Student Portal Login*\n\n"
+      + "Student: " + (student.fullName || "") + "\n"
+      + "Class: " + (student.currentClass || "") + "\n"
+      + "Student ID: " + (student.studentId || "") + "\n"
+      + "Email: " + (student.email || "") + "\n"
+      + "Login Code: " + (student.loginCode || "") + "\n\n"
+      + "Sign in at " + portalUrl() + "\nPlease keep this code private.";
+  }
+
+  // These are called from inline onclick attributes in the pending-approvals list,
   // so they take the approval index and read the payload from storage rather than
   // embedding JSON into the markup.
   function pendingApprovalAt(index) {

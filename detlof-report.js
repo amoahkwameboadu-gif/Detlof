@@ -535,6 +535,109 @@ function renderParentReportHTML(student, termKey) {
   return html + "</body></html>";
 }
 
+// A formal fee receipt: school header, receipt number, itemised fees in cedis
+// and pesewas, the amount in words, and the balance carried forward.
+function buildReceiptNumber(student, date) {
+  const d = date || new Date();
+  const stamp = d.getFullYear()
+    + String(d.getMonth() + 1).padStart(2, "0")
+    + String(d.getDate()).padStart(2, "0");
+  return "RCT-" + stamp + "-" + String(student.studentId || "0000").replace(/[^A-Za-z0-9]/g, "");
+}
+
+function renderFeeReceiptHTML(student) {
+  const totals = detlofBillTotals(student);
+  const issued = new Date();
+  const receiptNo = buildReceiptNumber(student, issued);
+  const termName = (TERM_LABELS[student.displayedTerm] || "Current term");
+
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<title>Fee Receipt ' + escapeHtml(receiptNo) + ' - ' + escapeHtml(student.fullName) + '</title>' +
+    '<style>' + RECEIPT_STYLES + '</style></head><body><div class="receipt">' +
+    '<div class="receipt-top">' +
+    '<img class="receipt-logo" src="detlofcreast.svg" alt="" />' +
+    '<div class="receipt-school">DETLOF PREPARATORY SCHOOL<small>Fee Receipt &middot; ' + escapeHtml(termName) + '</small></div>' +
+    '<div class="receipt-no"><span>Receipt No.</span><strong>' + escapeHtml(receiptNo) + "</strong></div>" +
+    "</div>" +
+    '<div class="receipt-meta">' +
+    "<div><span>Date</span><strong>" + issued.toLocaleDateString("en-GB") + "</strong></div>" +
+    "<div><span>Student</span><strong>" + escapeHtml(student.fullName || "—") + "</strong></div>" +
+    "<div><span>Student ID</span><strong>" + escapeHtml(student.studentId || "—") + "</strong></div>" +
+    "<div><span>Class</span><strong>" + escapeHtml(student.currentClass || "—") + "</strong></div>" +
+    "<div><span>Parent / Guardian</span><strong>" + escapeHtml(student.parentName || "—") + "</strong></div>" +
+    "<div><span>Academic Year</span><strong>" + escapeHtml(student.academicYear || ACADEMIC_YEAR) + "</strong></div>" +
+    "</div>" +
+    '<table class="receipt-table"><thead><tr><th>Description</th>' +
+    '<th class="num">Amount Billed (' + DETLOF_CURRENCY + ")</th>" +
+    '<th class="num">Amount Paid (' + DETLOF_CURRENCY + ")</th>" +
+    '<th class="num">Balance (' + DETLOF_CURRENCY + ")</th></tr></thead><tbody>";
+  totals.bills.forEach((bill) => {
+    html += "<tr><td>" + escapeHtml(bill.item) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.amount) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.paid) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(detlofBillBalance(bill)) + "</td></tr>";
+  });
+  html += '<tr class="receipt-total"><td>TOTAL</td>' +
+    '<td class="num">' + detlofFormatCedis(totals.billed) + "</td>" +
+    '<td class="num">' + detlofFormatCedis(totals.paid) + "</td>" +
+    '<td class="num">' + detlofFormatCedis(totals.balance) + "</td></tr></tbody></table>" +
+    '<div class="receipt-words"><span>Amount in words</span><strong>' +
+    escapeHtml(detlofAmountInWords(totals.billed)) +
+    "</strong><small>Paid in words: " + escapeHtml(detlofAmountInWords(totals.paid)) + "</small></div>" +
+    '<div class="receipt-pesewa">In pesewas, the amount billed of <strong>' +
+    escapeHtml(detlofFormatPesewas(totals.billed)) + "</strong> is equivalent to <strong>" +
+    escapeHtml(detlofFormatPesewas(totals.paid)) + "</strong> received.</div>" +
+    '<div class="receipt-status">Status: <strong>' + totals.status + "</strong>" +
+    (totals.balance > 0
+      ? " &mdash; " + escapeHtml(detlofFormatCedis(totals.balance)) + " still outstanding."
+      : " &mdash; account fully settled. Thank you.") +
+    "</div>" +
+    '<div class="receipt-foot">' +
+    "<div><span class=\"sig-line\"></span>Parent / Guardian</div>" +
+    "<div><span class=\"sig-line\"></span>School Officer</div>" +
+    "<div><span class=\"stamp\">PAID</span></div>" +
+    "</div>" +
+    '<p class="receipt-note">Please keep this receipt safe. Quote the receipt number when making any enquiry. ' +
+    "Amounts are in the " + DETLOF_CURRENCY_NAME + " (" + DETLOF_CURRENCY + ").</p>" +
+    "</div></body></html>";
+  return html;
+}
+
+const RECEIPT_STYLES =
+  '*{box-sizing:border-box;margin:0;padding:0;}' +
+  'body{font-family:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;' +
+    'background:#f4f1f6;color:#2a1730;padding:24px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}' +
+  '.receipt{background:#fff;max-width:760px;margin:0 auto;padding:28px;border:1px solid #eadfe9;border-radius:6px;}' +
+  '.receipt-top{display:flex;align-items:center;gap:14px;border-bottom:3px solid #8300c6;padding-bottom:14px;}' +
+  '.receipt-logo{width:64px;height:60px;}' +
+  '.receipt-school{flex:1;font-family:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;font-weight:600;' +
+    'font-size:15pt;letter-spacing:.02em;color:#560f75;line-height:1.2;}' +
+  '.receipt-school small{display:block;font-family:inherit;font-size:9pt;font-weight:500;letter-spacing:0;' +
+    'color:#75697a;margin-top:3px;}' +
+  '.receipt-no{text-align:right;font-size:8pt;color:#75697a;}' +
+  '.receipt-no strong{display:block;font-size:11pt;color:#2a1730;font-variant-numeric:tabular-nums;}' +
+  '.receipt-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin:16px 0 18px;}' +
+  '.receipt-meta span{display:block;font-size:7.5pt;text-transform:uppercase;letter-spacing:.06em;color:#75697a;}' +
+  '.receipt-meta strong{font-size:9.5pt;font-weight:600;}' +
+  '.receipt-table{width:100%;border-collapse:collapse;font-size:9.5pt;}' +
+  '.receipt-table th{text-align:left;font-size:7.5pt;text-transform:uppercase;letter-spacing:.05em;color:#75697a;' +
+    'padding:8px;border-bottom:2px solid #eadfe9;}' +
+  '.receipt-table td{padding:9px 8px;border-bottom:1px solid #eadfe9;}' +
+  '.receipt-table .num{text-align:right;font-variant-numeric:tabular-nums;}' +
+  '.receipt-total td{font-weight:800;border-top:2px solid #560f75;border-bottom:none;background:#faf5fd;}' +
+  '.receipt-words{margin:14px 0 6px;padding:10px 12px;background:#fffaf0;border-left:4px solid #ffc900;' +
+    'font-size:9.5pt;}' +
+  '.receipt-words span{display:block;font-size:7.5pt;text-transform:uppercase;letter-spacing:.06em;color:#75697a;}' +
+  '.receipt-words small{display:block;color:#75697a;font-size:8.5pt;margin-top:3px;}' +
+  '.receipt-pesewa{font-size:8.5pt;color:#75697a;margin-bottom:6px;}' +
+  '.receipt-status{margin:10px 0 18px;padding:10px 12px;border:1px solid #eadfe9;border-radius:6px;font-size:9.5pt;}' +
+  '.receipt-foot{display:flex;gap:24px;align-items:flex-end;margin-top:22px;font-size:8pt;color:#75697a;}' +
+  '.sig-line{display:block;border-top:1px solid #75697a;margin-bottom:4px;min-width:150px;}' +
+  '.stamp{margin-left:auto;border:2px solid #8300c6;color:#8300c6;border-radius:6px;padding:6px 14px;' +
+    'font-weight:800;letter-spacing:.1em;transform:rotate(-8deg);opacity:.75;}' +
+  '.receipt-note{margin-top:18px;font-size:7.5pt;color:#75697a;text-align:center;}' +
+  '@media print{body{background:#fff;padding:0;}.receipt{border:none;max-width:none;padding:12px;}}';
+
 function renderAnnualSummaryHTML(student) {
   const terms = collectPublishedTerms(student);
   let html = '<h2>Term Summary &amp; Cumulative Performance</h2>';

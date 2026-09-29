@@ -890,6 +890,81 @@ function downloadMyBills() {
   openPrintPreview(renderBillStatementHTML(activeStudent), "Please allow pop-ups to preview and download your bill statement.");
 }
 
+// ---- receipts ---------------------------------------------------------------
+function downloadMyReceipt() {
+  if (!activeStudent) { reportWarning("Sign in to download your receipt."); return; }
+  const totals = detlofBillTotals(activeStudent);
+  if (totals.billed <= 0) {
+    reportWarning("There are no fees on your account yet, so there is no receipt to save.");
+    return;
+  }
+  const ok = openPrintPreview(renderFeeReceiptHTML(activeStudent), "Please allow pop-ups to save your receipt.");
+  if (ok) reportSuccess("Receipt " + buildReceiptNumber(activeStudent) + " opened. Choose 'Save as PDF' to keep it.");
+}
+
+// The parent's number is on file, so the receipt can be texted to them.
+function sendReceiptBySms() {
+  if (!activeStudent) { reportWarning("Sign in to send your receipt."); return; }
+  const totals = detlofBillTotals(activeStudent);
+  if (totals.billed <= 0) {
+    reportWarning("There are no fees on your account yet, so there is no receipt to send.");
+    return;
+  }
+  const phone = whatsappNumber(activeStudent.parentPhone || activeStudent.profileParentPhone);
+  if (!phone) {
+    reportWarning("No parent phone number is on file. The school office needs to add it first.");
+    return;
+  }
+  const receiptNo = buildReceiptNumber(activeStudent);
+  const body =
+    "DETLOF PREPARATORY SCHOOL - FEE RECEIPT\n"
+    + "Receipt No: " + receiptNo + "\n"
+    + "Student: " + activeStudent.fullName + " (" + activeStudent.studentId + ")\n"
+    + "Class: " + (activeStudent.currentClass || "") + "\n"
+    + "Total billed: " + detlofFormatCedis(totals.billed) + "\n"
+    + "Amount paid: " + detlofFormatCedis(totals.paid) + "\n"
+    + "Balance: " + detlofFormatCedis(totals.balance) + "\n"
+    + "Status: " + totals.status + "\n"
+    + "Thank you. Please quote " + receiptNo + " for any enquiry.";
+
+  const href = "sms:" + phone + "?body=" + encodeURIComponent(body);
+  const opened = window.open(href, "_blank");
+  if (opened === null) window.location.href = href;
+  reportSuccess("Opening your phone's SMS app to send the receipt to +" + phone + ".");
+}
+
+function sendReceiptByWhatsApp() {
+  if (!activeStudent) { reportWarning("Sign in to send your receipt."); return; }
+  const totals = detlofBillTotals(activeStudent);
+  if (totals.billed <= 0) {
+    reportWarning("There are no fees on your account yet, so there is no receipt to send.");
+    return;
+  }
+  const phone = whatsappNumber(activeStudent.whatsappNumber || activeStudent.profileWhatsApp || activeStudent.parentPhone);
+  if (!phone) {
+    reportWarning("No parent WhatsApp number is on file. The school office needs to add it first.");
+    return;
+  }
+  const receiptNo = buildReceiptNumber(activeStudent);
+  const body =
+    "*Detlof Preparatory School - Fee Receipt*\n\n"
+    + "Receipt No: " + receiptNo + "\n"
+    + "Student: " + activeStudent.fullName + "\n"
+    + "Class: " + (activeStudent.currentClass || "") + "\n\n"
+    + "Total billed: " + detlofFormatCedis(totals.billed) + "\n"
+    + "Amount paid: " + detlofFormatCedis(totals.paid) + "\n"
+    + "Balance: " + detlofFormatCedis(totals.balance) + "\n"
+    + "Status: " + totals.status + "\n\n"
+    + "Save the receipt as a PDF from your portal and attach it here. Thank you.";
+  const href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(body);
+  const opened = window.open(href, "_blank");
+  if (opened === null) {
+    reportWarning("Your browser blocked the WhatsApp link. Allow pop-ups, then try again.");
+    return;
+  }
+  reportSuccess("Opening WhatsApp to send the receipt to +" + phone + ".");
+}
+
 function downloadResultsCSV() {
   if (!activeStudent) { reportWarning("Sign in to download your results."); return; }
   const terms = collectPublishedTerms(activeStudent);

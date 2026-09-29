@@ -137,10 +137,69 @@ function detlofAllSubjects() {
 }
 
 const DETLOF_CURRENCY = "GHS";
+const DETLOF_CURRENCY_SYMBOL = "₵"; // cedi sign
+const DETLOF_CURRENCY_NAME = "Ghana Cedi";
+const DETLOF_PESEWA_PER_CEDI = 100;
 
+// Thousands grouping written out rather than delegated to Intl, because the
+// "en-GH" locale is not present in every runtime and silently drops the commas.
+function detlofGroupThousands(digits) {
+  const negative = digits.charAt(0) === "-";
+  const body = negative ? digits.slice(1) : digits;
+  const grouped = body.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return negative ? "-" + grouped : grouped;
+}
+
+function detlofDecimal(value) {
+  const fixed = (Number(value) || 0).toFixed(2);
+  const parts = fixed.split(".");
+  // Group the whole part only; the decimals must be preserved exactly.
+  return detlofGroupThousands(parts[0]) + "." + (parts[1] || "00");
+}
+
+// Grouped money in the Ghana Cedi. "GHS" is used rather than the cedi sign
+// because it renders on every device and is what Ghanaian receipts carry.
 function detlofFormatCedis(amount) {
+  return DETLOF_CURRENCY + " " + detlofDecimal(Number(amount) || 0);
+}
+
+// The same amount expressed in pesewas, for receipt line items.
+function detlofFormatPesewas(amount) {
+  const pesewas = Math.round((Number(amount) || 0) * DETLOF_PESEWA_PER_CEDI);
+  return detlofGroupThousands(String(Math.abs(pesewas))) + " pesewas";
+}
+
+// Spell the amount out in words, as a formal receipt requires.
+const AMOUNT_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+  "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+const TENS_WORDS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+function detlofNumberToWords(value) {
+  const number = Math.floor(Math.abs(Number(value) || 0));
+  if (number === 0) return "Zero";
+  const underThousand = (n) => {
+    if (n < 20) return AMOUNT_WORDS[n];
+    if (n < 100) return TENS_WORDS[Math.floor(n / 10)] + (n % 10 ? " " + AMOUNT_WORDS[n % 10] : "");
+    return AMOUNT_WORDS[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + underThousand(n % 100) : "");
+  };
+  const parts = [];
+  const millions = Math.floor(number / 1000000);
+  const thousands = Math.floor((number % 1000000) / 1000);
+  const rest = number % 1000;
+  if (millions) parts.push(underThousand(millions) + " Million");
+  if (thousands) parts.push(underThousand(thousands) + " Thousand");
+  if (rest) parts.push(underThousand(rest));
+  return parts.join(" ");
+}
+
+function detlofAmountInWords(amount) {
   const value = Number(amount) || 0;
-  return DETLOF_CURRENCY + " " + value.toFixed(2);
+  if (!value) return "Zero";
+  const cedis = Math.floor(Math.abs(value));
+  const pesewas = Math.round((Math.abs(value) - cedis) * DETLOF_PESEWA_PER_CEDI);
+  const cediPart = detlofNumberToWords(cedis) + (cedis === 1 ? " Cedi" : " Cedis");
+  if (!pesewas) return cediPart + " only";
+  return cediPart + " and " + detlofNumberToWords(pesewas) + (pesewas === 1 ? " Pesewa" : " Pesewas");
 }
 
 function detlofFeeStatus(bill) {
