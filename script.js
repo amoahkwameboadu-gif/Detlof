@@ -350,8 +350,11 @@ function renderPortalForStudent(student) {
     promoChip.classList.add("hidden");
   }
 
-  const hasResults = Array.isArray(student.results);
-  const studentResults = hasResults ? student.results : DEFAULT_RESULTS;
+  // Average the first published term, or the results already on the record.
+  const firstTerm = collectPublishedTerms(student)[0];
+  const studentResults = Array.isArray(student.results)
+    ? student.results
+    : (firstTerm ? firstTerm.data.results : []);
   const average = studentResults.length
     ? Math.round(studentResults.reduce((total, result) => total + Number(result.totalScore || 0), 0) / studentResults.length)
     : null;
@@ -381,7 +384,7 @@ function renderPortalForStudent(student) {
   let resultsToDisplay = [];
   if (displayedTerm !== "all" && allTerms[displayedTerm] && Array.isArray(allTerms[displayedTerm].results)) {
     resultsToDisplay = allTerms[displayedTerm].results;
-  } else if (hasResults && studentResults.length) {
+  } else if (studentResults.length && !termCount) {
     resultsToDisplay = studentResults;
   } else if (termCount > 0) {
     Object.values(allTerms).forEach((termData) => {

@@ -541,6 +541,37 @@
       .timetable-day { min-height: 44px; }
     }
 
+    /* ---------------- guided step list (class results, upload flows) ---------------- */
+    .step-list { list-style: none; margin: 0; padding: 0; }
+    .step-list > li {
+      position: relative; padding: 14px 16px 14px 48px; margin-bottom: 12px; border-radius: 12px;
+      border: 1px solid var(--line); background: #fff; transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .step-list > li:hover { border-color: var(--crest-purple-soft); box-shadow: 0 4px 16px rgba(86, 15, 117, 0.08); }
+    .step-list > li::before {
+      content: ""; position: absolute; left: 29px; top: 48px; bottom: -13px; width: 2px;
+      background: var(--crest-purple-soft);
+    }
+    .step-list > li:last-child::before { display: none; }
+    .step-list > li:last-child { margin-bottom: 0; }
+    .step-list > li::after {
+      content: attr(data-step); position: absolute; left: 15px; top: 14px; width: 22px; height: 22px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; background: var(--crest-purple); color: #fff;
+    }
+    .step-head strong { display: block; font-family: var(--font-display); font-size: 14px; color: var(--crest-purple-dark); }
+    .step-head p { margin: 3px 0 0; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+    .results-summary { margin-top: 10px; }
+
+    @keyframes pendingIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .pending-approval { animation: pendingIn 260ms ease-out both; }
+    .pending-approval.approved { border-left: 4px solid var(--crest-green) !important; background: #f7fdf9 !important; }
+    .pending-approval.rejected { border-left: 4px solid #d9003b !important; background: #fef7f8 !important; }
+    .pending-approval.pending { border-left: 4px solid var(--crest-gold) !important; }
+
     /* ---------------- collapsible class credentials ---------------- */
     .cred-toolbar {
       display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px;
@@ -622,9 +653,10 @@
     .needs-attention { animation: pulseRing 2.4s ease-out 2; }
 
     @media (prefers-reduced-motion: reduce) {
-      .card, .cred-rows.is-revealing { animation: none !important; }
+      .card, .cred-rows.is-revealing, .pending-approval { animation: none !important; }
       .needs-attention { animation: none !important; }
-      .cred-caret { transition: none !important; }
+      .cred-caret, .cred-head, .cred-action, .subject-chip button { transition: none !important; }
+      .step-list > li { transition: none !important; }
     }
 
     /* ---------------- class results grid + billing ---------------- */
@@ -811,7 +843,17 @@
       .editor-head > div:last-child .btn { width: 100%; }
       #adminBillsTable table, #editorBillsTable table { min-width: 520px; }
     }
+    /* The academic review area: actions stack cleanly on a phone. */
+    @media (max-width: 900px) {
+      .pending-approval, .academics-panel, .admin-panel { padding: 12px; }
+      .pending-approval .btn, .academics-panel .btn, .admin-panel .btn { width: 100%; justify-content: center; }
+    }
     @media (max-width: 640px) {
+      .step-list > li { padding: 12px 12px 12px 42px; }
+      .step-list > li::before { left: 23px; top: 44px; }
+      .step-list > li::after { left: 12px; top: 12px; }
+      .step-head strong { font-size: 13px; }
+      .step-head p { font-size: 11px; }
       .card h2 { font-size: 15px; }
       .card p.sub { font-size: 11px; }
       .field input, .field select, .field textarea { font-size: 16px; }
@@ -1646,44 +1688,40 @@
               </select>
             </div>
           </div>
-            <div class="field">
-              <label>Subjects in this table</label>
-              <p class="sub" style="margin:0 0 8px;">Every student in the class has a column pair for each subject &mdash; class score (40%) then exam score (60%). Totals and grades are worked out for you.</p>
-              <p class="sub" id="classResultsCurriculum" style="margin:0 0 8px;color:var(--crest-purple);font-weight:700;"></p>
-            <div class="subject-chips" id="classResultsSubjects"></div>
-            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-              <input type="text" id="classResultsAddSubject" list="resultSubjectList" placeholder="Add a subject, e.g. French" style="flex:1;min-width:180px;" />
-              <datalist id="resultSubjectList"></datalist>
-              <button type="button" class="btn btn-outline" id="classResultsAddSubjectBtn">Add Subject</button>
-            </div>
-          </div>
-          <div class="field">
-            <label>Or upload a CSV of the whole class</label>
-            <p class="sub" style="margin:0 0 8px;">Columns: Student Name, Student ID, Subject, Class Score (40), Exam Score (60), Remark. Matching is by Student ID, falling back to Student Name. Rows are added into the table above so you can check them before publishing.</p>
-            <input type="file" id="classResultsCsv" accept=".csv,text/csv" />
-            <div id="classResultsCsvPreview" style="margin-top:10px;max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;">
-              <p style="color:var(--muted);text-align:center;padding:14px;margin:0;">Choose a CSV to preview it here.</p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-              <button type="button" class="btn btn-teal" id="classResultsCsvLoad">Add CSV Rows to Table</button>
-              <button type="button" class="btn btn-outline" id="downloadClassResultsTemplate">Download CSV Template</button>
-            </div>
-          </div>
-          <div class="field">
-            <label>Class score entry</label>
-            <div class="table-scroll results-grid-wrap">
-              <table id="classResultsTable" class="results-grid">
-                <thead id="classResultsHead"></thead>
-                <tbody id="classResultsBody"></tbody>
-              </table>
-            </div>
-          </div>
-          <div id="classResultsSummary" class="results-summary"></div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button type="button" class="btn btn-teal" id="classResultsPublish" style="flex:1;">Publish to All Student Portals</button>
-            <button type="button" class="btn btn-outline" id="classResultsQueue" style="flex:1;">Queue for Academics Admin Approval</button>
-            <button type="button" class="btn btn-outline" id="classResultsClear" style="flex:1;">Clear Table</button>
-          </div>
+          <p class="sub" id="classResultsCurriculum" style="margin:0 0 14px;color:var(--crest-purple);font-weight:700;"></p>
+
+          <ol class="step-list">
+            <li data-step="1">
+              <div class="step-head"><div>
+                <strong>1. Download the class list and score sheet</strong>
+                <p>A CSV with every student in the class and their credentials &mdash; one row per student per subject, with the score columns blank for you to fill in.</p>
+              </div></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                <button type="button" class="btn btn-gold" id="downloadClassResultsTemplate">Download Score Sheet (CSV)</button>
+                <button type="button" class="btn btn-outline" id="downloadClassResultsCredentials">Just the Class List (CSV)</button>
+              </div>
+            </li>
+            <li data-step="2">
+              <div class="step-head"><div>
+                <strong>2. Fill in the scores and upload</strong>
+                <p>Open the sheet in Excel, Google Sheets or LibreOffice. Enter the Class Score (40) and Exam Score (60) columns and save it as CSV. Totals, grades and GPA are worked out for you.</p>
+              </div></div>
+              <input type="file" id="classResultsCsv" accept=".csv,text/csv" style="margin-top:10px;" />
+              <div id="classResultsCsvPreview" style="margin-top:10px;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;">
+                <p style="color:var(--muted);text-align:center;padding:14px;margin:0;">Choose a CSV to preview it here.</p>
+              </div>
+            </li>
+            <li data-step="3">
+              <div class="step-head"><div>
+                <strong>3. Send for academic review</strong>
+                <p>The class goes to the Academics Admin, who reviews it and publishes. Nothing reaches a student portal until it is approved.</p>
+              </div></div>
+              <div id="classResultsSummary" class="results-summary"></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                <button type="button" class="btn btn-gold" id="classResultsQueue" style="flex:1;">Send Class Results for Academic Review</button>
+              </div>
+            </li>
+          </ol>
         </section>
 
         <section class="card" style="margin-bottom:18px;">
@@ -1770,7 +1808,18 @@
 
         <section class="card" style="margin-bottom:18px;">
           <h2>10. Preview &amp; Send</h2>
-          <p class="sub">Review exactly what the student will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
+          <p class="sub">Choose the class and the student, review exactly what they will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
+          <div class="row-2">
+            <div class="field">
+              <label for="previewClass">Class</label>
+              <select id="previewClass"></select>
+            </div>
+            <div class="field">
+              <label for="previewStudent">Student</label>
+              <input type="text" id="previewStudent" list="previewStudentNames" autocomplete="off" placeholder="Type a student's name or Student ID" />
+              <datalist id="previewStudentNames"></datalist>
+            </div>
+          </div>
           <div class="row-2">
             <div class="field">
               <label for="previewKind">What to preview</label>
@@ -1778,6 +1827,7 @@
                 <option value="report">Student results report</option>
                 <option value="timetable">Student class timetable</option>
                 <option value="profile">Student profile details</option>
+                <option value="receipt">Fee receipt</option>
               </select>
             </div>
             <div class="field">
@@ -1789,6 +1839,7 @@
               </select>
             </div>
           </div>
+          <div id="previewStudentSummary" class="editor-status"></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button type="button" class="btn btn-gold" id="openPreviewBtn" style="flex:1;">Preview Before Sending</button>
             <button type="button" class="btn btn-gold" id="sendParentPdfBtn" style="flex:1;">Send Full Report as PDF</button>
@@ -1876,7 +1927,7 @@
     const CLASS_SELECT_IDS = [
       "currentClass", "classGenerateClass", "downloadClassSelect", "timetableClass",
       "recordClass", "exportClass", "adminProfileClass",
-      "editorClass", "editorClassFees", "classResultsClass",
+      "editorClass", "editorClassFees", "classResultsClass", "previewClass",
     ];
 
     function populateClassSelects() {
@@ -2114,13 +2165,14 @@
       populateClubList();
       populateAdminProfileStudents();
       fillDatalist("annClassList", DETLOF_CLASS_ORDER);
-      fillDatalist("resultSubjectList", SUBJECT_SUGGESTIONS);
       const classResultsSelect = document.getElementById("classResultsClass");
       if (classResultsSelect && !classResultsSelect.value) classResultsSelect.selectedIndex = 0;
       applyCurriculumSubjects();
-      renderClassResultsGrid();
+      refreshPreviewTargets();
       fillDatalist("editorClassList", DETLOF_CLASS_ORDER);
+      fillDatalist("previewStudentNames", []);
       loadEditor();
+      refreshPreviewTargets();
       refreshClassNameTargets();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
@@ -3584,21 +3636,26 @@
       return activeResultSubjects.slice();
     }
 
-    // Replaces the grid's subjects with the ones this class actually teaches,
-    // following Ghana's standards-based curriculum for that level.
+    const CLASS_RESULTS_CSV_ALIASES = {
+      name: ["Student Name", "Full Name", "Name"],
+      studentId: ["Student ID", "StudentId", "ID"],
+      subject: ["Subject", "Subject Name"],
+      classScore: ["Class Score", "ClassScore", "Class Score (40)", "SBA"],
+      examScore: ["Exam Score", "ExamScore", "Exam Score (60)", "Exam"],
+      remark: ["Remark", "Teacher Remark", "Comment"],
+    };
+
+    // Replaces the subjects with the ones the selected class teaches, per Ghana's curriculum.
     function applyCurriculumSubjects() {
       const className = document.getElementById("classResultsClass").value;
       activeResultSubjects = detlofSubjectsForClass(className);
-      renderClassResultSubjects();
-    }
-
-    function renderClassResultSubjects() {
-      const wrap = document.getElementById("classResultsSubjects");
-      if (!wrap) return;
-      wrap.innerHTML = activeResultSubjects
-        .map((subject) => "<span class='subject-chip'>" + escapeHtml(subject) +
-          "<button type='button' data-remove-subject=\"" + escapeHtml(subject) + "\" aria-label='Remove " + escapeHtml(subject) + "'>&times;</button></span>")
-        .join("") || "<span style='font-size:11px;color:var(--muted);'>No subjects yet - add at least one below.</span>";
+      const note = document.getElementById("classResultsCurriculum");
+      if (note) {
+        note.textContent = activeResultSubjects.length + " subjects on the "
+          + detlofCurriculumLabel(className) + " programme: " + activeResultSubjects.join(", ");
+      }
+      renderClassResultsSummary();
+      return activeResultSubjects;
     }
 
     function studentsForClassResults() {
@@ -3611,234 +3668,32 @@
       return { className: className, records: records, names: names };
     }
 
-    function renderClassResultsGrid() {
-      const head = document.getElementById("classResultsHead");
-      const body = document.getElementById("classResultsBody");
-      if (!head || !body) return;
-      const { className, names } = studentsForClassResults();
-      const termKey = document.getElementById("classResultsTerm").value;
-
-      // Suggest the subjects this class actually teaches, per Ghana's curriculum.
-      fillDatalist("resultSubjectList", detlofSubjectsForClass(className).concat(SUBJECT_SUGGESTIONS));
-      const curriculumNote = document.getElementById("classResultsCurriculum");
-      if (curriculumNote) {
-        curriculumNote.textContent = detlofSubjectsForClass(className).length + " subjects on the "
-          + detlofCurriculumLabel(className) + " programme";
-      }
-
-      let html = "<tr><th class='sticky-col'>Student</th>";
-      activeResultSubjects.forEach((subject) => {
-        html += "<th colspan='2' class='subject-head'>" + escapeHtml(subject) + "</th>";
-      });
-      html += "<th class='total-col'>Total</th><th class='grade-col'>Grade</th></tr>";
-      html += "<tr><th class='sticky-col'></th>";
-      activeResultSubjects.forEach(() => { html += "<th class='sub-head'>Class (40)</th><th class='sub-head'>Exam (60)</th>"; });
-      html += "<th class='sub-head'></th><th class='sub-head'></th></tr>";
-      head.innerHTML = html;
-
-      if (!names.length) {
-        body.innerHTML = '<tr><td colspan="' + (1 + activeResultSubjects.length * 2 + 2) +
-          '" class="empty-cell">No students found in ' + escapeHtml(className) + ".</td></tr>";
-        renderClassResultsSummary();
-        return;
-      }
-
-      // Pre-fill from what is already published so editing is non-destructive.
-      const existing = new Map();
-      getStoredRecords().forEach((record) => {
-        const termData = (record.termResults || {})[termKey];
-        if (termData && Array.isArray(termData.results)) {
-          existing.set(detlofNormalizeName(record.fullName), new Map(termData.results.map((r) => [r.subject, r])));
-        }
-      });
-
-      body.innerHTML = names.map((name) => {
-        const rowExisting = existing.get(detlofNormalizeName(name)) || new Map();
-        const inputs = activeResultSubjects.map((subject) => {
-          const cell = rowExisting.get(subject);
-          const classScore = cell ? Number(cell.classScore) || 0 : "";
-          const examScore = cell ? Number(cell.examScore) || 0 : "";
-          const sid = escapeHtml(name);
-          return '<td class="num"><input type="number" min="0" max="40" step="0.5" data-student="' + sid +
-            '" data-subject="' + escapeHtml(subject) + '" data-kind="class" value="' + classScore + '" placeholder="0" /></td>' +
-            '<td class="num"><input type="number" min="0" max="60" step="0.5" data-student="' + sid +
-            '" data-subject="' + escapeHtml(subject) + '" data-kind="exam" value="' + examScore + '" placeholder="0" /></td>';
-        }).join("");
-        return '<tr data-student-row="' + escapeHtml(name) + '">' +
-          '<td class="sticky-col"><strong>' + escapeHtml(name) + "</strong></td>" + inputs +
-          '<td class="num row-total">—</td><td class="row-grade">—</td></tr>';
-      }).join("");
-
-      recalcClassResultsTotals();
-    }
-
-    function recalcClassResultsTotals() {
-      const rows = document.querySelectorAll("#classResultsBody tr[data-student-row]");
-      let complete = 0;
-      let partial = 0;
-      rows.forEach((row) => {
-        let total = 0;
-        let filled = 0;
-        row.querySelectorAll("input[data-kind]").forEach((input) => {
-          const value = Number(input.value);
-          if (!input.value || Number.isNaN(value)) return;
-          filled += 1;
-          total += value;
-        });
-        const totalCell = row.querySelector(".row-total");
-        const gradeCell = row.querySelector(".row-grade");
-        const isComplete = activeResultSubjects.length > 0 && filled === activeResultSubjects.length * 2;
-        const average = filled ? Math.round((total / activeResultSubjects.length) * 100) / 100 : 0;
-        if (isComplete) complete += 1;
-        else if (filled > 0) partial += 1;
-
-        row.classList.toggle("row-complete", isComplete);
-        row.classList.toggle("row-partial", !isComplete && filled > 0);
-        if (totalCell) totalCell.textContent = filled ? String(Math.round(total * 100) / 100) : "—";
-        if (gradeCell) {
-          gradeCell.textContent = isComplete ? calculateGrade(average) : (filled ? "—" : "—");
-          gradeCell.dataset.grade = isComplete ? calculateGrade(average) : "";
-        }
-      });
-      renderClassResultsSummary(complete, partial, rows.length);
-    }
-
-    function renderClassResultsSummary(complete, partial, total) {
+    // Counts what has been uploaded, and whether the class is ready for review.
+    function renderClassResultsSummary() {
       const box = document.getElementById("classResultsSummary");
-      if (!box) return;
-      const className = document.getElementById("classResultsClass").value;
-      if (complete === undefined) { complete = 0; partial = 0; total = studentsForClassResults().names.length; }
-      const ready = total > 0 && complete === total;
-      box.innerHTML = "<p style='margin:0 0 8px;'><strong>" + escapeHtml(className) + "</strong> &middot; " + total + " students &middot; " +
-        activeResultSubjects.length + " subjects</p>" +
-        "<div class='summary-chips'>" +
-        "<span class='summary-chip ok'>" + complete + " ready</span>" +
-        "<span class='summary-chip warn'>" + partial + " partly filled</span>" +
-        "<span class='summary-chip muted'>" + Math.max(0, total - complete - partial) + " empty</span>" +
+      if (!box) return { students: 0, rows: 0, subjects: 0, ready: false, complete: 0 };
+      const { className, names } = studentsForClassResults();
+      const subjects = activeResultSubjects;
+      const parsed = pendingCsvRows;
+      const studentCount = new Set(parsed.map((row) => row.studentId)).size;
+      const complete = new Set(parsed.filter((row) => row.complete).map((row) => row.studentId)).size;
+      const ready = names.length > 0 && complete > 0 && complete === names.length;
+      box.innerHTML = "<div class='summary-chips'>" +
+        "<span class='summary-chip'>" + names.length + " students</span>" +
+        "<span class='summary-chip'>" + subjects.length + " subjects</span>" +
+        (parsed.length ? "<span class='summary-chip ok'>" + studentCount + " loaded</span>" : "") +
+        (parsed.length ? "<span class='summary-chip " + (complete === names.length ? "ok" : "warn") + "'>" + complete + " complete</span>" : "") +
         "</div>" +
-        (ready
-          ? "<p style='margin:8px 0 0;color:var(--crest-green);font-size:12px;'>Every student has a complete score set. Ready to publish.</p>"
-          : "<p style='margin:8px 0 0;color:var(--crest-gold);font-size:12px;'>Rows with all subjects filled will be published; partly filled rows are skipped and reported back to you.</p>");
-      return { complete: complete, partial: partial, total: total };
+        (parsed.length
+          ? "<p style='margin:8px 0 0;font-size:12px;color:" + (ready ? "var(--crest-green)" : "var(--crest-gold)") + ";'>" +
+            (ready ? escapeHtml(className) + " is complete and ready to send for academic review."
+              : complete + " of " + names.length + " students have every subject filled. Only complete students are sent.") + "</p>"
+          : "<p style='margin:8px 0 0;font-size:12px;color:var(--muted);'>Download the class list, fill in the scores, then upload the CSV.</p>");
+      return { students: names.length, rows: parsed.length, subjects: subjects.length, ready: ready, complete: complete };
     }
 
-    // Turns the grid into { studentId -> results[] } for one term.
-    function collectClassResults() {
-      const termKey = document.getElementById("classResultsTerm").value;
-      const { records } = studentsForClassResults();
-      const byName = new Map(records.map((record) => [detlofNormalizeName(record.fullName), record]));
-      const payload = [];
-      const skipped = [];
-
-      document.querySelectorAll("#classResultsBody tr[data-student-row]").forEach((row) => {
-        const name = row.getAttribute("data-student-row");
-        const record = byName.get(detlofNormalizeName(name));
-        const results = [];
-        // Inputs are generated in subject order, so the two lists line up.
-        const classInputs = row.querySelectorAll("input[data-kind='class']");
-        const examInputs = row.querySelectorAll("input[data-kind='exam']");
-        activeResultSubjects.forEach((subject, index) => {
-          const classInput = classInputs[index];
-          const examInput = examInputs[index];
-          const classScore = classInput && classInput.value !== "" ? Number(classInput.value) : null;
-          const examScore = examInput && examInput.value !== "" ? Number(examInput.value) : null;
-          if (classScore === null || examScore === null) return;
-          if (Number.isNaN(classScore) || Number.isNaN(examScore)) return;
-          const totalScore = Math.round((classScore + examScore) * 100) / 100;
-          results.push({
-            subject: subject,
-            classScore: classScore,
-            examScore: examScore,
-            totalScore: totalScore,
-            grade: gradeFromTotal(totalScore),
-            remark: "Keep it up",
-            updatedBy: teacherLabel(),
-            updatedAt: stampIso(),
-          });
-        });
-        if (!record) { skipped.push({ name: name, reason: "not in the register" }); return; }
-        if (results.length !== activeResultSubjects.length) {
-          skipped.push({ name: name, reason: results.length + " of " + activeResultSubjects.length + " subjects" });
-          return;
-        }
-        payload.push({ studentId: record.studentId, fullName: record.fullName, class: record.currentClass, results: results });
-      });
-
-      return { termKey: termKey, payload: payload, skipped: skipped };
-    }
-
-    async function publishClassResults(queueForApproval) {
-      const collected = collectClassResults();
-      if (!collected.payload.length) {
-        reportWarning("No student has a complete score set yet.");
-        return;
-      }
-      if (collected.skipped.length) {
-        const proceed = window.confirm(
-          collected.skipped.length + " student(s) are not fully filled in and will be skipped:\n\n" +
-          collected.skipped.slice(0, 12).map((s) => "• " + s.name + " (" + s.reason + ")").join("\n") +
-          (collected.skipped.length > 12 ? "\n… and " + (collected.skipped.length - 12) + " more" : "") +
-          "\n\nPublish the " + collected.payload.length + " complete student(s) anyway?"
-        );
-        if (!proceed) return;
-      }
-
-      if (queueForApproval) {
-        const resultsData = [];
-        collected.payload.forEach((entry) => {
-          entry.results.forEach((result) => {
-            resultsData.push({
-              studentId: entry.studentId,
-              subject: result.subject,
-              classScore: result.classScore,
-              examScore: result.examScore,
-              totalScore: result.totalScore,
-              grade: result.grade,
-              remark: result.remark,
-            });
-          });
-        });
-        addPendingApproval("results", {
-          termKey: collected.termKey,
-          resultsData: resultsData,
-          matchedCount: collected.payload.length,
-          createdBy: teacherLabel(),
-          createdAt: stampIso(),
-        });
-        renderPendingApprovals();
-        reportSuccess("Queued " + collected.payload.length + " students for Academics Admin approval.");
-        return;
-      }
-
-      const resultsData = [];
-      collected.payload.forEach((entry) => {
-        entry.results.forEach((result) => {
-          resultsData.push({
-            studentId: entry.studentId,
-            subject: result.subject,
-            classScore: result.classScore,
-            examScore: result.examScore,
-            totalScore: result.totalScore,
-            grade: result.grade,
-            remark: result.remark,
-          });
-        });
-      });
-      await publishResultsToPortals(collected.termKey, resultsData);
-      reportSuccess("Published " + collected.payload.length + " students' " +
-        (TERM_LABELS[collected.termKey] || collected.termKey) + " results to their portals." +
-        (collected.skipped.length ? " " + collected.skipped.length + " skipped." : ""));
-    }
-
-    const CLASS_RESULTS_CSV_ALIASES = {
-      name: ["Student Name", "Full Name", "Name"],
-      studentId: ["Student ID", "StudentId", "ID"],
-      subject: ["Subject", "Subject Name"],
-      classScore: ["Class Score", "ClassScore", "Class Score (40)", "SBA"],
-      examScore: ["Exam Score", "ExamScore", "Exam Score (60)", "Exam"],
-      remark: ["Remark", "Teacher Remark", "Comment"],
-    };
-
+    // Reads an uploaded class CSV into pendingCsvRows, flagging students whose
+    // scores are complete against the class's curriculum subjects.
     function parseClassResultsCsv(file) {
       readCSVFile(file, function (rows, f) {
         const headers = rows[0];
@@ -3856,151 +3711,169 @@
         if (cols.examScoreIdx < 0) missing.push("Exam Score");
         if (cols.nameIdx < 0 && cols.studentIdIdx < 0) missing.push("Student Name or Student ID");
 
-        const { records } = studentsForClassResults();
-        let matched = 0;
+        const { records, className } = studentsForClassResults();
+        const byStudent = new Map();
         const unmatched = [];
+        const blankRows = [];
         const usable = [];
         if (!missing.length) {
           rows.slice(1).forEach((row) => {
             const record = findStudentRecord(records, row[cols.nameIdx], "", row[cols.studentIdIdx]);
+            const subject = String(row[cols.subjectIdx] || "").trim();
+            if (!record) { if (subject) unmatched.push(row[cols.nameIdx] || row[cols.studentIdIdx] || "?"); return; }
             const classScore = String(row[cols.classScoreIdx] || "").replace("%", "").trim();
             const examScore = String(row[cols.examScoreIdx] || "").replace("%", "").trim();
-            if (!record) {
-              if (row[cols.subjectIdx]) unmatched.push(row[cols.nameIdx] || row[cols.studentIdIdx] || "?");
+            if (classScore === "" || examScore === "" || Number.isNaN(Number(classScore)) || Number.isNaN(Number(examScore))) {
+              if (subject) blankRows.push(record.fullName + " — " + subject);
               return;
             }
-            if (classScore === "" || examScore === "" || Number.isNaN(Number(classScore)) || Number.isNaN(Number(examScore))) return;
-            matched += 1;
-            usable.push({
-              studentId: record.studentId,
-              fullName: record.fullName,
-              subject: String(row[cols.subjectIdx] || "").trim(),
+            const totalScore = Math.round((Number(classScore) + Number(examScore)) * 100) / 100;
+            const result = {
+              subject: subject,
               classScore: Number(classScore),
               examScore: Number(examScore),
+              totalScore: totalScore,
+              grade: gradeFromTotal(totalScore),
               remark: cols.remarkIdx >= 0 ? String(row[cols.remarkIdx] || "").trim() : "",
-            });
+            };
+            usable.push({ studentId: record.studentId, fullName: record.fullName, result: result });
+            if (!byStudent.has(record.studentId)) byStudent.set(record.studentId, new Set());
+            byStudent.get(record.studentId).add(subject);
           });
         }
-
+        const completeIds = new Set();
+        byStudent.forEach((covered, studentId) => {
+          if (activeResultSubjects.every((subject) => covered.has(subject))) completeIds.add(studentId);
+        });
+        usable.forEach((entry) => { entry.complete = completeIds.has(entry.studentId); });
         pendingCsvRows = usable;
         renderPreviewTable("classResultsCsvPreview", rows, {
           fileName: f.name,
           mapping: describeMapping(headers, cols),
-          note: missing.length ? "" : matched + " of " + (rows.length - 1) + " rows matched a student in " + studentsForClassResults().className,
+          note: missing.length ? "" : usable.length + " score row(s) matched in " + className,
           error: missing.length
-            ? "Missing required column(s): " + missing.join(", ") + ". Download the template for the correct format."
-            : (unmatched.length ? unmatched.length + " row(s) name a student who is not in this class" : ""),
+            ? "Missing required column(s): " + missing.join(", ") + ". Download the class list for the correct format."
+            : (unmatched.length ? unmatched.length + " row(s) name a student who is not in " + className : "")
+              + (blankRows.length ? " · " + blankRows.length + " row(s) have a blank score and were skipped" : ""),
         });
+        renderClassResultsSummary();
       }, function (message) {
         pendingCsvRows = [];
         renderPreviewError("classResultsCsvPreview", message);
+        renderClassResultsSummary();
       });
     }
 
-    // Writes parsed CSV rows into the on-screen grid so they can be checked.
-    function loadCsvIntoClassResultsGrid() {
-      if (!pendingCsvRows.length) {
-        reportWarning("Load a CSV with at least one matching row first.");
-        return;
-      }
-      const subjects = [];
-      pendingCsvRows.forEach((row) => {
-        if (subjects.indexOf(row.subject) === -1) subjects.push(row.subject);
-      });
-      const merged = activeResultSubjects.filter((s) => subjects.indexOf(s) !== -1).concat(
-        subjects.filter((s) => activeResultSubjects.indexOf(s) === -1)
-      );
-      activeResultSubjects = merged;
-      renderClassResultSubjects();
-      renderClassResultsGrid();
-
-      let filled = 0;
-      document.querySelectorAll("#classResultsBody tr[data-student-row]").forEach((row) => {
-        const name = row.getAttribute("data-student-row");
-        const normalized = detlofNormalizeName(name);
-        pendingCsvRows.forEach((entry) => {
-          if (detlofNormalizeName(entry.fullName) !== normalized) return;
-          const subjectIndex = activeResultSubjects.indexOf(entry.subject);
-          if (subjectIndex === -1) return;
-          const classInputs = row.querySelectorAll("input[data-kind='class']");
-          const examInputs = row.querySelectorAll("input[data-kind='exam']");
-          if (classInputs[subjectIndex]) classInputs[subjectIndex].value = entry.classScore;
-          if (examInputs[subjectIndex]) examInputs[subjectIndex].value = entry.examScore;
-          filled += 1;
+    // Step 1: a score sheet with every student in the class and their credentials,
+    // one row per subject, with the score columns left blank to fill in.
+    function buildClassScoreSheet() {
+      const { className, records, names } = studentsForClassResults();
+      const subjects = applyCurriculumSubjects();
+      const lines = [csvRow(["Student Name", "Student ID", "Class", "Subject",
+        "Class Score (40)", "Exam Score (60)", "Remark"])];
+      names.forEach((name) => {
+        const record = records.find((r) => detlofNormalizeName(r.fullName) === detlofNormalizeName(name));
+        subjects.forEach((subject) => {
+          lines.push(csvRow([name, record ? record.studentId : "", className, subject, "", "", ""]));
         });
       });
-      recalcClassResultsTotals();
+      return { lines: lines, className: className, students: names.length, subjects: subjects.length };
+    }
+
+    // Step 3: the class goes to the Academics Admin, who reviews and publishes.
+    // Nothing reaches a student portal until it is approved.
+    function submitClassResultsForReview() {
+      if (!pendingCsvRows.length) { reportWarning("Upload the completed class CSV first."); return; }
+      const { className } = studentsForClassResults();
+      const termKey = document.getElementById("classResultsTerm").value;
+      const sendable = pendingCsvRows.filter((row) => row.complete);
+      if (!sendable.length) {
+        reportWarning("No student has every subject filled in, so there is nothing to send. Check the preview for rows with blank scores.");
+        return;
+      }
+      const skipped = new Set(pendingCsvRows.filter((row) => !row.complete).map((row) => row.fullName));
+      const resultsData = sendable.map((entry) => ({
+        studentId: entry.studentId,
+        subject: entry.result.subject,
+        classScore: entry.result.classScore,
+        examScore: entry.result.examScore,
+        totalScore: entry.result.totalScore,
+        grade: entry.result.grade,
+        remark: entry.result.remark || "Keep it up",
+      }));
+      const students = new Set(resultsData.map((r) => r.studentId));
+      addPendingApproval("results", {
+        termKey: termKey,
+        className: className,
+        resultsData: resultsData,
+        matchedCount: students.size,
+        createdBy: teacherLabel(),
+        createdAt: stampIso(),
+      });
       pendingCsvRows = [];
-      reportSuccess("Added " + filled + " score(s) from the CSV into the table. Review, then publish.");
+      renderPendingApprovals();
+      const note = skipped.size ? " " + skipped.size + " incomplete student(s) were held back." : "";
+      reportSuccess("Sent " + students.size + " students' " + (TERM_LABELS[termKey] || termKey)
+        + " results to the Academics Admin for review." + note);
+      const preview = document.getElementById("classResultsCsvPreview");
+      if (preview) {
+        preview.innerHTML = "<p style='color:var(--crest-green);text-align:center;padding:14px;margin:0;'>Sent for review. The Academics Admin will publish it to "
+          + escapeHtml(className) + "'s student portals.</p>";
+      }
+      renderClassResultsSummary();
     }
 
     bindEvent("classResultsCsv", "change", function () {
       const file = this.files && this.files[0];
       if (!file) return;
+      pendingCsvRows = [];
       parseClassResultsCsv(file);
     });
 
-    bindEvent("classResultsCsvLoad", "click", loadCsvIntoClassResultsGrid);
+    bindEvent("classResultsClass", "change", function () {
+      pendingCsvRows = [];
+      applyCurriculumSubjects();
+      const preview = document.getElementById("classResultsCsvPreview");
+      if (preview) {
+        preview.innerHTML = "<p style='color:var(--muted);text-align:center;padding:14px;margin:0;'>Choose the completed CSV for "
+          + escapeHtml(this.value) + " to preview it here.</p>";
+      }
+    });
 
     bindEvent("downloadClassResultsTemplate", "click", function () {
-      const className = document.getElementById("classResultsClass").value;
-      const { records, names } = studentsForClassResults();
-      const subjects = detlofSubjectsForClass(className);
-      const lines = [csvRow(["Student Name", "Student ID", "Class", "Subject", "Class Score", "Exam Score", "Remark"])];
-      if (!names.length) {
-        reportWarning("No students found in " + className + ".");
-        return;
-      }
-      names.forEach((name) => {
-        const record = records.find((r) => detlofNormalizeName(r.fullName) === detlofNormalizeName(name));
-        subjects.forEach((subject) => {
-          lines.push(csvRow([
-            name,
-            record ? record.studentId : "",
-            className,
-            subject,
-            "",
-            "",
-            "",
-          ]));
-        });
-      });
-      downloadTextFile(safeFileName(className) + "_results_template.csv", lines.join("\r\n"), "text/csv");
-      reportSuccess("Downloaded a template for " + names.length + " students and " + subjects.length + " subjects.");
+      const sheet = buildClassScoreSheet();
+      if (!sheet.students) { reportWarning("No students found in " + sheet.className + "."); return; }
+      const term = document.getElementById("classResultsTerm").value.replace("term", "");
+      downloadTextFile(
+        safeFileName(sheet.className) + "_term" + term + "_scores.csv",
+        sheet.lines.join("\r\n"),
+        "text/csv"
+      );
+      reportSuccess("Downloaded a score sheet for " + sheet.students + " students and " + sheet.subjects
+        + " subjects. Fill it in, save as CSV, then upload it back.");
     });
 
-    bindEvent("classResultsClass", "change", function () {
-      applyCurriculumSubjects();
-      renderClassResultsGrid();
+    bindEvent("downloadClassResultsCredentials", "click", function () {
+      const { className, records, names } = studentsForClassResults();
+      if (!names.length) { reportWarning("No students found in " + className + "."); return; }
+      const lines = [csvRow(["Student Name", "Student ID", "Class", "Email", "Parent Name", "Parent Phone", "WhatsApp"])];
+      names.forEach((name) => {
+        const record = records.find((r) => detlofNormalizeName(r.fullName) === detlofNormalizeName(name));
+        lines.push(csvRow([
+          name,
+          record ? record.studentId : "",
+          className,
+          record ? record.email : "",
+          record ? (record.parentName || "") : "",
+          record ? (record.parentPhone || "") : "",
+          record ? (record.whatsappNumber || "") : "",
+        ]));
+      });
+      downloadTextFile(safeFileName(className) + "_students.csv", lines.join("\r\n"), "text/csv");
+      reportSuccess("Downloaded the " + names.length + " students in " + className + ".");
     });
-    bindEvent("classResultsTerm", "change", renderClassResultsGrid);
-    bindEvent("classResultsBody", "input", recalcClassResultsTotals);
-    bindEvent("classResultsSubjects", "click", function (event) {
-      const target = event.target.closest("[data-remove-subject]");
-      if (!target) return;
-      const subject = target.getAttribute("data-remove-subject");
-      if (activeResultSubjects.length <= 1) { reportWarning("Keep at least one subject."); return; }
-      activeResultSubjects = activeResultSubjects.filter((s) => s !== subject);
-      renderClassResultSubjects();
-      renderClassResultsGrid();
-    });
-    bindEvent("classResultsAddSubjectBtn", "click", function () {
-      const input = document.getElementById("classResultsAddSubject");
-      const subject = input.value.trim();
-      if (!subject) return;
-      if (activeResultSubjects.indexOf(subject) !== -1) { reportWarning("\"" + subject + "\" is already in the table."); return; }
-      activeResultSubjects.push(subject);
-      input.value = "";
-      renderClassResultSubjects();
-      renderClassResultsGrid();
-    });
-    bindEvent("classResultsPublish", "click", () => publishClassResults(false));
-    bindEvent("classResultsQueue", "click", () => publishClassResults(true));
-    bindEvent("classResultsClear", "click", function () {
-      document.querySelectorAll("#classResultsBody input").forEach((input) => { input.value = ""; });
-      recalcClassResultsTotals();
-      reportSuccess("Cleared the score entries. Student identities are unchanged.");
-    });
+
+    bindEvent("classResultsQueue", "click", submitClassResultsForReview);
 
     // -------------------------------------------------------------------------
     // Student Portal Editor — the single place that changes what a student sees
@@ -4367,8 +4240,47 @@
       });
     });
 
+    // Section 10 has its own class and student pickers so an admin can preview and
+    // send without travelling to the Student Records section.
+    function previewRecord() {
+      const query = document.getElementById("previewStudent").value.trim();
+      if (!query) return null;
+      const className = document.getElementById("previewClass").value;
+      const records = getStoredRecords();
+      const normalized = detlofNormalizeName(query);
+      return records.find((r) => r.currentClass === className && detlofNormalizeName(r.fullName) === normalized) ||
+        records.find((r) => detlofNormalizeName(r.fullName) === normalized) ||
+        records.find((r) => String(r.studentId).toUpperCase() === query.toUpperCase()) ||
+        null;
+    }
+
+    function refreshPreviewTargets() {
+      const className = document.getElementById("previewClass").value;
+      fillDatalist("previewStudentNames", getStudentsForClassSelect(className).map((r) => r.fullName));
+      const summary = document.getElementById("previewStudentSummary");
+      const record = previewRecord();
+      if (!summary) return null;
+      if (!record) { summary.textContent = ""; return null; }
+      const totals = detlofBillTotals(record);
+      summary.textContent = record.fullName + " · " + record.studentId + " · " + record.currentClass
+        + " · fees " + detlofFormatCedis(totals.balance) + " outstanding";
+      summary.className = "editor-status editor-status-ok";
+      const phoneInput = document.getElementById("adminSendParentPhone");
+      if (phoneInput && !phoneInput.value.trim()) {
+        phoneInput.value = record.whatsappNumber || record.parentPhone || "";
+      }
+      return record;
+    }
+
+    bindEvent("previewClass", "change", function () {
+      document.getElementById("previewStudent").value = "";
+      refreshPreviewTargets();
+    });
+    bindEvent("previewStudent", "input", refreshPreviewTargets);
+    bindEvent("previewStudent", "change", refreshPreviewTargets);
+
     function currentPreviewPayload() {
-      const record = getRecordForTypedName();
+      const record = previewRecord();
       const kind = document.getElementById("previewKind").value;
       const termKey = document.getElementById("previewTerm").value;
       const phoneInput = document.getElementById("adminSendParentPhone");
@@ -4377,55 +4289,65 @@
         record.whatsappNumber = typedPhone;
         record.profileWhatsApp = typedPhone;
       }
+      if (!record) return { record: null, title: "Preview", portalHtml: "", message: "" };
 
       if (kind === "timetable") {
         return {
           record,
-          title: "Timetable for " + (record ? record.fullName : "student"),
-          portalHtml: buildTimetablePreviewHtml(record && record.timetable),
-          message: record ? buildTimetableMessage(record, record.currentClass, record.timetable) : "",
+          title: "Timetable for " + record.fullName,
+          portalHtml: buildTimetablePreviewHtml(record.timetable),
+          message: buildTimetableMessage(record, record.currentClass, record.timetable),
         };
       }
       if (kind === "profile") {
         return {
           record,
-          title: "Profile for " + (record ? record.fullName : "student"),
+          title: "Profile for " + record.fullName,
           portalHtml: buildPortalPreviewHtml(record),
-          message: record
-            ? "*Detlof Preparatory School - STUDENT PROFILE*\n\n"
-              + "Student: " + record.fullName + "\n"
-              + "Class: " + record.currentClass + "\n"
-              + "Student ID: " + record.studentId + "\n"
-              + "Parent: " + (record.parentName || "Not on file") + "\n"
-              + "Phone: " + (record.parentPhone || "Not on file") + "\n"
-              + "Email: " + (record.email || "") + "\n\n"
-              + "Full details are on the Student Portal.\n" + portalUrl()
-            : "",
+          message: "*Detlof Preparatory School - STUDENT PROFILE*\n\n"
+            + "Student: " + record.fullName + "\n"
+            + "Class: " + record.currentClass + "\n"
+            + "Student ID: " + record.studentId + "\n"
+            + "Parent: " + (record.parentName || "Not on file") + "\n"
+            + "Phone: " + (record.parentPhone || "Not on file") + "\n"
+            + "Residence: " + (record.compound || "Not on file") + "\n"
+            + "Club: " + (record.club || "None") + "\n"
+            + "Fees outstanding: " + detlofFormatCedis(detlofBillTotals(record).balance) + "\n\n"
+            + "Full details are on the Student Portal.\n" + portalUrl(),
+        };
+      }
+      if (kind === "receipt") {
+        const totals = detlofBillTotals(record);
+        return {
+          record,
+          title: "Fee receipt for " + record.fullName,
+          portalHtml: buildPortalPreviewHtml(record) + buildResultsPreviewHtml(termKey, record),
+          message: totals.billed > 0 ? receiptTextForWhatsApp(record) : "",
         };
       }
       return {
         record,
-        title: (TERM_LABELS[termKey] || "Term") + " results for " + (record ? record.fullName : "student"),
-        portalHtml: buildResultsPreviewHtml(termKey),
-        message: record ? buildResultsMessage(record, termKey) : "",
+        title: (TERM_LABELS[termKey] || "Term") + " results for " + record.fullName,
+        portalHtml: buildPortalPreviewHtml(record) + buildResultsPreviewHtml(termKey, record),
+        message: buildResultsMessage(record, termKey),
       };
     }
 
     bindEvent("openPreviewBtn", "click", function () {
       const payload = currentPreviewPayload();
-      if (!payload.record) { reportWarning("Select a student in the Student Records section first"); return; }
+      if (!payload.record) { reportWarning("Choose a class and a student in this section first."); return; }
       openPublishPreview(payload);
     });
 
     bindEvent("saveContactBtn", "click", function () {
-      const record = getRecordForTypedName();
-      if (!record) { reportWarning("Select a student in the Student Records section first"); return; }
+      const record = refreshPreviewTargets();
+      if (!record) { reportWarning("Choose a class and a student in this section first."); return; }
       saveContactToPhone(record);
     });
 
     bindEvent("sendParentPdfBtn", "click", function () {
-      const record = getRecordForTypedName();
-      if (!record) { reportWarning("Select a student in the Student Records section first"); return; }
+      const record = refreshPreviewTargets();
+      if (!record) { reportWarning("Choose a class and a student in this section first."); return; }
       withFeedback(this, "Building the parent report", async () => {
         await sendParentPdfFlow(record, document.getElementById("previewTerm").value);
       });
@@ -4485,11 +4407,9 @@
       reportSuccess("Identity photo removed for " + record.fullName + ".");
     });
 
-    (function populateSubjectList() {
-      const datalist = document.getElementById("resultSubjectList");
-      if (!datalist) return;
-      datalist.innerHTML = SUBJECT_SUGGESTIONS.map((s) => "<option value=\"" + escapeHtml(s) + "\"></option>").join("");
-    })();
+  // Results are published a whole class at a time by submitClassResultsForReview()
+  // in section 6, which sends the uploaded CSV to the Academics Admin. There is no
+  // per-subject form and no manual score entry.
 
     // Results are published a whole class at a time by publishClassResults() in
     // section 6, which reuses publishResultsToPortals() to write each student's
@@ -5122,7 +5042,7 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     let html = "";
     pending.forEach((item, i) => {
       const typeLabel = { results: "Results", timetable: "Timetable", release: "Term Release" }[item.type] || item.type;
-      html += "<div style='border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:#fff;'>";
+      html += "<div class='pending-approval " + (item.status || "pending") + "' style='border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:#fff;'>";
       html += "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>";
       html += "<strong>" + escapeHtml(typeLabel) + "</strong>";
       html += "<span style='font-size:11px;color:var(--muted);'>Submitted: " + escapeHtml(item.submittedAt) + "</span>";
@@ -5177,7 +5097,7 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
             remark: r.remark || "",
           }));
         portalHtml = buildPortalPreviewHtml(record) +
-          buildResultsPreviewHtml(termKey).replace("results</h4>", "results</h4>") +
+          buildResultsPreviewHtml(termKey, record) +
           '<p class="preview-note">Previewing the first of ' + new Set(results.map((r) => r.studentId)).size +
           " students in this batch (" + results.length + " result rows in total).</p>" +
           '<p class="preview-note">This student\'s ' + escapeHtml(TERM_LABELS[termKey] || termKey) +
@@ -5216,10 +5136,23 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     });
   };
 
-  window.approvePending = function(index) {
+  // Only the Academics Admin can approve and publish. Everyone else can submit
+  // for review, so nothing reaches a student portal unreviewed.
+  const isAcademicsAdmin = localStorage.getItem("detlof_academics_admin") === "true";
+  function requireAcademicsAdmin(action) {
+    if (isAcademicsAdmin) return true;
+    reportWarning("Only the Academics Admin can " + action + ". This has been sent to them for review.");
+    return false;
+  }
+
+  window.approvePending = function (index) {
+    if (!requireAcademicsAdmin("approve and publish")) return;
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     const item = pending[index];
     if (!item) return;
+    const what = item.data && item.data.className
+      ? item.data.className
+      : (item.data && item.data.termKey ? (TERM_LABELS[item.data.termKey] || item.data.termKey) : "");
     if (item.type === "results") {
       publishResultsToPortals(item.data.termKey, item.data.resultsData);
     } else if (item.type === "timetable") {
@@ -5229,19 +5162,22 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     }
     item.status = "approved";
     item.approvedAt = stampIso();
+    item.approvedBy = teacherLabel();
     localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
-    reportSuccess("Approved and published to student portals.");
+    reportSuccess("Reviewed, approved and published to the students' portals" + (what ? " for " + what : "") + ".");
     renderPendingApprovals();
   };
 
-  window.rejectPending = function(index) {
+  window.rejectPending = function (index) {
+    if (!requireAcademicsAdmin("reject")) return;
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     const item = pending[index];
     if (!item) return;
     item.status = "rejected";
     item.rejectedAt = stampIso();
+    item.rejectedBy = teacherLabel();
     localStorage.setItem("detlof_pending_approvals", JSON.stringify(pending));
-    reportWarning("Rejected.");
+    reportWarning("Rejected. The submitter needs to upload a corrected file.");
     renderPendingApprovals();
   };
 
@@ -5260,6 +5196,7 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
   }
 
   bindEvent("approveAllBtn", "click", function() {
+    if (!requireAcademicsAdmin("approve and publish")) return;
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     pending.forEach((item, i) => {
       if (item.status === "pending") {
@@ -5269,6 +5206,7 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
   });
 
   bindEvent("rejectAllBtn", "click", function() {
+    if (!requireAcademicsAdmin("reject")) return;
     const pending = JSON.parse(localStorage.getItem("detlof_pending_approvals") || "[]");
     pending.forEach((item, i) => {
       if (item.status === "pending") {
@@ -5703,9 +5641,10 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
       "</div></div>";
   }
 
-  // A faithful mock of the results table as the student will see it.
-  function buildResultsPreviewHtml(termKey) {
-    const record = getRecordForTypedName();
+  // A faithful mock of the results table as the student will see it. The record
+  // is passed in so the caller decides which student this is for.
+  function buildResultsPreviewHtml(termKey, targetRecord) {
+    const record = targetRecord || getRecordForTypedName();
     const termData = record && (record.termResults || {})[termKey];
     const results = termData && Array.isArray(termData.results) ? termData.results : [];
     const label = TERM_LABELS[termKey] || "Term";

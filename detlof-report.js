@@ -10,28 +10,52 @@ const TERM_LABELS = { term1: "First Term", term2: "Second Term", term3: "Third T
 const GRADE_POINTS = { A: 4.0, B: 3.0, C: 2.0, D: 1.0, E: 0.5, F: 0.0 };
 
 // Starting results every roster student begins with, so both portals agree on
-// what a student sees before any term is published by the school.
-const DEFAULT_RESULTS = [
-  { subject: "Mathematics", classScore: 32, examScore: 56, totalScore: 88, grade: "B", remark: "Very good" },
-  { subject: "English Language", classScore: 34, examScore: 60, totalScore: 94, grade: "A", remark: "Excellent progress" },
-  { subject: "Integrated Science", classScore: 30, examScore: 55, totalScore: 85, grade: "B", remark: "Keep it up" },
-  { subject: "Computing / ICT", classScore: 28, examScore: 50, totalScore: 78, grade: "C", remark: "Good work" },
-  { subject: "Social Studies", classScore: 30, examScore: 52, totalScore: 82, grade: "B", remark: "Good effort" },
+// what a student sees before any term is published by the school. The subjects
+// are the ones that class actually teaches (detlof-school.js), so a portal can
+// never show a subject the class does not do.
+const DEMO_SCORE_PATTERNS = [
+  { classScore: 34, examScore: 58, remark: "Excellent progress" },
+  { classScore: 32, examScore: 56, remark: "Very good" },
+  { classScore: 30, examScore: 55, remark: "Keep it up" },
+  { classScore: 29, examScore: 52, remark: "Good work" },
+  { classScore: 27, examScore: 50, remark: "Good effort" },
+  { classScore: 25, examScore: 46, remark: "A little more practice needed" },
+  { classScore: 30, examScore: 53, remark: "Steady improvement" },
+  { classScore: 33, examScore: 57, remark: "Strong work" },
+  { classScore: 28, examScore: 48, remark: "Satisfactory" },
+  { classScore: 31, examScore: 54, remark: "Well done" },
+  { classScore: 26, examScore: 49, remark: "Can do better" },
+  { classScore: 29, examScore: 51, remark: "Consistent effort" },
 ];
 
-function detlofDefaultResults() {
-  return DEFAULT_RESULTS.map((row) => ({ ...row }));
+// Deterministic per student, so a given student always starts from the same set.
+function detlofDefaultResults(className, seed) {
+  const subjects = detlofSubjectsForClass(className);
+  const offset = Math.abs(Number(seed) || 0);
+  return subjects.map((subject, index) => {
+    const pattern = DEMO_SCORE_PATTERNS[(offset + index) % DEMO_SCORE_PATTERNS.length];
+    const totalScore = Math.round((pattern.classScore + pattern.examScore) * 100) / 100;
+    return {
+      subject: subject,
+      classScore: pattern.classScore,
+      examScore: pattern.examScore,
+      totalScore: totalScore,
+      grade: calculateGrade(totalScore),
+      remark: pattern.remark,
+    };
+  });
 }
 
 function detlofSeedDefaultResults(students, term) {
   const termKey = term || "term1";
-  return (students || []).map((student) => {
+  return (students || []).map((student, index) => {
     if (student.termResults && student.termResults[termKey]) return student;
+    const results = detlofDefaultResults(student.currentClass, index);
     return {
       ...student,
       termResults: {
         ...(student.termResults || {}),
-        [termKey]: { results: detlofDefaultResults(), gpa: null, subjectCount: detlofDefaultResults().length },
+        [termKey]: { results: results, gpa: null, subjectCount: results.length },
       },
     };
   });
@@ -147,7 +171,9 @@ function getAllGradesForStudent(student) {
     }
   });
   if (!grades.length) {
-    const studentResults = Array.isArray(student.results) ? student.results : DEFAULT_RESULTS;
+    const studentResults = Array.isArray(student.results)
+      ? student.results
+      : detlofDefaultResults(student.currentClass, 0);
     studentResults.forEach((result) => {
       grades.push(result.grade || calculateGrade(result.totalScore));
       scores.push(Number(result.totalScore || 0));
