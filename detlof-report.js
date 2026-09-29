@@ -216,25 +216,33 @@ function getPromotionNoticeData(promotionStatus, annualAverage, student) {
 }
 
 
-const REPORT_STYLES = '*{box-sizing:border-box;margin:0;padding:0;}' +
-  'body{font-family:Inter, Arial, sans-serif;padding:40px;color:#2a1730;}' +
+const REPORT_STYLES =
+  '*{box-sizing:border-box;margin:0;padding:0;}' +
+  'body{font-family:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;' +
+    'font-size:11pt;line-height:1.5;color:#2a1730;padding:40px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}' +
   '.header{text-align:center;margin-bottom:30px;}' +
   '.logo{width:110px;height:102px;}' +
-  '.subtitle{color:#75697a;font-size:12px;}' +
-  'h1{color:#560f75;font-size:24px;margin:8px 0;}' +
-  'h2{color:#560f75;font-size:18px;margin:22px 0 10px;}' +
-  '.info{color:#75697a;font-size:12px;margin:4px 0;}' +
-  'table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px;}' +
-  'th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#75697a;padding:8px;border-bottom:2px solid #eadfe9;}' +
-  'td{padding:8px;border-bottom:1px solid #eadfe9;font-size:12px;}' +
-  'td.num,th.num{text-align:center;}' +
-  '.grade-pill{display:inline-block;min-width:24px;padding:2px 6px;border-radius:6px;font-weight:800;font-size:11px;text-align:center;}' +
-  '.gpa-box{background:#fffaf0;padding:14px;border-radius:8px;margin:16px 0;border-left:4px solid #f2b500;font-size:12px;}' +
-  '.promo-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;}' +
-  '.remark{color:#75697a;font-size:11px;}' +
-  '.empty{color:#75697a;font-size:12px;font-style:italic;padding:12px 0;}' +
-  '.footer{margin-top:30px;font-size:11px;color:#75697a;text-align:center;}' +
-  '@media print{body{padding:16px;}.page-break{page-break-before:always;}}';
+  '.subtitle{color:#75697a;font-size:9pt;}' +
+  'h1{font-family:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;font-weight:600;' +
+    'letter-spacing:-.015em;color:#560f75;font-size:19pt;margin:8px 0;}' +
+  'h2{font-family:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;font-weight:600;' +
+    'letter-spacing:-.01em;color:#560f75;font-size:13pt;margin:22px 0 10px;}' +
+  'h3{font-family:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;color:#560f75;font-size:11pt;margin:14px 0 6px;}' +
+  '.info{color:#75697a;font-size:9pt;margin:4px 0;}' +
+  'table{width:100%;border-collapse:collapse;margin:16px 0;font-size:9.5pt;}' +
+  'th{text-align:left;font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;' +
+    'color:#75697a;padding:8px;border-bottom:2px solid #eadfe9;}' +
+  'td{padding:7px;border-bottom:1px solid #eadfe9;font-size:9.5pt;}' +
+  'td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}' +
+  'table{font-variant-numeric:tabular-nums;}' +
+  '.grade-pill{display:inline-block;min-width:22px;padding:2px 6px;border-radius:6px;font-weight:800;' +
+    'font-size:8.5pt;text-align:center;}' +
+  '.gpa-box{background:#fffaf0;padding:14px;border-radius:8px;margin:16px 0;border-left:4px solid #ffc900;font-size:9.5pt;}' +
+  '.promo-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:8.5pt;font-weight:700;}' +
+  '.remark{color:#75697a;font-size:8.5pt;}' +
+  '.empty{color:#75697a;font-size:9.5pt;font-style:italic;padding:12px 0;}' +
+  '.footer{margin-top:30px;font-size:8pt;color:#75697a;text-align:center;border-top:1px solid #eadfe9;padding-top:10px;}' +
+  '@media print{body{padding:14px;}.page-break{page-break-before:always;}}';
 
 function reportHeaderHTML(student, subtitle) {
   return '<div class="header"><img class="logo" src="detlofcreast.svg" alt="Detlof Crest">' +
@@ -438,6 +446,92 @@ function renderBillStatementHTML(student) {
 
   html += '<p class="remark">Please quote the Student ID when making payment. Payments are confirmed at the school office.</p>';
   html += '<div class="footer">Generated from Detlof Student Portal &middot; ' + new Date().toLocaleDateString("en-GB") + "</div>";
+  return html + "</body></html>";
+}
+
+// ---- printable school documents ---------------------------------------------
+// A single PDF-style document holding everything a parent is sent: the child's
+// identity block, the fee statement, published results and the timetable.
+function renderParentReportHTML(student, termKey) {
+  const termLabel = TERM_LABELS[termKey] || "All published terms";
+  const totals = detlofBillTotals(student);
+  const terms = collectPublishedTerms(student);
+
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<title>' + escapeHtml(student.fullName) + " - " + escapeHtml(termLabel) + '</title>' +
+    '<style>' + REPORT_STYLES + '</style></head><body>';
+  html += reportHeaderHTML(student, "Parent Report - " + termLabel);
+
+  // Identity block
+  html += '<h2>Student Details</h2>';
+  html += '<table><tbody>' +
+    "<tr><td><strong>Name</strong></td><td>" + escapeHtml(student.fullName) + "</td>" +
+    "<td><strong>Class</strong></td><td>" + escapeHtml(student.currentClass || "—") + "</td></tr>" +
+    "<tr><td><strong>Student ID</strong></td><td>" + escapeHtml(student.studentId || "—") + "</td>" +
+    "<td><strong>Academic Year</strong></td><td>" + escapeHtml(student.academicYear || ACADEMIC_YEAR) + "</td></tr>" +
+    "<tr><td><strong>Residence</strong></td><td>" + escapeHtml(student.compound || "Not on file") + "</td>" +
+    "<td><strong>Club</strong></td><td>" + escapeHtml(student.club || "None") + "</td></tr>" +
+    "<tr><td><strong>Parent / Guardian</strong></td><td>" + escapeHtml(student.parentName || "Not on file") + "</td>" +
+    "<td><strong>Parent Phone</strong></td><td>" + escapeHtml(student.parentPhone || "Not on file") + "</td></tr>" +
+    "</tbody></table>";
+
+  // Fees
+  html += '<h2>Fee Statement</h2>';
+  html += '<div class="gpa-box"><strong>Total Billed:</strong> ' + detlofFormatCedis(totals.billed) +
+    ' &middot; <strong>Paid:</strong> ' + detlofFormatCedis(totals.paid) +
+    ' &middot; <strong>Balance:</strong> <strong>' + detlofFormatCedis(totals.balance) + '</strong></div>';
+  html += '<table><thead><tr><th>Fee Item</th><th class="num">Billed</th><th class="num">Paid</th>' +
+    '<th class="num">Balance</th><th>Status</th></tr></thead><tbody>';
+  totals.bills.forEach((bill) => {
+    const status = detlofFeeStatus(bill);
+    const colours = BILL_STATUS_COLOURS[status] || BILL_STATUS_COLOURS["Not Applicable"];
+    html += "<tr><td>" + escapeHtml(bill.item) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.amount) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(bill.paid) + "</td>" +
+      '<td class="num">' + detlofFormatCedis(detlofBillBalance(bill)) + "</td>" +
+      '<td><span class="promo-badge" style="background:' + colours.bg + ';color:' + colours.fg + ';">' + status + "</span></td></tr>";
+  });
+  html += "</tbody></table>";
+
+  // Results
+  if (terms.length) {
+    html += '<h2>Academic Results</h2>';
+    const shown = termKey && termKey !== "all"
+      ? terms.filter((t) => t.key === termKey)
+      : terms;
+    html += renderConsolidatedResultsTableHTML({ termResults: (function () {
+      const map = {};
+      shown.forEach((t) => { map[t.key] = t.data; });
+      return map;
+    })() });
+    if (termKey && termKey === "all") html += renderAnnualSummaryHTML(student);
+    shown.forEach((term) => {
+      html += '<h3 style="font-size:14px;margin:16px 0 6px;">' + escapeHtml(term.label) + "</h3>";
+      html += renderResultsTableHTML(term.data.results, true);
+    });
+  } else {
+    html += '<h2>Academic Results</h2><p class="empty">No results have been published for ' +
+      escapeHtml(student.fullName) + " yet.</p>";
+  }
+
+  // Timetable
+  const schedule = Array.isArray(student.timetable) ? student.timetable : [];
+  html += "<h2>Class Timetable</h2>";
+  if (schedule.length) {
+    html += '<table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Venue</th><th>Teacher</th></tr></thead><tbody>';
+    schedule.forEach((entry) => {
+      html += "<tr><td>" + escapeHtml(entry.day || "") + "</td><td>" + escapeHtml(entry.time || "") + "</td><td>" +
+        escapeHtml(entry.subject || "") + "</td><td>" + escapeHtml(entry.venue || "") + "</td><td>" +
+        escapeHtml(entry.teacher || "Not assigned") + "</td></tr>";
+    });
+    html += "</tbody></table>";
+  } else {
+    html += '<p class="empty">No timetable has been published for this class yet.</p>';
+  }
+
+  html += '<p class="remark" style="margin-top:20px;">Issued by Detlof Preparatory School. ' +
+    "Please keep this document for your records. Enquiries: contact the school office.</p>";
+  html += '<div class="footer">Generated ' + new Date().toLocaleDateString("en-GB") + "</div>";
   return html + "</body></html>";
 }
 

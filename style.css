@@ -1,6 +1,86 @@
 /* ==========================================================================
    DETLOF PREPARATORY SCHOOL — STUDENT PORTAL STYLES
    ========================================================================== */
+/* ---------------------------------------------------------------------------
+   Typography
+   A display serif for headings gives an academic feel the reference portals
+   lack, with a clean grotesque for the interface. Both stacks name widely
+   available fonts first, so the portal still looks right with no internet and
+   no webfont request: Inter / Segoe UI Variable / system-ui, and a serif that
+   exists on every platform (Iowan Old Style, Palatino, Georgia).
+   --------------------------------------------------------------------------- */
+:root {
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-ui: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+body,
+.admin-shell,
+.portal-shell,
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-ui);
+}
+
+/* Headings: serif, tighter and slightly negative-tracked so they read as a
+   considered scale rather than default browser bold. */
+h1, h2, h3, h4,
+.brand strong,
+.login-hero h1,
+.panel h2,
+.card h2,
+.field > label,
+.stat-value,
+.bill-card-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+}
+
+h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem); }
+h2 { font-size: clamp(1.2rem, 1.05rem + 0.7vw, 1.55rem); }
+h3 { font-size: 1.05rem; }
+
+.field > label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.brand span,
+.sub,
+.field small,
+.id-pill,
+.synced-badge,
+.preview-note,
+.editor-meta,
+.stat-label {
+  font-family: var(--font-ui);
+  letter-spacing: 0.02em;
+}
+
+/* Scores, student IDs, codes and money align in columns. */
+td.num, th.num,
+.mono, .id-pill, .code-pill, .synced-badge,
+#billsTable td, #editorBillsTable td, #adminBillsTable td,
+.stat-value, .bill-card-value,
+.results-grid input, #adminBillsTable input, #editorBillsTable input,
+.grade-pill, .bill-pill {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 :root {
   --ink: #211526;
   --ink-deep: #2a1730;

@@ -27,6 +27,115 @@ const DETLOF_FEE_ITEMS = [
   "Club Dues",
 ];
 
+// ---------------------------------------------------------------------------
+// Subjects by level, following Ghana's standards-based curriculum.
+//
+//   Key Phase 1  Foundation      - Kindergarten 1 & 2
+//   Key Phase 2  Lower Primary   - Basic 1 to Basic 3
+//   Key Phase 3  Upper Primary   - Basic 4 to Basic 6
+//   Key Phase 4  Junior High     - Basic 7 to Basic 9 (Common Core Programme)
+//
+// Language, Mathematics, Science, History, Our World and Our People, Creative
+// Arts, Religious and Moral Education, Physical Education, French, Ghanaian
+// Language and Computing are taught from 2019. Note that French and Computing
+// begin at Basic 4, and Social Studies, Career Technology and Arabic begin at
+// Basic 7 where the Common Core Programme applies.
+// ---------------------------------------------------------------------------
+const DETLOF_SUBJECTS_CRECHE = [
+  "Play Activities",
+  "Language & Literacy",
+  "Numeracy",
+  "Our World & People",
+  "Creative Arts",
+  "Physical Development",
+];
+
+const DETLOF_SUBJECTS_KINDERGARTEN = [
+  "Numeracy",
+  "Language & Literacy",
+  "Our World & People",
+  "Creative Arts",
+  "Religious & Moral Education",
+  "Physical Education",
+];
+
+const DETLOF_SUBJECTS_LOWER_PRIMARY = [
+  "English Language",
+  "Mathematics",
+  "Science",
+  "Ghanaian Language",
+  "History",
+  "Our World and Our People",
+  "Creative Arts",
+  "Religious and Moral Education",
+  "Physical Education",
+];
+
+const DETLOF_SUBJECTS_UPPER_PRIMARY = DETLOF_SUBJECTS_LOWER_PRIMARY.concat([
+  "French",
+  "Computing",
+]);
+
+const DETLOF_SUBJECTS_JUNIOR_HIGH = [
+  "English Language",
+  "Mathematics",
+  "Science",
+  "Social Studies",
+  "Computing",
+  "Ghanaian Language",
+  "French",
+  "Creative Arts and Design",
+  "Career Technology",
+  "Religious and Moral Education",
+  "Physical Education and Health",
+];
+
+// Level groupings, used to resolve a class to its curriculum.
+function detlofCurriculumKey(className) {
+  const name = String(className || "");
+  if (/^Basic\s*[1-3]$/.test(name)) return "lowerPrimary";
+  if (/^Basic\s*[4-6]$/.test(name)) return "upperPrimary";
+  if (/^Basic\s*[7-9]$/.test(name)) return "juniorHigh";
+  if (/^JHS\s*[1-3]$/.test(name)) return "juniorHigh";
+  if (/^SHS\s*[1-3]$/.test(name)) return "seniorHigh";
+  if (/^KG/.test(name) || /Nursery/.test(name)) return "kindergarten";
+  if (/^Creche$/i.test(name)) return "creche";
+  if (/^Lower KG$/i.test(name) || /^Upper KG$/i.test(name)) return "kindergarten";
+  return "lowerPrimary";
+}
+
+const DETLOF_CURRICULUM = {
+  creche: { label: "Early Childhood Development", subjects: DETLOF_SUBJECTS_CRECHE },
+  kindergarten: { label: "Key Phase 1 - Foundation", subjects: DETLOF_SUBJECTS_KINDERGARTEN },
+  lowerPrimary: { label: "Key Phase 2 - Lower Primary (B1-B3)", subjects: DETLOF_SUBJECTS_LOWER_PRIMARY },
+  upperPrimary: { label: "Key Phase 3 - Upper Primary (B4-B6)", subjects: DETLOF_SUBJECTS_UPPER_PRIMARY },
+  juniorHigh: { label: "Key Phase 4 - Common Core Programme (B7-B9)", subjects: DETLOF_SUBJECTS_JUNIOR_HIGH },
+  seniorHigh: { label: "Key Phase 5 - Senior High School", subjects: DETLOF_SUBJECTS_JUNIOR_HIGH.concat(["Elective Mathematics", "Elective Science", "Elective Humanities"]) },
+};
+
+// The subjects a given class actually teaches.
+function detlofSubjectsForClass(className) {
+  const key = detlofCurriculumKey(className);
+  const entry = DETLOF_CURRICULUM[key] || DETLOF_CURRICULUM.lowerPrimary;
+  return entry.subjects.slice();
+}
+
+function detlofCurriculumLabel(className) {
+  const key = detlofCurriculumKey(className);
+  return (DETLOF_CURRICULUM[key] || DETLOF_CURRICULUM.lowerPrimary).label;
+}
+
+// Every subject any level teaches, for free-text entry and custom templates.
+function detlofAllSubjects() {
+  const seen = [];
+  Object.keys(DETLOF_CURRICULUM).forEach((key) => {
+    DETLOF_CURRICULUM[key].subjects.forEach((subject) => {
+      if (seen.indexOf(subject) === -1) seen.push(subject);
+    });
+  });
+  return seen;
+}
+
 const DETLOF_CURRENCY = "GHS";
 
 function detlofFormatCedis(amount) {
