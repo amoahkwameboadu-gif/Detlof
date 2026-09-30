@@ -2202,10 +2202,10 @@
   </div>
   </main>
 
-  <script src="detlof-icons.js"></script>
-  <script src="detlof-roster.js"></script>
-  <script src="detlof-school.js"></script>
-  <script src="detlof-report.js"></script>
+  <script src="detlof-icons.js?v=pre-jhs3-2026"></script>
+  <script src="detlof-roster.js?v=pre-jhs3-2026"></script>
+  <script src="detlof-school.js?v=pre-jhs3-2026"></script>
+  <script src="detlof-report.js?v=pre-jhs3-2026"></script>
   <script>
     const STORAGE_KEY = "detlof_bulk_import_codes";
 
@@ -2411,7 +2411,13 @@
         const map = new Map();
         defaultSeedCodes.forEach((record) => map.set(String(record.studentId).toUpperCase(), mergeStoredRecord({}, record)));
         if (Array.isArray(parsed)) {
-          parsed.forEach((record) => {
+          // A returning browser still holds the previous school structure. Map it
+          // onto the current roster before merging, so old classes do not appear
+          // again and no student ends up under two Student IDs.
+          const migrated = typeof detlofMigrateStoredRecords === "function"
+            ? detlofMigrateStoredRecords(parsed)
+            : parsed;
+          migrated.forEach((record) => {
             if (!record || !record.studentId) return;
             const key = String(record.studentId).toUpperCase();
             const existing = map.get(key);

@@ -403,3 +403,65 @@ function detlofNextClass(className) {
 function detlofPrefixForClass(className) {
   return DETLOF_CLASS_PREFIX[className] || "DPS";
 }
+
+// ---------------------------------------------------------------------------
+// Moving between school structures
+//
+// Records saved in a browser are kept in localStorage, so changing the class
+// list or the Student ID prefixes would otherwise leave the old classes showing
+// up beside the new ones and duplicate every student under two IDs. This maps
+// what was stored onto the current roster by student name, which is stable.
+// ---------------------------------------------------------------------------
+const DETLOF_DATA_VERSION = "pre-jhs3-2026";
+const DETLOF_RETIRED_CLASSES = ["Basic 7", "Basic 8", "Basic 9", "Nursery One", "Nursery Two"];
+
+function detlofCurrentRosterByName() {
+  const map = new Map();
+  detlofBuildRosterStudents().forEach((student) => {
+    map.set(detlofNormalizeName(student.fullName), student);
+  });
+  return map;
+}
+
+function detlofMigrateStoredRecords(records) {
+  const rosterByName = detlofCurrentRosterByName();
+  const kept = [];
+
+  (records || []).forEach((record) => {
+    if (!record || !record.fullName) return;
+    const key = detlofNormalizeName(record.rosterName || record.nameOverride || record.fullName);
+    const student = rosterByName.get(key);
+
+    if (student) {
+      // The same student under the new Student ID. Anything the school entered is
+      // kept. The class is only forced back to the roster's when the stored value
+      // is one the school no longer runs, so an administrator's own class change
+      // is never undone.
+      const storedClass = String(record.currentClass || "");
+      const classIsRetired = DETLOF_RETIRED_CLASSES.indexOf(storedClass) !== -1;
+      const identityMoved = String(record.studentId).toUpperCase() !== student.studentId
+        || (classIsRetired && storedClass !== student.currentClass);
+      kept.push(Object.assign({}, record, {
+        studentId: student.studentId,
+        currentClass: classIsRetired ? student.currentClass : (storedClass || student.currentClass),
+        email: record.email || student.email,
+        academicYear: record.academicYear || student.academicYear,
+        migratedFrom: identityMoved ? String(record.studentId) + " / " + record.currentClass : record.migratedFrom,
+      }));
+      return;
+    }
+
+// Not on the roster now. A genuine new admission is kept; only a leftover
+    // from a class the school no longer runs is dropped, so it cannot resurface.
+    if (DETLOF_RETIRED_CLASSES.indexOf(String(record.currentClass)) !== -1) return;
+    kept.push(record);
+  });
+
+  // One record per student, newest wins.
+  const byId = new Map();
+  kept.forEach((record) => {
+    const id = String(record.studentId).toUpperCase();
+    if (!byId.has(id)) byId.set(id, record);
+  });
+  return Array.from(byId.values());
+}
