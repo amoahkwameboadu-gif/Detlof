@@ -905,13 +905,83 @@ tbody tr:hover { background: rgba(86, 15, 117, 0.035); }
 }
 .login-card .logo, .login-hero .logo, .login-screen img[src$="detlofcreast.svg"] { animation: crestFloat 5s ease-in-out infinite; }
 
-/* ---------------- heading icons ----------------
+/* Buttons and nav items are comfortable to tap at every width, not only when
+   the browser reports a coarse pointer: that detection is unreliable (a tablet
+   with a mouse, some Android browsers), and a 35px button is hard to hit. */
+.btn,
+.outline-btn,
+.primary-btn,
+.nav-btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.primary-btn { min-height: 48px; }
+.nav-btn { padding: 11px 14px; }
+
+/* A checkbox is 13px on its own, so its label carries the tap area. */
+.checkbox-row {
+  display: flex; align-items: center; gap: 10px; min-height: 44px;
+  padding: 8px 10px; border-radius: 8px; background: #faf7fc; cursor: pointer;
+}
+.checkbox-row input[type="checkbox"] { width: 20px; height: 20px; flex: 0 0 auto; }
+.checkbox-row span { font-size: 12px; line-height: 1.4; }
+
+/* The profile photo button is a bare icon. */
+.profile-photo-btn { min-width: 44px; min-height: 44px; padding: 9px; }
    Solid glyphs on a tinted tile so each panel is recognisable at a glance. */
 .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; }
 .icon-sm { width: 15px; height: 15px; }
 .icon-md { width: 20px; height: 20px; }
 .icon-lg { width: 26px; height: 26px; }
 .icon-xl { width: 34px; height: 34px; }
+/* ---------------- login welcome ----------------
+   The same confident type and the school's purple and gold as the admin panels,
+   with a warmer welcome for a student. */
+.login-card {
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 48px rgba(86, 15, 117, 0.16);
+  padding: 34px 30px;
+  text-align: center;
+}
+.login-welcome { margin: 0 0 20px; }
+.login-welcome-flag {
+  display: inline-block; padding: 5px 14px; border-radius: 999px;
+  background: var(--crest-gold-soft); color: var(--ink-deep);
+  font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+}
+.login-welcome-title {
+  margin: 12px 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 7vw, 40px);
+  font-weight: 700; line-height: 1.08; letter-spacing: -0.02em;
+  color: var(--crest-purple);
+}
+.login-welcome-sub {
+  margin: 0 auto; font-size: 13px; line-height: 1.55; color: var(--muted); max-width: 30ch;
+}
+.login-divider {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 18px;
+  color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.login-divider::before,
+.login-divider::after { content: ""; flex: 1; height: 2px; background: var(--line); border-radius: 2px; }
+.login-card form .field { text-align: left; }
+.login-card .primary-btn {
+  width: 100%; margin-top: 6px; font-size: 15px; font-weight: 800; letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #560f75 0%, #7b1fa2 100%);
+  box-shadow: 0 10px 24px rgba(86, 15, 117, 0.28);
+}
+.login-card .primary-btn:hover { transform: translateY(-2px) scale(1.01); }
+.login-hint { text-align: left; }
+@media (max-width: 480px) {
+  .login-card { padding: 24px 16px; border-radius: 16px; }
+  .login-welcome-title { font-size: 27px; }
+  .login-welcome-sub { font-size: 12px; }
+}
+
 .heading-icon {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px; margin-right: 10px; border-radius: 10px;

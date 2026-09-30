@@ -592,6 +592,19 @@
     .pending-approval.rejected { border-left: 4px solid #d9003b !important; background: #fef7f8 !important; }
     .pending-approval.pending { border-left: 4px solid var(--crest-gold) !important; }
 
+    /* Buttons are comfortable to tap at every width, not only when the browser
+       reports a coarse pointer: that detection is unreliable, and a 35px button
+       is hard to hit on a phone. */
+    .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+    .profile-photo-btn { min-width: 44px; min-height: 44px; padding: 9px; }
+    .checkbox-row {
+      display: flex; align-items: center; gap: 10px; min-height: 44px;
+      padding: 8px 10px; border-radius: 8px; background: #faf7fc; cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] { width: 20px; height: 20px; flex: 0 0 auto; }
+    .checkbox-row span { font-size: 12px; line-height: 1.4; text-transform: none; letter-spacing: 0; color: var(--ink); font-weight: 600; }
+    .preview-close { min-width: 40px; min-height: 40px; font-size: 24px; }
+
     /* ---------------- heading icons ----------------
        Solid glyphs on a subtle tinted tile so each section is recognisable at a
        glance. The icon inherits the heading colour, so it stays in step. */
@@ -615,6 +628,43 @@
       .heading-icon { width: 28px; height: 28px; margin-right: 8px; }
       .heading-icon .icon { width: 17px; height: 17px; }
     }
+
+    /* ---------------- admin guide ---------------- */
+    .admin-guide {
+      margin: 0 0 18px; padding: 18px; border-radius: 14px; color: #fff;
+      background: linear-gradient(135deg, #2a1730 0%, #560f75 55%, #7b1fa2 100%);
+      box-shadow: 0 12px 32px rgba(42, 23, 48, 0.28);
+    }
+    .admin-guide-title { margin: 0 0 4px; font-size: 19px; color: #fff; }
+    .admin-guide-sub { margin: 0 0 16px; font-size: 12px; color: rgba(255, 255, 255, 0.78); }
+    .admin-guide-stage {
+      padding: 12px 14px; border-radius: 10px; margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .admin-guide-stage:last-child { margin-bottom: 0; }
+    .admin-guide-stage-name { margin: 0 0 2px; font-size: 13.5px; font-weight: 800; color: var(--crest-gold-soft); }
+    .admin-guide-stage-note { margin: 0 0 8px; font-size: 11.5px; color: rgba(255, 255, 255, 0.76); line-height: 1.5; }
+    .admin-guide-links { display: flex; flex-wrap: wrap; gap: 6px; }
+    .admin-guide-link {
+      display: inline-flex; align-items: center; min-height: 36px; padding: 7px 12px;
+      border-radius: 999px; background: rgba(255, 255, 255, 0.14); color: #fff;
+      font-size: 12px; font-weight: 600; text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.2); transition: background 160ms ease, transform 160ms ease;
+    }
+    .admin-guide-link:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
+    .admin-guide-link::after { content: " ›"; opacity: 0.7; }
+    @media (max-width: 560px) {
+      .admin-guide { padding: 14px; }
+      .admin-guide-title { font-size: 17px; }
+      .admin-guide-link { flex: 1 1 100%; justify-content: space-between; }
+    }
+
+    /* A live note under a class picker, so choosing a class is never silent. */
+    .class-pick-note {
+      display: none; margin: 6px 0 0; padding: 6px 9px; border-radius: 7px;
+      background: #f1f8f4; color: #2f6b48; font-size: 11px; font-weight: 700; line-height: 1.4;
+    }
+    .class-pick-note.is-visible { display: block; }
 
     /* ---------------- collapsible class credentials ---------------- */
     .cred-toolbar {
@@ -1225,6 +1275,48 @@
 </div>
 
 <div id="adminContent" class="hidden">
+<div class="admin-guide" id="adminGuide">
+  <h2 class="admin-guide-title">Admin panel guide</h2>
+  <p class="admin-guide-sub">Thirteen sections, listed in the order they appear on this page. Tap any line to jump to it.</p>
+  <div class="admin-guide-stage">
+    <p class="admin-guide-stage-name">1. Login codes</p>
+    <p class="admin-guide-stage-note">Issue a code for one student or a whole class, then hand them out.</p>
+    <div class="admin-guide-links">
+      <a class="admin-guide-link" href="#one-code">1. Quick Generate Single Student Login Code</a>
+      <a class="admin-guide-link" href="#class-codes">1. Generate Credentials for Entire Class</a>
+      <a class="admin-guide-link" href="#download-credentials">1. Download Credentials by Class</a>
+      <a class="admin-guide-link" href="#all-credentials">1. All Generated Student Credentials</a>
+    </div>
+  </div>
+  <div class="admin-guide-stage">
+    <p class="admin-guide-stage-name">2. The register and each student</p>
+    <p class="admin-guide-stage-note">Fix a name, admit or retire a student, then keep their details current.</p>
+    <div class="admin-guide-links">
+      <a class="admin-guide-link" href="#maintenance">1. Student Records Maintenance</a>
+      <a class="admin-guide-link" href="#adminProfileSection">1. Student Profile, Contact &amp; Photo</a>
+      <a class="admin-guide-link" href="#portalEditorSection">1. Student Portal Editor</a>
+      <a class="admin-guide-link" href="#records">1. Select a Student for Records &amp; Actions</a>
+    </div>
+  </div>
+  <div class="admin-guide-stage">
+    <p class="admin-guide-stage-name">3. Class results and timetables</p>
+    <p class="admin-guide-stage-note">Both go to the Academics Admin for review before anything reaches a student.</p>
+    <div class="admin-guide-links">
+      <a class="admin-guide-link" href="#class-results">1. Publish Class Results</a>
+      <a class="admin-guide-link" href="#timetable">1. Class Timetable Management</a>
+    </div>
+  </div>
+  <div class="admin-guide-stage">
+    <p class="admin-guide-stage-name">4. Send and export</p>
+    <p class="admin-guide-stage-note">Preview what the parent will receive, then send it or take a copy away.</p>
+    <div class="admin-guide-links">
+      <a class="admin-guide-link" href="#existing-data">1. Download Existing Data</a>
+      <a class="admin-guide-link" href="#preview-send">1. Preview &amp; Send</a>
+      <a class="admin-guide-link" href="#announcement">1. Broadcast Announcement to All Student Portals</a>
+    </div>
+  </div>
+</div>
+
       <div id="fileProtocolWarningAdmin" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;margin:0 0 16px;border-radius:8px;font-size:11px;display:none;">
         <strong>⚠️ Testing Mode Detected:</strong> Direct <code>file://</code> pages cannot share browser storage. For manual student login, start <code>python server.py</code>, then open both portals from the local server so generated codes can sync.
         <br><button onclick="location.reload()" class="btn btn-outline" style="margin-top:8px;padding:6px 12px;font-size:11px;">Reload After Starting Server</button>
@@ -1238,7 +1330,7 @@
 
     <div class="grid">
       <div>
-        <section class="card" style="margin-bottom:18px;">
+        <section id="one-code" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.65 10A6 6 0 0 0 7 6a6 6 0 1 0 4.65 10H13l2 2h2v2h2v-2h2v-2h-2v-2h-6.35A6 6 0 0 0 12.65 10zM7 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></span>1. Quick Generate Single Student Login Code</h2>
           <p class="sub">Create a unique Student ID and Login Code/PIN for any class from Creche to JHS 3.</p>
           <form id="singleForm">
@@ -1274,7 +1366,7 @@
           </form>
         </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="class-codes" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.31 0-6 1.79-6 4v2h12v-2c0-2.21-2.69-4-6-4zm8.5-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm.5 2c-.7 0-1.36.1-2 .27 1.24.9 2 2.2 2 3.73V20h6v-2c0-2.21-2.69-4-6-4z"/></svg></span>2. Generate Credentials for Entire Class</h2>
           <p class="sub">Select a class, generate unique login codes for all students in that class, and download as Excel.</p>
           <form id="classGenerateForm">
@@ -1310,7 +1402,7 @@
           </form>
         </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="download-credentials" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 16l-5-5h3V5h4v6h3l-5 5zM4 18h2v2h12v-2h2v4H4v-4z"/></svg></span>3. Download Credentials by Class</h2>
           <p class="sub">Download existing student credentials as Excel for any class. Includes students created via single or class generation.</p>
           <form id="downloadClassCredentialsForm">
@@ -1355,7 +1447,7 @@
               <div style="position:relative;">
                 <img id="adminProfilePicPreview" src="detlofcreast.svg" alt="Student profile picture" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--crest-purple-soft);" />
                 <input type="file" id="adminProfilePicInput" accept="image/*" style="display:none;" />
-                <button type="button" id="adminChangePicBtn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 3L7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9z"/></svg></button>
+                <button type="button" id="adminChangePicBtn" class="profile-photo-btn" style="position:absolute;bottom:0;right:-6px;background:var(--crest-purple);color:#fff;border-radius:50%;font-size:16px;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM9 3L7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9z"/></svg></button>
               </div>
               <div style="font-size:12px;color:var(--muted);">
                 <strong>Profile Picture</strong>
@@ -1577,9 +1669,9 @@
                 </div>
               </div>
               <div class="field">
-                <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;font-weight:600;color:var(--ink);">
-                  <input type="checkbox" id="resultsPublishNow" style="width:auto;" />
-                  Publish to student portals immediately (skip Academic Admin approval)
+                <label class="checkbox-row">
+                  <input type="checkbox" id="resultsPublishNow" />
+                  <span>Publish to student portals immediately (skip Academic Admin approval)</span>
                 </label>
               </div>
               <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
@@ -1591,7 +1683,7 @@
            </section>
 
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
-           <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
+           <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
            <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
              Click to finalize the selected term. For Term 3, the system will automatically calculate
              cumulative GPA, grade distribution across all terms, determine promotion status, and send
@@ -1619,7 +1711,7 @@
         </section>
        </div>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="maintenance" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>5. Student Records Maintenance</h2>
           <p class="sub">Correct a misspelt name, admit a new student with their own login code, reissue a lost code, or mark a student who has left the school.</p>
 
@@ -1806,7 +1898,7 @@
           </div>
         </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="records" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></span>7. Select a Student for Records &amp; Actions</h2>
           <p class="sub">Choose a class, then pick a student from the roster to publish results, send portal updates, or send reports and timetables to their parent.</p>
           <div class="row-2">
@@ -1875,7 +1967,7 @@
           </form>
         </section>
 
-        <section class="card" class-results-card" style="margin-bottom:18px;">
+        <section id="class-results" class="card" class-results-card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 20h16v2H2V2h2v18zm3-3V10h2v7H7zm4 0V6h2v11h-2zm4 0v-4h2v4h-2z"/></svg></span>8. Publish Class Results</h2>
           <p class="sub">Enter the whole class's scores in one table. When you publish, every student in that class gets their own results filled in on their portal automatically.</p>
           <div class="row-2">
@@ -1928,7 +2020,7 @@
           </ol>
         </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="existing-data" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg></span>9. Download Existing Data</h2>
           <p class="sub">Download what is already in the portal: the class roster, published results and the live timetable. Files download straight to your device.</p>
           <div class="field">
@@ -1947,7 +2039,7 @@
           <div id="exportStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
         </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="all-credentials" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 5h2v2H3V5zm4 0h14v2H7V5zM3 11h2v2H3v-2zm4 0h14v2H7v-2zm-4 6h2v2H3v-2zm4 0h14v2H7v-2z"/></svg></span>10. All Generated Student Credentials</h2>
           <p class="sub">Every roster student has a Student ID, email and Login Code. Open a class to see and download its credentials.</p>
           <div class="cred-toolbar">
@@ -1974,7 +2066,7 @@
           </div>
         </section>
 
-       <section class="card" style="margin-bottom:18px;">
+       <section id="timetable" class="card" style="margin-bottom:18px;">
          <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 18H5V10h14v10zM5 8V6h14v2H5z"/></svg></span>11. Class Timetable Management</h2>
         <p class="sub">Upload a CSV/Excel timetable for an entire class. The timetable will automatically apply to all students in that class.</p>
         <form id="timetableForm">
@@ -2010,7 +2102,7 @@
         </form>
       </section>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="preview-send" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.05-1.32A10 10 0 1 0 12 2zm5.8 14.16c-.25.7-1.45 1.34-2 1.4-.5.05-.98.23-3.3-.7-2.78-1.1-4.55-3.94-4.69-4.13-.14-.19-1.13-1.5-1.13-2.86 0-1.36.71-2.03.96-2.31.25-.28.55-.35.73-.35l.52.01c.17 0 .4-.07.62.47.25.6.83 2.06.9 2.21.07.14.12.31.02.5-.1.19-.15.31-.29.47l-.43.5c-.14.14-.29.29-.12.57.16.28.73 1.2 1.57 1.94 1.08.96 1.98 1.26 2.26 1.4.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.38-.24.66-.14.28.1 1.78.86 2.09 1.03.31.17.52.26.71.4.19.14.58.49.74.69.16.19.16.38.08.59-.08.21-.38.81-.53 1.1-.15.28-.3.65-.3 1.05 0 1.55.87 3.04.95 3.25.09.21 1.9 2.95 4.6 4.1 2.6 1.12 4.6.9 5.05.7.45-.2 1.45-1.2 1.65-2.35.2-1.15.1-2.15.1-2.2 0-.05-.2-.28-.28-.58z"/></svg></span>12. Preview &amp; Send</h2>
           <p class="sub">Choose the class and the student, review exactly what they will see on their portal and what the parent will receive, save the contact to your phone, then send.</p>
           <div class="row-2">
@@ -2098,7 +2190,7 @@
           </div>
         </div>
 
-        <section class="card" style="margin-bottom:18px;">
+        <section id="announcement" class="card" style="margin-bottom:18px;">
           <h2><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>13. Broadcast Announcement to All Student Portals</h2>
         <p class="sub">Compose an announcement that will appear in every student's portal under Announcements and their individual update notices.</p>
         <form id="announcementForm">
@@ -2129,10 +2221,28 @@
 
     // Every class <select> on this page is filled from the roster so the list can
     // never drift from detlof-roster.js. Add new class pickers here.
+    // Both lists are declared up here because showMainPanel() runs during boot,
+    // before the functions that use them are reached.
     const CLASS_SELECT_IDS = [
       "currentClass", "classGenerateClass", "downloadClassSelect", "timetableClass",
       "recordClass", "exportClass", "adminProfileClass",
       "editorClass", "editorClassFees", "classResultsClass", "previewClass", "maintClass",
+    ];
+
+    const CLASS_CHANGE_NOTES = [
+      "currentClass", "classGenerateClass", "downloadClassSelect", "timetableClass",
+      "recordClass", "exportClass", "adminProfileClass", "adminProfileClassFilter",
+      "editorClass", "editorClassFees", "classResultsClass", "previewClass", "maintClass",
+    ];
+
+    // Several sections have their own student picker, so whichever one the
+    // administrator used has to be honoured. Declared up here because boot runs
+    // before the functions below are reached.
+    const STUDENT_PICKER_IDS = [
+      "maintStudentName",          // section 5, Student Records Maintenance
+      "adminProfileStudentName",   // section 6, Student Profile
+      "recordStudentName",         // section 8, Records and Actions
+      "previewStudent",            // section 12, Preview and Send
     ];
 
     function populateClassSelects() {
@@ -2151,6 +2261,11 @@
           // Index 0 is the placeholder where there is one, else the first class.
           select.selectedIndex = 0;
         }
+      });
+      // A student picked elsewhere can name a class the picker does not hold yet.
+      CLASS_CHANGE_NOTES.forEach((id) => {
+        const select = document.getElementById(id);
+        if (select && !select.value) select.selectedIndex = 0;
       });
     }
 
@@ -2594,7 +2709,13 @@
       const byId = records.find((record) => String(record.studentId || "").trim().toUpperCase() === query.toUpperCase());
       if (byId) return byId;
       const normalized = detlofNormalizeName(query);
-      return records.find((record) => detlofNormalizeName(record.fullName) === normalized) || null;
+      const matches = (record) => {
+        // A picker may still hold the spelling the student had before a name
+        // was corrected, so the register spelling and the correction both count.
+        return [record.fullName, record.nameOverride, record.rosterName]
+          .some((name) => name && detlofNormalizeName(name) === normalized);
+      };
+      return records.find(matches) || null;
     }
 
     const PROFILE_FIELDS = [
@@ -2710,8 +2831,31 @@
 
     // Resolve the selected record without touching the form. Saving must never
     // reload the fields first, or unsaved edits would be discarded.
+    // Every student picker on the page shows the same student, so a choice made in
+    // one section is honoured everywhere and a stale value cannot override a
+    // fresh selection. The field being typed in is left alone.
+    function syncStudentPickers(record) {
+      if (!record) return;
+      const name = resolvedStudentName(record);
+      STUDENT_PICKER_IDS.forEach((id) => {
+        const field = document.getElementById(id);
+        if (!field || field === document.activeElement) return;
+        field.value = name;
+      });
+    }
+
     function findProfileRecord() {
-      return findAdminProfileRecord(document.getElementById("adminProfileStudentName").value);
+      for (let i = 0; i < STUDENT_PICKER_IDS.length; i += 1) {
+        const field = document.getElementById(STUDENT_PICKER_IDS[i]);
+        const value = field ? String(field.value || "").trim() : "";
+        if (!value) continue;
+        const record = findAdminProfileRecord(value);
+        if (record) {
+          syncStudentPickers(record);
+          return record;
+        }
+      }
+      return null;
     }
 
     bindEvent("adminBillsAddItemBtn", "click", function () {
@@ -2741,12 +2885,13 @@
           const field = document.getElementById(id);
           if (field) field.value = "";
         });
-        const compoundField = document.getElementById("adminProfileCompound");
-        if (compoundField) compoundField.value = DETLOF_COMPOUNDS[0];
+        const compound = document.getElementById("adminProfileCompound");
+        if (compound) compound.value = DETLOF_COMPOUNDS[0];
         document.getElementById("adminProfilePicPreview").src = "detlofcreast.svg";
         drawAdminBillRows({});
         return null;
       }
+      syncStudentPickers(record);
       const values = {
         adminProfileEmail: record.email || "",
         adminProfileClass: record.currentClass || DETLOF_CLASS_ORDER[0],
@@ -4046,9 +4191,47 @@
       parseClassResultsCsv(file);
     });
 
+    // Choosing a class has to look like it did something. A short live summary
+    // under the picker shows the class, how many students it holds and how many
+    // subjects the term sheet will need.
+    function classPickSummary() {
+      const select = document.getElementById("classResultsClass");
+      if (!select || !select.value) return;
+      const className = select.value;
+      const names = detlofRosterNamesForClass(className);
+      const subjects = detlofSubjectsForClass(className);
+      const box = document.getElementById("classResultsSummary");
+      if (!box) return;
+      box.insertAdjacentHTML("afterbegin",
+        '<div class="class-pick-note">' + escapeHtml(className) + " selected &middot; "
+        + names.length + " students &middot; " + subjects.length + " subjects on the "
+        + escapeHtml(detlofCurriculumLabel(className)) + " programme</div>");
+    }
+
+    // Every class picker reports what it now points at, so a change is never silent.
+    function announceClassChange(select) {
+      if (!select || !select.value) return;
+      const className = select.value;
+      const names = detlofRosterNamesForClass(className);
+      const subjects = detlofSubjectsForClass(className);
+      const host = select.closest(".field") || select.parentElement;
+      if (!host) return;
+      let note = host.querySelector(".class-pick-note");
+      if (!note) {
+        note = document.createElement("p");
+        note.className = "class-pick-note";
+        host.appendChild(note);
+      }
+      note.textContent = className + " · " + names.length + " students · " + subjects.length
+        + " subjects (" + detlofCurriculumLabel(className) + ")";
+      note.classList.add("is-visible");
+    }
+
     bindEvent("classResultsClass", "change", function () {
       pendingCsvRows = [];
       applyCurriculumSubjects();
+      classPickSummary();
+      announceClassChange(this);
       const preview = document.getElementById("classResultsCsvPreview");
       if (preview) {
         preview.innerHTML = "<p style='color:var(--muted);text-align:center;padding:14px;margin:0;'>Choose the completed CSV for "
@@ -4270,12 +4453,18 @@
       const nameField = document.getElementById("maintName");
       const idField = document.getElementById("maintMeta");
       const btn = document.getElementById("maintRetireBtn");
+      const picker = document.getElementById("maintStudentName");
       if (!record) {
         if (nameField) nameField.value = "";
-        if (idField) idField.textContent = "Select a student in section 5 to correct their details.";
+        if (idField) idField.textContent = "Find a student above, or pick one in section 4, to correct their details.";
         if (btn) { btn.textContent = "Mark as Left School"; btn.disabled = true; }
         return;
       }
+      // Keep every picker showing who is currently loaded.
+      if (picker && detlofNormalizeName(picker.value) !== detlofNormalizeName(resolvedStudentName(record))) {
+        picker.value = resolvedStudentName(record);
+      }
+      syncStudentPickers(record);
       if (nameField) nameField.value = resolvedStudentName(record);
       if (idField) {
         const parts = [
@@ -4285,7 +4474,7 @@
           record.academicYear || "",
         ].filter(Boolean);
         const corrected = record.rosterName && record.rosterName !== resolvedStudentName(record)
-          ? " · roster spelling: " + record.rosterName
+          ? " · register spelling: " + record.rosterName
           : "";
         idField.textContent = parts.join(" · ") + corrected;
       }
@@ -4313,12 +4502,8 @@
       withFeedback(this, "Reissuing the login code", regenerateLoginCode);
     });
     bindEvent("maintStudentName", "input", function () {
-      if (this.value.trim()) {
-        const record = getStoredRecords().find((r) => detlofNormalizeName(r.fullName) === detlofNormalizeName(this.value));
-        const nameField = document.getElementById("maintName");
-        if (record && nameField) nameField.value = resolvedStudentName(record);
-        loadMaintenance();
-      }
+      if (!this.value.trim()) { loadMaintenance(); return; }
+      loadMaintenance();
     });
     bindEvent("maintStudentName", "change", loadMaintenance);
 
