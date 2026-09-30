@@ -195,25 +195,12 @@
             <p id="portalUpdateMessage" style="margin:0;color:var(--muted);font-size:12px;"></p>
           </div>
 
-          <div class="two-col">
-            <div class="panel">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-                <h2 style="margin:0;font-size:16px;">My Bills</h2>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button class="outline-btn" onclick="switchTab('bills')">See breakdown →</button>
-                <button class="outline-btn" onclick="downloadMyBills()">Statement</button>
-                <button class="primary-btn" style="padding:9px 12px;font-size:12px;" onclick="downloadMyReceipt()">Save Receipt (PDF)</button>
-              </div>
-              </div>
-              <div class="bill-summary" id="billSummaryCards" style="margin-top:14px;"></div>
-            </div>
-
+<div class="two-col">
             <div class="panel">
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
                 <h2 style="margin:0;font-size:16px;">My Results Summary</h2>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <button class="outline-btn" onclick="switchTab('results')">Full Report →</button>
-                  <button class="outline-btn" onclick="downloadMyResults()">Download Full Results</button>
                 </div>
               </div>
               <div class="table-scroll"><table>
@@ -423,41 +410,37 @@
                 <div class="field"><label for="profileClass">Current Class</label><input type="text" id="profileClass" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
                 <div class="field"><label for="profileAcademicYear">Academic Year</label><input type="text" id="profileAcademicYear" readonly style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
-              <div class="field">
+<div class="field">
                 <label for="profileParentName">Parent / Guardian Full Name</label>
                 <input type="text" id="profileParentName" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" />
               </div>
               <div class="row-2">
                 <div class="field"><label for="profileParentRelation">Relationship to Student</label><input type="text" id="profileParentRelation" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
-                <div class="field"><label for="profileGender">Gender</label><input type="text" id="profileGender" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileParentPhone">Parent / Guardian Phone</label><input type="tel" id="profileParentPhone" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
+                <div class="field"><label for="profileWhatsApp">Active Parent WhatsApp Number</label><input type="tel" id="profileWhatsApp" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileParentEmail">Parent / Guardian Email</label><input type="text" id="profileParentEmail" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="profileEmergencyContact">Emergency Contact</label><input type="text" id="profileEmergencyContact" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
                 <div class="field"><label for="profileCompound">Residence / Compound</label><input type="text" id="profileCompound" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
-                <div class="field"><label for="profileClub">Club / Activity</label><input type="text" id="profileClub" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
                 <div class="field"><label for="profileGender">Gender</label><input type="text" id="profileGender" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
                 <div class="field"><label for="profileDateOfBirth">Date of Birth</label><input type="text" id="profileDateOfBirth" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
-                <div class="field"><label for="profileParentPhone">Parent/Guardian Phone Number</label><input type="tel" id="profileParentPhone" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
-                <div class="field"><label for="profileWhatsApp">Active Parent WhatsApp Number</label><input type="tel" id="profileWhatsApp" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
-              </div>
-              <div class="field">
-                <label for="profileParentEmail">Parent / Guardian Email</label>
-                <input type="text" id="profileParentEmail" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" />
-              </div>
-              <div class="field">
-                <label for="profileEmergencyContact">Emergency Contact</label>
-                <input type="text" id="profileEmergencyContact" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" />
-              </div>
-              <div class="field">
-                <label for="profileHomeAddress">Home Address</label>
-                <textarea id="profileHomeAddress" readonly placeholder="Managed by school administrator" style="min-height:70px;background:#f3f4f6;color:var(--muted);"></textarea>
+                <div class="field"><label for="profileBloodGroup">Blood Group</label><input type="text" id="profileBloodGroup" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+                <div class="field"><label for="profileClub">Club / Activity</label><input type="text" id="profileClub" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
               </div>
               <div class="row-2">
                 <div class="field"><label for="profileAllergies">Allergies / Health Notes</label><input type="text" id="profileAllergies" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
                 <div class="field"><label for="profileInterests">Interests / Talents</label><input type="text" id="profileInterests" readonly placeholder="Managed by school administrator" style="background:#f3f4f6;color:var(--muted);" /></div>
+              </div>
+              <div class="field">
+                <label for="profileHomeAddress">Home Address</label>
+                <textarea id="profileHomeAddress" readonly placeholder="Managed by school administrator" style="min-height:70px;background:#f3f4f6;color:var(--muted);"></textarea>
               </div>
               <div class="field">
                 <label for="profileLoginCode">Login Code / PIN</label>

@@ -8,8 +8,6 @@ const DETLOF_SCHOOL_DOMAIN = "detlof.edu.gh";
 
 const DETLOF_CLASS_ORDER = [
   "Creche",
-  "Nursery One",
-  "Nursery Two",
   "KG 1",
   "KG 2",
   "Basic 1",
@@ -18,15 +16,13 @@ const DETLOF_CLASS_ORDER = [
   "Basic 4",
   "Basic 5",
   "Basic 6",
-  "Basic 7",
-  "Basic 8",
-  "Basic 9"
+  "JHS 1",
+  "JHS 2",
+  "JHS 3"
 ];
 
 const DETLOF_CLASS_PREFIX = {
-  "Creche": "CRE",
-  "Nursery One": "NUR1",
-  "Nursery Two": "NUR2",
+  "Creche": "PRE",
   "KG 1": "KG1",
   "KG 2": "KG2",
   "Basic 1": "B1",
@@ -35,9 +31,9 @@ const DETLOF_CLASS_PREFIX = {
   "Basic 4": "B4",
   "Basic 5": "B5",
   "Basic 6": "B6",
-  "Basic 7": "B7",
-  "Basic 8": "B8",
-  "Basic 9": "B9"
+  "JHS 1": "J1",
+  "JHS 2": "J2",
+  "JHS 3": "J3"
 };
 
 const DETLOF_CLASS_ROSTER = {
@@ -47,38 +43,6 @@ const DETLOF_CLASS_ROSTER = {
     "KOFI MOSES",
     "OBREMPONG",
     "ENYIMYAM"
-  ],
-  "Nursery One": [
-    "THIERY O. ANKRAH",
-    "OHEMAA",
-    "DUALA",
-    "CALISTA OBENG APPIAH",
-    "NAA AGELE",
-    "KENDRICK",
-    "JANET",
-    "WISDOM",
-    "ZULAIHA ALI"
-  ],
-  "Nursery Two": [
-    "PERCIS WOODE AGYAPONG LAURIAN BANSO",
-    "LEON KOJO AFFUL",
-    "LEO BAIJON QUANSAH",
-    "ZANA AKORFUL",
-    "ANTHONY",
-    "ARMSTRONG",
-    "ZAID ADAMU",
-    "PRECIOUS ESSIEN",
-    "ELSIE ABAKAH MENSAH",
-    "UZZIAH",
-    "BLESSED",
-    "MATTHEW ABAKAH",
-    "DESTINY TAY",
-    "FIRDAUS BAIDOO",
-    "MARCEL ISIBU THOMPSON",
-    "NHYIRA EDUSEI",
-    "ELIANA MENSAH",
-    "LARA MENSAH",
-    "LAURIAN DANSO"
   ],
   "KG 1": [
     "KRISTEN DENNISON ESSOUN",
@@ -96,7 +60,16 @@ const DETLOF_CLASS_ROSTER = {
     "WARRICK OSWALD EWUAH",
     "GIOVANA ANIM",
     "GABRIELLA AMISSAL",
-    "ZIPPORAH AGYAPONG"
+    "ZIPPORAH AGYAPONG",
+    "THIERY O. ANKRAH",
+    "OHEMAA",
+    "DUALA",
+    "CALISTA OBENG APPIAH",
+    "NAA AGELE",
+    "KENDRICK",
+    "JANET",
+    "WISDOM",
+    "ZULAIHA ALI"
   ],
   "KG 2": [
     "NAPOLEON ODEHYE ARKRAH",
@@ -116,7 +89,26 @@ const DETLOF_CLASS_ROSTER = {
     "MAYA BRITT APPIAH",
     "HENRITTA STAR ARTHUR",
     "PATRICIA DADZIE",
-    "AMA ANOKYEWAA ADUSEI"
+    "AMA ANOKYEWAA ADUSEI",
+    "PERCIS WOODE AGYAPONG LAURIAN BANSO",
+    "LEON KOJO AFFUL",
+    "LEO BAIJON QUANSAH",
+    "ZANA AKORFUL",
+    "ANTHONY",
+    "ARMSTRONG",
+    "ZAID ADAMU",
+    "PRECIOUS ESSIEN",
+    "ELSIE ABAKAH MENSAH",
+    "UZZIAH",
+    "BLESSED",
+    "MATTHEW ABAKAH",
+    "DESTINY TAY",
+    "FIRDAUS BAIDOO",
+    "MARCEL ISIBU THOMPSON",
+    "NHYIRA EDUSEI",
+    "ELIANA MENSAH",
+    "LARA MENSAH",
+    "LAURIAN DANSO"
   ],
   "Basic 1": [
     "AGYAPONG JEHOSAPHAT",
@@ -252,7 +244,7 @@ const DETLOF_CLASS_ROSTER = {
     "QUAYSON GLORIA",
     "WOODE NICHOLINA"
   ],
-  "Basic 7": [
+  "JHS 1": [
     "AMOAH LORD MARCUS",
     "ARTHUR CEDERRAI",
     "BAFFOUR OHUSU ANDY",
@@ -281,7 +273,7 @@ const DETLOF_CLASS_ROSTER = {
     "SAAKAH DANIELLA",
     "THOMPSON MEVILYN"
   ],
-  "Basic 8": [
+  "JHS 2": [
     "ADU-ATEYI DANIEL",
     "BAIDOO THOMAS",
     "DANSO ROLAND",
@@ -302,7 +294,7 @@ const DETLOF_CLASS_ROSTER = {
     "TAYLOR KORANKYE EMMANUELLA",
     "THOMPSON ERNESTINA"
   ],
-  "Basic 9": [
+  "JHS 3": [
     "CUDJOE ERIC",
     "BOUFFAND MICHAEL ANGE",
     "CUDJOE ERICA",
@@ -377,8 +369,6 @@ function detlofRosterClassForName(name) {
 
 const DETLOF_PROMOTION_LADDER = [
   "Creche",
-  "Nursery One",
-  "Nursery Two",
   "KG 1",
   "KG 2",
   "Basic 1",
@@ -387,19 +377,24 @@ const DETLOF_PROMOTION_LADDER = [
   "Basic 4",
   "Basic 5",
   "Basic 6",
-  "Basic 7",
-  "Basic 8",
-  "Basic 9"
+  "JHS 1",
+  "JHS 2",
+  "JHS 3"
 ];
 
 function detlofClassLevel(className) {
-  const basic = /^Basic (\d)/.exec(String(className || ""));
-  if (basic) return 4 + Number(basic[1]);
-  if (className === "KG 2") return 4;
-  return DETLOF_PROMOTION_LADDER.indexOf(className);
+  const name = String(className || "").trim();
+  if (typeof detlofNextClassFor === "function") {
+    // The school module owns the progression so the ladder cannot drift.
+    return detlofNextClassFor(name) === name && DETLOF_PROMOTION_LADDER.indexOf(name) === -1
+      ? -1
+      : DETLOF_PROMOTION_LADDER.indexOf(name);
+  }
+  return DETLOF_PROMOTION_LADDER.indexOf(name);
 }
 
 function detlofNextClass(className) {
+  if (typeof detlofNextClassFor === "function") return detlofNextClassFor(className);
   const level = detlofClassLevel(className);
   if (level < 0 || level >= DETLOF_PROMOTION_LADDER.length - 1) return className;
   return DETLOF_PROMOTION_LADDER[level + 1];

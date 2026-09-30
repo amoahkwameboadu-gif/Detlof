@@ -597,12 +597,6 @@
        is hard to hit on a phone. */
     .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
     .profile-photo-btn { min-width: 44px; min-height: 44px; padding: 9px; }
-    .checkbox-row {
-      display: flex; align-items: center; gap: 10px; min-height: 44px;
-      padding: 8px 10px; border-radius: 8px; background: #faf7fc; cursor: pointer;
-    }
-    .checkbox-row input[type="checkbox"] { width: 20px; height: 20px; flex: 0 0 auto; }
-    .checkbox-row span { font-size: 12px; line-height: 1.4; text-transform: none; letter-spacing: 0; color: var(--ink); font-weight: 600; }
     .preview-close { min-width: 40px; min-height: 40px; font-size: 24px; }
 
     /* ---------------- heading icons ----------------
@@ -1306,6 +1300,8 @@
 </div>
 
 <div id="adminContent" class="hidden">
+<!-- Class results are entered once, in "Publish Class Results". The Academics Admin
+     uploads a class there and publishes it from the review panel below. -->
 <div class="admin-guide" id="adminGuide">
   <h2 class="admin-guide-title">Admin panel guide</h2>
   <p class="admin-guide-sub">Thirteen sections, in the order they appear on this page. Everything is closed until you open it. Tap a line to open that section.</p>
@@ -1679,43 +1675,7 @@
            <p id="noPendingMsg" style="color:var(--muted);text-align:center;padding:20px;">No pending items awaiting approval.</p>
          </section>
 
-         <section class="card" style="margin-bottom:18px;">
-           <h2 class="section-heading-host"><span class="section-caret" aria-hidden="true"></span><span class="heading-icon"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3l5 5h-3v6h-4V8H7l5-5zM4 17h2v2h12v-2h2v4H4v-4z"/></svg></span> Bulk Upload Term Results (Excel/CSV)</h2>
-           <p class="sub">Upload a CSV file with columns: Student Name, Class, Student ID, Subject, SBA 1, SBA 2, Project, Exam Score. The system will match students by name to send results to their portals.</p>
-           <form id="bulkResultsForm">
-             <div class="row-2">
-               <div class="field">
-                 <label for="resultsTerm">Academic Term</label>
-                 <select id="resultsTerm" required>
-                   <option value="term1">First Term</option>
-                   <option value="term2">Second Term</option>
-                   <option value="term3">Third Term</option>
-                 </select>
-               </div>
-                <div class="field">
-                  <label for="resultsFile">CSV File</label>
-                  <input type="file" id="resultsFile" accept=".csv,text/csv" required />
-                </div>
-              </div>
-              <div class="field">
-                <label>Preview / Parsed Data</label>
-                <div id="resultsPreview" style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;background:#fff;">
-                  <p style="color:var(--muted);text-align:center;padding:20px;margin:0;">Choose a CSV file to preview its contents here.</p>
-                </div>
-              </div>
-              <div class="field">
-                <label class="checkbox-row">
-                  <input type="checkbox" id="resultsPublishNow" />
-                  <span>Publish to student portals immediately (skip Academic Admin approval)</span>
-                </label>
-              </div>
-              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
-                <button class="btn btn-teal" type="submit">Upload &amp; Publish Results</button>
-                <button type="button" class="btn btn-outline" id="downloadResultsTemplate" style="padding:7px 11px;font-size:11px;">Download CSV Template</button>
-                <button type="button" class="btn btn-outline" id="downloadRosterTemplateBtn" style="padding:7px 11px;font-size:11px;">Download Class Roster Template</button>
-              </div>
-</form>
-           </section>
+         
 
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
            <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
@@ -5511,148 +5471,9 @@
   }
 
 
-  bindEvent("resultsFile", "change", function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    readCSVFile(file, function (rows, f) {
-      const headers = rows[0];
-      const cols = detectResultsColumns(headers);
-      const missing = [];
-      if (cols.subjectIdx < 0) missing.push("Subject");
-      if (cols.classScoreIdx < 0) missing.push("Class Score");
-      if (cols.examScoreIdx < 0) missing.push("Exam Score");
-      if (cols.nameIdx < 0 && cols.studentIdIdx < 0) missing.push("Student Name or Student ID");
 
-      if (missing.length) {
-        renderPreviewTable("resultsPreview", rows, {
-          fileName: f.name,
-          mapping: describeMapping(headers, cols),
-          error: "Missing required column(s): " + missing.join(", ") + ". Download the template for the correct format.",
-        });
-        return;
-      }
 
-      const existing = getStoredRecords();
-      let matched = 0;
-      rows.slice(1).forEach((row) => {
-        if (findStudentRecord(existing, row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx])) matched += 1;
-      });
 
-      renderPreviewTable("resultsPreview", rows, {
-        fileName: f.name,
-        mapping: describeMapping(headers, cols),
-        note: matched + " of " + (rows.length - 1) + " rows match a student in the register",
-      });
-    }, function (message) {
-      renderPreviewError("resultsPreview", message);
-    });
-  });
-
-  bindEvent("bulkResultsForm", "submit", async function (e) {
-    e.preventDefault();
-    const file = document.getElementById("resultsFile").files[0];
-    if (!file) { reportWarning("Select a CSV file first"); return; }
-    const termKey = document.getElementById("resultsTerm").value;
-    const publishNow = document.getElementById("resultsPublishNow") && document.getElementById("resultsPublishNow").checked;
-
-    readCSVFile(file, async function (rows) {
-      if (rows.length < 2) { reportWarning("The file needs a header row and at least one data row."); return; }
-      const headers = rows[0];
-      const cols = detectResultsColumns(headers);
-      if (cols.subjectIdx < 0 || cols.classScoreIdx < 0 || cols.examScoreIdx < 0) {
-        renderPreviewError("resultsPreview", "The file is missing the Subject, Class Score or Exam Score column. Download the template for the correct format.");
-        reportWarning("Missing required columns in the uploaded file");
-        return;
-      }
-
-      const existing = getStoredRecords();
-      const records = getStoredRecords();
-      const resultsData = [];
-      const unmatched = [];
-
-      rows.slice(1).forEach((row) => {
-        const rec = findStudentRecord(existing, row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx]);
-        if (!rec) {
-          if (String(row[cols.subjectIdx] || "").trim()) {
-            unmatched.push([row[cols.nameIdx], row[cols.classIdx], row[cols.studentIdIdx]].filter(Boolean).join(" / "));
-          }
-          return;
-        }
-        const classScore = Number(String(row[cols.classScoreIdx]).replace("%", "").trim());
-        const examScore = Number(String(row[cols.examScoreIdx]).replace("%", "").trim());
-        if (Number.isNaN(classScore) || Number.isNaN(examScore)) return;
-        const totalScore = Math.round((classScore + examScore) * 100) / 100;
-        resultsData.push({
-          studentId: rec.studentId,
-          fullName: rec.fullName,
-          class: rec.currentClass,
-          subject: String(row[cols.subjectIdx] || "").trim(),
-          classScore,
-          examScore,
-          totalScore,
-          grade: gradeFromTotal(totalScore),
-          remark: String(row[cols.remarkIdx] || "").trim() || "Keep it up",
-        });
-      });
-
-      if (!resultsData.length) {
-        renderPreviewError("resultsPreview", "No rows could be matched to students in the register. Check the Student Name / Student ID column, or generate the class credentials first.");
-        reportWarning("No students matched the uploaded file");
-        return;
-      }
-
-      renderPreviewTable("resultsPreview", rows, {
-        fileName: file.name,
-        mapping: describeMapping(headers, cols),
-        note: resultsData.length + " result row(s) ready for " + termKey.replace("term", "Term ") +
-          (unmatched.length ? " \u00b7 " + unmatched.length + " row(s) did not match a student" : ""),
-      });
-
-      if (publishNow) {
-        await publishResultsToPortals(termKey, resultsData);
-        reportSuccess("Published " + resultsData.length + " result row(s) to " + termKey.replace("term", "Term ") + " student portals.");
-      } else {
-        addPendingApproval("results", { termKey, resultsData, matchedCount: new Set(resultsData.map((r) => r.studentId)).size, createdBy: teacherLabel(), createdAt: stampIso() });
-        reportSuccess("Results for " + termKey.replace("term", "Term ") + " queued for Academic Admin approval (" + new Set(resultsData.map((r) => r.studentId)).size + " students matched).");
-      }
-      renderPendingApprovals();
-    }, function (message) {
-      renderPreviewError("resultsPreview", message);
-      reportError("Could not read the uploaded file");
-    });
-  });
-
-  bindEvent("downloadResultsTemplate", "click", function () {
-    const className = document.getElementById("recordClass").value;
-    const roster = getStoredRecords().filter((r) => r.currentClass === className);
-    const subjects = ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"];
-    const lines = [csvRow(["Student Name", "Class", "Student ID", "Subject", "Class Score", "Exam Score", "Remark"])];
-    if (roster.length) {
-      roster.slice(0, 12).forEach((rec) => {
-        subjects.forEach((subject) => {
-          lines.push(csvRow([rec.fullName, rec.currentClass, rec.studentId, subject, "", "", ""]));
-        });
-      });
-    } else {
-      lines.push(csvRow(["KRISTEN DENNISON ESSOUN", "KG 1", "KG1-0001", "Mathematics", "32", "56", "Very good"]));
-    }
-    downloadTextFile("results-upload-template.csv", lines.join("\r\n"), "text/csv");
-    reportSuccess("Downloaded the results template" + (roster.length ? " for " + roster.length + " " + className + " student(s)." : "."));
-  });
-
-  bindEvent("downloadRosterTemplateBtn", "click", function () {
-    const className = document.getElementById("recordClass").value;
-    const roster = getStoredRecords().filter((r) => r.currentClass === className);
-    if (!roster.length) { reportWarning("No students found in " + className); return; }
-    const lines = [csvRow(["Student Name", "Class", "Student ID", "Subject", "Class Score", "Exam Score", "Remark"])];
-    roster.forEach((rec) => {
-      ["Mathematics", "English Language", "Integrated Science", "Computing / ICT", "Social Studies"].forEach((subject) => {
-        lines.push(csvRow([rec.fullName, rec.currentClass, rec.studentId, subject, "", "", ""]));
-      });
-    });
-    downloadTextFile(className.replace(/\s+/g, "_") + "_results_template.csv", lines.join("\r\n"), "text/csv");
-    reportSuccess("Downloaded a results template for " + roster.length + " " + className + " student(s).");
-  });
 
   bindEvent("academicsAdminLoginLink", "click", function (e) {
     e.preventDefault();

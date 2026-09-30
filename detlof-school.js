@@ -28,37 +28,41 @@ const DETLOF_FEE_ITEMS = [
 ];
 
 // ---------------------------------------------------------------------------
-// Subjects by level, following Ghana's standards-based curriculum.
+// School structure, curriculum and assessment.
 //
-//   Key Phase 1  Foundation      - Kindergarten 1 & 2
+// Reference: NaCCA (nacca.gov.gh) Ghanaian curriculum.
+//   Key Phase 1  Foundation      - KG 1 and KG 2
 //   Key Phase 2  Lower Primary   - Basic 1 to Basic 3
 //   Key Phase 3  Upper Primary   - Basic 4 to Basic 6
-//   Key Phase 4  Junior High     - Basic 7 to Basic 9 (Common Core Programme)
+//   Key Phase 4  Junior High     - JHS 1 to JHS 3, the Common Core Programme
 //
-// Language, Mathematics, Science, History, Our World and Our People, Creative
-// Arts, Religious and Moral Education, Physical Education, French, Ghanaian
-// Language and Computing are taught from 2019. Note that French and Computing
-// begin at Basic 4, and Social Studies, Career Technology and Arabic begin at
-// Basic 7 where the Common Core Programme applies.
+// The school runs from Pre-school (Creche) through to JHS 3.
 // ---------------------------------------------------------------------------
-const DETLOF_SUBJECTS_CRECHE = [
-  "Play Activities",
-  "Language & Literacy",
-  "Numeracy",
-  "Our World & People",
-  "Creative Arts",
-  "Physical Development",
+
+// Pre-school: play-based early childhood, no graded subjects or exams.
+const DETLOF_SUBJECTS_PRE_SCHOOL = [
+  "Play & Language Development",
+  "Early Numeracy",
+  "Fine & Gross Motor Skills",
+  "Social & Emotional Skills",
+  "Creative Expression",
+  "Health, Hygiene & Safety",
 ];
 
-const DETLOF_SUBJECTS_KINDERGARTEN = [
+// KG 1: the four KG subjects NaCCA names, plus RME and Physical Education.
+const DETLOF_SUBJECTS_KG1 = [
   "Numeracy",
   "Language & Literacy",
   "Our World & People",
-  "Creative Arts",
+  "Creative Art",
   "Religious & Moral Education",
   "Physical Education",
 ];
 
+// KG 2 adds Coding and Programming, which NaCCA places in the upper KG.
+const DETLOF_SUBJECTS_KG2 = DETLOF_SUBJECTS_KG1.concat(["Coding & Programming"]);
+
+// Key Phase 2, Lower Primary. French and Computing start at Basic 4.
 const DETLOF_SUBJECTS_LOWER_PRIMARY = [
   "English Language",
   "Mathematics",
@@ -71,45 +75,55 @@ const DETLOF_SUBJECTS_LOWER_PRIMARY = [
   "Physical Education",
 ];
 
+// Key Phase 3, Upper Primary.
 const DETLOF_SUBJECTS_UPPER_PRIMARY = DETLOF_SUBJECTS_LOWER_PRIMARY.concat([
   "French",
   "Computing",
 ]);
 
-const DETLOF_SUBJECTS_JUNIOR_HIGH = ["English Language", "Mathematics", "Science", "Social Studies", "Computing","Ghanaian Language", "French", "Creative Arts and Design", "Career Technology","Religious and Moral Education", "Physical Education and Health",];
+// Key Phase 4, the Common Core Programme's nine learning areas.
+const DETLOF_SUBJECTS_JHS = [
+  "English Language",
+  "Mathematics",
+  "Science",
+  "Social Studies",
+  "Computing",
+  "Ghanaian Language",
+  "French",
+  "Creative Arts and Design",
+  "Career Technology",
+  "Religious and Moral Education",
+  "Physical and Health Education",
+];
 
-// Level groupings, used to resolve a class to its curriculum.
 function detlofCurriculumKey(className) {
-  const name = String(className || "");
-  if (/^Basic\s*[1-3]$/.test(name)) return "lowerPrimary";
-  if (/^Basic\s*[4-6]$/.test(name)) return "upperPrimary";
-  if (/^Basic\s*[7-9]$/.test(name)) return "juniorHigh";
-  if (/^KG/.test(name) || /Nursery/.test(name)) return "kindergarten";
-  if (/^Creche$/i.test(name)) return "creche";
+  const name = String(className || "").trim();
+  if (/^Creche$/i.test(name)) return "preSchool";
+  if (/^KG\s*1$/i.test(name)) return "kg1";
+  if (/^KG\s*2$/i.test(name)) return "kg2";
+  if (/^Basic\s*[1-3]$/i.test(name)) return "lowerPrimary";
+  if (/^Basic\s*[4-6]$/i.test(name)) return "upperPrimary";
+  if (/^JHS\s*[1-3]$/i.test(name)) return "juniorHigh";
   return "lowerPrimary";
 }
 
 const DETLOF_CURRICULUM = {
-  creche: { label: "Early Childhood Development", subjects: DETLOF_SUBJECTS_CRECHE },
-  kindergarten: { label: "Key Phase 1 - Foundation", subjects: DETLOF_SUBJECTS_KINDERGARTEN },
-  lowerPrimary: { label: "Key Phase 2 - Lower Primary (B1-B3)", subjects: DETLOF_SUBJECTS_LOWER_PRIMARY },
-  upperPrimary: { label: "Key Phase 3 - Upper Primary (B4-B6)", subjects: DETLOF_SUBJECTS_UPPER_PRIMARY },
-  juniorHigh: { label: "Key Phase 4 - Common Core Programme (B7-B9)", subjects: DETLOF_SUBJECTS_JUNIOR_HIGH },
+  preSchool: { label: "Pre-school (Early Childhood Development)", subjects: DETLOF_SUBJECTS_PRE_SCHOOL, assessment: "continuous" },
+  kg1: { label: "Key Phase 1 - Foundation, KG 1", subjects: DETLOF_SUBJECTS_KG1, assessment: "continuous" },
+  kg2: { label: "Key Phase 1 - Foundation, KG 2", subjects: DETLOF_SUBJECTS_KG2, assessment: "continuous" },
+  lowerPrimary: { label: "Key Phase 2 - Lower Primary (Basic 1-3)", subjects: DETLOF_SUBJECTS_LOWER_PRIMARY, assessment: "exam" },
+  upperPrimary: { label: "Key Phase 3 - Upper Primary (Basic 4-6)", subjects: DETLOF_SUBJECTS_UPPER_PRIMARY, assessment: "exam" },
+  juniorHigh: { label: "Key Phase 4 - Common Core Programme (JHS 1-3)", subjects: DETLOF_SUBJECTS_JHS, assessment: "exam" },
 };
 
-// The subjects a given class actually teaches.
 function detlofSubjectsForClass(className) {
-  const key = detlofCurriculumKey(className);
-  const entry = DETLOF_CURRICULUM[key] || DETLOF_CURRICULUM.lowerPrimary;
-  return entry.subjects.slice();
+  return DETLOF_CURRICULUM[detlofCurriculumKey(className)].subjects.slice();
 }
 
 function detlofCurriculumLabel(className) {
-  const key = detlofCurriculumKey(className);
-  return (DETLOF_CURRICULUM[key] || DETLOF_CURRICULUM.lowerPrimary).label;
+  return DETLOF_CURRICULUM[detlofCurriculumKey(className)].label;
 }
 
-// Every subject any level teaches, for free-text entry and custom templates.
 function detlofAllSubjects() {
   const seen = [];
   Object.keys(DETLOF_CURRICULUM).forEach((key) => {
@@ -118,6 +132,45 @@ function detlofAllSubjects() {
     });
   });
   return seen;
+}
+
+// Pre-school and KG are assessed continuously, not by a class/exam split, so
+// the score fields a class needs must change with the level.
+const DETLOF_ASSESSMENT = {
+  continuous: {
+    mode: "continuous",
+    scoreLabel: "Continuous Assessment Score",
+    scoreMax: 100,
+    exam: false,
+    bands: ["Emerging", "Developing", "Achieving", "Exceeding"],
+    note: "Pre-school and KG are assessed through continuous observation. There is no separate exam score.",
+  },
+  exam: {
+    mode: "exam",
+    scoreLabel: "Class Score",
+    scoreMax: 40,
+    exam: true,
+    bands: ["A", "B", "C", "D", "E", "F"],
+    note: "Class work is weighted 40 and the end of term exam 60.",
+  },
+};
+
+function detlofAssessmentFor(className) {
+  return DETLOF_ASSESSMENT[DETLOF_CURRICULUM[detlofCurriculumKey(className)].assessment];
+}
+
+// The terminal class on the school's ladder.
+const DETLOF_TOP_CLASS = "JHS 3";
+
+function detlofNextClassFor(className) {
+  const ladder = [
+    "Creche", "KG 1", "KG 2",
+    "Basic 1", "Basic 2", "Basic 3", "Basic 4", "Basic 5", "Basic 6",
+    "JHS 1", "JHS 2", "JHS 3",
+  ];
+  const i = ladder.indexOf(String(className || "").trim());
+  if (i === -1 || i >= ladder.length - 1) return className;
+  return ladder[i + 1];
 }
 
 const DETLOF_CURRENCY = "GHS";

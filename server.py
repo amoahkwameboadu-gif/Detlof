@@ -20,6 +20,7 @@ How to run it:
 from flask import Flask, jsonify, request, send_from_directory
 import os
 import json
+import re
 
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_data.json")
 app = Flask(__name__, static_folder=".", static_url_path="")
@@ -37,8 +38,6 @@ ROSTER_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "detlof_r
 
 FALLBACK_CLASS_ORDER = [
     "Creche",
-    "Nursery One",
-    "Nursery Two",
     "KG 1",
     "KG 2",
     "Basic 1",
@@ -47,9 +46,9 @@ FALLBACK_CLASS_ORDER = [
     "Basic 4",
     "Basic 5",
     "Basic 6",
-    "Basic 7",
-    "Basic 8",
-    "Basic 9"
+    "JHS 1",
+    "JHS 2",
+    "JHS 3",
 ]
 
 
@@ -72,13 +71,132 @@ CLASS_ROSTER = ROSTER.get("classRoster") or {}
 
 # Starting results, identical to the browser portals (detlof-report.js) so a
 # student sees the same thing whether the API or localStorage answers.
-DEFAULT_RESULTS = [
-    {"subject": "Mathematics", "classScore": 32, "examScore": 56, "totalScore": 88, "grade": "B", "remark": "Very good"},
-    {"subject": "English Language", "classScore": 34, "examScore": 60, "totalScore": 94, "grade": "A", "remark": "Excellent progress"},
-    {"subject": "Integrated Science", "classScore": 30, "examScore": 55, "totalScore": 85, "grade": "B", "remark": "Keep it up"},
-    {"subject": "Computing / ICT", "classScore": 28, "examScore": 50, "totalScore": 78, "grade": "C", "remark": "Good work"},
-    {"subject": "Social Studies", "classScore": 30, "examScore": 52, "totalScore": 82, "grade": "B", "remark": "Good effort"},
+PRE_SCHOOL_SUBJECTS = [
+    "Play & Language Development",
+    "Early Numeracy",
+    "Fine & Gross Motor Skills",
+    "Social & Emotional Skills",
+    "Creative Expression",
+    "Health, Hygiene & Safety",
 ]
+KG1_SUBJECTS = [
+    "Numeracy",
+    "Language & Literacy",
+    "Our World & People",
+    "Creative Art",
+    "Religious & Moral Education",
+    "Physical Education",
+]
+KG2_SUBJECTS = KG1_SUBJECTS + ["Coding & Programming"]
+LOWER_PRIMARY_SUBJECTS = [
+    "English Language",
+    "Mathematics",
+    "Science",
+    "Ghanaian Language",
+    "History",
+    "Our World and Our People",
+    "Creative Arts",
+    "Religious and Moral Education",
+    "Physical Education",
+]
+UPPER_PRIMARY_SUBJECTS = LOWER_PRIMARY_SUBJECTS + ["French", "Computing"]
+JHS_SUBJECTS = [
+    "English Language",
+    "Mathematics",
+    "Science",
+    "Social Studies",
+    "Computing",
+    "Ghanaian Language",
+    "French",
+    "Creative Arts and Design",
+    "Career Technology",
+    "Religious and Moral Education",
+    "Physical and Health Education",
+]
+
+CURRICULUM = {
+    "preSchool": PRE_SCHOOL_SUBJECTS,
+    "kg1": KG1_SUBJECTS,
+    "kg2": KG2_SUBJECTS,
+    "lowerPrimary": LOWER_PRIMARY_SUBJECTS,
+    "upperPrimary": UPPER_PRIMARY_SUBJECTS,
+    "juniorHigh": JHS_SUBJECTS,
+}
+
+# Pre-school and KG are assessed continuously, so there is no separate exam score.
+CONTINUOUS_ASSESSMENT_KEYS = ("preSchool", "kg1", "kg2")
+
+
+def curriculum_key(class_name):
+    """Which key phase a class belongs to. Mirrors detlof-school.js."""
+    name = (class_name or "").strip().lower()
+    if name == "creche":
+        return "preSchool"
+    if re.match(r"^kg\s*1$", name):
+        return "kg1"
+    if re.match(r"^kg\s*2$", name):
+        return "kg2"
+    if re.match(r"^basic\s*[1-3]$", name):
+        return "lowerPrimary"
+    if re.match(r"^basic\s*[4-6]$", name):
+        return "upperPrimary"
+    if re.match(r"^jhs\s*[1-3]$", name):
+        return "juniorHigh"
+    return "lowerPrimary"
+
+
+def subjects_for_class(class_name):
+    """The subjects that class actually teaches."""
+    return list(CURRICULUM[curriculum_key(class_name)])
+
+
+def assessment_for_class(class_name):
+    """Pre-school and KG are observed continuously; Basic and JHS are examined."""
+    if curriculum_key(class_name) in CONTINUOUS_ASSESSMENT_KEYS:
+        return {"mode": "continuous", "scoreMax": 100, "exam": False}
+    return {"mode": "exam", "scoreMax": 40, "exam": True}
+
+
+# Starting results, identical to the browser portals (detlof-report.js) so a
+# student sees the same thing whether the API or localStorage answers.
+def grade_for(total):
+    if total >= 80:
+        return "A"
+    if total >= 70:
+        return "B"
+    if total >= 60:
+        return "C"
+    if total >= 50:
+        return "D"
+    if total >= 40:
+        return "E"
+    return "F"
+
+
+def default_results(class_name):
+    """A spread of scores across the subjects that class actually teaches."""
+    patterns = [
+        (32, 56, "Very good"),
+        (34, 58, "Excellent progress"),
+        (30, 55, "Keep it up"),
+        (29, 52, "Good work"),
+        (27, 50, "Good effort"),
+        (25, 46, "A little more practice needed"),
+    ]
+    results = []
+    for index, subject in enumerate(subjects_for_class(class_name)):
+        class_score, exam_score, remark = patterns[index % len(patterns)]
+        total = round(class_score + exam_score, 2)
+        results.append({
+            "subject": subject,
+            "classScore": class_score,
+            "examScore": exam_score,
+            "totalScore": total,
+            "grade": grade_for(total),
+            "remark": remark,
+        })
+    return results
+
 
 # Profile fields the administrator maintains; the API must not drop them.
 PROFILE_FIELDS = [
@@ -97,9 +215,9 @@ def seed_default_results(students):
         term_results = dict(record.get("termResults") or {})
         if not term_results.get("term1"):
             term_results["term1"] = {
-                "results": [dict(row) for row in DEFAULT_RESULTS],
+                "results": default_results(record.get("currentClass")),
                 "gpa": None,
-                "subjectCount": len(DEFAULT_RESULTS),
+                "subjectCount": len(record["termResults"]["term1"]["results"]),
             }
         record["termResults"] = term_results
         seeded.append(record)
