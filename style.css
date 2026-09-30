@@ -936,6 +936,50 @@ tbody tr:hover { background: rgba(86, 15, 117, 0.035); }
 .icon-md { width: 20px; height: 20px; }
 .icon-lg { width: 26px; height: 26px; }
 .icon-xl { width: 34px; height: 34px; }
+/* ---------------- big crest on the student sign-in ----------------
+   The crest is the hero on the left, the same way the admin and academics
+   admin sign-in screens present it. */
+.login-brand-panel {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 26px; padding: 40px 24px; text-align: center;
+}
+.login-crest-hero { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.login-crest-big {
+  width: 260px; height: 240px; object-fit: contain;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.34));
+}
+.login-crest-wordmark { display: flex; flex-direction: column; gap: 2px; }
+.login-crest-wordmark strong {
+  font-family: var(--font-display);
+  font-size: 30px; font-weight: 700; letter-spacing: 0.14em; color: #fff;
+}
+.login-crest-wordmark span {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.3em; color: var(--crest-gold-soft);
+}
+.login-hero { max-width: 46ch; }
+.login-footnote {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--crest-gold); font-weight: 700; opacity: 0.85;
+}
+@media (min-width: 1100px) {
+  .login-crest-big { width: 300px; height: 276px; }
+  .login-crest-wordmark strong { font-size: 34px; }
+}
+@media (max-width: 860px) {
+  .login-brand-panel { gap: 16px; padding: 24px 18px; }
+  .login-crest-big { width: 150px; height: 138px; }
+  .login-crest-wordmark strong { font-size: 20px; }
+  .login-crest-wordmark span { font-size: 9px; letter-spacing: 0.24em; }
+  .login-hero h1 { font-size: 22px; }
+  .login-hero p { font-size: 12px; }
+  .login-footnote { font-size: 9.5px; }
+}
+@media (max-width: 560px) {
+  .login-crest-big { width: 124px; height: 114px; }
+  .login-crest-wordmark strong { font-size: 17px; }
+  .feature-pills { flex-direction: column; align-items: stretch; }
+}
+
 /* ---------------- login welcome ----------------
    The same confident type and the school's purple and gold as the admin panels,
    with a warmer welcome for a student. */
