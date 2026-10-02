@@ -30,7 +30,7 @@
       font-size: 16px;
       line-height: 1.5;
     }
-    body { display: grid; place-items: center; min-height: 100vh; padding: 24px; position: relative; overflow: hidden; }
+    body { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; min-height: 100vh; padding: 24px; position: relative; }
     body::before, body::after {
       content: "";
       position: fixed;
@@ -80,6 +80,42 @@
     a.student-btn { background: linear-gradient(135deg, #9d20b8, var(--crest-purple)); color: #fff; box-shadow: 0 10px 22px rgba(122,21,145,.3); }
     a.student-btn:hover { background: linear-gradient(135deg, #b52bd0, var(--crest-purple-dark)); box-shadow: 0 12px 26px rgba(42, 23, 48, 0.28); transform: translateY(-2px); }
     .footer { margin-top: 18px; font-size: 11px; color: var(--muted); }
+    .footer-admin-login { display: inline-block; margin-top: 8px; color: var(--muted); font-size: 10px; opacity: .72; text-decoration: none; }
+    .footer-admin-login:hover, .footer-admin-login:focus-visible { color: var(--crest-gold); opacity: 1; text-decoration: underline; }
+    .public-announcements { width: min(560px, 100%); padding: 20px clamp(18px, 4vw, 28px); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: rgba(255,255,255,.07); box-shadow: var(--shadow); position: relative; z-index: 1; backdrop-filter: blur(10px); }
+    .public-announcements h2 { margin: 0 0 12px; font-size: 16px; color: #fff; }
+    .public-announcement-list { display: grid; gap: 10px; }
+    .public-announcement { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); }
+    .public-announcement small { color: var(--crest-gold); font-size: 10px; font-weight: 700; }
+    .public-announcement h3 { margin: 4px 0; color: #fff; font-size: 13px; }
+    .public-announcement p, .announcement-status { margin: 0; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+  .public-school-info {
+    background: #fff; border: 1px solid var(--line); border-radius: 18px;
+    padding: 26px; margin: 22px auto 0; max-width: 1080px;
+  }
+  .public-school-info h2 { margin: 0 0 16px; }
+  .school-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .school-info-card {
+    padding: 16px; border-radius: 12px; background: var(--cream, #fdfbf7);
+    border: 1px solid var(--line);
+  }
+  .school-info-card h3 { margin: 0 0 6px; font-size: 15px; color: var(--crest-purple, #560f75); }
+  .school-info-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .school-info-subhead { margin: 22px 0 10px; font-size: 15px; color: var(--crest-purple, #560f75); }
+  .school-subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .school-subject {
+    padding: 13px 14px; border-radius: 10px; border: 1px solid var(--line);
+    background: #fff; box-shadow: 0 1px 2px rgba(42, 23, 48, 0.04);
+  }
+  .school-subject h4 { margin: 0 0 4px; font-size: 13.5px; color: var(--crest-purple, #560f75); }
+  .school-subject p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .school-info-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .school-list { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .school-list li { margin-bottom: 4px; overflow-wrap: anywhere; }
+  @media (max-width: 560px) {
+    .public-school-info { padding: 16px; border-radius: 12px; }
+    .school-info-grid, .school-subject-grid, .school-info-columns { grid-template-columns: minmax(0, 1fr); }
+  }
     @media (max-width: 560px) {
       .card { padding: 24px; }
       body { padding: 16px; }
@@ -102,7 +138,139 @@
     <div class="buttons">
       <a class="btn student-btn" href="detlof-student-portal.html">Click to Sign In to Student Portal <span aria-hidden="true">→</span></a>
     </div>
-    <p class="footer">© 2026 Detlof Preparatory School</p>
+    <p class="footer">© 2026 Detlof Preparatory School<br /><a class="footer-admin-login" href="detlof-admin-bulk-import%20(6).html">Admin Login</a></p>
   </main>
+  <section class="public-announcements" aria-labelledby="publicAnnouncementsHeading">
+    <h2 id="publicAnnouncementsHeading">School Announcements</h2>
+    <div id="publicAnnouncementList" class="public-announcement-list" aria-live="polite">
+      <p class="announcement-status" role="status">Loading announcements…</p>
+    </div>
+  </section>
+
+  <!-- School information below is maintained by an administrator and served by the
+       backend. The markup is only revealed once the backend answers, so the page
+       still reads sensibly when opened without the server. -->
+  <section class="public-school-info" id="publicSchoolInfo" hidden aria-labelledby="schoolInfoHeading">
+    <h2 id="schoolInfoHeading">About the School</h2>
+    <div class="school-info-grid">
+      <article class="school-info-card">
+        <h3>Our Vision</h3>
+        <p id="schoolVision"></p>
+      </article>
+      <article class="school-info-card">
+        <h3>Our Mission</h3>
+        <p id="schoolMission"></p>
+      </article>
+    </div>
+
+    <h3 class="school-info-subhead">Subjects Offered</h3>
+    <div class="school-subject-grid" id="schoolSubjectGrid"></div>
+
+    <div class="school-info-columns">
+      <div>
+        <h3 class="school-info-subhead">Latest Notices</h3>
+        <ul class="school-list" id="schoolNoticeList"></ul>
+      </div>
+      <div>
+        <h3 class="school-info-subhead">Upcoming Events</h3>
+        <ul class="school-list" id="schoolEventList"></ul>
+      </div>
+      <div>
+        <h3 class="school-info-subhead">Get in Touch</h3>
+        <ul class="school-list" id="schoolContactList"></ul>
+      </div>
+    </div>
+  </section>
+  <script>
+    (async function loadPublicAnnouncements() {
+      const list = document.getElementById("publicAnnouncementList");
+      try {
+        const response = await fetch("/api/announcements");
+        if (!response.ok) throw new Error("Announcements could not be loaded.");
+        const announcements = await response.json();
+        if (!Array.isArray(announcements)) throw new Error("The server returned an invalid announcement list.");
+        list.replaceChildren();
+        if (!announcements.length) {
+          const empty = document.createElement("p");
+          empty.className = "announcement-status";
+          empty.textContent = "There are no current announcements.";
+          list.appendChild(empty);
+          return;
+        }
+        announcements.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "public-announcement";
+          const meta = document.createElement("small");
+          meta.textContent = [item.category || "School Notice", item.date || ""].filter(Boolean).join(" · ");
+          const title = document.createElement("h3");
+          title.textContent = item.title || "";
+          const message = document.createElement("p");
+          message.textContent = item.message || item.body || "";
+          card.append(meta, title, message);
+          list.appendChild(card);
+        });
+      } catch (error) {
+        const status = document.createElement("p");
+        status.className = "announcement-status";
+        status.setAttribute("role", "alert");
+        status.textContent = error.message || "Could not load school announcements.";
+        list.replaceChildren(status);
+      }
+    })();
+  </script>
+<script>
+    // Renders the school information an administrator maintains. Fails quietly so
+    // the page still works when opened without the backend running.
+    (async function loadSiteContent() {
+      const section = document.getElementById("publicSchoolInfo");
+      try {
+        const response = await fetch("/api/site-content");
+        if (!response.ok) return;
+        const content = await response.json();
+        if (!content || typeof content !== "object") return;
+
+        const setText = (id, value) => {
+          const el = document.getElementById(id);
+          if (el && value) el.textContent = value;
+        };
+        setText("schoolVision", content.vision);
+        setText("schoolMission", content.mission);
+        document.title = (content.schoolName || "Detlof Preparatory School")
+          + (content.tagline ? " \u2014 " + content.tagline : "");
+
+        const subjects = document.getElementById("schoolSubjectGrid");
+        if (subjects && Array.isArray(content.subjects)) {
+          subjects.replaceChildren(...content.subjects.map((item) => {
+            const card = document.createElement("article");
+            card.className = "school-subject";
+            const name = document.createElement("h4");
+            name.textContent = item.name || "";
+            const text = document.createElement("p");
+            text.textContent = item.text || "";
+            card.append(name, text);
+            return card;
+          }));
+        }
+
+        const fillList = (id, items, render) => {
+          const list = document.getElementById(id);
+          if (!list || !Array.isArray(items) || !items.length) return;
+          list.replaceChildren(...items.map((item) => {
+            const li = document.createElement("li");
+            li.textContent = render(item);
+            return li;
+          }));
+        };
+        fillList("schoolNoticeList", content.notices, (n) => n.title || "");
+        fillList("schoolEventList", content.events, (e) => e.title || "");
+        fillList("schoolContactList", [content.phone, content.email, content.address].filter(Boolean),
+          (c) => c);
+
+        section.hidden = false;
+      } catch (error) {
+        // No backend: keep the static page as it is.
+      }
+    })();
+  </script>
 </body>
 </html>

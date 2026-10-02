@@ -955,6 +955,10 @@
     /* Very large screens: keep lines readable instead of stretching edge to edge. */
     @media (min-width: 1500px) {
       .admin-shell, main { max-width: 1440px; margin-left: auto; margin-right: auto; }
+      #adminPasswordDialog { width: min(460px, 92vw); border: 0; border-radius: 16px; padding: 22px; box-shadow: 0 18px 50px rgba(0,0,0,.3); }
+      #adminPasswordDialog::backdrop { background: rgba(26,15,32,.62); }
+      #adminPasswordDialog form { display: grid; gap: 12px; }
+      #adminPasswordDialog input { width: 100%; min-height: 44px; }
     }
     @media (max-width: 1200px) {
       .row-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
@@ -1241,6 +1245,48 @@
       .admin-shell, main { max-width: 1440px; margin-left: auto; margin-right: auto; }
     }
 
+    /* Keep fixed dialogs scrollable on short screens and prevent grid children
+       or native file inputs from widening the page on narrow devices. */
+    .grid > *,
+    .row-2 > *,
+    .maint-grid > * {
+      min-width: 0;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    @media (max-width: 768px) {
+      .admin-login-screen {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+      }
+
+      .admin-login-left,
+      .admin-login-right {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .grid,
+      .row-2,
+      .maint-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .grid > div {
+        min-width: 0;
+      }
+
+      .step-list > li {
+        min-width: 0;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1255,9 +1301,27 @@
     <div class="top-actions">
       <span class="role-badge" id="roleBadge">Welcome</span>
       <span class="sync-pill" id="syncIndicator"><span class="sync-dot"></span>Synced (0 active student codes)</span>
+      <button type="button" class="btn btn-outline hidden" id="adminChangePasswordBtn" style="padding:7px 11px;font-size:11px;">Change Password</button>
+      <button type="button" class="btn btn-outline hidden" id="adminLogoutBtn" style="padding:7px 11px;font-size:11px;">Sign out</button>
       <a class="btn btn-outline" href="detlof-student-portal.html" style="padding:7px 11px;font-size:11px;">Go to Student Login →</a>
     </div>
   </header>
+  <dialog id="adminPasswordDialog" aria-labelledby="adminPasswordHeading">
+    <form id="adminPasswordForm">
+      <h2 id="adminPasswordHeading" style="margin:0;">Change Administrator Password</h2>
+      <label for="adminCurrentPassword">Current password</label>
+      <input id="adminCurrentPassword" type="password" autocomplete="current-password" required />
+      <label for="adminNewPassword">New password (12 or more characters)</label>
+      <input id="adminNewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required />
+      <label for="adminConfirmPassword">Confirm new password</label>
+      <input id="adminConfirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required />
+      <div id="adminPasswordError" class="admin-login-error hidden" role="alert"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" id="adminPasswordCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-gold" id="adminPasswordSubmitBtn">Update Password</button>
+      </div>
+    </form>
+  </dialog>
 
    <main id="adminMain" class="container">
       <div id="adminLoginScreen" class="admin-login-screen">
@@ -1687,7 +1751,7 @@
          
 
           <form id="releaseResultsForm" class="update-card admin-only" style="margin-bottom:18px;">
-           <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
+           <h3 style="margin:0 0 8px;font-size:14px;"><span class="heading-icon heading-icon-sm"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 10v4a1 1 0 0 0 1 1h3l4 4V5L7 9H4a1 1 0 0 0-1 1zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></span>Release Term Results &amp; Calculate Promotions</h3>
            <p style="margin:0 0 12px;font-size:11px;color:var(--muted);">
              Click to finalize the selected term. For Term 3, the system will automatically calculate
              cumulative GPA, grade distribution across all terms, determine promotion status, and send
@@ -2204,8 +2268,11 @@
           </div>
           <div class="field"><label>Message</label><textarea id="annMessage" placeholder="Type the announcement students will see on their portal…" required></textarea></div>
           <div class="field"><label>Target Class (optional)</label><input id="annClass" list="annClassList" placeholder="Leave blank to send to all classes" /><datalist id="annClassList"></datalist></div>
-          <button class="btn btn-teal" type="submit">Broadcast to All Portals</button>
+          <input id="annEditingId" type="hidden" />
+          <button id="annSubmitBtn" class="btn btn-teal" type="submit">Publish Announcement</button>
+          <button id="annCancelEdit" class="btn btn-outline hidden" type="button">Cancel Edit</button>
         </form>
+        <div id="managedAnnouncements" aria-live="polite" style="margin-top:18px;"></div>
       </section>
     </div>
   </div>
@@ -2242,10 +2309,11 @@
     // Several sections have their own student picker, so whichever one the
     // administrator used has to be honoured. Declared up here because boot runs
     // before the functions below are reached.
-    const STUDENT_PICKER_IDS = [
+const STUDENT_PICKER_IDS = [
       "maintStudentName",          // section 5, Student Records Maintenance
-      "adminProfileStudentName",   // section 6, Student Profile
-      "recordStudentName",         // section 8, Records and Actions
+      "adminProfileStudentName",   // section 4, Student Profile
+      "recordStudentName",         // section 6, Records and Actions
+      "editorStudent",             // section 6, Student Portal Editor
       "previewStudent",            // section 12, Preview and Send
     ];
 
@@ -2453,20 +2521,15 @@
       return "DPS-25-" + String(num).padStart(4, "0");
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const ADMIN_CREDENTIALS = [
-      { email: "admin@detlof.edu.gh", password: "DetlofAdmin2026!", name: "Administrator", role: "admin" },
-      { email: "teacher@detlof.edu.gh", password: "DetlofTeacher2026!", name: "Class Teacher", role: "teacher" },
-    ];
     let currentRole = "teacher";
-    let teacherName = decodeURIComponent(urlParams.get("teacher") || "") || "Class Teacher";
+    let teacherName = "Class Teacher";
     let isTeacher = true;
     let isAuthenticated = false;
 
     function initRoleUI() {
       document.body.classList.toggle("teacher-mode", isTeacher);
       const roleBadge = document.getElementById("roleBadge");
-      if (roleBadge) roleBadge.textContent = "Welcome";
+      if (roleBadge) roleBadge.textContent = currentRole === "academic_admin" ? "Academic Admin" : isTeacher ? "Teacher" : "Administrator";
       const roleSubtitle = document.getElementById("roleSubtitle");
       if (roleSubtitle) roleSubtitle.textContent = isTeacher ? "Teacher Portal — Academic Records & Timetable" : "ADMIN BULK IMPORT & STUDENT LOGIN CODE GENERATOR";
       const roleBanner = document.getElementById("roleBanner");
@@ -2474,6 +2537,8 @@
       const profileSection = document.getElementById("adminProfileSection");
       if (profileSection) profileSection.classList.toggle("hidden", currentRole !== "admin");
       document.querySelectorAll(".admin-only").forEach((el) => { el.style.display = ""; });
+      document.getElementById("adminLogoutBtn").classList.toggle("hidden", !isAuthenticated);
+      document.getElementById("adminChangePasswordBtn").classList.toggle("hidden", !isAuthenticated);
     }
 
     function showLoginScreen() {
@@ -2483,7 +2548,13 @@
       if (screen) screen.classList.remove("hidden");
     }
 
-    function showMainPanel() {
+    async function showMainPanel() {
+      const response = await fetch("/api/admin/students");
+      if (response.status === 401) throw new Error("Your administrator session has expired. Please sign in again.");
+      if (!response.ok) throw new Error("Could not load the secure student register (HTTP " + response.status + ").");
+      const serverData = await response.json();
+      if (!Array.isArray(serverData.students)) throw new Error("The server returned an invalid student register.");
+      saveStoredRecords(serverData.students);
       const content = document.getElementById("adminContent");
       const screen = document.getElementById("adminLoginScreen");
       if (content) content.classList.remove("hidden");
@@ -2505,6 +2576,7 @@
       refreshPreviewTargets();
       fillDatalist("editorClassList", DETLOF_CLASS_ORDER);
       setupCollapsibleSections();
+      await loadManagedAnnouncements();
       fillDatalist("previewStudentNames", []);
       fillDatalist("maintStudentNames", activeRecords().map((r) => r.fullName));
       loadEditor();
@@ -2516,20 +2588,32 @@
       syncRecordsToPortal(seed);
     }
 
-    const auth = JSON.parse(sessionStorage.getItem("detlof_admin_auth") || "{}");
-    if (auth && auth.role) {
-      currentRole = auth.role === "teacher" ? "teacher" : "admin";
-      teacherName = auth.teacherName || (currentRole === "teacher" ? "Class Teacher" : "Administrator");
+    async function applyAdminIdentity(user) {
+      currentRole = user.role;
+      teacherName = user.name || user.email;
       isTeacher = currentRole === "teacher";
       isAuthenticated = true;
-      showMainPanel();
-    } else {
+      await showMainPanel();
+    }
+
+    async function restoreAdminSession() {
       showLoginScreen();
+      try {
+        const response = await fetch("/api/admin/session");
+        if (response.status === 401) return;
+        if (!response.ok) throw new Error("Could not verify the administrator session.");
+        const data = await response.json();
+        if (data.authenticated && data.user) await applyAdminIdentity(data.user);
+      } catch (error) {
+        const errorBox = document.getElementById("adminLoginError");
+        errorBox.textContent = error.message || "Could not reach the secure administrator service.";
+        errorBox.classList.remove("hidden");
+      }
     }
 
     const adminLoginForm = document.getElementById("adminLoginForm");
     if (adminLoginForm) {
-      adminLoginForm.addEventListener("submit", (e) => {
+      adminLoginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = (document.getElementById("adminLoginEmail").value || "").trim().toLowerCase();
         const password = document.getElementById("adminLoginPassword").value || "";
@@ -2539,25 +2623,27 @@
         if (errorBox) errorBox.classList.add("hidden");
         if (btn) btn.disabled = true;
         if (btnText) btnText.textContent = "Signing in…";
-        // Simulate brief auth delay for UX
-        setTimeout(() => {
-          let ok = false;
-          const match = ADMIN_CREDENTIALS.find((a) => a.email.toLowerCase() === email && a.password === password);
-          if (match) {
-            ok = true;
-            currentRole = match.role || "teacher";
-            teacherName = match.name;
-            isTeacher = currentRole === "teacher";
+        try {
+          const response = await fetch("/api/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Administrator sign-in failed.");
+          if (!data.user || data.user.role === "academic_admin") {
+            throw new Error("Use the Academic Administrator sign-in for this account.");
           }
+          await applyAdminIdentity(data.user);
+        } catch (error) {
+          if (errorBox) {
+            errorBox.textContent = error.message || "Could not reach the secure administrator service.";
+            errorBox.classList.remove("hidden");
+          }
+        } finally {
           if (btn) btn.disabled = false;
           if (btnText) btnText.textContent = "Sign in";
-          if (!ok) {
-            if (errorBox) { errorBox.textContent = "Invalid credentials. Please try again."; errorBox.classList.remove("hidden"); }
-            return;
-          }
-          sessionStorage.setItem("detlof_admin_auth", JSON.stringify({ role: currentRole, teacherName: teacherName }));
-          showMainPanel();
-         }, 400);
+        }
        });
         bindEvent("currentClass", "change", function () {
           populateQuickGenerateNames();
@@ -2570,6 +2656,65 @@
         bindEvent("fullName", "change", applyRosterIdentityToSingleForm);
         bindEvent("fullName", "blur", applyRosterIdentityToSingleForm);
       }
+
+      populateClassSelects();
+      restoreAdminSession();
+
+    bindEvent("adminLogoutBtn", "click", async function () {
+      try {
+        const response = await fetch("/api/admin/logout", { method: "POST" });
+        if (!response.ok) throw new Error("Could not sign out (HTTP " + response.status + ").");
+        localStorage.removeItem(STORAGE_KEY);
+        isAuthenticated = false;
+        currentRole = "teacher";
+        isTeacher = true;
+        showLoginScreen();
+      } catch (error) {
+        window.alert(error.message || "Could not contact the administrator service.");
+      }
+    });
+
+    bindEvent("adminChangePasswordBtn", "click", function () {
+      document.getElementById("adminPasswordError").classList.add("hidden");
+      document.getElementById("adminPasswordDialog").showModal();
+    });
+    bindEvent("adminPasswordCancelBtn", "click", function () {
+      document.getElementById("adminPasswordDialog").close();
+    });
+    bindEvent("adminPasswordForm", "submit", async function (event) {
+      event.preventDefault();
+      const error = document.getElementById("adminPasswordError");
+      const button = document.getElementById("adminPasswordSubmitBtn");
+      const currentPassword = document.getElementById("adminCurrentPassword").value;
+      const newPassword = document.getElementById("adminNewPassword").value;
+      const confirmation = document.getElementById("adminConfirmPassword").value;
+      error.classList.add("hidden");
+      if (newPassword !== confirmation) {
+        error.textContent = "The new passwords do not match.";
+        error.classList.remove("hidden");
+        return;
+      }
+      button.disabled = true;
+      button.textContent = "Updating…";
+      try {
+        const response = await fetch("/api/admin/password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currentPassword, newPassword }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not update the password.");
+        document.getElementById("adminPasswordForm").reset();
+        document.getElementById("adminPasswordDialog").close();
+        reportSuccess("Administrator password updated.");
+      } catch (failure) {
+        error.textContent = failure.message || "Could not contact the administrator service.";
+        error.classList.remove("hidden");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Update Password";
+      }
+    });
 
     // escapeHtml, the grading helpers and the report builders come from
     // detlof-report.js, which is loaded just above this script.
@@ -2658,30 +2803,27 @@
             source: "detlof-admin-bulk-import (6).html",
           }),
         });
-        let data = {};
-        if (res) {
-          try { data = await res.json(); } catch { data = {}; }
-        }
-        if (res && res.ok && Array.isArray(data.students)) {
-          const existing = getStoredRecords();
-          const map = new Map();
-          existing.forEach((item) => map.set(String(item.studentId).toUpperCase(), item));
-          data.students.forEach((item) => {
-            if (item && item.studentId) {
-              const key = String(item.studentId).toUpperCase();
-              map.set(key, mergeStoredRecord(map.get(key), item));
-            }
-          });
-          const merged = Array.from(map.values());
-          saveStoredRecords(merged);
-          renderTable(merged);
-          populateAdminProfileStudents();
-          if (indicator) indicator.textContent = "Synced (" + merged.length + " active student codes)";
-        } else {
-          if (indicator) indicator.textContent = "Saved locally & ready for login";
-        }
-      } catch {
-        if (indicator) indicator.textContent = "Saved locally & ready for login";
+        if (!res) throw new Error("The secure portal server could not be reached.");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Student records were not saved (HTTP " + res.status + ").");
+        if (!Array.isArray(data.students)) throw new Error("The server returned an invalid student list.");
+        const existing = getStoredRecords();
+        const map = new Map();
+        existing.forEach((item) => map.set(String(item.studentId).toUpperCase(), item));
+        data.students.forEach((item) => {
+          if (item && item.studentId) {
+            const key = String(item.studentId).toUpperCase();
+            map.set(key, mergeStoredRecord(map.get(key), item));
+          }
+        });
+        const merged = Array.from(map.values());
+        saveStoredRecords(merged);
+        renderTable(merged);
+        populateAdminProfileStudents();
+        if (indicator) indicator.textContent = "Synced (" + merged.length + " active student codes)";
+      } catch (error) {
+        if (indicator) indicator.textContent = "Sync failed — server save not confirmed";
+        reportError(error.message || "Could not save student records to the server.");
       }
     }
 
@@ -3654,8 +3796,13 @@
     });
 
     // Wraps an async handler so a failure is reported rather than swallowed.
-    function withFeedback(button, context, work) {
+    // Pass { print: true } when the handler produces a report or receipt: the
+    // print window is opened here, synchronously, because the promise chain below
+    // would otherwise lose the browser's user gesture and be blocked as a pop-up.
+    function withFeedback(button, context, work, options) {
       const wasDisabled = button ? button.disabled : false;
+      const wantsPrint = !!(options && options.print);
+      if (wantsPrint && typeof reservePrintWindow === "function") reservePrintWindow();
       if (button) {
         button.classList.add("is-loading");
         button.disabled = true;
@@ -3667,6 +3814,11 @@
           if (button) {
             button.classList.remove("is-loading");
             button.disabled = wasDisabled;
+          }
+          // Do not leave a blank window hanging if nothing was printed.
+          if (wantsPrint && typeof reservedPrintWindow !== "undefined" && reservedPrintWindow && !reservedPrintWindow.closed) {
+            const used = reservedPrintWindow.document && reservedPrintWindow.document.body && reservedPrintWindow.document.body.children.length > 0;
+            if (!used && typeof releasePrintWindow === "function") releasePrintWindow();
           }
         });
     }
@@ -4950,12 +5102,12 @@
       if (!record) { reportWarning("Select a student first."); return; }
       const totals = detlofBillTotals(record);
       if (totals.billed <= 0) { reportWarning("No fees are on this student's account yet, so there is no receipt to save."); return; }
-      withFeedback(this, "Building the receipt", async () => {
-        await saveEditor();
-        if (openPrintPreview(renderFeeReceiptHTML(record), "Please allow pop-ups to save the receipt.")) {
-          reportSuccess("Receipt " + buildReceiptNumber(record) + " opened. Choose 'Save as PDF' to keep it.");
-        }
-      });
+withFeedback(this, "Building the receipt", async () => {
+  await saveEditor();
+  if (openPrintPreview(renderFeeReceiptHTML(record), "Please allow pop-ups to save the receipt.")) {
+  reportSuccess("Receipt " + buildReceiptNumber(record) + " opened. Choose 'Save as PDF' to keep it.");
+  }
+  }, { print: true });
     });
 
     bindEvent("editorReceiptSmsBtn", "click", function () {
@@ -5092,7 +5244,7 @@
       if (!record) { reportWarning("Choose a class and a student in this section first."); return; }
       withFeedback(this, "Building the parent report", async () => {
         await sendParentPdfFlow(record, document.getElementById("previewTerm").value);
-      });
+      }, { print: true });
     });
 
     // Academics Admin: send every student in an approved batch their own PDF.
@@ -5236,30 +5388,124 @@
       const category = document.getElementById("annCategory").value;
       const targetClass = document.getElementById("annClass").value.trim();
       if (!title || !message) return;
-      const updateObj = {
-        id: "ann-" + Date.now(),
-        title,
-        category,
-        message,
-        date: stampDate(),
-        createdAt: stampIso(),
-        createdBy: teacherLabel(),
-        individual: false,
-      };
-      const records = getStoredRecords().map((rec) => {
-        if (targetClass && rec.currentClass !== targetClass) return rec;
-        const updates = Array.isArray(rec.updates) ? rec.updates : [];
-        updates.push({ ...updateObj });
-        rec.updatedBy = teacherLabel();
-        rec.updatedAt = stampIso();
-        return rec;
-      });
-      saveStoredRecords(records);
-      renderTable(records);
-      await syncRecordsToPortal(records);
-      event.target.reset();
-       reportSuccess("Broadcast announcement sent to " + (targetClass || "all") + " student portal(s).");
-     });
+      const editingId = document.getElementById("annEditingId").value;
+      const submitButton = document.getElementById("annSubmitBtn");
+      submitButton.disabled = true;
+      try {
+        const response = await fetch(editingId
+          ? "/api/admin/announcements/" + encodeURIComponent(editingId)
+          : "/api/admin/announcements", {
+          method: editingId ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, message, category, targetClass }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not save the announcement.");
+        event.target.reset();
+        resetAnnouncementEditor();
+        await loadManagedAnnouncements();
+        reportSuccess(editingId ? "Announcement updated and published." : "Announcement published to the public site and student portals.");
+      } catch (error) {
+        reportError(error.message || "Could not save the announcement.");
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    function resetAnnouncementEditor() {
+      document.getElementById("annEditingId").value = "";
+      document.getElementById("annSubmitBtn").textContent = "Publish Announcement";
+      document.getElementById("annCancelEdit").classList.add("hidden");
+    }
+
+    async function loadManagedAnnouncements() {
+      const container = document.getElementById("managedAnnouncements");
+      if (!container) return;
+      try {
+        const response = await fetch("/api/announcements");
+        if (!response.ok) throw new Error("Could not load announcements (HTTP " + response.status + ").");
+        const announcements = await response.json();
+        if (!Array.isArray(announcements)) throw new Error("The server returned an invalid announcement list.");
+        container.replaceChildren();
+        const heading = document.createElement("h3");
+        heading.textContent = "Published Announcements";
+        container.appendChild(heading);
+        if (!announcements.length) {
+          const empty = document.createElement("p");
+          empty.textContent = "No announcements have been published.";
+          container.appendChild(empty);
+          return;
+        }
+        announcements.forEach((announcement) => {
+          const item = document.createElement("article");
+          item.style.cssText = "border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:#fff;";
+          const title = document.createElement("strong");
+          title.textContent = announcement.title;
+          const message = document.createElement("p");
+          message.textContent = announcement.message || announcement.body || "";
+          const meta = document.createElement("small");
+          meta.textContent = [announcement.category, announcement.targetClass || "All classes", announcement.date].filter(Boolean).join(" · ");
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "btn btn-outline";
+          edit.textContent = "Edit";
+          edit.dataset.announcementAction = "edit";
+          edit.dataset.announcementId = announcement.id;
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "btn btn-outline";
+          remove.textContent = "Delete";
+          remove.dataset.announcementAction = "delete";
+          remove.dataset.announcementId = announcement.id;
+          const actions = document.createElement("div");
+          actions.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;";
+          actions.append(edit, remove);
+          item.append(meta, document.createElement("br"), title, message, actions);
+          container.appendChild(item);
+        });
+        container.querySelectorAll("[data-announcement-action]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const announcement = announcements.find((item) => item.id === button.dataset.announcementId);
+            if (!announcement) return;
+            if (button.dataset.announcementAction === "edit") {
+              document.getElementById("annEditingId").value = announcement.id;
+              document.getElementById("annTitle").value = announcement.title || "";
+              document.getElementById("annMessage").value = announcement.message || announcement.body || "";
+              document.getElementById("annCategory").value = announcement.category || "School Notice";
+              document.getElementById("annClass").value = announcement.targetClass || "";
+              document.getElementById("annSubmitBtn").textContent = "Save Changes";
+              document.getElementById("annCancelEdit").classList.remove("hidden");
+              document.getElementById("annTitle").focus();
+              return;
+            }
+            if (!window.confirm("Delete this announcement from the public site and student portals?")) return;
+            button.disabled = true;
+            try {
+              const response = await fetch("/api/admin/announcements/" + encodeURIComponent(announcement.id), { method: "DELETE" });
+              const data = await response.json();
+              if (!response.ok) throw new Error(data.error || "Could not delete the announcement.");
+              if (document.getElementById("annEditingId").value === announcement.id) {
+                document.getElementById("announcementForm").reset();
+                resetAnnouncementEditor();
+              }
+              await loadManagedAnnouncements();
+              reportSuccess("Announcement deleted.");
+            } catch (error) {
+              reportError(error.message || "Could not delete the announcement.");
+              button.disabled = false;
+            }
+          });
+        });
+      } catch (error) {
+        container.textContent = error.message || "Could not load announcements.";
+        reportError(container.textContent);
+      }
+    }
+
+    bindEvent("annCancelEdit", "click", () => {
+      document.getElementById("announcementForm").reset();
+      resetAnnouncementEditor();
+    });
 
   // ---------------------------------------------------------------------------
   // CSV parsing + preview
@@ -5502,22 +5748,40 @@
     document.querySelector(".admin-login-form").classList.remove("hidden");
   });
 
-bindEvent("academicsAdminLoginBtn", "click", function (e) {
-    e.preventDefault();
-    const email = document.getElementById("academicsAdminEmail").value;
-    const password = document.getElementById("academicsAdminPassword").value;
-    if (email === "admin-academics@detlof.edu.gh" && password === "DetlofAcademics2026!") {
-      localStorage.setItem("detlof_academics_admin", "true");
-      document.getElementById("academicsAdminError").classList.add("hidden");
-       document.getElementById("adminLoginScreen").classList.add("hidden");
-      document.getElementById("adminContent").classList.remove("hidden");
-      document.getElementById("adminProfileSection").classList.add("hidden");
-      document.querySelectorAll(".admin-only, .academics-admin-only").forEach((el) => el.classList.remove("hidden"));
-      renderPendingApprovals();
-    } else {
-      document.getElementById("academicsAdminError").classList.remove("hidden");
+const academicsAdminForm = document.getElementById("academicsAdminLoginScreen");
+if (academicsAdminForm) {
+  academicsAdminForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const error = document.getElementById("academicsAdminError");
+    const button = document.getElementById("academicsAdminLoginBtn");
+    const buttonText = document.getElementById("academicsAdminLoginBtnText");
+    error.classList.add("hidden");
+    button.disabled = true;
+    buttonText.textContent = "Signing in…";
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("academicsAdminEmail").value.trim().toLowerCase(),
+          password: document.getElementById("academicsAdminPassword").value,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Academic administrator sign-in failed.");
+      if (!data.user || data.user.role !== "academic_admin") {
+        throw new Error("This account does not have Academic Administrator access.");
+      }
+      await applyAdminIdentity(data.user);
+    } catch (failure) {
+      error.textContent = failure.message || "Could not reach the secure administrator service.";
+      error.classList.remove("hidden");
+    } finally {
+      button.disabled = false;
+      buttonText.textContent = "Sign in to Academic Admin";
     }
   });
+}
 
   bindEvent("timetableFile", "change", function (e) {
     const file = e.target.files[0];
@@ -5633,7 +5897,7 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     const noPendingMsg = document.getElementById("noPendingMsg");
     const pendingApprovals = document.getElementById("pendingApprovals");
     const adminOnlyItems = document.querySelectorAll(".admin-only");
-    const isAcademicsAdmin = localStorage.getItem("detlof_academics_admin") === "true";
+    const isAcademicsAdmin = currentRole === "academic_admin";
     if (!isAcademicsAdmin) return;
     if (!pending.length) {
       pendingApprovals.style.display = "none";
@@ -5741,9 +6005,9 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
 
   // Only the Academics Admin can approve and publish. Everyone else can submit
   // for review, so nothing reaches a student portal unreviewed.
-  const isAcademicsAdmin = localStorage.getItem("detlof_academics_admin") === "true";
+  function isAcademicsAdmin() { return currentRole === "academic_admin"; }
   function requireAcademicsAdmin(action) {
-    if (isAcademicsAdmin) return true;
+    if (isAcademicsAdmin()) return true;
     reportWarning("Only the Academics Admin can " + action + ". This has been sent to them for review.");
     return false;
   }
@@ -6460,12 +6724,6 @@ bindEvent("academicsAdminLoginBtn", "click", function (e) {
     const text = "Student: " + student.fullName + "\nEmail: " + student.email + "\nStudent ID: " + student.studentId + "\nLogin Code: " + student.loginCode + "\nClass: " + student.currentClass;
     navigator.clipboard.writeText(text).then(() => reportSuccess("Test credentials copied to clipboard!")).catch(() => reportWarning("Copy failed"));
   }
-
-const initial = getStoredRecords();
-        renderTable(initial);
-        populateRecordStudents();
-        updateSelectedStudentSummary(getRecordForTypedName());
-        syncRecordsToPortal(initial);
 
       // Show warning if opened via file:// protocol
       if (location.protocol === "file:") {

@@ -726,18 +726,73 @@ function renderTermSummaryRowHTML(results, label) {
 // Prints a report in a new window. A blocked pop-up is a normal outcome, so it
 // reports itself rather than failing silently: it uses the page's own feedback
 // helper when one is loaded.
+// ---------------------------------------------------------------------------
+// Printing and saving as PDF
+//
+// A browser only lets a page open a window from a real user gesture. Any await,
+// promise chain or timeout in between loses that gesture and the pop-up is
+// silently blocked, which is why reports and receipts would sometimes do
+// nothing. So the window is reserved synchronously, while the click is still
+// trusted, and written into later.
+// ---------------------------------------------------------------------------
+let reservedPrintWindow = null;
+
+function reservePrintWindow() {
+  if (reservedPrintWindow && !reservedPrintWindow.closed) return reservedPrintWindow;
+  try {
+    reservedPrintWindow = window.open("", "_blank");
+  } catch (error) {
+    reservedPrintWindow = null;
+  }
+  return reservedPrintWindow;
+}
+
+function releasePrintWindow() {
+  const handle = reservedPrintWindow;
+  reservedPrintWindow = null;
+  if (!handle) return;
+  try {
+    if (!handle.closed) handle.close();
+  } catch (error) {
+    // Already gone.
+  }
+}
+
 function openPrintPreview(html, blockedMessage) {
-  const printWindow = window.open("", "_blank");
+  let printWindow = null;
+  try {
+    printWindow = reservedPrintWindow && !reservedPrintWindow.closed ? reservedPrintWindow : window.open("", "_blank");
+  } catch (error) {
+    printWindow = null;
+  }
+  reservedPrintWindow = null;
+
   if (!printWindow) {
-    const message = "Your browser blocked the pop-up. Allow pop-ups for this site, then try again.";
+    const message = "Your browser blocked the report window. Allow pop-ups for this site, then try again.";
     if (typeof window.reportWarning === "function") window.reportWarning(message);
-    else window.alert(blockedMessage || message);
+    else if (typeof window.alert === "function") window.alert(blockedMessage || message);
     return false;
   }
-  printWindow.document.write(html);
-  printWindow.document.close();
-  printWindow.focus();
-  setTimeout(function () { printWindow.print(); }, 500);
+
+  try {
+    // document.open() resets the window, but not every document exposes it.
+    if (typeof printWindow.document.open === "function") printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.focus();
+  } catch (error) {
+    releasePrintWindow();
+    if (typeof window.reportError === "function") window.reportError("The report window could not be written to: " + error.message);
+    return false;
+  }
+
+  setTimeout(function () {
+    try {
+      if (!printWindow.closed) printWindow.print();
+    } catch (error) {
+      // The window was closed by the user; nothing to do.
+    }
+  }, 600);
   return true;
 }
 
