@@ -852,10 +852,11 @@
       font-weight: 800; font-size: 11px;
     }
     .toast-text { flex: 1; min-width: 0; word-break: break-word; }
-    .toast-close {
-      flex: 0 0 auto; background: transparent; border: none; color: rgba(255, 255, 255, 0.75);
-      font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px;
-    }
+.toast-close {
+     flex: 0 0 auto; min-width: 44px; min-height: 44px; background: transparent; border: none;
+     color: rgba(255, 255, 255, 0.75);
+     font-size: 18px; line-height: 1; cursor: pointer; padding: 0 6px;
+     }
     .toast-close:hover { color: #fff; }
     .toast-out { animation: toastOut 240ms ease-in forwards; }
     @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
@@ -2548,13 +2549,10 @@ const STUDENT_PICKER_IDS = [
       if (screen) screen.classList.remove("hidden");
     }
 
-    async function showMainPanel() {
-      const response = await fetch("/api/admin/students");
-      if (response.status === 401) throw new Error("Your administrator session has expired. Please sign in again.");
-      if (!response.ok) throw new Error("Could not load the secure student register (HTTP " + response.status + ").");
-      const serverData = await response.json();
-      if (!Array.isArray(serverData.students)) throw new Error("The server returned an invalid student register.");
-      saveStoredRecords(serverData.students);
+    // Draws the whole panel from the register this browser already holds. Nothing
+    // here depends on the network, so a failed request can never leave an
+    // administrator looking at a blank screen.
+    function renderPanelFromLocalRecords() {
       const content = document.getElementById("adminContent");
       const screen = document.getElementById("adminLoginScreen");
       if (content) content.classList.remove("hidden");
@@ -2573,10 +2571,8 @@ const STUDENT_PICKER_IDS = [
       const classResultsSelect = document.getElementById("classResultsClass");
       if (classResultsSelect && !classResultsSelect.value) classResultsSelect.selectedIndex = 0;
       applyCurriculumSubjects();
-      refreshPreviewTargets();
       fillDatalist("editorClassList", DETLOF_CLASS_ORDER);
       setupCollapsibleSections();
-      await loadManagedAnnouncements();
       fillDatalist("previewStudentNames", []);
       fillDatalist("maintStudentNames", activeRecords().map((r) => r.fullName));
       loadEditor();
@@ -2585,7 +2581,34 @@ const STUDENT_PICKER_IDS = [
       refreshClassNameTargets();
       populateRecordStudents();
       updateSelectedStudentSummary(getRecordForTypedName());
-      syncRecordsToPortal(seed);
+      return seed;
+    }
+
+    async function showMainPanel() {
+      // Show the panel first from local data, then try the shared register.
+      const local = renderPanelFromLocalRecords();
+      try {
+        const response = await fetch("/api/admin/students");
+        if (response && response.status === 401) {
+          sessionStorage.removeItem("detlof_admin_auth");
+          showLoginScreen();
+          reportWarning("Your administrator session has expired. Please sign in again.");
+          return;
+        }
+        if (response && response.ok) {
+          const serverData = await response.json();
+          if (Array.isArray(serverData.students)) {
+            saveStoredRecords(serverData.students);
+            renderPanelFromLocalRecords();
+          }
+        } else {
+          reportWarning("Working from this browser's copy of the register. Start the school server to load the shared one.");
+        }
+      } catch (error) {
+        reportWarning("Working offline: showing this browser's copy of the register. Start the school server to load the shared one.");
+      }
+      loadManagedAnnouncements();
+      syncRecordsToPortal(local);
     }
 
     async function applyAdminIdentity(user) {
@@ -2593,21 +2616,60 @@ const STUDENT_PICKER_IDS = [
       teacherName = user.name || user.email;
       isTeacher = currentRole === "teacher";
       isAuthenticated = true;
+      // Remember the sign-in locally so a refresh does not throw you back to the
+      // login screen. This is a convenience record only: the server session cookie
+      // is what actually authorises every request, and it stays HttpOnly.
+      try {
+        sessionStorage.setItem("detlof_admin_auth", JSON.stringify({
+          role: user.role,
+          name: user.name || user.email,
+          email: user.email || "",
+          at: new Date().toISOString(),
+        }));
+      } catch (error) {
+        // A browser with storage blocked still works for this session.
+      }
       await showMainPanel();
     }
 
     async function restoreAdminSession() {
-      showLoginScreen();
+      const storedRole = (function () {
+        try {
+          return JSON.parse(sessionStorage.getItem("detlof_admin_auth") || "{}").role || "";
+        } catch (error) {
+          return "";
+        }
+      })();
+      if (!storedRole) {
+        showLoginScreen();
+        return;
+      }
+      // Optimistically show the panel from this browser's copy, then verify the
+      // session. Otherwise a slow or unreachable server throws you back to the
+      // login screen even though your session is still valid.
+      isAuthenticated = true;
+      currentRole = storedRole;
+      isTeacher = storedRole === "teacher";
+      renderPanelFromLocalRecords();
       try {
         const response = await fetch("/api/admin/session");
-        if (response.status === 401) return;
-        if (!response.ok) throw new Error("Could not verify the administrator session.");
-        const data = await response.json();
-        if (data.authenticated && data.user) await applyAdminIdentity(data.user);
+        if (response && response.status === 401) {
+          sessionStorage.removeItem("detlof_admin_auth");
+          isAuthenticated = false;
+          showLoginScreen();
+          reportWarning("Your administrator session has expired. Please sign in again.");
+          return;
+        }
+        if (response && response.ok) {
+          const data = await response.json();
+          if (data.authenticated && data.user) {
+            await applyAdminIdentity(data.user);
+            return;
+          }
+        }
+        reportWarning("Working offline: showing this browser's copy of the register. Start the school server to load the shared one.");
       } catch (error) {
-        const errorBox = document.getElementById("adminLoginError");
-        errorBox.textContent = error.message || "Could not reach the secure administrator service.";
-        errorBox.classList.remove("hidden");
+        reportWarning("Working offline: showing this browser's copy of the register. Start the school server to load the shared one.");
       }
     }
 
@@ -2660,19 +2722,31 @@ const STUDENT_PICKER_IDS = [
       populateClassSelects();
       restoreAdminSession();
 
-    bindEvent("adminLogoutBtn", "click", async function () {
-      try {
-        const response = await fetch("/api/admin/logout", { method: "POST" });
-        if (!response.ok) throw new Error("Could not sign out (HTTP " + response.status + ").");
-        localStorage.removeItem(STORAGE_KEY);
-        isAuthenticated = false;
-        currentRole = "teacher";
-        isTeacher = true;
-        showLoginScreen();
-      } catch (error) {
-        window.alert(error.message || "Could not contact the administrator service.");
-      }
-    });
+bindEvent("adminLogoutBtn", "click", async function () {
+        const button = this;
+        if (button) button.disabled = true;
+        try {
+          const response = await fetch("/api/admin/logout", { method: "POST" });
+          if (!response.ok) throw new Error("Could not sign out (HTTP " + response.status + ").");
+          // Clear the local sign-in marker too, or the panel would still open on
+          // the next load even though the server session has ended.
+          try {
+            sessionStorage.removeItem("detlof_admin_auth");
+          } catch (error) {
+            // Storage blocked; the server session is already gone.
+          }
+          localStorage.removeItem(STORAGE_KEY);
+          isAuthenticated = false;
+          currentRole = "teacher";
+          isTeacher = true;
+          showLoginScreen();
+          reportSuccess("You have been signed out.");
+        } catch (error) {
+reportError(error.message || "Could not contact the administrator service.");
+        } finally {
+          if (button) button.disabled = false;
+        }
+      });
 
     bindEvent("adminChangePasswordBtn", "click", function () {
       document.getElementById("adminPasswordError").classList.add("hidden");
@@ -3084,9 +3158,9 @@ const STUDENT_PICKER_IDS = [
       }
       document.getElementById("adminProfilePicPreview").src = record.profilePic || "detlofcreast.svg";
       document.getElementById("adminProfileAvatar").src = record.profilePic || "detlofcreast.svg";
-      document.getElementById("adminProfileSummaryName").textContent = record.fullName || record.studentId;
-      document.getElementById("adminProfileSummaryMeta").textContent =
-        (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || "");
+      detlofSetText("adminProfileSummaryName", record.fullName || record.studentId);
+      detlofSetText("adminProfileSummaryMeta",
+        (record.currentClass || "") + " · " + (record.studentId || "") + " · " + (record.email || ""));
       const sendPhone = document.getElementById("adminSendParentPhone");
       if (sendPhone && !sendPhone.value.trim()) sendPhone.value = record.whatsappNumber || record.parentPhone || "";
       summary.classList.remove("hidden");
@@ -4566,7 +4640,7 @@ const STUDENT_PICKER_IDS = [
       renderTable(getStoredRecords());
       renderTable(getStoredRecords());
       syncRecordsToPortal([record]);
-      document.getElementById("maintNewName").value = "";
+      detlofSetValue("maintNewName", "");
       loadMaintenance();
       reportSuccess(name + " admitted to " + className + " with ID " + studentId
         + " and Login Code " + record.loginCode + ".");
@@ -4874,9 +4948,9 @@ const STUDENT_PICKER_IDS = [
       }
       empty.classList.add("hidden");
       body.classList.remove("hidden");
-      document.getElementById("editorName").textContent = record.fullName;
-      document.getElementById("editorMeta").textContent =
-        record.studentId + " · " + (record.currentClass || "") + " · " + (record.email || "");
+      detlofSetText("editorName", record.fullName);
+      detlofSetText("editorMeta",
+        record.studentId + " · " + (record.currentClass || "") + " · " + (record.email || ""));
       document.getElementById("editorPhoto").src = record.profilePic || "detlofcreast.svg";
       renderEditorProfileFields(record);
       renderEditorBills(record);
@@ -4941,7 +5015,7 @@ const STUDENT_PICKER_IDS = [
     }
 
     bindEvent("editorClass", "change", function () {
-      document.getElementById("editorStudent").value = "";
+      detlofSetValue("editorStudent", "");
       loadEditor();
     });
     bindEvent("editorStudent", "input", loadEditor);
@@ -5018,8 +5092,8 @@ const STUDENT_PICKER_IDS = [
       withFeedback(this, "Saving message", async () => {
         const ok = await saveEditor({ message: { title: title, body: bodyText } });
         if (ok) {
-          document.getElementById("editorMessageTitle").value = "";
-          document.getElementById("editorMessageBody").value = "";
+          detlofSetValue("editorMessageTitle", "");
+          detlofSetValue("editorMessageBody", "");
         }
       });
     });
@@ -5051,7 +5125,7 @@ const STUDENT_PICKER_IDS = [
     bindEvent("editorFullProfile", "click", function () {
       const record = editorRecord();
       if (!record) { reportWarning("Select a student first."); return; }
-      document.getElementById("adminProfileStudentName").value = record.fullName;
+      detlofSetValue("adminProfileStudentName", record.fullName);
       loadAdminProfileRecord();
       const section = document.getElementById("adminProfileSection");
       if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -5167,7 +5241,7 @@ withFeedback(this, "Building the receipt", async () => {
     }
 
     bindEvent("previewClass", "change", function () {
-      document.getElementById("previewStudent").value = "";
+      detlofSetValue("previewStudent", "");
       refreshPreviewTargets();
     });
     bindEvent("previewStudent", "input", refreshPreviewTargets);
@@ -5413,8 +5487,8 @@ withFeedback(this, "Building the receipt", async () => {
     });
 
     function resetAnnouncementEditor() {
-      document.getElementById("annEditingId").value = "";
-      document.getElementById("annSubmitBtn").textContent = "Publish Announcement";
+      detlofSetValue("annEditingId", "");
+      detlofSetText("annSubmitBtn", "Publish Announcement");
       document.getElementById("annCancelEdit").classList.add("hidden");
     }
 
@@ -5468,12 +5542,12 @@ withFeedback(this, "Building the receipt", async () => {
             const announcement = announcements.find((item) => item.id === button.dataset.announcementId);
             if (!announcement) return;
             if (button.dataset.announcementAction === "edit") {
-              document.getElementById("annEditingId").value = announcement.id;
-              document.getElementById("annTitle").value = announcement.title || "";
-              document.getElementById("annMessage").value = announcement.message || announcement.body || "";
-              document.getElementById("annCategory").value = announcement.category || "School Notice";
-              document.getElementById("annClass").value = announcement.targetClass || "";
-              document.getElementById("annSubmitBtn").textContent = "Save Changes";
+              detlofSetValue("annEditingId", announcement.id);
+              detlofSetValue("annTitle", announcement.title || "");
+              detlofSetValue("annMessage", announcement.message || announcement.body || "");
+              detlofSetValue("annCategory", announcement.category || "School Notice");
+              detlofSetValue("annClass", announcement.targetClass || "");
+              detlofSetText("annSubmitBtn", "Save Changes");
               document.getElementById("annCancelEdit").classList.remove("hidden");
               document.getElementById("annTitle").focus();
               return;
@@ -5853,7 +5927,7 @@ if (academicsAdminForm) {
 
       reportSuccess("Timetable synced for all " + classRecords.length + " students in " + timetableClass + " (" + schedule.length + " lessons).");
       e.target.reset();
-      document.getElementById("timetableFile").value = "";
+      detlofSetValue("timetableFile", "");
     }, function (message) {
       renderPreviewError("timetablePreview", message);
       reportError("Could not read the uploaded file");
@@ -6357,7 +6431,7 @@ if (academicsAdminForm) {
     if (!modal || !list) {     reportError("Recipient list is unavailable on this page."); return; }
 
     const reachable = rows.filter((row) => row.number && row.message);
-    document.getElementById("whatsappFallbackTitle").textContent = title;
+    detlofSetText("whatsappFallbackTitle", title);
     if (numberEl) numberEl.textContent = reachable.length + " parent(s) with a number on file";
     if (link) { link.href = "#"; link.textContent = ""; }
 
@@ -6452,8 +6526,8 @@ if (academicsAdminForm) {
     const phone = whatsappNumber(record && (record.whatsappNumber || record.profileWhatsApp || record.parentPhone));
     const message = options.message || "";
 
-    document.getElementById("publishPreviewTitle").textContent = options.title || "Preview before sending";
-    document.getElementById("publishPreviewPortal").innerHTML = options.portalHtml || "";
+    detlofSetText("publishPreviewTitle", options.title || "Preview before sending");
+    detlofSetHtml("publishPreviewPortal", options.portalHtml || "");
     document.getElementById("publishPreviewWhatsapp").innerHTML = message
       ? whatsappTextToHtml(message)
       : "<p class='preview-note'>There is nothing to send yet for this student.</p>";
@@ -6591,7 +6665,7 @@ if (academicsAdminForm) {
       const modal = document.getElementById("whatsappFallbackModal");
       const list = document.getElementById("whatsappBulkList");
       if (modal && list) {
-        document.getElementById("whatsappFallbackTitle").textContent = "Send " + prepared.label + " to the parent";
+        detlofSetText("whatsappFallbackTitle", "Send " + prepared.label + " to the parent");
         const numberEl = document.getElementById("whatsappFallbackNumber");
         if (numberEl) numberEl.textContent = "Parent number: +" + number;
         const link = document.getElementById("whatsappFallbackLink");

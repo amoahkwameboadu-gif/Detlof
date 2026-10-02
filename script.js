@@ -1,6 +1,7 @@
 const STORAGE_KEY = "detlof_bulk_import_codes";
 const PORTAL_API_BASE = "http://127.0.0.1:5000";
 let activeStudent = null;
+let PORTAL_ANNOUNCEMENTS = [];
 
 // ACADEMIC_YEAR, grading, the default results and the report builders live in
 // detlof-report.js, which detlof-student-portal.html loads before this file.
@@ -24,12 +25,6 @@ function rosterMatch(value) {
   if (byId) return byId;
   return ROSTER_STUDENT_INDEX.byName.get(detlofNormalizeName(query)) || null;
 }
-
-const DEFAULT_ANNOUNCEMENTS = [
-  { title: "Term 3 assessments begin next Monday", category: "School Notice", date: "May 14, 2026", body: "Please check the assessment schedule and bring your required materials each day." },
-  { title: "Science has moved to the Science Lab", category: "Timetable Update", date: "May 9, 2026", body: "Wednesday science lessons will take place in the Science Lab from 10:30 AM." },
-  { title: "Term 3 results are now available", category: "Results Update", date: "May 7, 2026", body: "Your latest academic results have been published." },
-];
 
 const DAY_ORDER = { Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5 };
 
@@ -126,10 +121,12 @@ function upsertSyncedStudent(student) {
 }
 
 async function resolveStudentFromCredentials(credentials, allowLocal = true) {
+  const password = String(credentials.loginCode || credentials.password || "").trim();
   const payload = {
     email: String(credentials.email || "").trim().toLowerCase(),
     studentId: String(credentials.studentId || "").trim().toUpperCase(),
-    password: String(credentials.loginCode || credentials.password || "").trim(),
+    password,
+    loginCode: password,
   };
   const response = await fetchPortalApi("/api/auth/login", {
     method: "POST",
@@ -183,7 +180,13 @@ function getSyncedStudents() {
     const map = new Map();
     DEFAULT_STUDENTS.forEach((student) => map.set(student.studentId.toUpperCase(), normalizeStudent(student)));
     if (Array.isArray(parsed)) {
-      parsed.forEach((student) => {
+      // A returning browser still holds the previous school structure. Map it onto
+      // the current roster by student name, so old classes do not reappear and no
+      // student ends up listed twice.
+      const migrated = typeof detlofMigrateStoredRecords === "function"
+        ? detlofMigrateStoredRecords(parsed)
+        : parsed;
+      migrated.forEach((student) => {
         if (student && student.studentId) {
           const key = String(student.studentId).toUpperCase();
           const existing = map.get(key);
@@ -219,11 +222,11 @@ function togglePasswordVisibility() {
 
 function fillCredentials(student) {
   const credentials = normalizeStudent(student);
-  document.getElementById("loginEmail").value = credentials.email;
-  document.getElementById("loginStudentId").value = credentials.studentId;
-  document.getElementById("loginPassword").value = credentials.loginCode;
+  detlofSetValue("loginEmail", credentials.email);
+  detlofSetValue("loginStudentId", credentials.studentId);
+  detlofSetValue("loginPassword", credentials.loginCode);
   document.getElementById("loginPassword").type = "password";
-  document.getElementById("togglePasswordBtn").textContent = "Show";
+  detlofSetText("togglePasswordBtn", "Show");
   document.getElementById("togglePasswordBtn").setAttribute("aria-label", "Show password");
   const info = document.getElementById("loginInfoBox");
   info.textContent = "Loaded credentials for " + student.fullName + " (" + student.studentId + "). Click Sign in to Portal.";
@@ -322,19 +325,19 @@ function renderPortalForStudent(student) {
   document.getElementById("loginScreen").classList.add("hidden");
   document.getElementById("portalShell").classList.remove("hidden");
 
-  document.getElementById("topbarStudentName").textContent = student.fullName;
-  document.getElementById("topbarStudentMeta").textContent =
-    (student.currentClass || "KG 1") + " · " + student.studentId + " · " + student.email;
-  document.getElementById("dashWelcomeHeading").textContent =
-    "Good morning, " + student.fullName.split(" ")[0] + "!";
-  document.getElementById("statClass").textContent = student.currentClass || "KG 1";
-  document.getElementById("statStudentId").textContent = "Student ID: " + student.studentId;
+  detlofSetText("topbarStudentName", student.fullName);
+  detlofSetText("topbarStudentMeta",
+    (student.currentClass || "KG 1") + " · " + student.studentId + " · " + student.email);
+  detlofSetText("dashWelcomeHeading",
+    "Good morning, " + student.fullName.split(" ")[0] + "!");
+  detlofSetText("statClass", student.currentClass || "KG 1");
+  detlofSetText("statStudentId", "Student ID: " + student.studentId);
 
   const allTerms = getAllTermResults(student);
   const termCount = Object.values(allTerms).filter((t) => t != null).length;
   const annualAverage = calculateCumulativeGPA(student);
-  document.getElementById("dashTermInfo").textContent =
-    termCount >= 3 ? "Third Term · Results Released" : termCount > 0 ? "Term " + termCount : "No Results Yet";
+  detlofSetText("dashTermInfo",
+    termCount >= 3 ? "Third Term · Results Released" : termCount > 0 ? "Term " + termCount : "No Results Yet");
 
   const promoChip = document.getElementById("dashPromoChip");
   const promoIcon = document.getElementById("dashPromoIcon");
@@ -361,26 +364,35 @@ function renderPortalForStudent(student) {
   const studentResults = Array.isArray(student.results)
     ? student.results
     : (firstTerm ? firstTerm.data.results : []);
-  const average = studentResults.length
+  const termAverage = studentResults.length
     ? Math.round(studentResults.reduce((total, result) => total + Number(result.totalScore || 0), 0) / studentResults.length)
     : null;
-  document.getElementById("statAverage").textContent = average == null ? "—" : average + "%";
-
-  document.getElementById("statAverage").nextElementSibling.textContent =
+  const average = annualAverage != null ? annualAverage : termAverage;
+  // The label above the figure and the caption below it are siblings of it, so
+  // they are looked up defensively: a missing one must not stop the dashboard.
+  detlofSetSiblingText("statAverage", annualAverage != null ? "Annual Average" : "Term Average", "previous");
+  detlofSetText("statAverage", average == null ? "—" : average + "%");
+  detlofSetSiblingText(
+    "statAverage",
     average == null
       ? (termCount ? termCount + " Term(s) Published" : "No results published yet")
-      : (termCount ? "Annual Average: " + annualAverage + "% · " + termCount + " Term(s)" : "Term 2 · " + studentResults.length + " Subjects Published");
-
+      : (annualAverage != null
+        ? termCount + " Term(s) Published"
+        : firstTerm
+          ? firstTerm.label + " · Annual average pending (" + termCount + " of 3 terms published)"
+          : "Term results available · Annual average pending"),
+    "next"
+  );
   const displayedTerm = student.displayedTerm || "all";
   const selectedTermLabel = displayedTerm === "all" ? "All Terms" : (TERM_LABELS[displayedTerm] || displayedTerm);
   const termFilterEl = document.getElementById("resultsTermFilter");
   if (termFilterEl && termFilterEl.value !== displayedTerm) termFilterEl.value = displayedTerm;
-  document.getElementById("resultsSubtitle").textContent =
+  detlofSetText("resultsSubtitle",
     student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "KG 1") +
     " · Academic Year " + (student.academicYear || ACADEMIC_YEAR) +
-    " · Viewing: " + selectedTermLabel;
-  document.getElementById("timetableSubtitle").textContent =
-    "Current Class Timetable for " + (student.currentClass || "KG 1") + " · " + ACADEMIC_YEAR;
+    " · Viewing: " + selectedTermLabel);
+  detlofSetText("timetableSubtitle",
+    "Current Class Timetable for " + (student.currentClass || "KG 1") + " · " + ACADEMIC_YEAR);
 
   const dashResults = document.getElementById("dashResultsBody");
   const fullResults = document.getElementById("fullResultsBody");
@@ -494,13 +506,13 @@ function renderPortalForStudent(student) {
       fullTT.innerHTML += "<tr><td>" + escapeHtml(item.day) + "</td><td>" + escapeHtml(item.time) + "</td><td><strong>" + escapeHtml(item.subject) + "</strong></td><td>" + escapeHtml(item.teacher || "Not assigned") + (item.updatedBy ? "<br><small class='update-meta'>Updated by " + escapeHtml(item.updatedBy) + "</small>" : "") + "</td><td>" + escapeHtml(item.venue || "—") + "</td></tr>";
     });
     const nextLesson = schedule[0];
-    document.getElementById("statNextLesson").textContent = nextLesson.subject;
-    document.getElementById("statNextLesson").nextElementSibling.textContent = nextLesson.day + " · " + nextLesson.time;
+    detlofSetText("statNextLesson", nextLesson.subject);
+    detlofSetSiblingText("statNextLesson", nextLesson.day + " · " + nextLesson.time);
   } else {
     dashTT.innerHTML = emptyRow(3, "No timetable has been published for this student yet.");
     fullTT.innerHTML = emptyRow(5, "No timetable has been published for this student yet.");
-    document.getElementById("statNextLesson").textContent = "—";
-    document.getElementById("statNextLesson").nextElementSibling.textContent = "No lessons scheduled";
+    detlofSetText("statNextLesson", "—");
+    detlofSetSiblingText("statNextLesson", "No lessons scheduled");
   }
 
   const updates = Array.isArray(student.updates) ? student.updates : [];
@@ -508,18 +520,22 @@ function renderPortalForStudent(student) {
   const updateNotice = document.getElementById("portalUpdateNotice");
   if (latestUpdate) {
     updateNotice.classList.remove("hidden");
-    document.getElementById("portalUpdateTitle").textContent = latestUpdate.title;
-    document.getElementById("portalUpdateMessage").textContent = latestUpdate.message;
-    document.getElementById("portalUpdateMeta").textContent =
-      (latestUpdate.category || "Portal Update") + " · " + (latestUpdate.date || latestUpdate.createdAt || "") + (latestUpdate.createdBy ? " · Sent by " + latestUpdate.createdBy : "");
+    detlofSetText("portalUpdateTitle", latestUpdate.title);
+    detlofSetText("portalUpdateMessage", latestUpdate.message);
+    detlofSetText("portalUpdateMeta",
+      (latestUpdate.category || "Portal Update") + " · " + (latestUpdate.date || latestUpdate.createdAt || "") + (latestUpdate.createdBy ? " · Sent by " + latestUpdate.createdBy : ""));
   } else {
     updateNotice.classList.add("hidden");
   }
 
   const annBox = document.getElementById("announcementsContainer");
   annBox.innerHTML = "";
-  const individualUpdates = updates.map((update) => ({ ...update, individual: true }));
-  [...individualUpdates, ...DEFAULT_ANNOUNCEMENTS].forEach((announcement) => {
+  const individualUpdates = updates
+    .filter((update) => update.individual !== false)
+    .map((update) => ({ ...update, individual: true }));
+  const schoolAnnouncements = PORTAL_ANNOUNCEMENTS
+    .filter((announcement) => !announcement.targetClass || announcement.targetClass === student.currentClass);
+  [...individualUpdates, ...schoolAnnouncements].forEach((announcement) => {
     annBox.innerHTML +=
       "<div style='padding:14px;border:1px solid var(--line);border-radius:10px;" + (announcement.individual ? "border-left:4px solid var(--crest-gold);background:var(--crest-gold-soft);" : "") + "'>" +
       "<small style='color:" + (announcement.individual ? "var(--crest-purple);" : "var(--crest-green);") + ";font-weight:700;'>" + escapeHtml(announcement.category || "Portal Update") + (announcement.individual ? " · Individual Update" : "") + " · " + escapeHtml(announcement.date || announcement.createdAt || "") + "</small>" +
@@ -614,7 +630,7 @@ function logoutPortal() {
   forgetStudent();
   document.getElementById("portalShell").classList.add("hidden");
   document.getElementById("loginScreen").classList.remove("hidden");
-  document.getElementById("loginPassword").value = "";
+  detlofSetValue("loginPassword", "");
 }
 
 const REMEMBER_KEY = "detlof_portal_remembered_student";
@@ -649,7 +665,7 @@ async function restoreRememberedStudent() {
     const response = await fetchPortalApi("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: saved.email, studentId: saved.studentId, password: saved.loginCode }),
+      body: JSON.stringify({ email: saved.email, studentId: saved.studentId, password: saved.loginCode, loginCode: saved.loginCode }),
     });
     if (response && response.ok) {
       const data = await response.json().catch(() => ({}));
@@ -680,7 +696,7 @@ document.getElementById("portalLoginForm").addEventListener("submit", async (eve
   };
 
   const matchedLocal = findSyncedStudent({ email, studentId, loginCode: password });
-  const payload = { email, studentId, password, syncedRecord: matchedLocal || null };
+  const payload = { email, studentId, password, loginCode: password, syncedRecord: matchedLocal || null };
   let remoteStudent = null;
   let canUseLocal = false;
 
@@ -841,9 +857,9 @@ function renderBillsTab(student) {
   if (!body) return;
   const totals = detlofBillTotals(student);
 
-  document.getElementById("billsSubtitle").textContent =
+  detlofSetText("billsSubtitle",
     student.fullName + " (" + student.studentId + ") · " + (student.currentClass || "") +
-    " · Academic Year " + (student.academicYear || ACADEMIC_YEAR);
+    " · Academic Year " + (student.academicYear || ACADEMIC_YEAR));
 
   body.innerHTML = totals.bills.map((bill) => {
     const status = detlofFeeStatus(bill);
@@ -867,7 +883,7 @@ function renderBillsTab(student) {
   overall.style.color = overallColours.fg;
 
   const pct = totals.billed > 0 ? Math.min(100, Math.round((totals.paid / totals.billed) * 100)) : 0;
-  document.getElementById("billSummaryCards").innerHTML =
+  detlofSetHtml("billSummaryCards",
     '<div class="bill-card"><span class="bill-card-label">Total Billed</span>' +
     '<span class="bill-card-value">' + detlofFormatCedis(totals.billed) + "</span></div>" +
     '<div class="bill-card ok"><span class="bill-card-label">Paid</span>' +
@@ -876,7 +892,7 @@ function renderBillsTab(student) {
     '<span class="bill-card-value">' + detlofFormatCedis(totals.balance) + "</span></div>" +
     '<div class="bill-card wide"><span class="bill-card-label">Payment progress</span>' +
     '<span class="bill-card-value">' + pct + "%</span>" +
-    '<span class="bill-progress"><span style="width:' + pct + '%;background:' + (totals.balance > 0 ? "var(--crest-gold)" : "var(--crest-green)") + ';"></span></span></div>';
+    '<span class="bill-progress"><span style="width:' + pct + '%;background:' + (totals.balance > 0 ? "var(--crest-gold)" : "var(--crest-green)") + ';"></span></span></div>');
 
   const badge = document.getElementById("billsNavBadge");
   if (badge) {
@@ -1063,6 +1079,20 @@ function downloadMyTimetable() {
   downloadTimetablePDF();
 }
 
+async function loadPortalAnnouncements() {
+  try {
+    const response = await fetchPortalApi("/api/announcements");
+    if (!response) throw new Error("The school announcement service could not be reached.");
+    if (!response.ok) throw new Error("Announcements could not be loaded (HTTP " + response.status + ").");
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error("The server returned an invalid announcement list.");
+    PORTAL_ANNOUNCEMENTS = data;
+    if (activeStudent) renderPortalForStudent(activeStudent);
+  } catch (error) {
+    reportError(error.message || "Could not load school announcements.");
+  }
+}
+
 window.addEventListener("storage", (event) => {
   if (event.key === STORAGE_KEY && activeStudent) {
     const updated = getSyncedStudents().find(
@@ -1109,3 +1139,4 @@ if (downloadTimetableBtn) {
 // Open straight into the last student's profile so their details are already
 // filled in, rather than making them sign in on every visit.
 restoreRememberedStudent();
+loadPortalAnnouncements();

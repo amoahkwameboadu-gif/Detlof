@@ -824,7 +824,7 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   font-weight: 800; font-size: 11px;
 }
 .toast-text { flex: 1; min-width: 0; word-break: break-word; }
-.toast-close { flex: 0 0 auto; background: transparent; border: none; color: rgba(255, 255, 255, 0.75); font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; }
+.toast-close { flex: 0 0 auto; min-width: 44px; min-height: 44px; background: transparent; border: none; color: rgba(255, 255, 255, 0.75); font-size: 18px; line-height: 1; cursor: pointer; padding: 0 6px; }
 .toast-close:hover { color: #fff; }
 .toast-out { animation: toastOut 240ms ease-in forwards; }
 @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }

@@ -726,6 +726,48 @@ function renderTermSummaryRowHTML(results, label) {
 // Prints a report in a new window. A blocked pop-up is a normal outcome, so it
 // reports itself rather than failing silently: it uses the page's own feedback
 // helper when one is loaded.
+// Safe element writes. A missing element must never abort a whole render: these
+// quietly do nothing instead of throwing part way through.
+function detlofSetText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value == null ? "" : String(value);
+  return el;
+}
+
+function detlofSetHtml(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = value == null ? "" : String(value);
+  return el;
+}
+
+function detlofSetValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value == null ? "" : String(value);
+  return el;
+}
+
+// Writes to an element beside another one. A sibling only exists if the markup
+// matches exactly, so it is always looked up defensively.
+function detlofSetSiblingText(id, value, side) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  const sibling = side === "previous" ? el.previousElementSibling : el.nextElementSibling;
+  if (sibling) sibling.textContent = value == null ? "" : String(value);
+  return sibling;
+}
+
+function detlofShow(id, visible, className) {
+  const el = document.getElementById(id);
+  if (el && className) el.classList.toggle(className, !!visible);
+  return el;
+}
+
+function detlofToggleClass(id, className, on) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle(className, !!on);
+  return el;
+}
+
 // ---------------------------------------------------------------------------
 // Printing and saving as PDF
 //
