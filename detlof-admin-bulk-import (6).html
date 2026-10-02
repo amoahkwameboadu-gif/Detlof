@@ -2279,10 +2279,11 @@
   </div>
   </main>
 
-  <script src="detlof-icons.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-roster.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-school.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-report.js?v=pre-jhs3-2026"></script>
+  <script src="detlof-connection.js?v=2026-10-02"></script>
+  <script src="detlof-icons.js?v=2026-10-02"></script>
+  <script src="detlof-roster.js?v=2026-10-02"></script>
+  <script src="detlof-school.js?v=2026-10-02"></script>
+  <script src="detlof-report.js?v=2026-10-02"></script>
   <script>
     const STORAGE_KEY = "detlof_bulk_import_codes";
 
@@ -2707,7 +2708,14 @@ const data = await response.json().catch(() => ({}));
           }
 return;
         }
-        if (!response.ok) throw new Error(data.error || "Administrator sign-in failed.");
+        if (!response.ok) {
+            // A 404 or 405 here means these pages are not being served by the
+            // Detlof server at all, so the server's own message is missing.
+            if (response.status === 404 || response.status === 405) {
+              throw new Error(detlofConnectionHint(response.status));
+            }
+            throw new Error(data.error || "Administrator sign-in failed.");
+          }
         if (!data.user || data.user.role === "academic_admin") {
             throw new Error("Use the Academic Administrator sign-in for this account.");
           }
@@ -5868,7 +5876,14 @@ if (academicsAdminForm) {
         }
         return;
       }
-      if (!response.ok) throw new Error(data.error || "Academic administrator sign-in failed.");
+      if (!response.ok) {
+        // Same reasoning as the Administrator sign-in: a 404 or 405 means the
+        // page is not being served by the Detlof server.
+        if (response.status === 404 || response.status === 405) {
+          throw new Error(detlofConnectionHint(response.status));
+        }
+        throw new Error(data.error || "Academic administrator sign-in failed.");
+      }
       if (!data.user || data.user.role !== "academic_admin") {
         throw new Error("This account does not have Academic Administrator access.");
       }

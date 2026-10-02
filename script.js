@@ -604,7 +604,41 @@ function renderPortalForStudent(student) {
   updateTermDownloadLabel();
 }
 
+/* The sidebar is a fixed column on wide screens and an off-canvas drawer on
+   narrow ones. These helpers keep the two in step, and the drawer closes as
+   soon as it is no longer needed. */
+function setDrawerOpen(open) {
+  const sidebar = document.getElementById("portalSidebar");
+  const backdrop = document.getElementById("drawerBackdrop");
+  const toggle = document.getElementById("drawerToggle");
+  if (!sidebar || !toggle) return;
+  sidebar.classList.toggle("is-open", open);
+  toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  if (backdrop) {
+    if (open) {
+      backdrop.hidden = false;
+      requestAnimationFrame(() => backdrop.classList.add("is-open"));
+    } else {
+      backdrop.classList.remove("is-open");
+      setTimeout(() => { backdrop.hidden = true; }, 260);
+    }
+  }
+}
+
+function isDrawerLayout() {
+  return window.matchMedia("(max-width: 1080px)").matches;
+}
+
+function toggleDrawer() {
+  const sidebar = document.getElementById("portalSidebar");
+  if (!sidebar) return;
+  setDrawerOpen(!sidebar.classList.contains("is-open"));
+}
+
 function switchTab(tabName) {
+  // On narrow screens the nav lives in the drawer, so close it after the tap.
+  if (isDrawerLayout()) setDrawerOpen(false);
   document.querySelectorAll(".portal-tab").forEach((element) => element.classList.add("hidden"));
   document.querySelectorAll(".nav-btn").forEach((button) => button.classList.remove("active"));
   const panel = document.getElementById("tab-" + tabName);
@@ -1082,14 +1116,15 @@ function downloadMyTimetable() {
 async function loadPortalAnnouncements() {
   try {
     const response = await fetchPortalApi("/api/announcements");
-    if (!response) throw new Error("The school announcement service could not be reached.");
-    if (!response.ok) throw new Error("Announcements could not be loaded (HTTP " + response.status + ").");
+    // Notices are useful but never worth interrupting the portal for. Anything
+    // unexpected is left silent; the tab simply shows what it has.
+    if (!response || !response.ok) return;
     const data = await response.json();
-    if (!Array.isArray(data)) throw new Error("The server returned an invalid announcement list.");
+    if (!Array.isArray(data)) return;
     PORTAL_ANNOUNCEMENTS = data;
     if (activeStudent) renderPortalForStudent(activeStudent);
   } catch (error) {
-    reportError(error.message || "Could not load school announcements.");
+    /* ignored on purpose: see above */
   }
 }
 
@@ -1137,6 +1172,25 @@ if (downloadTimetableBtn) {
 }
 
 // Open straight into the last student's profile so their details are already
-// filled in, rather than making them sign in on every visit.
-restoreRememberedStudent();
-loadPortalAnnouncements();
+  // filled in, rather than making them sign in on every visit.
+  restoreRememberedStudent();
+  loadPortalAnnouncements();
+
+  // ------------------------------------------------------------------ drawer
+  const drawerToggle = document.getElementById("drawerToggle");
+  if (drawerToggle) drawerToggle.addEventListener("click", toggleDrawer);
+
+  const drawerBackdrop = document.getElementById("drawerBackdrop");
+  if (drawerBackdrop) {
+    drawerBackdrop.addEventListener("click", () => setDrawerOpen(false));
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setDrawerOpen(false);
+  });
+
+  // Widening past the drawer breakpoint restores the fixed sidebar, so any
+  // leftover drawer state is cleared rather than left half open.
+  window.addEventListener("resize", () => {
+    if (!isDrawerLayout()) setDrawerOpen(false);
+  });

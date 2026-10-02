@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" /></noscript>
   <link rel="icon" href="detlofcreast.svg" />
-  <link rel="stylesheet" href="style.css?v=pre-jhs3-2026" />
+  <link rel="stylesheet" href="style.css?v=2026-10-02" />
   <style>
     .icon { display:inline-block; width:1em; height:1em; vertical-align:middle; fill:currentColor; flex-shrink:0; }
     .icon-sm { width:14px; height:14px; }
@@ -103,7 +103,7 @@
        VIEW 2: AUTHENTICATED STUDENT PORTAL SHELL
        ========================================================================== -->
   <div id="portalShell" class="portal-shell hidden">
-    <aside class="sidebar">
+    <aside class="sidebar" id="portalSidebar">
       <div class="brand">
         <img class="brand-logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
         <div>
@@ -130,14 +130,20 @@
 
     <div class="portal-main">
       <header class="topbar">
+        <button class="drawer-toggle" id="drawerToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="portalSidebar">
+          <span class="drawer-toggle-bar"></span>
+          <span class="drawer-toggle-bar"></span>
+          <span class="drawer-toggle-bar"></span>
+        </button>
         <div>
           <strong id="topbarStudentName" style="color:var(--ink-deep);">Student Name</strong>
           <span id="topbarStudentMeta" style="color:var(--muted);font-size:12px;margin-left:8px;">Class · Student ID</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
           <button onclick="logoutPortal()" class="outline-btn">Logout</button>
         </div>
       </header>
+      <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
 
       <div class="portal-content">
         <!-- TAB: DASHBOARD -->
@@ -455,11 +461,12 @@
 
   <div id="toastBox" class="toast-stack" aria-live="polite"></div>
 
-  <script src="detlof-icons.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-roster.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-school.js?v=pre-jhs3-2026"></script>
-  <script src="detlof-report.js?v=pre-jhs3-2026"></script>
-  <script src="script.js"></script>
+  <script src="detlof-connection.js?v=2026-10-02"></script>
+  <script src="detlof-icons.js?v=2026-10-02"></script>
+  <script src="detlof-roster.js?v=2026-10-02"></script>
+  <script src="detlof-school.js?v=2026-10-02"></script>
+  <script src="detlof-report.js?v=2026-10-02"></script>
+  <script src="script.js?v=2026-10-02"></script>
   <script>
     // Auto-login from URL parameters (for admin portal test links)
     (async function() {

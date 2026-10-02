@@ -82,14 +82,7 @@
     .footer { margin-top: 18px; font-size: 11px; color: var(--muted); }
     .footer-admin-login { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; margin-top: 4px; color: var(--muted); font-size: 10px; opacity: .72; text-decoration: none; }
     .footer-admin-login:hover, .footer-admin-login:focus-visible { color: var(--crest-gold); opacity: 1; text-decoration: underline; }
-    .public-announcements { width: min(560px, 100%); padding: 20px clamp(18px, 4vw, 28px); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: rgba(255,255,255,.07); box-shadow: var(--shadow); position: relative; z-index: 1; backdrop-filter: blur(10px); }
-    .public-announcements h2 { margin: 0 0 12px; font-size: 16px; color: #fff; }
-    .public-announcement-list { display: grid; gap: 10px; }
-    .public-announcement { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); }
-    .public-announcement small { color: var(--crest-gold); font-size: 10px; font-weight: 700; }
-    .public-announcement h3 { margin: 4px 0; color: #fff; font-size: 13px; }
-    .public-announcement p, .announcement-status { margin: 0; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
-  .public-school-info {
+    .public-school-info {
     background: #fff; border: 1px solid var(--line); border-radius: 18px;
     padding: 26px; margin: 22px auto 0; max-width: 1080px;
   }
@@ -134,18 +127,12 @@
     <img class="logo" src="detlofcreast.svg" alt="Detlof Preparatory School crest" />
     <div class="eyebrow">Wisdom Balance</div>
     <h1>Detlof Preparatory School</h1>
-    <p class="lead">Student Information Portal — academic results, class timetable, and school announcements.</p>
+    <p class="lead">Student Information Portal — academic results, class timetable, and school notices.</p>
     <div class="buttons">
       <a class="btn student-btn" href="detlof-student-portal.html">Click to Sign In to Student Portal <span aria-hidden="true">→</span></a>
     </div>
     <p class="footer">© 2026 Detlof Preparatory School<br /><a class="footer-admin-login" href="detlof-admin-bulk-import%20(6).html">Admin Login</a></p>
   </main>
-  <section class="public-announcements" aria-labelledby="publicAnnouncementsHeading">
-    <h2 id="publicAnnouncementsHeading">School Announcements</h2>
-    <div id="publicAnnouncementList" class="public-announcement-list" aria-live="polite">
-      <p class="announcement-status" role="status">Loading announcements…</p>
-    </div>
-  </section>
 
   <!-- School information below is maintained by an administrator and served by the
        backend. The markup is only revealed once the backend answers, so the page
@@ -181,42 +168,28 @@
       </div>
     </div>
   </section>
+  <script src="detlof-connection.js?v=2026-10-02"></script>
   <script>
-    (async function loadPublicAnnouncements() {
-      const list = document.getElementById("publicAnnouncementList");
-      try {
-        const response = await fetch("/api/announcements");
-        if (!response.ok) throw new Error("Announcements could not be loaded.");
-        const announcements = await response.json();
-        if (!Array.isArray(announcements)) throw new Error("The server returned an invalid announcement list.");
-        list.replaceChildren();
-        if (!announcements.length) {
-          const empty = document.createElement("p");
-          empty.className = "announcement-status";
-          empty.textContent = "There are no current announcements.";
-          list.appendChild(empty);
-          return;
-        }
-        announcements.forEach((item) => {
-          const card = document.createElement("article");
-          card.className = "public-announcement";
-          const meta = document.createElement("small");
-          meta.textContent = [item.category || "School Notice", item.date || ""].filter(Boolean).join(" · ");
-          const title = document.createElement("h3");
-          title.textContent = item.title || "";
-          const message = document.createElement("p");
-          message.textContent = item.message || item.body || "";
-          card.append(meta, title, message);
-          list.appendChild(card);
-        });
-      } catch (error) {
-        const status = document.createElement("p");
-        status.className = "announcement-status";
-        status.setAttribute("role", "alert");
-        status.textContent = error.message || "Could not load school announcements.";
-        list.replaceChildren(status);
+    /* Opened straight from disk the page origin is file://, where a root-relative
+       "/api/..." request can never succeed. Try the local server as well.
+       Mirrors fetchPortalApi in script.js. */
+    const PUBLIC_API_BASE = window.DETLOF_SERVER_URL || "http://127.0.0.1:5000";
+
+    async function fetchPublicApi(path) {
+      const urls = [path];
+      if (window.location.href.indexOf(PUBLIC_API_BASE) !== 0) {
+        urls.push(PUBLIC_API_BASE + path);
       }
-    })();
+      for (const url of urls) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) return response;
+        } catch (error) {
+          /* try the next address */
+        }
+      }
+      return null;
+    }
   </script>
 <script>
     // Renders the school information an administrator maintains. Fails quietly so
@@ -224,7 +197,7 @@
     (async function loadSiteContent() {
       const section = document.getElementById("publicSchoolInfo");
       try {
-        const response = await fetch("/api/site-content");
+        const response = await fetchPublicApi("/api/site-content");
         if (!response.ok) return;
         const content = await response.json();
         if (!content || typeof content !== "object") return;

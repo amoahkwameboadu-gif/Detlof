@@ -1239,3 +1239,212 @@ input {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ==========================================================================
+   RESPONSIVE NAVIGATION LAYER
+   --------------------------------------------------------------------------
+   This block comes last on purpose, so it settles the layout the older
+   blocks above kept re-deciding. Those rules define the sidebar three times
+   at three different breakpoints and restyle .nav-btn thirteen times, so
+   which one applied depended on source order rather than intent.
+
+   One layout is used per width, each on a single named breakpoint:
+     >= 1080px  fixed purple sidebar on the left
+     <  1080px  off-canvas drawer with a menu button in the top bar
+     <= 560px   compact spacing, drawer still used
+   ========================================================================== */
+
+:root {
+  --dt-drawer-width: 264px;
+  --dt-topbar-height: 60px;
+  --dt-ease: cubic-bezier(0.32, 0.72, 0.28, 1);
+}
+
+/* Menu button: parked out of sight on desktop. */
+.drawer-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 11px 9px;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--crest-purple-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.drawer-toggle-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--crest-purple-dark);
+  transition: transform 260ms var(--dt-ease), opacity 180ms ease;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(33, 21, 38, 0.5);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 260ms var(--dt-ease);
+}
+
+.drawer-backdrop.is-open { opacity: 1; }
+
+/* ---------------------------------------------------------------- desktop */
+@media (min-width: 1081px) {
+  .sidebar {
+    width: var(--dt-drawer-width);
+    flex: 0 0 var(--dt-drawer-width);
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    text-align: left;
+    border-radius: 12px;
+    /* Sidebar reads top to bottom, so the marker sits on the left edge. */
+    box-shadow: none;
+  }
+
+  .nav-btn.active {
+    box-shadow: inset 3px 0 0 var(--crest-gold);
+    transform: none;
+  }
+}
+
+/* ----------------------------------------------------------------- mobile */
+@media (max-width: 1080px) {
+  .portal-shell { flex-direction: row; }
+
+  .drawer-toggle { display: flex; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    gap: 12px;
+    padding: 10px 14px;
+    min-height: var(--dt-topbar-height);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  /* Off-canvas. transform moves it off screen without reflowing the page. */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 70;
+    width: var(--dt-drawer-width);
+    max-width: 84vw;
+    padding: 16px 14px;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 300ms var(--dt-ease);
+    box-shadow: 0 0 40px rgba(33, 21, 38, 0.25);
+  }
+
+  .sidebar.is-open { transform: translateX(0); }
+
+  .sidebar .brand { justify-content: flex-start; margin-bottom: 16px; }
+
+  /* A plain vertical stack: the drawer already scrolls. */
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 12px 14px;
+    font-size: 14px;
+    text-align: left;
+    justify-content: flex-start;
+    border-radius: 12px;
+  }
+
+  .nav-btn.active {
+    box-shadow: inset 3px 0 0 var(--crest-gold);
+    transform: none;
+  }
+
+  /* Animate the bars into a cross while the drawer is open. */
+  .drawer-toggle[aria-expanded="true"] .drawer-toggle-bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  .drawer-toggle[aria-expanded="true"] .drawer-toggle-bar:nth-child(2) { opacity: 0; }
+  .drawer-toggle[aria-expanded="true"] .drawer-toggle-bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  /* Content is full width once the sidebar has left the flow. */
+  .portal-main { width: 100%; }
+}
+
+@media (max-width: 560px) {
+  .drawer-toggle { width: 38px; height: 38px; padding: 10px 8px; }
+
+  .topbar { padding: 8px 12px; }
+
+  .topbar #topbarStudentMeta {
+    display: block;
+    margin-left: 0;
+    font-size: 11px;
+  }
+
+  .topbar .outline-btn { padding: 9px 12px; font-size: 12px; }
+
+  .nav-btn { min-height: 48px; font-size: 14.5px; }
+}
+
+/* ------------------------------------------------------- smooth page moves */
+/* Tab switching already animates through .tab-enter; it only needed the
+   reduced-motion opt-out below. */
+
+/* Cards lift slightly on hover, but only where a real pointer exists. */
+@media (hover: hover) and (pointer: fine) {
+  .stat-card,
+  .bill-card,
+  .panel,
+  .card { transition: transform 220ms var(--dt-ease), box-shadow 220ms var(--dt-ease); }
+
+  .stat-card:hover,
+  .bill-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(33, 21, 38, 0.1); }
+
+  .nav-btn { transition: background 180ms ease, color 180ms ease, transform 180ms ease; }
+  .nav-btn:hover { transform: translateX(3px); }
+}
+
+/* Honour the system setting: no movement, no animation. */
+@media (prefers-reduced-motion: reduce) {
+  .portal-tab.tab-enter { animation: none; }
+  .sidebar,
+  .drawer-backdrop,
+  .drawer-toggle-bar { transition: none; }
+  .stat-card,
+  .bill-card,
+  .nav-btn { transition: none; }
+  .nav-btn:hover { transform: none; }
+  .stat-card:hover,
+  .bill-card:hover { transform: none; }
+}

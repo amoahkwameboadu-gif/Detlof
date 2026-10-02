@@ -27,16 +27,17 @@ from functools import wraps
 from getpass import getpass
 from flask import Flask, jsonify, request, send_from_directory, session
 import copy
+import detlof_store
 import os
 import json
 import re
 import secrets
 import sys
 import threading
+import uuid
 from werkzeug.security import check_password_hash, generate_password_hash
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(APP_DIR, "detlof_data.json")
 INSTANCE_DIR = os.path.join(APP_DIR, "instance")
 SESSION_KEY_FILE = os.path.join(INSTANCE_DIR, "session.key")
 STORE_LOCK = threading.RLock()
@@ -44,10 +45,23 @@ app = Flask(__name__, static_folder=".", static_url_path="")
 
 
 def load_or_create_session_key():
+    """Return the key that signs the sign-in cookies.
+
+    The key must be the same on every run, or every saved session is rejected
+    and the school is asked to sign in again each time. On a school computer it
+    is kept in the project folder. On Vercel there is no writable folder, so it
+    has to be supplied as DETLOF_SECRET_KEY.
+    """
     configured_key = os.environ.get("DETLOF_SECRET_KEY")
     if configured_key:
         return configured_key
-    os.makedirs(INSTANCE_DIR, exist_ok=True)
+    try:
+        os.makedirs(INSTANCE_DIR, exist_ok=True)
+    except OSError as error:
+        raise RuntimeError(
+            "Set DETLOF_SECRET_KEY in the environment so sign-in sessions survive "
+            "between visits. Without it there is nowhere on this server to keep the key."
+        ) from error
     try:
         with open(SESSION_KEY_FILE, "r", encoding="utf-8") as handle:
             return handle.read().strip()
@@ -59,6 +73,11 @@ def load_or_create_session_key():
         except FileExistsError:
             with open(SESSION_KEY_FILE, "r", encoding="utf-8") as handle:
                 return handle.read().strip()
+        except OSError as error:
+            raise RuntimeError(
+                "Set DETLOF_SECRET_KEY in the environment so sign-in sessions survive "
+                "between visits. Without it there is nowhere on this server to keep the key."
+            ) from error
         return key
 
 
@@ -88,6 +107,13 @@ def prevent_private_store_downloads():
 def disable_private_response_caching(response):
     if request.path.startswith("/api/admin/") or request.path == "/api/auth/login":
         response.headers["Cache-Control"] = "no-store"
+        return response
+    # The pages, styles and scripts are edited in place while the school is
+    # setting the portal up. Without this, a browser may reuse a cached copy
+    # using Last-Modified as a guess, so an updated file keeps loading the
+    # previous version and fixes appear not to take effect.
+    if request.path.endswith((".html", ".js", ".css")) or request.path in ("/", ""):
+        response.headers["Cache-Control"] = "no-store, must-revalidate"
     return response
 
 
@@ -320,9 +346,9 @@ def latest_results_for_class(class_name):
     })
 
 ANNOUNCEMENTS = [
-    {"title": "Term 3 assessments begin next Monday", "category": "School Notice", "date": "May 14, 2026", "body": "Please check the assessment schedule and bring your required materials each day."},
-    {"title": "Science has moved to the Science Lab", "category": "Timetable Update", "date": "May 9, 2026", "body": "Wednesday science lessons will take place in the Science Lab from 10:30 AM."},
-    {"title": "Term 3 results are now available", "category": "Results Update", "date": "May 7, 2026", "body": "Your latest academic results have been published."},
+    {"id": "ann-term3-assessments", "title": "Term 3 assessments begin next Monday", "category": "School Notice", "date": "May 14, 2026", "body": "Please check the assessment schedule and bring your required materials each day."},
+    {"id": "ann-science-lab", "title": "Science has moved to the Science Lab", "category": "Timetable Update", "date": "May 9, 2026", "body": "Wednesday science lessons will take place in the Science Lab from 10:30 AM."},
+    {"id": "ann-term3-results", "title": "Term 3 results are now available", "category": "Results Update", "date": "May 7, 2026", "body": "Your latest academic results have been published."},
 ]
 
 # ---------------------------------------------------------------------------
@@ -396,10 +422,14 @@ def load_students():
         order.append(sid)
 
     stored = []
-    if os.path.exists(DATA_FILE):
+    # detlof_store decides between the local JSON file and a database, so this
+    # reads the same way wherever the school is running it from.
+    try:
+        data = detlof_store.read_document()
+    except (OSError, json.JSONDecodeError, ValueError) as error:
+        raise RuntimeError("Could not load the Detlof data store: " + str(error)) from error
+    if data is not None:
         try:
-            with open(DATA_FILE, "r", encoding="utf-8") as handle:
-                data = json.load(handle)
             if isinstance(data, list):
                 stored = [item for item in data if isinstance(item, dict)]
                 # An older build saved the register as a bare list, which has
@@ -425,10 +455,16 @@ def load_students():
                     ]
                 saved_announcements = data.get("announcements")
                 if isinstance(saved_announcements, list):
+                    # Notices saved by an older build carried no id. Give those a
+                    # stable one instead of dropping them, otherwise the whole
+                    # noticeboard silently comes back empty.
                     ANNOUNCEMENTS[:] = [
-                        announcement for announcement in saved_announcements
+                        dict(
+                            announcement,
+                            id=str(announcement.get("id") or uuid.uuid4().hex),
+                        )
+                        for announcement in saved_announcements
                         if isinstance(announcement, dict)
-                        and announcement.get("id")
                         and announcement.get("title")
                     ]
                 saved_site = data.get("siteContent")
@@ -455,23 +491,16 @@ def load_students():
 
 
 def save_students():
-    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
-    temp_file = DATA_FILE + ".tmp"
-    with open(temp_file, "w", encoding="utf-8") as handle:
-        json.dump(
-            {
-                "students": STUDENTS,
-                "adminUsers": ADMIN_USERS,
-                "announcements": ANNOUNCEMENTS,
-                "siteContent": site_content(),
-            },
-            handle,
-            indent=2,
-            ensure_ascii=False,
-        )
-        handle.flush()
-        os.fsync(handle.fileno())
-    os.replace(temp_file, DATA_FILE)
+    # Written through detlof_store so the register lands in the JSON file on a
+    # school computer, or in the database when running on Vercel.
+    detlof_store.write_document(
+        {
+            "students": STUDENTS,
+            "adminUsers": ADMIN_USERS,
+            "announcements": ANNOUNCEMENTS,
+            "siteContent": site_content(),
+        }
+    )
 
 
 def site_content():

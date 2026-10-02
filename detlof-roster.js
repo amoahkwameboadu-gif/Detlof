@@ -328,8 +328,7 @@ function detlofRosterEmailFor(name) {
 function detlofBuildRosterStudents() {
   const students = [];
   const usedEmails = new Map();
-  const usedCodes = new Set();
-  let codeCounter = 1001;
+  let loginSequence = 1000;
   DETLOF_CLASS_ORDER.forEach((className) => {
     const names = DETLOF_CLASS_ROSTER[className] || [];
     const prefix = DETLOF_CLASS_PREFIX[className] || "DPS";
@@ -342,16 +341,14 @@ function detlofBuildRosterStudents() {
       } else {
         usedEmails.set(email, 1);
       }
-      let loginCode = "";
-      do { loginCode = "DET-" + String(codeCounter); codeCounter += 1; } while (usedCodes.has(loginCode));
-      usedCodes.add(loginCode);
+      loginSequence += 1;
       students.push({
         fullName: fullName,
         email: email,
         studentId: prefix + "-" + String(index + 1).padStart(4, "0"),
         currentClass: className,
         academicYear: DETLOF_ACADEMIC_YEAR,
-        loginCode: loginCode,
+        loginCode: "DET-" + String(loginSequence),
       });
     });
   });

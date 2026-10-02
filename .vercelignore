@@ -1,0 +1,14 @@
+# The school register holds every student record, their login codes and the
+# administrator password hashes. It belongs in the database (DATABASE_URL) or on
+# the school's own computer, never in a deployment upload.
+detlof_data.json
+detlof_data.json.tmp
+
+# Per-installation session key, likewise local only.
+instance/
+
+.venv/
+__pycache__/
+.git/
+.vscode/
+.gitignore
