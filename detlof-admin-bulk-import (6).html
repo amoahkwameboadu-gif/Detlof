@@ -2691,9 +2691,24 @@ const STUDENT_PICKER_IDS = [
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
           });
-          const data = await response.json();
-          if (!response.ok) throw new Error(data.error || "Administrator sign-in failed.");
-          if (!data.user || data.user.role === "academic_admin") {
+const data = await response.json().catch(() => ({}));
+        // Checked before the generic failure: a server that reports no accounts
+        // needs setup guidance, not "sign-in failed".
+        if (data.code === "no_accounts") {
+          // Guidance is shown in place; return rather than throw, so the catch
+          // does not overwrite it with a generic network message.
+          const box = document.getElementById("adminLoginError");
+          if (box) {
+            box.innerHTML = "<strong>No administrator account exists yet.</strong><br />"
+              + "From the folder holding server.py, run:<br />"
+              + "<code>python server.py setup-admin</code><br />"
+              + "then sign in again. Use <code>python server.py setup-admin academic_admin</code> for the Academics Administrator.";
+            box.classList.remove("hidden");
+          }
+return;
+        }
+        if (!response.ok) throw new Error(data.error || "Administrator sign-in failed.");
+        if (!data.user || data.user.role === "academic_admin") {
             throw new Error("Use the Academic Administrator sign-in for this account.");
           }
           await applyAdminIdentity(data.user);
@@ -5841,7 +5856,18 @@ if (academicsAdminForm) {
           password: document.getElementById("academicsAdminPassword").value,
         }),
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
+      // Checked before the generic failure, so setup guidance is not masked.
+      if (data.code === "no_accounts") {
+        // Shown in place; returning keeps the catch from overwriting it.
+        const box = document.getElementById("academicsAdminError");
+        if (box) {
+          box.innerHTML = "<strong>No administrator account exists yet.</strong><br />"
+            + "Run <code>python server.py setup-admin academic_admin</code> from the folder holding server.py.";
+          box.classList.remove("hidden");
+        }
+        return;
+      }
       if (!response.ok) throw new Error(data.error || "Academic administrator sign-in failed.");
       if (!data.user || data.user.role !== "academic_admin") {
         throw new Error("This account does not have Academic Administrator access.");

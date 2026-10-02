@@ -374,6 +374,8 @@ SITE_TEXT_LIMITS = {
 PERSISTED_ADMIN_USERS = []
 # A one-item holder, so it can be updated in place like the other stored lists.
 PERSISTED_SITE_CONTENT = []
+# True when the store on disk is the old bare student list.
+LEGACY_STORE_SHAPE = False
 
 
 def copy_default_site_content():
@@ -382,7 +384,8 @@ def copy_default_site_content():
 
 def load_students():
     """Seed the full official roster, then overlay anything previously saved."""
-    global ANNOUNCEMENTS
+    global ANNOUNCEMENTS, LEGACY_STORE_SHAPE
+    LEGACY_STORE_SHAPE = False
     merged = {}
     order = []
     for student in DEFAULT_STUDENTS:
@@ -399,6 +402,10 @@ def load_students():
                 data = json.load(handle)
             if isinstance(data, list):
                 stored = [item for item in data if isinstance(item, dict)]
+                # An older build saved the register as a bare list, which has
+                # nowhere to keep administrator accounts or announcements. Note it
+                # so the store is migrated after the module loads.
+                LEGACY_STORE_SHAPE = True
             elif isinstance(data, dict):
                 records = data.get("students", [])
                 if isinstance(records, list):
@@ -604,6 +611,28 @@ def normalize_student(incoming):
 STUDENTS = [normalize_student(dict(s)) for s in load_students()]
 
 
+def migrate_legacy_store():
+    """Rewrite an old bare student list as the full store.
+
+    The earlier format kept only students, so administrator accounts and
+    announcements had nowhere to live and any sign-in was refused. Moving to the
+    full shape means accounts saved from now on survive. No student is lost: the
+    list is carried over as-is.
+    """
+    if not LEGACY_STORE_SHAPE:
+        return False
+    save_students()
+    print(
+        "Store upgraded: detlof_data.json now keeps administrator accounts and "
+        "announcements as well as students. Run 'python server.py setup-admin' "
+        "to create the administrator sign-ins."
+    )
+    return True
+
+
+migrate_legacy_store()
+
+
 def merge_student(incoming):
     incoming = normalize_student(incoming)
     sid = str(incoming.get("studentId", "")).strip().upper()
@@ -658,6 +687,13 @@ def admin_login():
     data = request.get_json(silent=True)
     if not isinstance(data, dict):
         return jsonify({"error": "Submit an email address and password."}), 400
+    # No accounts at all is a setup problem, not a wrong password. Saying so saves
+    # an administrator hunting for a typo that does not exist.
+    if not ADMIN_USERS:
+        return jsonify({
+            "error": "No administrator account exists yet. Create one with: python server.py setup-admin",
+            "code": "no_accounts",
+        }), 503
     user = find_admin(data.get("email"))
     password = str(data.get("password") or "")
     if not user or not check_password_hash(user["passwordHash"], password):
